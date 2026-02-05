@@ -3,3 +3,6 @@
 ^examples$
 ^\.copilot$
 ^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

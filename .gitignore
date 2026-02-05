@@ -9,6 +9,7 @@
 *.Rcheck/
 .Rcheck/
 inst/doc
+docs/
 
 # Common outputs
 *.log

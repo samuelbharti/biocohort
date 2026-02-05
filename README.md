@@ -1,6 +1,13 @@
 # myceliumr
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/yourusername/myceliumr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yourusername/myceliumr/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/yourusername/myceliumr/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/yourusername/myceliumr/actions/workflows/pkgdown.yaml)
+<!-- badges: end -->
+
 **myceliumr** is an R package for managing cross-species study data and analysis artifacts. It provides a cohort framework for rat/mouse/human projects with ortholog-aware annotation and lightweight storage for WES and snRNA outputs.
+
+**Website**: https://yourusername.github.io/myceliumr/
 
 ## Features
 
@@ -119,5 +126,15 @@ This package is under active development. Core features are stable, but the API 
 - readr: CSV reading
 - dplyr: Data manipulation
 - tibble: Modern data frames
+
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
+
+## Website
+
+Full documentation is available at https://yourusername.github.io/myceliumr/
+
+The website is automatically built and deployed via GitHub Actions on every push to main.
 
 
