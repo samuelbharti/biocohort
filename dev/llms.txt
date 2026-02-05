@@ -116,3 +116,9 @@ Data validation functions
 - [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
   : Validate a Cohort object
 
+# Articles
+
+### Tutorials
+
+- [Getting Started with
+  myceliumr](http://www.samuelbharti.com/myceliumr/articles/getting-started.md):
