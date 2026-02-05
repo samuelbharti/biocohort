@@ -6,6 +6,7 @@
 \usage{
 Cohort(
   study = NULL,
+  subjects = list(),
   subject_tbl = structure(list(), class = c("tbl_df", "tbl", "data.frame"), row.names =
     integer(0), names = character(0)),
   sample_map = structure(list(), class = c("tbl_df", "tbl", "data.frame"), row.names =
@@ -17,6 +18,10 @@ Cohort(
 \arguments{
 \item{study}{A Study object providing project-level context and metadata,
 or NULL if not applicable. Optional.}
+
+\item{subjects}{Named list of Subject objects, automatically created from
+subject_tbl rows during cohort construction. Names are subject IDs.
+Access individual subjects via: \code{cohort@subjects[["RAT001"]]}.}
 
 \item{subject_tbl}{A tibble (data frame) containing subject-level metadata.
 Required columns: \code{subject_id} (character), \code{species} (rat/mouse/human).
@@ -52,11 +57,13 @@ Validation ensures:
 
 Access properties via the \code{@} operator:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{cohort@study       # Study object or NULL
-cohort@subject_tbl # Subject metadata table
-cohort@sample_map  # Sample mapping table
-cohort@paths       # File paths
-cohort@analyses    # Stored analysis results
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{cohort@study         # Study object or NULL
+cohort@subjects      # Named list of Subject objects
+cohort@subjects[["RAT001"]]  # Individual Subject object
+cohort@subject_tbl   # Subject metadata table (for bulk operations)
+cohort@sample_map    # Sample mapping table
+cohort@paths         # File paths
+cohort@analyses      # Stored analysis results
 }\if{html}{\out{</div>}}
 }
 \seealso{

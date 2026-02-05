@@ -52,10 +52,17 @@ Construction automatically runs \code{\link[=validate_cohort]{validate_cohort()}
 \item Sample map can be linked to subjects
 }
 
+\strong{Automatic Subject Object Creation:}
+Subject objects are automatically created from each row in \code{subject_tbl}.
+These are stored in the \code{subjects} property as a named list, accessible by
+subject_id. This eliminates the need to manually create Subject objects.
+
 Use the \code{@} operator to access cohort components:
 \itemize{
 \item \code{cohort@study} - Study metadata
-\item \code{cohort@subject_tbl} - Subject table
+\item \code{cohort@subjects} - Named list of Subject objects
+\item \verb{cohort@subjects[[\\"RAT001\\"]]} - Access individual Subject
+\item \code{cohort@subject_tbl} - Subject table (for bulk operations)
 \item \code{cohort@sample_map} - Sample mapping
 }
 }
@@ -83,6 +90,10 @@ cohort <- cohort_new(
   sample_map = manifest_split$sample_map
 )
 print(cohort)
+
+# Access individual Subject objects (automatically created)
+rat_subject <- cohort@subjects[["RAT001"]]
+print(rat_subject)
 
 }
 \seealso{

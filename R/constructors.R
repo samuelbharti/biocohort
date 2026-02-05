@@ -221,9 +221,16 @@ subject_new <- function(
 #' - No duplicate subject IDs
 #' - Sample map can be linked to subjects
 #'
+#' **Automatic Subject Object Creation:**
+#' Subject objects are automatically created from each row in `subject_tbl`.
+#' These are stored in the `subjects` property as a named list, accessible by
+#' subject_id. This eliminates the need to manually create Subject objects.
+#'
 #' Use the `@` operator to access cohort components:
 #' - `cohort@study` - Study metadata
-#' - `cohort@subject_tbl` - Subject table
+#' - `cohort@subjects` - Named list of Subject objects
+#' - `cohort@subjects[[\"RAT001\"]]` - Access individual Subject
+#' - `cohort@subject_tbl` - Subject table (for bulk operations)
 #' - `cohort@sample_map` - Sample mapping
 #'
 #' @examples
@@ -251,6 +258,10 @@ subject_new <- function(
 #' )
 #' print(cohort)
 #'
+#' # Access individual Subject objects (automatically created)
+#' rat_subject <- cohort@subjects[["RAT001"]]
+#' print(rat_subject)
+#'
 #' @seealso [validate_manifest()] for preparing input tables,
 #'   [validate_cohort()] for detailed validation,
 #'   [Study] for study metadata
@@ -268,8 +279,28 @@ cohort_new <- function(
     cli::cli_abort("`study` must be a Study object or NULL.")
   }
 
+  # Automatically create Subject objects from subject_tbl
+  subjects <- list()
+  if (nrow(subject_tbl) > 0) {
+    for (i in seq_len(nrow(subject_tbl))) {
+      row <- subject_tbl[i, ]
+      subject_obj <- subject_new(
+        subject_id = row$subject_id,
+        species = row$species,
+        sex = if ("sex" %in% names(row)) row$sex else NA_character_,
+        strain = if ("strain" %in% names(row)) row$strain else NA_character_,
+        genotype = if ("genotype" %in% names(row)) row$genotype else NA_character_,
+        cohort = if ("cohort" %in% names(row)) row$cohort else NA_character_,
+        timepoint = if ("timepoint" %in% names(row)) row$timepoint else NA_character_,
+        notes = if ("notes" %in% names(row)) row$notes else NA_character_
+      )
+      subjects[[row$subject_id]] <- subject_obj
+    }
+  }
+
   cohort <- Cohort(
     study = study,
+    subjects = subjects,
     subject_tbl = subject_tbl,
     sample_map = sample_map,
     paths = paths,
