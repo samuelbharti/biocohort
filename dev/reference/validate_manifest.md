@@ -1,7 +1,7 @@
 # Validate and structure a manifest table
 
 Validates a manifest data frame or tibble containing cross-species
-subject metadata and sample identifiers. Automaticallyr structures the
+subject metadata and sample identifiers. Automatically structures the
 data into subject-level and sample-level tables suitable for Cohort
 construction. Comprehensive validation ensures data integrity and
 compatibility.
