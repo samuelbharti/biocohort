@@ -55,9 +55,11 @@ returned \code{sample_map}. Typical assay columns include:
 # Create a temporary CSV manifest
 manifest_file <- tempfile(fileext = ".csv")
 writeLines(
-  "subject_id,species,sex,strain,assay_wes_id\n
-   RAT001,rat,M,Lewis,WES_R001\n
-   MOUSE001,mouse,F,C57BL/6,WES_M001",
+  c(
+    "subject_id,species,sex,strain,assay_wes_id",
+    "RAT001,rat,M,Lewis,WES_R001",
+    "MOUSE001,mouse,F,C57BL/6,WES_M001"
+  ),
   manifest_file
 )
 
