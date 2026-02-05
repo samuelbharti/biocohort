@@ -11,7 +11,7 @@ data model. Includes a complete Study object with subject metadata."></head><bod
 
     <a class="navbar-brand me-2" href="../index.html">myceliumr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.01</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,7 @@ data model. Includes a complete Study object with subject metadata.</p>
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
     <p>A Cohort object (S7 class) with the following structure:</p><ul><li><p>study: A Study object with metadata for a cross-species genomics project</p></li>
+<li><p>subjects (named list): 4 Subject objects automatically created, accessible by subject_id</p></li>
 <li><p>subject_tbl (tibble): 4 subjects (2 rat, 2 mouse) with species, sex, strain, genotype, cohort, timepoint</p></li>
 <li><p>sample_map (tibble): Subjects mapped to assay sample IDs (WES, snRNA-seq)</p></li>
 <li><p>paths (list): Empty, ready for file paths</p></li>
@@ -59,10 +60,14 @@ data model. Includes a complete Study object with subject metadata.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The example_cohort demonstrates the complete myceliumr data structure including:</p><ul><li><p>Cross-species data (rat and mouse)</p></li>
+<li><p>Automatic Subject object creation from manifest data</p></li>
 <li><p>Subject-to-sample mappings with multiple assays</p></li>
 <li><p>Integration with a Study object for project context</p></li>
 <li><p>Proper data types and structure for downstream analysis</p></li>
-</ul><p>Use this cohort to explore the API, test workflows, or as a template for
+</ul><p>Subject objects are automatically created when building the cohort, eliminating
+the need to manually instantiate individual Subject objects. Access them via
+the subjects property using subject IDs as names.</p>
+<p>Use this cohort to explore the API, test workflows, or as a template for
 creating your own cohorts from real data.</p>
     </div>
     <div class="section level2">
@@ -87,13 +92,24 @@ creating your own cohorts from real data.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ aims         : chr [1:2] "Map rat genes to mouse orthologs" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ assays       : chr [1:2] "WES" "snRNA-seq"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ genome_builds:List of 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ rat  : chr "rn6"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ rat  : chr "rn7"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ mouse: chr "mm10"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ human: chr "hg38"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ created_at   : POSIXct[1:1], format: "2026-02-05 04:16:44"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  @ created_at   : POSIXct[1:1], format: "2026-02-05 06:06:07"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ tags         : chr(0) </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># View all subjects with metadata</span></span></span>
+<span class="r-in"><span><span class="co"># Access individual Subject objects (automatically created)</span></span></span>
+<span class="r-in"><span><span class="va">rat1</span> <span class="op">&lt;-</span> <span class="va">example_cohort</span><span class="op">@</span><span class="va">subjects</span><span class="op">[[</span><span class="st">"RAT001"</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">rat1</span><span class="op">@</span><span class="va">species</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rat"</span>
+<span class="r-in"><span><span class="va">rat1</span><span class="op">@</span><span class="va">sex</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "M"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># List all subject IDs</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">example_cohort</span><span class="op">@</span><span class="va">subjects</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "RAT001"   "RAT002"   "MOUSE001" "MOUSE002"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># View all subjects with metadata (tibble for bulk operations)</span></span></span>
 <span class="r-in"><span><span class="va">example_cohort</span><span class="op">@</span><span class="va">subject_tbl</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id species genotype sex   strain  cohort    timepoint</span>

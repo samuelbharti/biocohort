@@ -71,11 +71,20 @@ to ensure:
 
 - Sample map can be linked to subjects
 
+**Automatic Subject Object Creation:** Subject objects are automatically
+created from each row in `subject_tbl`. These are stored in the
+`subjects` property as a named list, accessible by subject_id. This
+eliminates the need to manually create Subject objects.
+
 Use the `@` operator to access cohort components:
 
 - `cohort@study` - Study metadata
 
-- `cohort@subject_tbl` - Subject table
+- `cohort@subjects` - Named list of Subject objects
+
+- `cohort@subjects[[\"RAT001\"]]` - Access individual Subject
+
+- `cohort@subject_tbl` - Subject table (for bulk operations)
 
 - `cohort@sample_map` - Sample mapping
 
@@ -100,10 +109,12 @@ study <- study_new(
 
 # Create manifest data
 manifest <- data.frame(
-  subject_id = c("RAT001", "MOUSE001"),
+  rat_id = c(101, 202),
   species = c("rat", "mouse"),
   sex = c("M", "F"),
-  assay_wes_id = c("WES_R001", "WES_M001")
+  wes_tumor_id = c("WES_T1", "WES_T2"),
+  wes_normal_id = c("WES_N1", "WES_N2"),
+  sn_id = I(list("RNA_T1", "RNA_T2"))
 )
 
 # Validate and create cohort
@@ -123,15 +134,51 @@ print(cohort)
 #>  .. @ aims         : chr(0) 
 #>  .. @ assays       : chr [1:2] "WES" "snRNA-seq"
 #>  .. @ genome_builds: list()
-#>  .. @ created_at   : POSIXct[1:1], format: "2026-02-05 05:42:28"
+#>  .. @ created_at   : POSIXct[1:1], format: "2026-02-05 07:59:43"
 #>  .. @ tags         : chr(0) 
+#>  @ subjects   :List of 2
+#>  .. $ 101: <myceliumr::Subject>
+#>  ..  ..@ subject_id: chr "101"
+#>  ..  ..@ species   : chr "rat"
+#>  ..  ..@ sex       : chr "M"
+#>  ..  ..@ strain    : chr NA
+#>  ..  ..@ genotype  : chr NA
+#>  ..  ..@ cohort    : chr NA
+#>  ..  ..@ timepoint : chr NA
+#>  ..  ..@ notes     : chr NA
+#>  .. $ 202: <myceliumr::Subject>
+#>  ..  ..@ subject_id: chr "202"
+#>  ..  ..@ species   : chr "mouse"
+#>  ..  ..@ sex       : chr "F"
+#>  ..  ..@ strain    : chr NA
+#>  ..  ..@ genotype  : chr NA
+#>  ..  ..@ cohort    : chr NA
+#>  ..  ..@ timepoint : chr NA
+#>  ..  ..@ notes     : chr NA
 #>  @ subject_tbl: tibble [2 × 3] (S3: tbl_df/tbl/data.frame)
-#>  $ subject_id: chr [1:2] "RAT001" "MOUSE001"
+#>  $ subject_id: chr [1:2] "101" "202"
 #>  $ species   : chr [1:2] "rat" "mouse"
 #>  $ sex       : chr [1:2] "M" "F"
-#>  @ sample_map : tibble [2 × 2] (S3: tbl_df/tbl/data.frame)
-#>  $ subject_id  : chr [1:2] "RAT001" "MOUSE001"
-#>  $ assay_wes_id: chr [1:2] "WES_R001" "WES_M001"
+#>  @ sample_map : tibble [6 × 4] (S3: tbl_df/tbl/data.frame)
+#>  $ subject_id: chr [1:6] "101" "202" "101" "202" ...
+#>  $ assay     : chr [1:6] "dna_wes" "dna_wes" "dna_wes" "dna_wes" ...
+#>  $ sample_id : chr [1:6] "WES_T1" "WES_T2" "WES_N1" "WES_N2" ...
+#>  $ role      : chr [1:6] "tumor" "tumor" "normal" "normal" ...
 #>  @ paths      : list()
 #>  @ analyses   : list()
+#>  @ registry   : list()
+#>  @ cache      : list()
+
+# Access individual Subject objects (automatically created)
+rat_subject <- cohort@subjects[["101"]]
+print(rat_subject)
+#> <myceliumr::Subject>
+#>  @ subject_id: chr "101"
+#>  @ species   : chr "rat"
+#>  @ sex       : chr "M"
+#>  @ strain    : chr NA
+#>  @ genotype  : chr NA
+#>  @ cohort    : chr NA
+#>  @ timepoint : chr NA
+#>  @ notes     : chr NA
 ```

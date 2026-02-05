@@ -18,6 +18,9 @@ A Cohort object (S7 class) with the following structure:
 - study: A Study object with metadata for a cross-species genomics
   project
 
+- subjects (named list): 4 Subject objects automatically created,
+  accessible by subject_id
+
 - subject_tbl (tibble): 4 subjects (2 rat, 2 mouse) with species, sex,
   strain, genotype, cohort, timepoint
 
@@ -35,11 +38,17 @@ including:
 
 - Cross-species data (rat and mouse)
 
+- Automatic Subject object creation from manifest data
+
 - Subject-to-sample mappings with multiple assays
 
 - Integration with a Study object for project context
 
 - Proper data types and structure for downstream analysis
+
+Subject objects are automatically created when building the cohort,
+eliminating the need to manually instantiate individual Subject objects.
+Access them via the subjects property using subject IDs as names.
 
 Use this cohort to explore the API, test workflows, or as a template for
 creating your own cohorts from real data.
@@ -69,13 +78,24 @@ example_cohort@study
 #>  @ aims         : chr [1:2] "Map rat genes to mouse orthologs" ...
 #>  @ assays       : chr [1:2] "WES" "snRNA-seq"
 #>  @ genome_builds:List of 3
-#>  .. $ rat  : chr "rn6"
+#>  .. $ rat  : chr "rn7"
 #>  .. $ mouse: chr "mm10"
 #>  .. $ human: chr "hg38"
-#>  @ created_at   : POSIXct[1:1], format: "2026-02-05 04:16:44"
+#>  @ created_at   : POSIXct[1:1], format: "2026-02-05 06:06:07"
 #>  @ tags         : chr(0) 
 
-# View all subjects with metadata
+# Access individual Subject objects (automatically created)
+rat1 <- example_cohort@subjects[["RAT001"]]
+rat1@species
+#> [1] "rat"
+rat1@sex
+#> [1] "M"
+
+# List all subject IDs
+names(example_cohort@subjects)
+#> [1] "RAT001"   "RAT002"   "MOUSE001" "MOUSE002"
+
+# View all subjects with metadata (tibble for bulk operations)
 example_cohort@subject_tbl
 #> # A tibble: 4 × 7
 #>   subject_id species genotype sex   strain  cohort    timepoint

@@ -13,7 +13,7 @@ for cross-species genomics analysis."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">myceliumr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.01</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,17 +77,18 @@ character long.</p></dd>
 
 <dt id="arg-description">description<a class="anchor" aria-label="anchor" href="#arg-description"></a></dt>
 <dd><p>Character scalar with optional longer description of the
-study purpose and design. Defaults to NA.</p></dd>
+study purpose and design. Can be a file path (ending with .md, .txt, or .rtf)
+which will be read into the description field. Defaults to NA.</p></dd>
 
 
 <dt id="arg-hypotheses">hypotheses<a class="anchor" aria-label="anchor" href="#arg-hypotheses"></a></dt>
-<dd><p>Character vector of research hypotheses. Optional and
-defaults to empty vector.</p></dd>
+<dd><p>Character vector of research hypotheses. Accepts multiple
+hypotheses. Optional and defaults to empty vector.</p></dd>
 
 
 <dt id="arg-aims">aims<a class="anchor" aria-label="anchor" href="#arg-aims"></a></dt>
-<dd><p>Character vector of specific research aims. Optional and defaults
-to empty vector.</p></dd>
+<dd><p>Character vector of specific research aims. Accepts multiple aims.
+Optional and defaults to empty vector.</p></dd>
 
 
 <dt id="arg-assays">assays<a class="anchor" aria-label="anchor" href="#arg-assays"></a></dt>
@@ -97,7 +98,8 @@ to empty vector.</p></dd>
 
 <dt id="arg-genome-builds">genome_builds<a class="anchor" aria-label="anchor" href="#arg-genome-builds"></a></dt>
 <dd><p>Named list mapping species names to genome build versions
-(e.g., <code>list(rat = "rn6", mouse = "mm10")</code>). Optional and defaults to empty list.</p></dd>
+(e.g., <code>list(rat = "rn7", mouse = "mm10")</code>). Supports rn6, rn7 for rat;
+mm9, mm10, mm39 for mouse; hg19, hg38 for human. Optional and defaults to empty list.</p></dd>
 
 
 <dt id="arg-created-at">created_at<a class="anchor" aria-label="anchor" href="#arg-created-at"></a></dt>
@@ -118,6 +120,10 @@ and defaults to empty vector.</p></dd>
     <p>Study objects are S7 classes that immutably store research project metadata.
 They provide context for cohorts and support cross-species genomics analysis.
 The study_id and title are required; all other fields are optional.</p>
+<p>The description parameter accepts either plain text or a file path. If a file
+path ending with .md, .txt, or .rtf is provided, the file contents will be
+read and stored in the description field. This allows storing detailed README
+content within the study metadata.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -126,29 +132,43 @@ The study_id and title are required; all other fields are optional.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu">study_new</span><span class="op">(</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example with multiple hypotheses and aims</span></span></span>
+<span class="r-in"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu">study_new</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  study_id <span class="op">=</span> <span class="st">"STUDY001"</span>,</span></span>
 <span class="r-in"><span>  title <span class="op">=</span> <span class="st">"Cross-species genomics comparison"</span>,</span></span>
 <span class="r-in"><span>  description <span class="op">=</span> <span class="st">"Comparing rat and mouse genomes"</span>,</span></span>
-<span class="r-in"><span>  hypotheses <span class="op">=</span> <span class="st">"Orthologous genes show conserved expression"</span>,</span></span>
-<span class="r-in"><span>  aims <span class="op">=</span> <span class="st">"Map regulatory regions"</span>,</span></span>
+<span class="r-in"><span>  hypotheses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"Orthologous genes show conserved expression patterns"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Disease genes are enriched in specific pathways"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  aims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"Map regulatory regions across species"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Identify conserved non-coding elements"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WES"</span>, <span class="st">"snRNA-seq"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  genome_builds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rat <span class="op">=</span> <span class="st">"rn6"</span>, mouse <span class="op">=</span> <span class="st">"mm10"</span>, human <span class="op">=</span> <span class="st">"hg38"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  genome_builds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rat <span class="op">=</span> <span class="st">"rn7"</span>, mouse <span class="op">=</span> <span class="st">"mm10"</span>, human <span class="op">=</span> <span class="st">"hg38"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;myceliumr::Study&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ study_id     : chr "STUDY001"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ title        : chr "Cross-species genomics comparison"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ description  : chr "Comparing rat and mouse genomes"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ hypotheses   : chr "Orthologous genes show conserved expression"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ aims         : chr "Map regulatory regions"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  @ hypotheses   : chr [1:2] "Orthologous genes show conserved expression patterns" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  @ aims         : chr [1:2] "Map regulatory regions across species" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ assays       : chr [1:2] "WES" "snRNA-seq"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ genome_builds:List of 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ rat  : chr "rn6"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ rat  : chr "rn7"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ mouse: chr "mm10"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ human: chr "hg38"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ created_at   : POSIXct[1:1], format: "2026-02-05 05:42:29"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  @ created_at   : POSIXct[1:1], format: "2026-02-05 07:59:44"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ tags         : chr(0) </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example with README file as description</span></span></span>
+<span class="r-in"><span><span class="co"># study &lt;- study_new(</span></span></span>
+<span class="r-in"><span><span class="co">#   study_id = "STUDY002",</span></span></span>
+<span class="r-in"><span><span class="co">#   title = "My Study",</span></span></span>
+<span class="r-in"><span><span class="co">#   description = "path/to/README.md"</span></span></span>
+<span class="r-in"><span><span class="co"># )</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

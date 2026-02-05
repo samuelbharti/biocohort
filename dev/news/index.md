@@ -1,6 +1,29 @@
 # Changelog
 
-## myceliumr 0.01
+## myceliumr 0.1.1
+
+### New Features
+
+- **Automatic Subject Object Creation**: Cohort objects now
+  automatically create Subject objects from subject_tbl rows. Access
+  individual subjects via `cohort@subjects[["subject_id"]]`
+- **Multiple Hypotheses and Aims**: Study objects now properly support
+  multiple hypotheses and aims as character vectors
+- **README File Support**: Study `description` parameter can now accept
+  file paths (.md, .txt, .rtf) to load README content directly
+- **Genome Build Updates**: Added rn7 support for rat genomes.
+  Documentation clarifies supported builds (rat: rn6/rn7, mouse:
+  mm9/mm10/mm39, human: hg19/hg38)
+
+### Enhancements
+
+- Enhanced documentation across all functions with verbose descriptions,
+  detailed parameters, examples, and cross-references
+- Added GitHub Copilot as contributor
+- Improved example_cohort dataset with rn7 genome build
+- Package now displays version and documentation URL on load
+
+## myceliumr 0.1.0
 
 ### Initial Release
 

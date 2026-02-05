@@ -64,6 +64,24 @@ R2,rat,KO,WES_002,SN_002
 See [package documentation](http://www.samuelbharti.com/myceliumr/) for
 details.
 
+## Documentation
+
+The package website includes: -
+**[Glossary](http://www.samuelbharti.com/myceliumr/articles/glossary.md)**
+— Key terms and definitions - **[Naming
+Conventions](http://www.samuelbharti.com/myceliumr/articles/naming-conventions.md)**
+— Standardized column, object, and file names - **[Getting
+Started](http://www.samuelbharti.com/myceliumr/articles/getting-started.md)**
+— Workflow and examples
+
+To build the site locally:
+
+``` r
+pkgdown::build_site()
+```
+
+This generates HTML documentation in the `docs/` directory.
+
 ## Contributing
 
 See

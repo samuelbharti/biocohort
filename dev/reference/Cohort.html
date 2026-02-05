@@ -13,7 +13,7 @@ container for WES and snRNA-seq analyses across rat, mouse, and human studies.">
 
     <a class="navbar-brand me-2" href="../index.html">myceliumr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.01</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,12 +50,13 @@ container for WES and snRNA-seq analyses across rat, mouse, and human studies.</
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Cohort</span><span class="op">(</span></span>
 <span>  study <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  subject_tbl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tbl_df"</span>, <span class="st">"tbl"</span>, <span class="st">"data.frame"</span><span class="op">)</span>, row.names <span class="op">=</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  sample_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tbl_df"</span>, <span class="st">"tbl"</span>, <span class="st">"data.frame"</span><span class="op">)</span>, row.names <span class="op">=</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  subjects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  subject_tbl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sample_map <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  paths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  analyses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  analyses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  registry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  cache <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -66,6 +67,12 @@ container for WES and snRNA-seq analyses across rat, mouse, and human studies.</
 <dl><dt id="arg-study">study<a class="anchor" aria-label="anchor" href="#arg-study"></a></dt>
 <dd><p>A Study object providing project-level context and metadata,
 or NULL if not applicable. Optional.</p></dd>
+
+
+<dt id="arg-subjects">subjects<a class="anchor" aria-label="anchor" href="#arg-subjects"></a></dt>
+<dd><p>Named list of Subject objects, automatically created from
+subject_tbl rows during cohort construction. Names are subject IDs.
+Access individual subjects via: <code>cohort@subjects[["RAT001"]]</code>.</p></dd>
 
 
 <dt id="arg-subject-tbl">subject_tbl<a class="anchor" aria-label="anchor" href="#arg-subject-tbl"></a></dt>
@@ -91,6 +98,16 @@ Optional, defaults to empty list.</p></dd>
 <dd><p>Named list containing analysis results, intermediate tables,
 or other data objects for later retrieval. Optional, defaults to empty list.</p></dd>
 
+
+<dt id="arg-registry">registry<a class="anchor" aria-label="anchor" href="#arg-registry"></a></dt>
+<dd><p>Named list of AnalysisSpec objects defining registered
+analyses. Names correspond to spec@name. Optional, defaults to empty list.</p></dd>
+
+
+<dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>
+<dd><p>Named list for optional memoization of loaded analysis data.
+Optional, defaults to empty list.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -100,18 +117,23 @@ Validation ensures:</p><ul><li><p>Required columns in subject_tbl and sample_map
 <li><p>Referential integrity between subject_tbl and sample_map</p></li>
 <li><p>No duplicate subject IDs</p></li>
 </ul><p>Access properties via the <code>@</code> operator:</p>
-<p></p><div class="sourceCode r"><pre><code><span><span class="va">cohort</span><span class="op">@</span><span class="va">study</span>       <span class="co"># Study object or NULL</span></span>
-<span><span class="va">cohort</span><span class="op">@</span><span class="va">subject_tbl</span> <span class="co"># Subject metadata table</span></span>
-<span><span class="va">cohort</span><span class="op">@</span><span class="va">sample_map</span>  <span class="co"># Sample mapping table</span></span>
-<span><span class="va">cohort</span><span class="op">@</span><span class="va">paths</span>       <span class="co"># File paths</span></span>
-<span><span class="va">cohort</span><span class="op">@</span><span class="va">analyses</span>    <span class="co"># Stored analysis results</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">cohort</span><span class="op">@</span><span class="va">study</span>         <span class="co"># Study object or NULL</span></span>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">subjects</span>      <span class="co"># Named list of Subject objects</span></span>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">subjects</span><span class="op">[[</span><span class="st">"RAT001"</span><span class="op">]</span><span class="op">]</span>  <span class="co"># Individual Subject object</span></span>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">subject_tbl</span>   <span class="co"># Subject metadata table (for bulk operations)</span></span>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">sample_map</span>    <span class="co"># Sample mapping table</span></span>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">paths</span>         <span class="co"># File paths</span></span>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">analyses</span>      <span class="co"># Stored analysis results</span></span>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">registry</span>      <span class="co"># Named list of AnalysisSpec objects</span></span>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">cache</span>         <span class="co"># Memoization cache</span></span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="cohort_new.html">cohort_new()</a></code> for object construction,
 <code><a href="validate_cohort.html">validate_cohort()</a></code> for validation details,
 <code><a href="validate_manifest.html">validate_manifest()</a></code> for manifest preparation,
-<code><a href="read_manifest_csv.html">read_manifest_csv()</a></code> for loading manifest from file</p></div>
+<code><a href="read_manifest_csv.html">read_manifest_csv()</a></code> for loading manifest from file,
+<code><a href="analysis_register.html">analysis_register()</a></code> for registering analyses</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

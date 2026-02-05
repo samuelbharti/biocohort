@@ -1,0 +1,96 @@
+# List registered analysis specifications
+
+Returns a tibble with one row per registered AnalysisSpec in a Cohort.
+Summarizes key metadata for quick inspection of available analyses.
+
+## Usage
+
+``` r
+analysis_list(cohort)
+```
+
+## Arguments
+
+- cohort:
+
+  A Cohort object.
+
+## Value
+
+A tibble with the following columns:
+
+- `name`: Analysis name (chr)
+
+- `assay`: Assay type (chr)
+
+- `level`: Data level - "subject", "pair", or "cohort" (chr)
+
+- `format`: File format (chr)
+
+- `reader`: Reader function name (chr)
+
+- `root_key`: Optional root path key (chr)
+
+If the cohort has no registered specs, returns an empty tibble with
+these columns.
+
+## Details
+
+The returned tibble includes only the most essential metadata fields for
+discovery and filtering. Use
+[`analysis_spec()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec.md)
+to retrieve the full AnalysisSpec object including description,
+path_template, and key_cols.
+
+## See also
+
+[`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md)
+for registering specs,
+[`analysis_spec()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec.md)
+for retrieving a full spec object
+
+## Examples
+
+``` r
+# Create and register specs
+study <- study_new(study_id = "STUDY001", title = "My Study")
+manifest <- data.frame(
+  rat_id = c(101, 102),
+  wes_tumor_id = c("WES_T1", "WES_T2"),
+  wes_normal_id = c("WES_N1", "WES_N2"),
+  sn_id = I(list("RNA_T1", "RNA_T2"))
+)
+parsed <- validate_manifest(manifest)
+cohort <- cohort_new(
+  subject_tbl = parsed$subject_tbl,
+  sample_map = parsed$sample_map,
+  study = study
+)
+
+spec1 <- analysis_spec_new(
+  name = "somatic_vars",
+  assay = "wes_somatic",
+  level = "pair",
+  format = "tsv",
+  reader = "read_tsv",
+  key_cols = c("pair_id")
+)
+
+spec2 <- analysis_spec_new(
+  name = "gene_expr",
+  assay = "snrna",
+  level = "subject",
+  format = "rds",
+  reader = "readRDS",
+  key_cols = c("subject_id")
+)
+
+cohort <- analysis_register(cohort, spec1)
+cohort <- analysis_register(cohort, spec2)
+analysis_list(cohort)
+#> # A tibble: 2 × 6
+#>   name         assay       level   format reader   root_key
+#>   <chr>        <chr>       <chr>   <chr>  <chr>    <chr>   
+#> 1 somatic_vars wes_somatic pair    tsv    read_tsv NA      
+#> 2 gene_expr    snrna       subject rds    readRDS  NA      
+```

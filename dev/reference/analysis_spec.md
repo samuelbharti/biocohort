@@ -1,0 +1,72 @@
+# Retrieve an analysis specification from registry
+
+Retrieves a fully-specified AnalysisSpec object from a Cohort's registry
+by name. Useful for accessing all properties of a registered analysis
+(description, path_template, key_cols, etc.).
+
+## Usage
+
+``` r
+analysis_spec(cohort, name)
+```
+
+## Arguments
+
+- cohort:
+
+  A Cohort object.
+
+- name:
+
+  Character scalar with the name of the AnalysisSpec to retrieve.
+
+## Value
+
+The AnalysisSpec object if found.
+
+## Details
+
+Raises an informative error if the spec name is not found in the
+registry.
+
+## See also
+
+[`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md)
+for registering specs,
+[`analysis_list()`](http://www.samuelbharti.com/myceliumr/reference/analysis_list.md)
+for listing all registered specs
+
+## Examples
+
+``` r
+# Create and register a spec
+study <- study_new(study_id = "STUDY001", title = "My Study")
+manifest <- data.frame(
+  rat_id = c(101, 102),
+  wes_tumor_id = c("WES_T1", "WES_T2"),
+  wes_normal_id = c("WES_N1", "WES_N2"),
+  sn_id = I(list("RNA_T1", "RNA_T2"))
+)
+parsed <- validate_manifest(manifest)
+cohort <- cohort_new(
+  subject_tbl = parsed$subject_tbl,
+  sample_map = parsed$sample_map,
+  study = study
+)
+
+spec <- analysis_spec_new(
+  name = "somatic_vars",
+  assay = "wes_somatic",
+  level = "pair",
+  format = "tsv",
+  reader = "read_tsv",
+  key_cols = c("pair_id")
+)
+
+cohort_with_spec <- analysis_register(cohort, spec)
+
+# Retrieve the spec
+retrieved_spec <- analysis_spec(cohort_with_spec, "somatic_vars")
+print(retrieved_spec@reader)  # "read_tsv"
+#> [1] "read_tsv"
+```

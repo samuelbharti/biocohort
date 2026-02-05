@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">myceliumr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.01</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,22 @@
     </div>
 
     <div class="section level2">
+      <h2 id="package">Package<a class="anchor" aria-label="anchor" href="#package"></a></h2>
+
+      <div class="section-desc"><p>Package overview and entry point</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="myceliumr-package.html">myceliumr</a></code> <code><a href="myceliumr-package.html">myceliumr-package</a></code>
+
+        </dt>
+        <dd>myceliumr: Cross-Species Cohort Framework</dd>
+      </dl></div><div class="section level2">
       <h2 id="core-classes">Core Classes<a class="anchor" aria-label="anchor" href="#core-classes"></a></h2>
 
       <div class="section-desc"><p>S7 classes for study data structures</p></div>
@@ -61,6 +77,13 @@
 
         </dt>
         <dd>S7 Cohort class</dd>
+
+        <dt>
+
+          <code><a href="AnalysisSpec.html">AnalysisSpec()</a></code>
+
+        </dt>
+        <dd>S7 AnalysisSpec class</dd>
 
         <dt>
 
@@ -98,6 +121,13 @@
 
         </dt>
         <dd>Create a Cohort object</dd>
+
+        <dt>
+
+          <code><a href="analysis_spec_new.html">analysis_spec_new()</a></code>
+
+        </dt>
+        <dd>Create an AnalysisSpec object</dd>
       </dl></div><div class="section level2">
       <h2 id="io-functions">IO Functions<a class="anchor" aria-label="anchor" href="#io-functions"></a></h2>
 
@@ -115,6 +145,36 @@
         </dt>
         <dd>Read and validate a manifest CSV file</dd>
       </dl></div><div class="section level2">
+      <h2 id="analysis-registry">Analysis Registry<a class="anchor" aria-label="anchor" href="#analysis-registry"></a></h2>
+
+      <div class="section-desc"><p>Register and list analyses</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="analysis_register.html">analysis_register()</a></code>
+
+        </dt>
+        <dd>Register an analysis specification in a cohort</dd>
+
+        <dt>
+
+          <code><a href="analysis_list.html">analysis_list()</a></code>
+
+        </dt>
+        <dd>List registered analysis specifications</dd>
+
+        <dt>
+
+          <code><a href="analysis_spec.html">analysis_spec()</a></code>
+
+        </dt>
+        <dd>Retrieve an analysis specification from registry</dd>
+      </dl></div><div class="section level2">
       <h2 id="validation">Validation<a class="anchor" aria-label="anchor" href="#validation"></a></h2>
 
       <div class="section-desc"><p>Data validation functions</p></div>
@@ -129,7 +189,7 @@
           <code><a href="validate_manifest.html">validate_manifest()</a></code>
 
         </dt>
-        <dd>Validate and structure a manifest table</dd>
+        <dd>Validate and structure a manifest for cross-species genomics study</dd>
 
         <dt>
 
