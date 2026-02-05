@@ -30,6 +30,10 @@ articles:
 - title: Tutorials
   contents:
   - getting-started
+- title: Reference
+  contents:
+  - glossary
+  - naming-conventions
 reference:
 - title: Core Classes
   desc: S7 classes for study data structures
