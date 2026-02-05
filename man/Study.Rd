@@ -12,29 +12,54 @@ Study(
   aims = character(0),
   assays = character(0),
   genome_builds = list(),
-  created_at = structure(1770265130.10862, class = c("POSIXct", "POSIXt")),
+  created_at = structure(1770266595.37765, class = c("POSIXct", "POSIXt")),
   tags = character(0)
 )
 }
 \arguments{
-\item{study_id}{Character scalar for study identifier.}
+\item{study_id}{Character scalar for study identifier. Unique within a project.}
 
-\item{title}{Character scalar for study title.}
+\item{title}{Character scalar for study name/title.}
 
-\item{description}{Character scalar for study description.}
+\item{description}{Character scalar for longer description of study purpose,
+design, or protocols. Optional.}
 
-\item{hypotheses}{Character vector of study hypotheses.}
+\item{hypotheses}{Character vector of research hypotheses. Optional.}
 
-\item{aims}{Character vector of study aims.}
+\item{aims}{Character vector of specific research aims. Optional.}
 
-\item{assays}{Character vector of assay types.}
+\item{assays}{Character vector of assay types used (e.g., "WES", "snRNA-seq").
+Optional.}
 
-\item{genome_builds}{Named list of genome build information.}
+\item{genome_builds}{Named list mapping species to genome build versions
+(e.g., \code{list(rat = "rn6", mouse = "mm10", human = "hg38")}). Optional.}
 
-\item{created_at}{POSIXct timestamp for study creation.}
+\item{created_at}{POSIXct timestamp for creation. Defaults to current time.}
 
-\item{tags}{Character vector of tags.}
+\item{tags}{Character vector of arbitrary tags for categorization. Optional.}
 }
 \description{
-S7 Study class
+An immutable S7 class for storing research project metadata in cross-species
+genomics studies. Study objects provide high-level context and configuration
+for cohorts and analyses involving rat, mouse, and human subjects.
+}
+\details{
+Use \code{\link[=study_new]{study_new()}} to construct Study objects with immediate validation.
+
+Access properties via the \code{@} operator:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{study@study_id
+study@title
+study@description
+study@hypotheses
+study@aims
+study@assays
+study@genome_builds
+study@created_at
+study@tags
+}\if{html}{\out{</div>}}
+}
+\seealso{
+\code{\link[=study_new]{study_new()}} for object construction,
+\link{Cohort} for combining studies with subject data
 }

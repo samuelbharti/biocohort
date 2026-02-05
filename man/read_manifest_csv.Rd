@@ -2,18 +2,72 @@
 % Please edit documentation in R/io.R
 \name{read_manifest_csv}
 \alias{read_manifest_csv}
-\title{Read a manifest CSV file}
+\title{Read and validate a manifest CSV file}
 \usage{
 read_manifest_csv(path, ...)
 }
 \arguments{
-\item{path}{Path to a CSV manifest.}
+\item{path}{Character scalar with file path to a CSV manifest file.
+Path must exist and file must be readable.}
 
-\item{...}{Additional arguments passed to readr::read_csv.}
+\item{...}{Additional named arguments passed to \code{\link[readr:read_delim]{readr::read_csv()}},
+such as \code{col_types}, \code{skip}, \code{comment}, etc.}
 }
 \value{
-A list with \code{subject_tbl} and \code{sample_map}.
+A list with two elements:
+\itemize{
+\item \code{subject_tbl}: Tibble containing subject-level metadata (subject_id,
+species, sex, strain, genotype, cohort, timepoint, notes)
+\item \code{sample_map}: Tibble mapping subjects to assay-specific sample IDs
+}
 }
 \description{
-Read a manifest CSV file
+Reads a CSV file containing cross-species subject metadata and sample mappings,
+then validates and structures the data into subject and sample tables suitable
+for creating a Cohort object. This is the primary entry point for loading
+external manifest data.
+}
+\details{
+The manifest CSV must contain at least two columns:
+\itemize{
+\item \code{subject_id}: Unique identifier for each subject (character)
+\item \code{species}: Species designation - one of "rat", "mouse", or "human" (character)
+}
+
+Optional subject metadata columns are automatically detected:
+\itemize{
+\item \code{sex}: Biological sex
+\item \code{strain}: Strain or breed designation
+\item \code{genotype}: Genetic background or modification
+\item \code{cohort}: Treatment group or cohort membership
+\item \code{timepoint}: Study timepoint or collection date
+\item \code{notes}: Free-form notes
+}
+
+Any additional columns are treated as sample/assay IDs and placed in the
+returned \code{sample_map}. Typical assay columns include:
+\itemize{
+\item \code{assay_wes_id}: WES sample identifier
+\item \code{assay_snrna_id}: snRNA-seq sample identifier
+}
+}
+\examples{
+# Create a temporary CSV manifest
+manifest_file <- tempfile(fileext = ".csv")
+writeLines(
+  "subject_id,species,sex,strain,assay_wes_id\n
+   RAT001,rat,M,Lewis,WES_R001\n
+   MOUSE001,mouse,F,C57BL/6,WES_M001",
+  manifest_file
+)
+
+# Read and validate the manifest
+manifest_split <- read_manifest_csv(manifest_file)
+print(manifest_split$subject_tbl)
+print(manifest_split$sample_map)
+
+}
+\seealso{
+\code{\link[=validate_manifest]{validate_manifest()}} for detailed validation rules,
+\code{\link[=cohort_new]{cohort_new()}} for creating a Cohort from manifest data
 }

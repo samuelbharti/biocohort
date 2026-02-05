@@ -16,25 +16,67 @@ subject_new(
 )
 }
 \arguments{
-\item{subject_id}{Character scalar for subject identifier.}
+\item{subject_id}{Character scalar providing a unique identifier for the subject.
+Must be at least 1 character long.}
 
-\item{species}{Character scalar for species (rat/mouse/human).}
+\item{species}{Character scalar specifying the species. Must be one of:
+"rat", "mouse", or "human". Case-insensitive. Required.}
 
-\item{sex}{Character scalar for biological sex.}
+\item{sex}{Character scalar indicating biological sex (e.g., "M", "F").
+Optional and defaults to NA.}
 
-\item{strain}{Character scalar for strain/breed.}
+\item{strain}{Character scalar for strain or breed designation.
+Optional and defaults to NA.}
 
-\item{genotype}{Character scalar for genotype.}
+\item{genotype}{Character scalar describing the genetic background or
+modification (e.g., "WT", "KO"). Optional and defaults to NA.}
 
-\item{cohort}{Character scalar for cohort membership.}
+\item{cohort}{Character scalar for cohort membership or treatment group.
+Optional and defaults to NA.}
 
-\item{timepoint}{Character scalar for timepoint.}
+\item{timepoint}{Character scalar indicating study timepoint or collection date.
+Optional and defaults to NA.}
 
-\item{notes}{Character scalar for notes.}
+\item{notes}{Character scalar for additional metadata or observations.
+Optional and defaults to NA.}
 }
 \value{
-A Subject object.
+A Subject object with validated species specification.
 }
 \description{
-Create a Subject object
+Constructs a Subject object representing an individual animal or biological
+sample in a study. Subjects must have a unique identifier and valid species
+designation (rat, mouse, or human). All other attributes are optional.
+}
+\details{
+Subject objects are S7 classes for storing individual-level metadata in
+cross-species studies. Species validation ensures compatibility across
+supported organisms (rat, mouse, human). Individual subjects are typically
+grouped into Cohort objects for collective analysis.
+}
+\examples{
+# Create a rat subject
+rat_subject <- subject_new(
+  subject_id = "RAT001",
+  species = "rat",
+  sex = "M",
+  strain = "Lewis",
+  genotype = "WT",
+  cohort = "Control"
+)
+print(rat_subject)
+
+# Create a mouse subject
+mouse_subject <- subject_new(
+  subject_id = "MOUSE001",
+  species = "mouse",
+  sex = "F",
+  strain = "C57BL/6",
+  genotype = "KO"
+)
+print(mouse_subject)
+
+}
+\seealso{
+\link{Cohort} for managing groups of subjects
 }

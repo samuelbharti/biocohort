@@ -13,19 +13,80 @@ cohort_new(
 )
 }
 \arguments{
-\item{subject_tbl}{A tibble with subject metadata.}
+\item{subject_tbl}{A tibble containing subject-level metadata. Required columns:
+\code{subject_id} (character) and \code{species} (rat/mouse/human). Optional columns:
+\code{sex}, \code{strain}, \code{genotype}, \code{cohort}, \code{timepoint}, \code{notes}. Typically
+obtained from \code{\link[=validate_manifest]{validate_manifest()}}.}
 
-\item{sample_map}{A tibble mapping subjects to assay-specific sample IDs.}
+\item{sample_map}{A tibble mapping subjects to assay-specific sample IDs.
+Must have at least a \code{subject_id} column to link to \code{subject_tbl}.
+Additional columns can include \code{assay_wes_id}, \code{assay_snrna_id}, etc.
+Typically obtained from \code{\link[=validate_manifest]{validate_manifest()}}.}
 
-\item{study}{A Study object or NULL.}
+\item{study}{A Study object providing project-level metadata and context,
+or NULL if not applicable. Defaults to NULL.}
 
-\item{paths}{Named list of file paths.}
+\item{paths}{Named list of file paths to data files or results directories.
+Optional and defaults to empty list.}
 
-\item{analyses}{Named list of analysis results.}
+\item{analyses}{Named list containing analysis results or intermediate data
+objects for later retrieval. Optional and defaults to empty list.}
 }
 \value{
-A Cohort object.
+A Cohort object with validated subject data and optional metadata.
+Raises informative errors if validation fails.
 }
 \description{
-Create a Cohort object
+Constructs a Cohort object by combining validated subject data with optional
+study metadata, file paths, and analysis results. Cohorts serve as the primary
+container for cross-species genomics data, ensuring schema validation and data
+integrity across rat, mouse, and human studies.
+}
+\details{
+Cohort objects are S7 classes for managing cross-species study data.
+Construction automatically runs \code{\link[=validate_cohort]{validate_cohort()}} to ensure:
+\itemize{
+\item Required columns are present
+\item Species values are valid (rat/mouse/human)
+\item No duplicate subject IDs
+\item Sample map can be linked to subjects
+}
+
+Use the \code{@} operator to access cohort components:
+\itemize{
+\item \code{cohort@study} - Study metadata
+\item \code{cohort@subject_tbl} - Subject table
+\item \code{cohort@sample_map} - Sample mapping
+}
+}
+\examples{
+# Create a study
+study <- study_new(
+  study_id = "STUDY001",
+  title = "Cross-species study",
+  assays = c("WES", "snRNA-seq")
+)
+
+# Create manifest data
+manifest <- data.frame(
+  subject_id = c("RAT001", "MOUSE001"),
+  species = c("rat", "mouse"),
+  sex = c("M", "F"),
+  assay_wes_id = c("WES_R001", "WES_M001")
+)
+
+# Validate and create cohort
+manifest_split <- validate_manifest(manifest)
+cohort <- cohort_new(
+  study = study,
+  subject_tbl = manifest_split$subject_tbl,
+  sample_map = manifest_split$sample_map
+)
+print(cohort)
+
+}
+\seealso{
+\code{\link[=validate_manifest]{validate_manifest()}} for preparing input tables,
+\code{\link[=validate_cohort]{validate_cohort()}} for detailed validation,
+\link{Study} for study metadata
 }

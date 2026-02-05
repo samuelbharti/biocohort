@@ -2,16 +2,81 @@
 % Please edit documentation in R/validate.R
 \name{validate_manifest}
 \alias{validate_manifest}
-\title{Validate a manifest table}
+\title{Validate and structure a manifest table}
 \usage{
 validate_manifest(manifest)
 }
 \arguments{
-\item{manifest}{A data.frame or tibble with subject metadata and assay IDs.}
+\item{manifest}{A data.frame or tibble with subject metadata and optional
+sample/assay ID columns. See Details for required and optional columns.}
 }
 \value{
-A list with \code{subject_tbl} and \code{sample_map}.
+A list with two elements:
+\itemize{
+\item \code{subject_tbl}: Tibble with subject-level metadata
+\item \code{sample_map}: Tibble with subject-to-sample mappings
+}
 }
 \description{
-Validate a manifest table
+Validates a manifest data frame or tibble containing cross-species subject
+metadata and sample identifiers. Automaticallyr structures the data into
+subject-level and sample-level tables suitable for Cohort construction.
+Comprehensive validation ensures data integrity and compatibility.
+}
+\details{
+REQUIRED COLUMNS:
+\itemize{
+\item \code{subject_id} (character): Unique subject identifier, no duplicates allowed
+\item \code{species} (character): Species designation - one of "rat", "mouse",
+"human" (case-insensitive)
+}
+
+RECOGNIZED OPTIONAL SUBJECT COLUMNS (placed in \code{subject_tbl}):
+\itemize{
+\item \code{sex}: Biological sex
+\item \code{strain}: Strain/breed designation
+\item \code{genotype}: Genetic background or modification
+\item \code{cohort}: Treatment group or cohort assignment
+\item \code{timepoint}: Study timepoint or collection date
+\item \code{notes}: Free-form annotations
+}
+
+SAMPLE ID COLUMNS (placed in \code{sample_map}):
+Any additional columns not listed above are treated as assay-specific
+sample identifiers and included in the sample map. Examples:
+\itemize{
+\item \code{assay_wes_id}: WES sample identifier
+\item \code{assay_snrna_id}: snRNA-seq sample identifier
+}
+
+VALIDATION CHECKS:
+\itemize{
+\item All required columns present and non-empty
+\item subject_id and species are character vectors
+\item No missing or empty values in required columns
+\item No duplicate subject_id values
+\item All species values are valid (rat/mouse/human)
+}
+}
+\examples{
+# Create valid manifest
+manifest <- data.frame(
+  subject_id = c("RAT001", "RAT002", "MOUSE001"),
+  species = c("rat", "rat", "mouse"),
+  sex = c("M", "F", "M"),
+  strain = c("Lewis", "Lewis", "C57BL/6"),
+  genotype = c("WT", "WT", "KO"),
+  assay_wes_id = c("WES_R001", "WES_R002", "WES_M001")
+)
+
+# Validate and structure
+result <- validate_manifest(manifest)
+print(result$subject_tbl)
+print(result$sample_map)
+
+}
+\seealso{
+\code{\link[=read_manifest_csv]{read_manifest_csv()}} for reading manifest from CSV file,
+\code{\link[=validate_cohort]{validate_cohort()}} for cohort-level validation,
+\code{\link[=cohort_new]{cohort_new()}} for creating a Cohort object
 }

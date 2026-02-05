@@ -7,11 +7,55 @@
 validate_cohort(x)
 }
 \arguments{
-\item{x}{A Cohort object.}
+\item{x}{An S7 object expected to be a Cohort class instance.}
 }
 \value{
-TRUE (invisibly) when valid.
+Invisibly returns TRUE if validation succeeds. Throws informative
+errors if validation fails.
 }
 \description{
-Validate a Cohort object
+Ensures a Cohort object satisfies all structural and integrity requirements
+for cross-species genomics analysis. Validates the subject table, sample map,
+and referential integrity between them. Intended as an internal validation
+step called automatically by \code{\link[=cohort_new]{cohort_new()}}.
+}
+\details{
+VALIDATION CHECKS:
+\itemize{
+\item \code{x} is actually a Cohort object
+\item Both \code{subject_tbl} and \code{sample_map} are data frames
+\item \code{subject_tbl} includes required columns: subject_id, species
+\item \code{sample_map} includes subject_id column
+\item subject_id and species are character vectors, non-empty
+\item No duplicate subject_id values in subject_tbl
+\item All species values are valid (rat/mouse/human)
+\item Referential integrity: sample_map$subject_id values exist in subject_tbl
+}
+
+Validation is performed automatically by \code{\link[=cohort_new]{cohort_new()}}, but can be called
+directly for debugging or custom Cohort construction.
+}
+\examples{
+# Create valid cohort components
+subjects <- data.frame(
+  subject_id = "RAT001",
+  species = "rat",
+  sex = "M"
+)
+samples <- data.frame(
+  subject_id = "RAT001",
+  assay_wes_id = "WES_R001"
+)
+cohort <- cohort_new(
+  subject_tbl = subjects,
+  sample_map = samples
+)
+
+# Validation succeeds (called automatically above)
+validate_cohort(cohort)
+
+}
+\seealso{
+\code{\link[=cohort_new]{cohort_new()}} for Cohort construction,
+\code{\link[=validate_manifest]{validate_manifest()}} for manifest validation
 }
