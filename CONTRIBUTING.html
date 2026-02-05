@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">myceliumr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.01</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,7 +18,7 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/yourusername/myceliumr" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/samuelbharti/myceliumr" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -28,52 +28,42 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Contributing to myceliumr</h1>
-      <small class="dont-index">Source: <a href="https://github.com/yourusername/myceliumr/blob/main/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/samuelbharti/myceliumr/blob/main/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
     </div>
 
 <div id="contributing-to-myceliumr" class="section level1">
 
 <div class="section level2">
 <h2 id="development-workflow">Development Workflow<a class="anchor" aria-label="anchor" href="#development-workflow"></a></h2>
-<p>See <a href="DEVELOPMENT_WORKFLOW.html">DEVELOPMENT_WORKFLOW.md</a> for the complete checklist of steps to follow after making changes.</p>
-<p><strong>Quick summary:</strong> 1. Make changes 2. <code>devtools::load_all()</code> - test interactively 3. <code>devtools::test()</code> - run tests 4. <code>devtools::check()</code> - validate package 5. Commit and push (website auto-updates)</p>
-</div>
-<div class="section level2">
-<h2 id="development-setup">Development Setup<a class="anchor" aria-label="anchor" href="#development-setup"></a></h2>
-<ol style="list-style-type: decimal"><li><p>Clone the repository</p></li>
-<li>
-<p>Install dependencies:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_deps</span><span class="op">(</span>dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<ol style="list-style-type: decimal"><li>Make changes to code</li>
+<li>Test: <code>devtools::test()</code>
 </li>
-<li>
-<p>Load the package:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<li>Check: <code>devtools::check()</code>
 </li>
+<li>Commit and push (website auto-updates)</li>
 </ol></div>
 <div class="section level2">
+<h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a></h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Clone repository</span></span>
+<span><span class="co"># Install dependencies</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_deps</span><span class="op">(</span>dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Load package</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="testing">Testing<a class="anchor" aria-label="anchor" href="#testing"></a></h2>
-<p>Run tests before submitting changes:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="building-the-pkgdown-site">Building the pkgdown Site<a class="anchor" aria-label="anchor" href="#building-the-pkgdown-site"></a></h2>
-<p>The pkgdown website is automatically built via GitHub Actions when you push to main.</p>
-<p><strong>No local build required</strong> - the site builds on GitHub automatically.</p>
-<p>To preview locally (optional):</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Requires Pandoc installed</span></span>
-<span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="github-pages-setup">GitHub Pages Setup<a class="anchor" aria-label="anchor" href="#github-pages-setup"></a></h3>
-<p>Already configured via <code>usethis::use_pkgdown_github_pages()</code>.</p>
-<p>The site is at: <a href="http://www.samuelbharti.com/myceliumr/" class="uri">http://www.samuelbharti.com/myceliumr/</a></p>
-<p>It auto-updates when you push to main.</p>
-</div>
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a></h2>
+<p>The pkgdown website auto-builds on push via GitHub Actions.</p>
+<p>To build locally (requires Pandoc):</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="code-style">Code Style<a class="anchor" aria-label="anchor" href="#code-style"></a></h2>
@@ -81,11 +71,10 @@
 <li>Keep dependencies minimal</li>
 <li>Add tests for new functions</li>
 <li>Document all exported functions with roxygen2</li>
-<li>Follow tidyverse style guide</li>
 </ul></div>
 <div class="section level2">
 <h2 id="pull-requests">Pull Requests<a class="anchor" aria-label="anchor" href="#pull-requests"></a></h2>
-<ul><li>Create a new branch for each feature or fix</li>
+<ul><li>Create a new branch for each feature/fix</li>
 <li>Write descriptive commit messages</li>
 <li>Ensure all tests pass</li>
 <li>Update documentation as needed</li>
@@ -97,7 +86,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by First Last.</p>
+  <p>Developed by Samuel Bharti.</p>
 </div>
 
 <div class="pkgdown-footer-right">
