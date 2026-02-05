@@ -12,12 +12,12 @@ test_that("subject_new validates species", {
 })
 
 test_that("cohort_new validates structure", {
-  manifest <- tibble::tibble(
-    subject_id = c("R1", "R2"),
-    species = c("rat", "rat"),
-    wes_id = c("W1", "W2")
+  meta_rats <- data.frame(
+    rat_id = c(101, 102),
+    wes_tumor_id = c("DNA_T1", "DNA_T2"),
+    wes_normal_id = c("DNA_N1", "DNA_N2")
   )
-  parsed <- validate_manifest(manifest)
+  parsed <- validate_manifest(meta_rats)
 
   cohort <- cohort_new(
     subject_tbl = parsed$subject_tbl,

@@ -79,7 +79,10 @@ manifest <- data.frame(
   subject_id = c("RAT001", "MOUSE001"),
   species = c("rat", "mouse"),
   sex = c("M", "F"),
-  assay_wes_id = c("WES_R001", "WES_M001")
+  dna_tumor_id = c("DNA_T1", "DNA_T2"),
+  dna_normal_id = c("DNA_N1", "DNA_N2"),
+  wes_tumor_sample_id = c("WES_T1", "WES_T2"),
+  wes_normal_sample_id = c("WES_N1", "WES_N2")
 )
 
 # Validate and create cohort

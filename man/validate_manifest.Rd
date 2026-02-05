@@ -4,34 +4,54 @@
 \alias{validate_manifest}
 \title{Validate and structure a manifest table}
 \usage{
-validate_manifest(manifest)
+validate_manifest(manifest, allow_rna_duplicates = FALSE)
 }
 \arguments{
-\item{manifest}{A data.frame or tibble with subject metadata and optional
-sample/assay ID columns. See Details for required and optional columns.}
+\item{manifest}{A data.frame or tibble with subject metadata and sample IDs.
+See Details for required and optional columns.}
+
+\item{allow_rna_duplicates}{Logical. If TRUE, allows the same rna_sample_id
+to appear multiple times for a subject_id. If FALSE (default), errors on
+duplicates. Default: FALSE.}
 }
 \value{
-A list with two elements:
+A list with four elements:
 \itemize{
-\item \code{subject_tbl}: Tibble with subject-level metadata
-\item \code{sample_map}: Tibble with subject-to-sample mappings
+\item \code{subject_tbl}: Tibble with one row per subject_id (includes subject_id,
+species, and optional metadata columns)
+\item \code{wes_pair_tbl}: Tibble with one row per subject_id (includes subject_id,
+dna_tumor_id, dna_normal_id, wes_tumor_sample_id, wes_normal_sample_id)
+\item \code{rna_tbl}: Tibble with zero or more rows per subject_id (includes
+subject_id, rna_sample_id for each RNA tumor sample)
+\item \code{sample_map}: Long-format tibble mapping subjects to assay samples
+(includes subject_id, assay, sample_id, role)
 }
 }
 \description{
 Validates a manifest data frame or tibble containing cross-species subject
-metadata and sample identifiers. Automatically structures the data into
-subject-level and sample-level tables suitable for Cohort construction.
-Comprehensive validation ensures data integrity and compatibility.
+metadata, DNA sample identifiers, and optional RNA sample identifiers.
+Automatically structures the data into subject-level, WES pair-level, RNA-level,
+and sample mapping tables suitable for Cohort construction.
 }
 \details{
+Each subject must have exactly one DNA tumor sample and one DNA normal sample
+(represented by dna_tumor_id and dna_normal_id). Each subject can have zero
+or more RNA tumor samples. The manifest can have multiple rows per subject
+if they differ in rna_sample_id; DNA and WES identifiers must be consistent
+across rows for the same subject.
+
 REQUIRED COLUMNS:
 \itemize{
-\item \code{subject_id} (character): Unique subject identifier, no duplicates allowed
+\item \code{subject_id} (character): Unique subject identifier (primary key)
 \item \code{species} (character): Species designation - one of "rat", "mouse",
 "human" (case-insensitive)
+\item \code{dna_tumor_id} (character): DNA tumor sample identifier for this subject
+\item \code{dna_normal_id} (character): DNA normal sample identifier for this subject
+\item \code{wes_tumor_sample_id} (character): WES tumor sample identifier
+\item \code{wes_normal_sample_id} (character): WES normal sample identifier
 }
 
-RECOGNIZED OPTIONAL SUBJECT COLUMNS (placed in \code{subject_tbl}):
+RECOGNIZED OPTIONAL SUBJECT COLUMNS:
 \itemize{
 \item \code{sex}: Biological sex
 \item \code{strain}: Strain/breed designation
@@ -41,12 +61,10 @@ RECOGNIZED OPTIONAL SUBJECT COLUMNS (placed in \code{subject_tbl}):
 \item \code{notes}: Free-form annotations
 }
 
-SAMPLE ID COLUMNS (placed in \code{sample_map}):
-Any additional columns not listed above are treated as assay-specific
-sample identifiers and included in the sample map. Examples:
+OPTIONAL SAMPLE COLUMNS:
 \itemize{
-\item \code{assay_wes_id}: WES sample identifier
-\item \code{assay_snrna_id}: snRNA-seq sample identifier
+\item \code{rna_sample_id}: RNA tumor sample identifier (optional, can appear multiple
+times per subject_id for multi-modal studies)
 }
 
 VALIDATION CHECKS:
@@ -54,24 +72,30 @@ VALIDATION CHECKS:
 \item All required columns present and non-empty
 \item subject_id and species are character vectors
 \item No missing or empty values in required columns
-\item No duplicate subject_id values
+\item dna_tumor_id, dna_normal_id, wes_tumor_sample_id, wes_normal_sample_id
+are consistent (same value) across all rows for each subject_id
+\item No rna_sample_id duplicates within a subject (default: errors on duplicates;
+set allow_rna_duplicates = TRUE to allow)
 \item All species values are valid (rat/mouse/human)
 }
 }
 \examples{
-# Create valid manifest
+# Create valid manifest with DNA and RNA samples
 manifest <- data.frame(
-  subject_id = c("RAT001", "RAT002", "MOUSE001"),
-  species = c("rat", "rat", "mouse"),
-  sex = c("M", "F", "M"),
-  strain = c("Lewis", "Lewis", "C57BL/6"),
-  genotype = c("WT", "WT", "KO"),
-  assay_wes_id = c("WES_R001", "WES_R002", "WES_M001")
+  subject_id = c("RAT001", "RAT001", "RAT002"),
+  species = c("rat", "rat", "rat"),
+  dna_tumor_id = c("DNA_T1", "DNA_T1", "DNA_T2"),
+  dna_normal_id = c("DNA_N1", "DNA_N1", "DNA_N2"),
+  wes_tumor_sample_id = c("WES_T1", "WES_T1", "WES_T2"),
+  wes_normal_sample_id = c("WES_N1", "WES_N1", "WES_N2"),
+  rna_sample_id = c("RNA_T1", "RNA_T2", NA)
 )
 
 # Validate and structure
 result <- validate_manifest(manifest)
 print(result$subject_tbl)
+print(result$wes_pair_tbl)
+print(result$rna_tbl)
 print(result$sample_map)
 
 }
