@@ -108,6 +108,6 @@ print(study)
 #>  .. $ rat  : chr "rn6"
 #>  .. $ mouse: chr "mm10"
 #>  .. $ human: chr "hg38"
-#>  @ created_at   : POSIXct[1:1], format: "2026-02-05 05:35:41"
+#>  @ created_at   : POSIXct[1:1], format: "2026-02-05 05:37:25"
 #>  @ tags         : chr(0) 
 ```
