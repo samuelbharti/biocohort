@@ -19,7 +19,7 @@ A list with two elements:
 }
 \description{
 Validates a manifest data frame or tibble containing cross-species subject
-metadata and sample identifiers. Automaticallyr structures the data into
+metadata and sample identifiers. Automatically structures the data into
 subject-level and sample-level tables suitable for Cohort construction.
 Comprehensive validation ensures data integrity and compatibility.
 }
