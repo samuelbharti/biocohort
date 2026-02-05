@@ -123,7 +123,7 @@ print(cohort)
 #>  .. @ aims         : chr(0) 
 #>  .. @ assays       : chr [1:2] "WES" "snRNA-seq"
 #>  .. @ genome_builds: list()
-#>  .. @ created_at   : POSIXct[1:1], format: "2026-02-05 04:49:22"
+#>  .. @ created_at   : POSIXct[1:1], format: "2026-02-05 05:33:25"
 #>  .. @ tags         : chr(0) 
 #>  @ subject_tbl: tibble [2 × 3] (S3: tbl_df/tbl/data.frame)
 #>  $ subject_id: chr [1:2] "RAT001" "MOUSE001"
