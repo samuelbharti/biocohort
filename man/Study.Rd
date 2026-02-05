@@ -12,7 +12,7 @@ Study(
   aims = character(0),
   assays = character(0),
   genome_builds = list(),
-  created_at = structure(1770264002.95051, class = c("POSIXct", "POSIXt")),
+  created_at = structure(1770265130.10862, class = c("POSIXct", "POSIXt")),
   tags = character(0)
 )
 }
