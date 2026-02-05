@@ -7,7 +7,7 @@ Description: An R package for managing cross-species study data and analysis
     artifacts. Provides a cohort framework for rat/mouse/human projects with
     ortholog-aware annotation and lightweight storage for WES and snRNA outputs.
 License: MIT + file LICENSE
-URL: https://github.com/yourusername/myceliumr, https://yourusername.github.io/myceliumr/
+URL: https://github.com/yourusername/myceliumr, https://yourusername.github.io/myceliumr/, http://www.samuelbharti.com/myceliumr/
 BugReports: https://github.com/yourusername/myceliumr/issues
 Imports:
     S7,

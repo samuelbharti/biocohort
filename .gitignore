@@ -9,7 +9,6 @@
 *.Rcheck/
 .Rcheck/
 inst/doc
-docs/
 
 # Common outputs
 *.log
@@ -33,7 +32,11 @@ config/*.local.*
 .copilot/
 **/.copilot/
 
+# ---- Development workflow (local only) ----
+DEVELOPMENT_WORKFLOW.md
+
 # ---- OS junk ----
 .DS_Store
 Thumbs.db
 /examples
+docs

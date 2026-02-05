@@ -1,12 +1,10 @@
-url: https://yourusername.github.io/myceliumr/
+url: http://www.samuelbharti.com/myceliumr/
 template:
   bootstrap: 5
   bootswatch: flatly
-
 home:
   title: myceliumr
   description: Cross-species cohort framework for rat/mouse/human analysis
-
 navbar:
   structure:
     left:
@@ -15,8 +13,7 @@ navbar:
     - reference
     - articles
     - news
-    right:
-    - github
+    right: github
   components:
     home:
       icon: fa-home
@@ -28,7 +25,7 @@ navbar:
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/yourusername/myceliumr
-
+      aria-label: GitHub
 reference:
 - title: Core Classes
   desc: S7 classes for study data structures
@@ -36,21 +33,18 @@ reference:
   - Study
   - Subject
   - Cohort
-
 - title: Constructors
   desc: Create and validate objects
   contents:
   - study_new
   - subject_new
   - cohort_new
-
 - title: IO Functions
   desc: Read and write data
-  contents:
-  - read_manifest_csv
-
+  contents: read_manifest_csv
 - title: Validation
   desc: Data validation functions
   contents:
   - validate_manifest
   - validate_cohort
+

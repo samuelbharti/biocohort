@@ -4,5 +4,6 @@
 ^\.copilot$
 ^\.github$
 ^_pkgdown\.yml$
-^docs$
 ^pkgdown$
+^DEVELOPMENT_WORKFLOW\.md$
+^docs$

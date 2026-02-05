@@ -1,5 +1,16 @@
 # Contributing to myceliumr
 
+## Development Workflow
+
+See [DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md) for the complete checklist of steps to follow after making changes.
+
+**Quick summary:**
+1. Make changes
+2. `devtools::load_all()` - test interactively
+3. `devtools::test()` - run tests
+4. `devtools::check()` - validate package
+5. Commit and push (website auto-updates)
+
 ## Development Setup
 
 1. Clone the repository
@@ -25,23 +36,24 @@ devtools::check()
 
 ## Building the pkgdown Site
 
-The pkgdown website is automatically built and deployed via GitHub Actions when you push to the main branch.
+The pkgdown website is automatically built via GitHub Actions when you push to main.
 
-To build locally (requires Pandoc):
+**No local build required** - the site builds on GitHub automatically.
+
+To preview locally (optional):
 
 ```r
+# Requires Pandoc installed
 pkgdown::build_site()
 ```
 
-### Initial GitHub Pages Setup
+### GitHub Pages Setup
 
-After pushing to GitHub for the first time:
+Already configured via `usethis::use_pkgdown_github_pages()`.
 
-1. Go to **Settings** → **Pages** in your GitHub repository
-2. Set **Source** to `gh-pages` branch
-3. The site will be available at `https://yourusername.github.io/myceliumr/`
+The site is at: http://www.samuelbharti.com/myceliumr/
 
-The pkgdown site will rebuild automatically on every push to main.
+It auto-updates when you push to main.
 
 ## Code Style
 
