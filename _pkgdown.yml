@@ -35,12 +35,17 @@ articles:
   - glossary
   - naming-conventions
 reference:
+- title: Package
+  desc: Package overview and entry point
+  contents:
+  - myceliumr-package
 - title: Core Classes
   desc: S7 classes for study data structures
   contents:
   - Study
   - Subject
   - Cohort
+  - AnalysisSpec
   - example_cohort
 - title: Constructors
   desc: Create and validate objects
@@ -48,9 +53,16 @@ reference:
   - study_new
   - subject_new
   - cohort_new
+  - analysis_spec_new
 - title: IO Functions
   desc: Read and write data
   contents: read_manifest_csv
+- title: Analysis Registry
+  desc: Register and list analyses
+  contents:
+  - analysis_register
+  - analysis_list
+  - analysis_spec
 - title: Validation
   desc: Data validation functions
   contents:
