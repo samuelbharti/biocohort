@@ -7,13 +7,17 @@
 #' @param study_id Character scalar for study identifier. Unique within a project.
 #' @param title Character scalar for study name/title.
 #' @param description Character scalar for longer description of study purpose,
-#'   design, or protocols. Optional.
-#' @param hypotheses Character vector of research hypotheses. Optional.
-#' @param aims Character vector of specific research aims. Optional.
+#'   design, or protocols. Can be a file path (ending with .md, .txt, or .rtf)
+#'   to read README content. Optional.
+#' @param hypotheses Character vector of research hypotheses. Accepts multiple
+#'   hypotheses. Optional.
+#' @param aims Character vector of specific research aims. Accepts multiple aims.
+#'   Optional.
 #' @param assays Character vector of assay types used (e.g., "WES", "snRNA-seq").
 #'   Optional.
 #' @param genome_builds Named list mapping species to genome build versions
-#'   (e.g., `list(rat = "rn6", mouse = "mm10", human = "hg38")`). Optional.
+#'   (e.g., `list(rat = "rn7", mouse = "mm10", human = "hg38")`). Supports rn6,
+#'   rn7 for rat; mm9, mm10, mm39 for mouse; hg19, hg38 for human. Optional.
 #' @param created_at POSIXct timestamp for creation. Defaults to current time.
 #' @param tags Character vector of arbitrary tags for categorization. Optional.
 #'
@@ -114,6 +118,9 @@ Subject <- S7::new_class(
 #'
 #' @param study A Study object providing project-level context and metadata,
 #'   or NULL if not applicable. Optional.
+#' @param subjects Named list of Subject objects, automatically created from
+#'   subject_tbl rows during cohort construction. Names are subject IDs.
+#'   Access individual subjects via: `cohort@subjects[["RAT001"]]`.
 #' @param subject_tbl A tibble (data frame) containing subject-level metadata.
 #'   Required columns: `subject_id` (character), `species` (rat/mouse/human).
 #'   Optional columns: `sex`, `strain`, `genotype`, `cohort`, `timepoint`,
@@ -137,11 +144,13 @@ Subject <- S7::new_class(
 #'
 #' Access properties via the `@` operator:
 #' ```r
-#' cohort@study       # Study object or NULL
-#' cohort@subject_tbl # Subject metadata table
-#' cohort@sample_map  # Sample mapping table
-#' cohort@paths       # File paths
-#' cohort@analyses    # Stored analysis results
+#' cohort@study         # Study object or NULL
+#' cohort@subjects      # Named list of Subject objects
+#' cohort@subjects[["RAT001"]]  # Individual Subject object
+#' cohort@subject_tbl   # Subject metadata table (for bulk operations)
+#' cohort@sample_map    # Sample mapping table
+#' cohort@paths         # File paths
+#' cohort@analyses      # Stored analysis results
 #' ```
 #'
 #' @seealso [cohort_new()] for object construction,
@@ -154,6 +163,7 @@ Cohort <- S7::new_class(
   "Cohort",
   properties = list(
     study = S7::new_property(S7::class_any, default = NULL),
+    subjects = S7::new_property(S7::class_list, default = list()),
     subject_tbl = S7::new_property(S7::class_any, default = tibble::tibble()),
     sample_map = S7::new_property(S7::class_any, default = tibble::tibble()),
     paths = S7::new_property(S7::class_list, default = list()),

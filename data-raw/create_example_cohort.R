@@ -13,7 +13,7 @@ study <- study_new(
   ),
   aims = c("Map rat genes to mouse orthologs", "Identify conserved regulatory regions"),
   assays = c("WES", "snRNA-seq"),
-  genome_builds = list(rat = "rn6", mouse = "mm10", human = "hg38")
+  genome_builds = list(rat = "rn7", mouse = "mm10", human = "hg38")
 )
 
 # Create a sample manifest
