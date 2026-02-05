@@ -18,7 +18,7 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/yourusername/myceliumr"><span class="fa fab fa-github fa-lg"></span></a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/yourusername/myceliumr" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -33,87 +33,87 @@
 
 <div id="github-deployment-setup-for-myceliumr" class="section level1">
 
-<p>This guide explains how to set up your GitHub repository to automatically deploy the pkgdown website.</p>
+<p>This package uses <code>usethis::use_pkgdown_github_pages()</code> which automatically configures everything.</p>
 <div class="section level2">
-<h2 id="id_1-update-repository-urls">1. Update Repository URLs<a class="anchor" aria-label="anchor" href="#id_1-update-repository-urls"></a></h2>
-<p>Before pushing to GitHub, update the URLs in these files:</p>
-<div class="section level3">
-<h3 id="description">DESCRIPTION<a class="anchor" aria-label="anchor" href="#description"></a></h3>
-<p>Replace <code>yourusername</code> with your GitHub username:</p>
-<pre><code>URL: https://github.com/yourusername/myceliumr, https://yourusername.github.io/myceliumr/
-BugReports: https://github.com/yourusername/myceliumr/issues</code></pre>
-</div>
-<div class="section level3">
-<h3 id="id__pkgdownyml">_pkgdown.yml<a class="anchor" aria-label="anchor" href="#id__pkgdownyml"></a></h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">url</span><span class="kw">:</span><span class="at"> https://yourusername.github.io/myceliumr/</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="readmemd">README.md<a class="anchor" aria-label="anchor" href="#readmemd"></a></h3>
-<p>Update badge URLs and website link:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">[</span><span class="al">![R-CMD-check](https://github.com/yourusername/myceliumr/actions/workflows/R-CMD-check.yaml/badge.svg)</span><span class="co">](https://github.com/yourusername/myceliumr/actions/workflows/R-CMD-check.yaml)</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">[</span><span class="al">![pkgdown](https://github.com/yourusername/myceliumr/actions/workflows/pkgdown.yaml/badge.svg)</span><span class="co">](https://github.com/yourusername/myceliumr/actions/workflows/pkgdown.yaml)</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="id_2-create-github-repository">2. Create GitHub Repository<a class="anchor" aria-label="anchor" href="#id_2-create-github-repository"></a></h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Initialize git (if not already done)</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">git</span> init</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co"># Add all files</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">git</span> add .</span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Initial commit: myceliumr package with pkgdown"</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co"># Add remote (replace with your repo URL)</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="fu">git</span> remote add origin https://github.com/yourusername/myceliumr.git</span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co"># Push to GitHub</span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-M</span> main</span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin main</span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="id_3-enable-github-pages">3. Enable GitHub Pages<a class="anchor" aria-label="anchor" href="#id_3-enable-github-pages"></a></h2>
-<ol style="list-style-type: decimal"><li>Go to your repository on GitHub</li>
-<li>Click <strong>Settings</strong> → <strong>Pages</strong>
+<h2 id="already-configured">Already Configured<a class="anchor" aria-label="anchor" href="#already-configured"></a></h2>
+<p>The package is already set up! When you push to GitHub:</p>
+<ol style="list-style-type: decimal"><li>GitHub Actions automatically builds the pkgdown site</li>
+<li>Deploys to the <code>gh-pages</code> branch</li>
+<li>Site is live at: <a href="http://www.samuelbharti.com/myceliumr/" class="uri">http://www.samuelbharti.com/myceliumr/</a>
 </li>
-<li>Under <strong>Source</strong>, select branch: <code>gh-pages</code> and folder: <code>/ (root)</code>
-</li>
-<li>Click <strong>Save</strong>
-</li>
-</ol><p>The GitHub Actions workflow will automatically: - Create the <code>gh-pages</code> branch on first push - Build the pkgdown website - Deploy it to GitHub Pages</p>
-</div>
+</ol><p><strong>No Pandoc installation required locally</strong> - building happens on GitHub.</p>
+<hr></div>
 <div class="section level2">
-<h2 id="id_4-verify-deployment">4. Verify Deployment<a class="anchor" aria-label="anchor" href="#id_4-verify-deployment"></a></h2>
-<p>After a few minutes: 1. Check the <strong>Actions</strong> tab to see workflow status 2. Visit <code>https://yourusername.github.io/myceliumr/</code></p>
-<p>The site will rebuild automatically on every push to main.</p>
-</div>
+<h2 id="first-time-github-setup">First-Time GitHub Setup<a class="anchor" aria-label="anchor" href="#first-time-github-setup"></a></h2>
+<p>If starting fresh with a new repo:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Initialize and push to GitHub</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">git</span> init</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Initial commit"</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">git</span> remote add origin https://github.com/samuelbharti/myceliumr.git</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-M</span> main</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin main</span></code></pre></div>
+<p>Then run in R:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">use_pkgdown_github_pages</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>That’s it! The workflow will run automatically on your first push.</p>
+<hr></div>
 <div class="section level2">
-<h2 id="id_5-optional-add-github-topics">5. Optional: Add GitHub Topics<a class="anchor" aria-label="anchor" href="#id_5-optional-add-github-topics"></a></h2>
-<p>Add relevant topics to your repository for discoverability: - r-package - bioinformatics - genomics - cross-species - s7</p>
-</div>
+<h2 id="workflow-after-changes">Workflow After Changes<a class="anchor" aria-label="anchor" href="#workflow-after-changes"></a></h2>
+<p>Every time you update the package:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># 1. Make your changes</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co"># 2. Test</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">test</span>()</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co"># 3. Check</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">check</span>()</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co"># 4. Commit and push (site rebuilds automatically)</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>git add .</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>git commit <span class="sc">-</span>m <span class="st">"Update package"</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>git push origin main</span></code></pre></div>
+<p>The website rebuilds automatically - <strong>no manual build needed</strong>.</p>
+<hr></div>
+<div class="section level2">
+<h2 id="how-it-works">How It Works<a class="anchor" aria-label="anchor" href="#how-it-works"></a></h2>
+<ol style="list-style-type: decimal"><li>
+<strong>Push to main</strong> triggers <code>.github/workflows/pkgdown.yaml</code>
+</li>
+<li>
+<strong>GitHub Actions</strong> builds the site (with Pandoc pre-installed)</li>
+<li>
+<strong>Deploys to gh-pages</strong> branch automatically</li>
+<li>
+<strong>GitHub Pages</strong> serves from gh-pages</li>
+</ol><hr></div>
 <div class="section level2">
 <h2 id="workflows-included">Workflows Included<a class="anchor" aria-label="anchor" href="#workflows-included"></a></h2>
 <div class="section level3">
-<h3 id="r-cmd-checkyaml">R-CMD-check.yaml<a class="anchor" aria-label="anchor" href="#r-cmd-checkyaml"></a></h3>
-<ul><li>Runs <code>R CMD check</code> on Windows, macOS, and Ubuntu</li>
-<li>Tests on R release and devel</li>
-<li>Runs on push and pull requests</li>
+<h3 id="pkgdownyaml">pkgdown.yaml<a class="anchor" aria-label="anchor" href="#pkgdownyaml"></a></h3>
+<ul><li>Auto-builds pkgdown site on push/PR</li>
+<li>Deploys to gh-pages branch</li>
+<li>No local Pandoc needed</li>
 </ul></div>
 <div class="section level3">
-<h3 id="pkgdownyaml">pkgdown.yaml<a class="anchor" aria-label="anchor" href="#pkgdownyaml"></a></h3>
-<ul><li>Builds and deploys pkgdown website</li>
-<li>Runs on push to main, pull requests, releases</li>
-<li>Can be manually triggered via <code>workflow_dispatch</code>
-</li>
-</ul></div>
+<h3 id="r-cmd-checkyaml">R-CMD-check.yaml<a class="anchor" aria-label="anchor" href="#r-cmd-checkyaml"></a></h3>
+<ul><li>Runs R CMD check on Windows, macOS, Ubuntu</li>
+<li>Tests on R release and devel</li>
+<li>Runs on push and pull requests</li>
+</ul><hr></div>
 </div>
 <div class="section level2">
-<h2 id="local-development">Local Development<a class="anchor" aria-label="anchor" href="#local-development"></a></h2>
-<p>Build site locally (requires Pandoc):</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Preview locally:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/preview_site.html" class="external-link">preview_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<h2 id="advantages">Advantages<a class="anchor" aria-label="anchor" href="#advantages"></a></h2>
+<ul><li>No Pandoc installation required</li>
+<li>Automatic site updates on every push</li>
+<li>Clean separation: gh-pages for site, main for code</li>
+<li>Consistent builds via GitHub Actions</li>
+<li>Works across all collaborators automatically</li>
+</ul><hr></div>
+<div class="section level2">
+<h2 id="troubleshooting">Troubleshooting<a class="anchor" aria-label="anchor" href="#troubleshooting"></a></h2>
+<p><strong>Site not updating?</strong> - Check Actions tab for build status - Wait 2-3 minutes for GitHub Pages to refresh</p>
+<p><strong>Build failing?</strong> - Check the Actions logs - Usually DESCRIPTION or _pkgdown.yml issues</p>
+<p><strong>Want to preview locally?</strong> - Install Pandoc, then run <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> - Not required for deployment</p>
 </div>
 </div>
 

@@ -1,99 +1,110 @@
 # GitHub Deployment Setup for myceliumr
 
-This guide explains how to set up your GitHub repository to
-automatically deploy the pkgdown website.
+This package uses `usethis::use_pkgdown_github_pages()` which
+automatically configures everything.
 
-## 1. Update Repository URLs
+## Already Configured
 
-Before pushing to GitHub, update the URLs in these files:
+The package is already set up! When you push to GitHub:
 
-### DESCRIPTION
+1.  GitHub Actions automatically builds the pkgdown site
+2.  Deploys to the `gh-pages` branch
+3.  Site is live at: <http://www.samuelbharti.com/myceliumr/>
 
-Replace `yourusername` with your GitHub username:
+**No Pandoc installation required locally** - building happens on
+GitHub.
 
-    URL: https://github.com/yourusername/myceliumr, https://yourusername.github.io/myceliumr/
-    BugReports: https://github.com/yourusername/myceliumr/issues
+------------------------------------------------------------------------
 
-### \_pkgdown.yml
+## First-Time GitHub Setup
 
-``` yaml
-url: https://yourusername.github.io/myceliumr/
-```
-
-### README.md
-
-Update badge URLs and website link:
-
-``` markdown
-[![R-CMD-check](https://github.com/yourusername/myceliumr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yourusername/myceliumr/actions/workflows/R-CMD-check.yaml)
-[![pkgdown](https://github.com/yourusername/myceliumr/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/yourusername/myceliumr/actions/workflows/pkgdown.yaml)
-```
-
-## 2. Create GitHub Repository
+If starting fresh with a new repo:
 
 ``` bash
-# Initialize git (if not already done)
+# Initialize and push to GitHub
 git init
-
-# Add all files
 git add .
-git commit -m "Initial commit: myceliumr package with pkgdown"
-
-# Add remote (replace with your repo URL)
-git remote add origin https://github.com/yourusername/myceliumr.git
-
-# Push to GitHub
+git commit -m "Initial commit"
+git remote add origin https://github.com/samuelbharti/myceliumr.git
 git branch -M main
 git push -u origin main
 ```
 
-## 3. Enable GitHub Pages
+Then run in R:
 
-1.  Go to your repository on GitHub
-2.  Click **Settings** → **Pages**
-3.  Under **Source**, select branch: `gh-pages` and folder: `/ (root)`
-4.  Click **Save**
+``` r
+usethis::use_pkgdown_github_pages()
+```
 
-The GitHub Actions workflow will automatically: - Create the `gh-pages`
-branch on first push - Build the pkgdown website - Deploy it to GitHub
-Pages
+That’s it! The workflow will run automatically on your first push.
 
-## 4. Verify Deployment
+------------------------------------------------------------------------
 
-After a few minutes: 1. Check the **Actions** tab to see workflow status
-2. Visit `https://yourusername.github.io/myceliumr/`
+## Workflow After Changes
 
-The site will rebuild automatically on every push to main.
+Every time you update the package:
 
-## 5. Optional: Add GitHub Topics
+``` r
+# 1. Make your changes
+# 2. Test
+devtools::test()
 
-Add relevant topics to your repository for discoverability: -
-r-package - bioinformatics - genomics - cross-species - s7
+# 3. Check
+devtools::check()
+
+# 4. Commit and push (site rebuilds automatically)
+git add .
+git commit -m "Update package"
+git push origin main
+```
+
+The website rebuilds automatically - **no manual build needed**.
+
+------------------------------------------------------------------------
+
+## How It Works
+
+1.  **Push to main** triggers `.github/workflows/pkgdown.yaml`
+2.  **GitHub Actions** builds the site (with Pandoc pre-installed)
+3.  **Deploys to gh-pages** branch automatically
+4.  **GitHub Pages** serves from gh-pages
+
+------------------------------------------------------------------------
 
 ## Workflows Included
 
+### pkgdown.yaml
+
+- Auto-builds pkgdown site on push/PR
+- Deploys to gh-pages branch
+- No local Pandoc needed
+
 ### R-CMD-check.yaml
 
-- Runs `R CMD check` on Windows, macOS, and Ubuntu
+- Runs R CMD check on Windows, macOS, Ubuntu
 - Tests on R release and devel
 - Runs on push and pull requests
 
-### pkgdown.yaml
+------------------------------------------------------------------------
 
-- Builds and deploys pkgdown website
-- Runs on push to main, pull requests, releases
-- Can be manually triggered via `workflow_dispatch`
+## Advantages
 
-## Local Development
+- No Pandoc installation required
+- Automatic site updates on every push
+- Clean separation: gh-pages for site, main for code
+- Consistent builds via GitHub Actions
+- Works across all collaborators automatically
 
-Build site locally (requires Pandoc):
+------------------------------------------------------------------------
 
-``` r
-pkgdown::build_site()
-```
+## Troubleshooting
 
-Preview locally:
+**Site not updating?** - Check Actions tab for build status - Wait 2-3
+minutes for GitHub Pages to refresh
 
-``` r
-pkgdown::preview_site()
-```
+**Build failing?** - Check the Actions logs - Usually DESCRIPTION or
+\_pkgdown.yml issues
+
+**Want to preview locally?** - Install Pandoc, then run
+[`pkgdown::build_site()`](https://pkgdown.r-lib.org/reference/build_site.html) -
+Not required for deployment

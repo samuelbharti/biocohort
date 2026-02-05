@@ -5,7 +5,7 @@ analysis artifacts. It provides a cohort framework for rat/mouse/human
 projects with ortholog-aware annotation and lightweight storage for WES
 and snRNA outputs.
 
-**Website**: <https://yourusername.github.io/myceliumr/>
+**Website**: <http://www.samuelbharti.com/myceliumr/>
 
 ## Features
 
@@ -125,14 +125,16 @@ the API may evolve.
 
 ## Contributing
 
-Contributions are welcome! Please see
-[CONTRIBUTING.md](https://yourusername.github.io/myceliumr/CONTRIBUTING.md)
-for development setup and guidelines.
+Contributions are welcome! See: -
+[CONTRIBUTING.md](http://www.samuelbharti.com/myceliumr/CONTRIBUTING.md) -
+Development setup and guidelines -
+[DEVELOPMENT_WORKFLOW.md](http://www.samuelbharti.com/myceliumr/DEVELOPMENT_WORKFLOW.md) -
+Step-by-step checklist for changes
 
 ## Website
 
 Full documentation is available at
-<https://yourusername.github.io/myceliumr/>
+<http://www.samuelbharti.com/myceliumr/>
 
 The website is automatically built and deployed via GitHub Actions on
 every push to main.
