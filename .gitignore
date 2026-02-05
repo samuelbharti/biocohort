@@ -1,1 +1,37 @@
-.Rproj.user
+*.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rprofile
+
+# Package build artifacts
+*.tar.gz
+*.Rcheck/
+.Rcheck/
+inst/doc
+
+# Common outputs
+*.log
+*.out
+*.tmp
+*.swp
+
+renv/library/
+renv/staging/
+.Renviron
+
+# ---- local config / secrets ----
+config/local.*
+config/*.local.*
+*.key
+*.pem
+*.env
+.env
+
+# ---- local Copilot context (do not commit) ----
+.copilot/
+**/.copilot/
+
+# ---- OS junk ----
+.DS_Store
+Thumbs.db
