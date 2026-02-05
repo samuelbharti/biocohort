@@ -3,8 +3,7 @@ Title: Cross-Species Cohort Framework for Genomics Data
 Version: 0.01
 Authors@R: 
     c(
-      person("Samuel", "Bharti", , "samuelbharti.io@gmail.com", role = c("aut", "cre")),
-      person("GitHub", "Copilot", role = "ctb", comment = "Development assistance")
+      person("Samuel", "Bharti", , "samuelbharti.io@gmail.com", role = c("aut", "cre"))
     )
 Description: A lightweight R package for managing cross-species study data
     and analysis artifacts. Provides S7 classes for rat/mouse/human cohorts
