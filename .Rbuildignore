@@ -1,2 +1,5 @@
 ^myceliumr\.Rproj$
 ^\.Rproj\.user$
+^examples$
+^\.copilot$
+^\.github$
