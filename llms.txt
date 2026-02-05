@@ -86,6 +86,8 @@ S7 classes for study data structures
   : S7 Subject class
 - [`Cohort()`](http://www.samuelbharti.com/myceliumr/reference/Cohort.md)
   : S7 Cohort class
+- [`example_cohort`](http://www.samuelbharti.com/myceliumr/reference/example_cohort.md)
+  : Example Cohort Dataset
 
 ## Constructors
 
@@ -103,14 +105,20 @@ Create and validate objects
 Read and write data
 
 - [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md)
-  : Read a manifest CSV file
+  : Read and validate a manifest CSV file
 
 ## Validation
 
 Data validation functions
 
 - [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
-  : Validate a manifest table
+  : Validate and structure a manifest table
 - [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
   : Validate a Cohort object
 
+# Articles
+
+### Tutorials
+
+- [Getting Started with
+  myceliumr](http://www.samuelbharti.com/myceliumr/articles/getting-started.md):
