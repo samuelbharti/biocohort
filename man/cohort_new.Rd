@@ -76,13 +76,12 @@ study <- study_new(
 
 # Create manifest data
 manifest <- data.frame(
-  subject_id = c("RAT001", "MOUSE001"),
+  rat_id = c(101, 202),
   species = c("rat", "mouse"),
   sex = c("M", "F"),
-  dna_tumor_id = c("DNA_T1", "DNA_T2"),
-  dna_normal_id = c("DNA_N1", "DNA_N2"),
-  wes_tumor_sample_id = c("WES_T1", "WES_T2"),
-  wes_normal_sample_id = c("WES_N1", "WES_N2")
+  wes_tumor_id = c("WES_T1", "WES_T2"),
+  wes_normal_id = c("WES_N1", "WES_N2"),
+  sn_id = I(list("RNA_T1", "RNA_T2"))
 )
 
 # Validate and create cohort
@@ -95,7 +94,7 @@ cohort <- cohort_new(
 print(cohort)
 
 # Access individual Subject objects (automatically created)
-rat_subject <- cohort@subjects[["RAT001"]]
+rat_subject <- cohort@subjects[["101"]]
 print(rat_subject)
 
 }

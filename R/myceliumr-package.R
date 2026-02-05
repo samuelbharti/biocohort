@@ -69,4 +69,5 @@
 #' For getting started with a worked example,
 #' see [Getting Started](articles/getting-started.html).
 #'
+#' @importFrom magrittr %>%
 "_PACKAGE"

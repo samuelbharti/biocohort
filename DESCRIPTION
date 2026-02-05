@@ -20,11 +20,11 @@ Imports:
     fs,
     readr,
     dplyr,
+    magrittr,
     tibble
 Suggests:
     testthat (>= 3.0.0),
     pkgdown,
-    quarto,
     knitr,
     rmarkdown
 VignetteBuilder: knitr

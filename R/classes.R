@@ -51,7 +51,7 @@ Study <- S7::new_class(
     aims = S7::new_property(S7::class_character, default = character()),
     assays = S7::new_property(S7::class_character, default = character()),
     genome_builds = S7::new_property(S7::class_list, default = list()),
-    created_at = S7::new_property(S7::class_any, default = Sys.time()),
+    created_at = S7::new_property(S7::class_any, default = NULL),
     tags = S7::new_property(S7::class_character, default = character())
   )
 )
@@ -171,8 +171,8 @@ Cohort <- S7::new_class(
   properties = list(
     study = S7::new_property(S7::class_any, default = NULL),
     subjects = S7::new_property(S7::class_list, default = list()),
-    subject_tbl = S7::new_property(S7::class_any, default = tibble::tibble()),
-    sample_map = S7::new_property(S7::class_any, default = tibble::tibble()),
+    subject_tbl = S7::new_property(S7::class_any, default = NULL),
+    sample_map = S7::new_property(S7::class_any, default = NULL),
     paths = S7::new_property(S7::class_list, default = list()),
     analyses = S7::new_property(S7::class_list, default = list()),
     registry = S7::new_property(S7::class_list, default = list()),

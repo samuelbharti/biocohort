@@ -1,6 +1,18 @@
 ---
 title: "Naming Conventions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Naming Conventions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
 This document describes standardized naming conventions used in myceliumr for data columns, R objects, functions, and file names.
 
@@ -159,7 +171,7 @@ cohort_complete_metadata.csv
 ### Vignette Titles
 
 - Use sentence case (e.g., "Getting started", "Glossary", "Naming conventions")
-- Markdown files: `{title_snake_case}.qmd` (e.g., `glossary.qmd`, `naming-conventions.qmd`)
+- Markdown files: `{title_snake_case}.Rmd` (e.g., `glossary.Rmd`, `naming-conventions.Rmd`)
 
 ### Roxygen Documentation
 

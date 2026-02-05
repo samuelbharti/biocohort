@@ -29,11 +29,11 @@ navbar:
 articles:
 - title: Tutorials
   contents:
-  - getting-started
+  - starts_with("getting")
 - title: Reference
   contents:
-  - glossary
-  - naming-conventions
+  - starts_with("glossary")
+  - starts_with("naming")
 reference:
 - title: Package
   desc: Package overview and entry point

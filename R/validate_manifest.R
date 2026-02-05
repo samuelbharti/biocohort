@@ -19,6 +19,8 @@
 #' @param strict Logical. If TRUE, requires each rat to have both DNA tumor and
 #'   DNA normal sample IDs. If FALSE (default), missing DNA or RNA samples
 #'   are allowed. Default: FALSE.
+#' @param allow_rna_duplicates Logical. If TRUE, allows duplicate RNA sample IDs
+#'   within a rat_id. If FALSE (default), duplicates trigger an error.
 #'
 #' @return A list with elements:
 #'   - `subject_tbl`: Tibble with one row per rat_id (from meta_rats with species added).
@@ -45,7 +47,8 @@
 #'   are non-missing and non-empty: paste0(tumor, "__", normal).
 #' - Strict mode enforces that both DNA tumor and DNA normal are present for
 #'   every rat; if missing, throws validation error.
-#' - RNA sample duplicates within a rat_id trigger an error.
+#' - RNA sample duplicates within a rat_id trigger an error unless
+#'   allow_rna_duplicates = TRUE.
 #'
 #' @examples
 #' # Create sample data
@@ -55,11 +58,11 @@
 #'   cohort = c("A", "A", "B"),
 #'   wes_tumor_id = c("T1", "T2", NA),
 #'   wes_normal_id = c("N1", "N2", NA),
-#'   sn_id = list(
+#'   sn_id = I(list(
 #'     c("RNA_T1_1", "RNA_T1_2"),
 #'     c("RNA_T2_1"),
-#'     NA
-#'   )
+#'     NA_character_
+#'   ))
 #' )
 #'
 #' result <- validate_manifest(meta_rats)
@@ -68,7 +71,12 @@
 #' print(result$rna_tbl)
 #'
 #' @export
-validate_manifest <- function(meta_rats, meta_samples = NULL, strict = FALSE) {
+validate_manifest <- function(
+  meta_rats,
+  meta_samples = NULL,
+  strict = FALSE,
+  allow_rna_duplicates = FALSE
+) {
   # Validate inputs
   if (!is.data.frame(meta_rats)) {
     cli::cli_abort("`meta_rats` must be a data.frame or tibble.")
@@ -178,7 +186,9 @@ validate_manifest <- function(meta_rats, meta_samples = NULL, strict = FALSE) {
       }
 
       # Check for duplicates within this rat
-      if (!is.null(rna_samples) && length(rna_samples) > length(unique(rna_samples))) {
+      if (!allow_rna_duplicates &&
+          !is.null(rna_samples) &&
+          length(rna_samples) > length(unique(rna_samples))) {
         dups <- unique(rna_samples[duplicated(rna_samples)])
         cli::cli_abort(
           c(
@@ -282,19 +292,19 @@ validate_manifest <- function(meta_rats, meta_samples = NULL, strict = FALSE) {
   result <- list(
     subject_tbl = subject_tbl %>% 
       dplyr::mutate(subject_id = as.character(.data$rat_id)) %>%
-      dplyr::select(.data$subject_id, dplyr::everything(), -.data$rat_id),
+      dplyr::select(subject_id, dplyr::everything(), -rat_id),
     dna_tbl = dna_tbl %>% 
       dplyr::mutate(subject_id = as.character(.data$rat_id)) %>%
-      dplyr::select(.data$subject_id, dplyr::everything(), -.data$rat_id),
+      dplyr::select(subject_id, dplyr::everything(), -rat_id),
     rna_tbl = rna_tbl %>% 
       dplyr::mutate(subject_id = as.character(.data$rat_id)) %>%
-      dplyr::select(.data$subject_id, dplyr::everything(), -.data$rat_id),
+      dplyr::select(subject_id, dplyr::everything(), -rat_id),
     sample_map = sample_map %>% 
       dplyr::mutate(subject_id = as.character(.data$rat_id)) %>%
-      dplyr::select(.data$subject_id, dplyr::everything(), -.data$rat_id),
+      dplyr::select(subject_id, dplyr::everything(), -rat_id),
     completeness_tbl = completeness_tbl %>% 
       dplyr::mutate(subject_id = as.character(.data$rat_id)) %>%
-      dplyr::select(.data$subject_id, dplyr::everything(), -.data$rat_id)
+      dplyr::select(subject_id, dplyr::everything(), -rat_id)
   )
 
   # Optionally process meta_samples

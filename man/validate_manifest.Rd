@@ -4,7 +4,12 @@
 \alias{validate_manifest}
 \title{Validate and structure a manifest for cross-species genomics study}
 \usage{
-validate_manifest(meta_rats, meta_samples = NULL, strict = FALSE)
+validate_manifest(
+  meta_rats,
+  meta_samples = NULL,
+  strict = FALSE,
+  allow_rna_duplicates = FALSE
+)
 }
 \arguments{
 \item{meta_rats}{A data.frame with one row per rat/subject containing metadata
@@ -22,6 +27,9 @@ plus optional QC columns. If NA/NULL, sample_tbl is not returned.}
 \item{strict}{Logical. If TRUE, requires each rat to have both DNA tumor and
 DNA normal sample IDs. If FALSE (default), missing DNA or RNA samples
 are allowed. Default: FALSE.}
+
+\item{allow_rna_duplicates}{Logical. If TRUE, allows duplicate RNA sample IDs
+within a rat_id. If FALSE (default), duplicates trigger an error.}
 }
 \value{
 A list with elements:
@@ -59,7 +67,8 @@ BEHAVIOR:
 are non-missing and non-empty: paste0(tumor, "__", normal).
 \item Strict mode enforces that both DNA tumor and DNA normal are present for
 every rat; if missing, throws validation error.
-\item RNA sample duplicates within a rat_id trigger an error.
+\item RNA sample duplicates within a rat_id trigger an error unless
+allow_rna_duplicates = TRUE.
 }
 }
 \examples{
@@ -70,11 +79,11 @@ meta_rats <- data.frame(
   cohort = c("A", "A", "B"),
   wes_tumor_id = c("T1", "T2", NA),
   wes_normal_id = c("N1", "N2", NA),
-  sn_id = list(
+  sn_id = I(list(
     c("RNA_T1_1", "RNA_T1_2"),
     c("RNA_T2_1"),
-    NA
-  )
+    NA_character_
+  ))
 )
 
 result <- validate_manifest(meta_rats)

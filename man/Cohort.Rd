@@ -7,10 +7,8 @@
 Cohort(
   study = NULL,
   subjects = list(),
-  subject_tbl = structure(list(), class = c("tbl_df", "tbl", "data.frame"), row.names =
-    integer(0), names = character(0)),
-  sample_map = structure(list(), class = c("tbl_df", "tbl", "data.frame"), row.names =
-    integer(0), names = character(0)),
+  subject_tbl = NULL,
+  sample_map = NULL,
   paths = list(),
   analyses = list(),
   registry = list(),
