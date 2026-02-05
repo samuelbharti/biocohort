@@ -12,7 +12,9 @@ Cohort(
   sample_map = structure(list(), class = c("tbl_df", "tbl", "data.frame"), row.names =
     integer(0), names = character(0)),
   paths = list(),
-  analyses = list()
+  analyses = list(),
+  registry = list(),
+  cache = list()
 )
 }
 \arguments{
@@ -38,6 +40,12 @@ Optional, defaults to empty list.}
 
 \item{analyses}{Named list containing analysis results, intermediate tables,
 or other data objects for later retrieval. Optional, defaults to empty list.}
+
+\item{registry}{Named list of AnalysisSpec objects defining registered
+analyses. Names correspond to spec@name. Optional, defaults to empty list.}
+
+\item{cache}{Named list for optional memoization of loaded analysis data.
+Optional, defaults to empty list.}
 }
 \description{
 An immutable S7 class for managing cross-species cohort data. Cohorts combine
@@ -64,11 +72,14 @@ cohort@subject_tbl   # Subject metadata table (for bulk operations)
 cohort@sample_map    # Sample mapping table
 cohort@paths         # File paths
 cohort@analyses      # Stored analysis results
+cohort@registry      # Named list of AnalysisSpec objects
+cohort@cache         # Memoization cache
 }\if{html}{\out{</div>}}
 }
 \seealso{
 \code{\link[=cohort_new]{cohort_new()}} for object construction,
 \code{\link[=validate_cohort]{validate_cohort()}} for validation details,
 \code{\link[=validate_manifest]{validate_manifest()}} for manifest preparation,
-\code{\link[=read_manifest_csv]{read_manifest_csv()}} for loading manifest from file
+\code{\link[=read_manifest_csv]{read_manifest_csv()}} for loading manifest from file,
+\code{\link[=analysis_register]{analysis_register()}} for registering analyses
 }

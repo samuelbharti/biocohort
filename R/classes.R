@@ -133,6 +133,10 @@ Subject <- S7::new_class(
 #'   Optional, defaults to empty list.
 #' @param analyses Named list containing analysis results, intermediate tables,
 #'   or other data objects for later retrieval. Optional, defaults to empty list.
+#' @param registry Named list of AnalysisSpec objects defining registered
+#'   analyses. Names correspond to spec@name. Optional, defaults to empty list.
+#' @param cache Named list for optional memoization of loaded analysis data.
+#'   Optional, defaults to empty list.
 #'
 #' @details
 #' Use [cohort_new()] to construct Cohort objects with comprehensive validation.
@@ -151,12 +155,15 @@ Subject <- S7::new_class(
 #' cohort@sample_map    # Sample mapping table
 #' cohort@paths         # File paths
 #' cohort@analyses      # Stored analysis results
+#' cohort@registry      # Named list of AnalysisSpec objects
+#' cohort@cache         # Memoization cache
 #' ```
 #'
 #' @seealso [cohort_new()] for object construction,
 #'   [validate_cohort()] for validation details,
 #'   [validate_manifest()] for manifest preparation,
-#'   [read_manifest_csv()] for loading manifest from file
+#'   [read_manifest_csv()] for loading manifest from file,
+#'   [analysis_register()] for registering analyses
 #'
 #' @export
 Cohort <- S7::new_class(
@@ -167,6 +174,8 @@ Cohort <- S7::new_class(
     subject_tbl = S7::new_property(S7::class_any, default = tibble::tibble()),
     sample_map = S7::new_property(S7::class_any, default = tibble::tibble()),
     paths = S7::new_property(S7::class_list, default = list()),
-    analyses = S7::new_property(S7::class_list, default = list())
+    analyses = S7::new_property(S7::class_list, default = list()),
+    registry = S7::new_property(S7::class_list, default = list()),
+    cache = S7::new_property(S7::class_list, default = list())
   )
 )
