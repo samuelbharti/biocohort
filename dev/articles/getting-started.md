@@ -45,7 +45,7 @@ study
 #>  @ genome_builds:List of 2
 #>  .. $ rat  : chr "rn6"
 #>  .. $ mouse: chr "mm10"
-#>  @ created_at   : POSIXct[1:1], format: "2026-02-05 04:31:18"
+#>  @ created_at   : POSIXct[1:1], format: "2026-02-05 04:34:52"
 #>  @ tags         : chr(0)
 ```
 
@@ -141,7 +141,7 @@ cohort
 #>  .. @ genome_builds:List of 2
 #>  .. .. $ rat  : chr "rn6"
 #>  .. .. $ mouse: chr "mm10"
-#>  .. @ created_at   : POSIXct[1:1], format: "2026-02-05 04:31:18"
+#>  .. @ created_at   : POSIXct[1:1], format: "2026-02-05 04:34:52"
 #>  .. @ tags         : chr(0) 
 #>  @ subject_tbl: tibble [4 × 6] (S3: tbl_df/tbl/data.frame)
 #>  $ subject_id: chr [1:4] "RAT001" "RAT002" "MOUSE001" "MOUSE002"
