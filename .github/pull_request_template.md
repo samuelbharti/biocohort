@@ -21,10 +21,6 @@ Closes #(issue number)
 - [ ] Added new tests
 - [ ] Updated existing tests
 
-```r
-# Example of testing the changes
-```
-
 ## Documentation
 - [ ] Updated README if needed
 - [ ] Updated function documentation
