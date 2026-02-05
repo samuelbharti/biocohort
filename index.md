@@ -1,0 +1,138 @@
+# myceliumr
+
+**myceliumr** is an R package for managing cross-species study data and
+analysis artifacts. It provides a cohort framework for rat/mouse/human
+projects with ortholog-aware annotation and lightweight storage for WES
+and snRNA outputs.
+
+**Website**: <https://yourusername.github.io/myceliumr/>
+
+## Features
+
+- **S7 Classes**: Study, Subject, and Cohort with explicit properties
+  and validation
+- **Manifest IO**: Read and validate CSV manifests with
+  required/optional fields
+- **Cross-Species Support**: Built-in support for rat, mouse, and human
+- **Lightweight**: Minimal dependencies, Shiny-friendly accessors
+- **Validated**: Comprehensive test coverage with clear error messages
+
+## Installation
+
+``` r
+# Install from local source
+devtools::install()
+
+# Or from package tarball
+install.packages("myceliumr_0.0.0.9000.tar.gz", repos = NULL, type = "source")
+```
+
+## Quick Start
+
+``` r
+library(myceliumr)
+
+# Create a study
+study <- study_new(
+  study_id = "PILOT_001",
+  title = "NF1 Rat Pilot Study",
+  description = "Cross-species analysis of NF1 mutations",
+  assays = c("WES", "snRNA")
+)
+
+# Load and validate a manifest CSV
+# manifest.csv should have: subject_id, species, and optional fields
+# Example: subject_id, species, genotype, wes_id, snrna_id
+parsed <- read_manifest_csv("manifest.csv")
+
+# Create a cohort
+cohort <- cohort_new(
+  subject_tbl = parsed$subject_tbl,
+  sample_map = parsed$sample_map,
+  study = study,
+  paths = list(
+    wes_vcf = "data/wes/",
+    snrna_h5 = "data/snrna/"
+  )
+)
+
+print(cohort)
+```
+
+## Manifest Format
+
+Manifests must include: - `subject_id`: Unique identifier for each
+subject - `species`: One of “rat”, “mouse”, or “human”
+
+Optional fields: - `genotype`: Genotype information - `sex`: Biological
+sex - `strain`: Strain or breed - `cohort`: Cohort membership -
+`timepoint`: Experimental timepoint - Any assay-specific sample IDs
+(e.g., `wes_id`, `snrna_id`)
+
+Example manifest:
+
+``` csv
+subject_id,species,genotype,sex,wes_id,snrna_id
+R1,rat,WT,M,WES_001,SN_001
+R2,rat,KO,F,WES_002,SN_002
+R3,rat,KO,M,WES_003,SN_003
+```
+
+## Core Classes
+
+### Study
+
+Represents study-level metadata: - `study_id`: Unique identifier -
+`title`: Study title - `description`: Optional description - `assays`:
+Vector of assay types - `genome_builds`: Named list of genome
+information
+
+### Subject
+
+Represents individual subjects: - `subject_id`: Unique identifier -
+`species`: Species (rat/mouse/human) - Optional: sex, strain, genotype,
+cohort, timepoint
+
+### Cohort
+
+Container for study data: - `study`: Associated Study object -
+`subject_tbl`: Table of subject metadata - `sample_map`: Mapping to
+assay-specific sample IDs - `paths`: Named list of data locations -
+`analyses`: Registry for analysis results
+
+## Testing
+
+``` r
+devtools::test()       # Run all tests
+devtools::check()      # Full R CMD check
+```
+
+## Development Status
+
+This package is under active development. Core features are stable, but
+the API may evolve.
+
+## Dependencies
+
+- S7: S7 object system
+- cli: User-friendly messages
+- rlang: Tidy evaluation
+- checkmate: Argument validation
+- fs: File system operations
+- readr: CSV reading
+- dplyr: Data manipulation
+- tibble: Modern data frames
+
+## Contributing
+
+Contributions are welcome! Please see
+[CONTRIBUTING.md](https://yourusername.github.io/myceliumr/CONTRIBUTING.md)
+for development setup and guidelines.
+
+## Website
+
+Full documentation is available at
+<https://yourusername.github.io/myceliumr/>
+
+The website is automatically built and deployed via GitHub Actions on
+every push to main.
