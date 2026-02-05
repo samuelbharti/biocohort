@@ -1,0 +1,44 @@
+#' Example Cohort Dataset
+#'
+#' A sample Cohort object containing cross-species study data with rat and mouse
+#' subjects. Provided for demonstration, testing, and learning the myceliumr
+#' data model. Includes a complete Study object with subject metadata.
+#'
+#' @format A Cohort object (S7 class) with the following structure:
+#'  - study: A Study object with metadata for a cross-species genomics project
+#'  - subject_tbl (tibble): 4 subjects (2 rat, 2 mouse) with species, sex, strain, genotype, cohort, timepoint
+#'  - sample_map (tibble): Subjects mapped to assay sample IDs (WES, snRNA-seq)
+#'  - paths (list): Empty, ready for file paths
+#'  - analyses (list): Empty, ready for analysis results
+#'
+#' @details
+#' The example_cohort demonstrates the complete myceliumr data structure including:
+#'  - Cross-species data (rat and mouse)
+#'  - Subject-to-sample mappings with multiple assays
+#'  - Integration with a Study object for project context
+#'  - Proper data types and structure for downstream analysis
+#'
+#' Use this cohort to explore the API, test workflows, or as a template for
+#' creating your own cohorts from real data.
+#'
+#' @examples
+#' # Load the example cohort
+#' data(example_cohort)
+#'
+#' # View the study metadata
+#' example_cohort@study
+#'
+#' # View all subjects with metadata
+#' example_cohort@subject_tbl
+#'
+#' # View sample mapping
+#' example_cohort@sample_map
+#'
+#' # Get summary statistics
+#' table(example_cohort@subject_tbl$species)  # Count by species
+#'
+#' @seealso [cohort_new()] for creating Cohort objects,
+#'   [validate_manifest()] for preparing manifest data,
+#'   [read_manifest_csv()] for loading manifest from CSV file
+#'
+"example_cohort"

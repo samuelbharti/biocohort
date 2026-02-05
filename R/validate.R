@@ -20,10 +20,66 @@ validate_species <- function(species) {
   invisible(TRUE)
 }
 
-#' Validate a manifest table
+#' Validate and structure a manifest table
 #'
-#' @param manifest A data.frame or tibble with subject metadata and assay IDs.
-#' @return A list with `subject_tbl` and `sample_map`.
+#' Validates a manifest data frame or tibble containing cross-species subject
+#' metadata and sample identifiers. Automatically structures the data into
+#' subject-level and sample-level tables suitable for Cohort construction.
+#' Comprehensive validation ensures data integrity and compatibility.
+#'
+#' @param manifest A data.frame or tibble with subject metadata and optional
+#'   sample/assay ID columns. See Details for required and optional columns.
+#'
+#' @return A list with two elements:
+#'   - `subject_tbl`: Tibble with subject-level metadata
+#'   - `sample_map`: Tibble with subject-to-sample mappings
+#'
+#' @details
+#' REQUIRED COLUMNS:
+#' - `subject_id` (character): Unique subject identifier, no duplicates allowed
+#' - `species` (character): Species designation - one of "rat", "mouse",
+#'   "human" (case-insensitive)
+#'
+#' RECOGNIZED OPTIONAL SUBJECT COLUMNS (placed in `subject_tbl`):
+#' - `sex`: Biological sex
+#' - `strain`: Strain/breed designation
+#' - `genotype`: Genetic background or modification
+#' - `cohort`: Treatment group or cohort assignment
+#' - `timepoint`: Study timepoint or collection date
+#' - `notes`: Free-form annotations
+#'
+#' SAMPLE ID COLUMNS (placed in `sample_map`):
+#' Any additional columns not listed above are treated as assay-specific
+#' sample identifiers and included in the sample map. Examples:
+#' - `assay_wes_id`: WES sample identifier
+#' - `assay_snrna_id`: snRNA-seq sample identifier
+#'
+#' VALIDATION CHECKS:
+#' - All required columns present and non-empty
+#' - subject_id and species are character vectors
+#' - No missing or empty values in required columns
+#' - No duplicate subject_id values
+#' - All species values are valid (rat/mouse/human)
+#'
+#' @examples
+#' # Create valid manifest
+#' manifest <- data.frame(
+#'   subject_id = c("RAT001", "RAT002", "MOUSE001"),
+#'   species = c("rat", "rat", "mouse"),
+#'   sex = c("M", "F", "M"),
+#'   strain = c("Lewis", "Lewis", "C57BL/6"),
+#'   genotype = c("WT", "WT", "KO"),
+#'   assay_wes_id = c("WES_R001", "WES_R002", "WES_M001")
+#' )
+#'
+#' # Validate and structure
+#' result <- validate_manifest(manifest)
+#' print(result$subject_tbl)
+#' print(result$sample_map)
+#'
+#' @seealso [read_manifest_csv()] for reading manifest from CSV file,
+#'   [validate_cohort()] for cohort-level validation,
+#'   [cohort_new()] for creating a Cohort object
 #' @export
 validate_manifest <- function(manifest) {
   if (!is.data.frame(manifest)) {
@@ -103,8 +159,51 @@ validate_manifest <- function(manifest) {
 
 #' Validate a Cohort object
 #'
-#' @param x A Cohort object.
-#' @return TRUE (invisibly) when valid.
+#' Ensures a Cohort object satisfies all structural and integrity requirements
+#' for cross-species genomics analysis. Validates the subject table, sample map,
+#' and referential integrity between them. Intended as an internal validation
+#' step called automatically by [cohort_new()].
+#'
+#' @param x An S7 object expected to be a Cohort class instance.
+#'
+#' @return Invisibly returns TRUE if validation succeeds. Throws informative
+#'   errors if validation fails.
+#'
+#' @details
+#' VALIDATION CHECKS:
+#' - `x` is actually a Cohort object
+#' - Both `subject_tbl` and `sample_map` are data frames
+#' - `subject_tbl` includes required columns: subject_id, species
+#' - `sample_map` includes subject_id column
+#' - subject_id and species are character vectors, non-empty
+#' - No duplicate subject_id values in subject_tbl
+#' - All species values are valid (rat/mouse/human)
+#' - Referential integrity: sample_map$subject_id values exist in subject_tbl
+#'
+#' Validation is performed automatically by [cohort_new()], but can be called
+#' directly for debugging or custom Cohort construction.
+#'
+#' @examples
+#' # Create valid cohort components
+#' subjects <- data.frame(
+#'   subject_id = "RAT001",
+#'   species = "rat",
+#'   sex = "M"
+#' )
+#' samples <- data.frame(
+#'   subject_id = "RAT001",
+#'   assay_wes_id = "WES_R001"
+#' )
+#' cohort <- cohort_new(
+#'   subject_tbl = subjects,
+#'   sample_map = samples
+#' )
+#'
+#' # Validation succeeds (called automatically above)
+#' validate_cohort(cohort)
+#'
+#' @seealso [cohort_new()] for Cohort construction,
+#'   [validate_manifest()] for manifest validation
 #' @export
 validate_cohort <- function(x) {
   if (!S7::S7_inherits(x, Cohort)) {

@@ -1,0 +1,176 @@
+---
+title: "Getting Started with myceliumr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with myceliumr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+myceliumr provides a lightweight framework for managing cross-species study data (rat, mouse, human) with validation, ortholog support, and standardized storage for WES and snRNA-seq outputs.
+
+## Installation
+
+```r
+devtools::install_github("samuelbharti/myceliumr")
+```
+
+## Quick Start
+
+Load the package and example data:
+
+```{r}
+library(myceliumr)
+data(example_cohort)
+```
+
+## Create a Study
+
+A Study object describes the overall research project:
+
+```{r}
+study <- study_new(
+  study_id = "STUDY001",
+  title = "My Genomics Project",
+  description = "Comparing rat and mouse expression",
+  hypotheses = "Orthologs show conserved patterns",
+  aims = "Map regulatory regions",
+  assays = c("WES", "snRNA-seq"),
+  genome_builds = list(rat = "rn6", mouse = "mm10")
+)
+
+study
+```
+
+## Create Subjects
+
+Individual subjects (animals or samples):
+
+```{r}
+subject1 <- subject_new(
+  subject_id = "RAT001",
+  species = "rat",
+  sex = "M",
+  strain = "Lewis",
+  genotype = "WT"
+)
+
+subject1
+```
+
+Supported species: `rat`, `mouse`, `human`.
+
+## Create a Manifest
+
+A manifest CSV defines all subjects and sample mappings. Required columns:
+
+- `subject_id` - unique identifier
+- `species` - rat, mouse, or human
+
+Optional columns: `sex`, `strain`, `genotype`, `cohort`, `timepoint`, `notes`, and assay IDs like `assay_wes_id`, `assay_snrna_id`.
+
+Example:
+
+```{r}
+manifest <- tibble::tribble(
+  ~subject_id, ~species, ~sex, ~strain, ~genotype, ~cohort, ~assay_wes_id,
+  "RAT001", "rat", "M", "Lewis", "WT", "Control", "WES_R001",
+  "RAT002", "rat", "F", "Lewis", "WT", "Control", "WES_R002",
+  "MOUSE001", "mouse", "M", "C57BL/6", "WT", "Control", "WES_M001",
+  "MOUSE002", "mouse", "F", "C57BL/6", "KO", "Treatment", "WES_M002"
+)
+
+manifest
+```
+
+Or load from CSV:
+
+```r
+manifest <- read_manifest_csv("path/to/manifest.csv")
+```
+
+## Create a Cohort
+
+A Cohort combines a Study with validated subject data:
+
+```{r}
+# First validate the manifest
+manifest_split <- validate_manifest(manifest)
+
+# Create cohort from validated components
+cohort <- cohort_new(
+  study = study,
+  subject_tbl = manifest_split$subject_tbl,
+  sample_map = manifest_split$sample_map
+)
+
+cohort
+```
+
+## Access Cohort Data
+
+Get the subject table:
+
+```{r}
+subjects <- cohort@subject_tbl
+subjects
+```
+
+Get the sample mapping:
+
+```{r}
+samples <- cohort@sample_map
+samples
+```
+
+## Validation
+
+Validation happens automatically during object creation. Invalid data raises clear error messages:
+
+```r
+# This will fail - invalid species
+bad_subject <- subject_new(
+  subject_id = "BAD001",
+  species = "zebra fish"  # Error: not rat/mouse/human
+)
+
+# This will fail - missing required columns
+bad_manifest <- tibble::tibble(subject_id = c("S1", "S2"))
+cohort_bad <- cohort_new(
+  study = study,
+  subject_tbl = bad_manifest,
+  sample_map = tibble::tibble()
+)
+# Error: species column is required
+```
+
+## Example Dataset
+
+Use the built-in example cohort to explore:
+
+```{r}
+data(example_cohort)
+
+# View the study
+example_cohort@study
+
+# View subjects
+example_cohort@subject_tbl
+
+# View samples
+example_cohort@sample_map
+```
+
+## Next Steps
+
+- Define your study metadata with `study_new()`
+- Prepare a manifest CSV with subject and sample info
+- Create a Cohort to validate and manage your data
+- Use `@` to access cohort components for downstream analysis

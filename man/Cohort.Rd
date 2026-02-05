@@ -15,16 +15,53 @@ Cohort(
 )
 }
 \arguments{
-\item{study}{A Study object or NULL.}
+\item{study}{A Study object providing project-level context and metadata,
+or NULL if not applicable. Optional.}
 
-\item{subject_tbl}{A tibble with subject metadata.}
+\item{subject_tbl}{A tibble (data frame) containing subject-level metadata.
+Required columns: \code{subject_id} (character), \code{species} (rat/mouse/human).
+Optional columns: \code{sex}, \code{strain}, \code{genotype}, \code{cohort}, \code{timepoint},
+\code{notes}. Validated by \code{\link[=validate_cohort]{validate_cohort()}}.}
 
-\item{sample_map}{A tibble mapping subjects to assay-specific sample IDs.}
+\item{sample_map}{A tibble mapping subjects to assay-specific sample IDs.
+Must include \code{subject_id} column for referential integrity.
+Additional columns typically include \code{assay_wes_id}, \code{assay_snrna_id}, etc.
+Validated by \code{\link[=validate_cohort]{validate_cohort()}}.}
 
-\item{paths}{Named list of file paths.}
+\item{paths}{Named list of file paths to data files or results directories.
+Optional, defaults to empty list.}
 
-\item{analyses}{Named list of analysis results.}
+\item{analyses}{Named list containing analysis results, intermediate tables,
+or other data objects for later retrieval. Optional, defaults to empty list.}
 }
 \description{
-S7 Cohort class
+An immutable S7 class for managing cross-species cohort data. Cohorts combine
+validated subject-level metadata with sample-to-assay mappings and optional
+study context, file paths, and analysis results. This is the primary data
+container for WES and snRNA-seq analyses across rat, mouse, and human studies.
+}
+\details{
+Use \code{\link[=cohort_new]{cohort_new()}} to construct Cohort objects with comprehensive validation.
+Validation ensures:
+\itemize{
+\item Required columns in subject_tbl and sample_map
+\item Valid species values (rat/mouse/human)
+\item Referential integrity between subject_tbl and sample_map
+\item No duplicate subject IDs
+}
+
+Access properties via the \code{@} operator:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{cohort@study       # Study object or NULL
+cohort@subject_tbl # Subject metadata table
+cohort@sample_map  # Sample mapping table
+cohort@paths       # File paths
+cohort@analyses    # Stored analysis results
+}\if{html}{\out{</div>}}
+}
+\seealso{
+\code{\link[=cohort_new]{cohort_new()}} for object construction,
+\code{\link[=validate_cohort]{validate_cohort()}} for validation details,
+\code{\link[=validate_manifest]{validate_manifest()}} for manifest preparation,
+\code{\link[=read_manifest_csv]{read_manifest_csv()}} for loading manifest from file
 }

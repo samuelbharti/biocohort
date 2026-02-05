@@ -16,22 +16,48 @@ Subject(
 )
 }
 \arguments{
-\item{subject_id}{Character scalar for subject identifier.}
+\item{subject_id}{Character scalar for unique subject identifier.}
 
-\item{species}{Character scalar for species (rat/mouse/human).}
+\item{species}{Character scalar for species designation. Must be one of:
+"rat", "mouse", or "human" (validated by \code{\link[=subject_new]{subject_new()}}).}
 
-\item{sex}{Character scalar for biological sex.}
+\item{sex}{Character scalar for biological sex (e.g., "M", "F"). Optional.}
 
-\item{strain}{Character scalar for strain/breed.}
+\item{strain}{Character scalar for strain or breed designation. Optional.}
 
-\item{genotype}{Character scalar for genotype.}
+\item{genotype}{Character scalar for genetic background or modification
+(e.g., "WT", "KO"). Optional.}
 
-\item{cohort}{Character scalar for cohort membership.}
+\item{cohort}{Character scalar for cohort membership or treatment group.
+Optional.}
 
-\item{timepoint}{Character scalar for timepoint.}
+\item{timepoint}{Character scalar for study timepoint or collection date.
+Optional.}
 
-\item{notes}{Character scalar for notes.}
+\item{notes}{Character scalar for free-form annotations. Optional.}
 }
 \description{
-S7 Subject class
+An immutable S7 class for storing individual-level metadata in cross-species
+genomics studies. Subject objects represent individual animals or biological
+samples and are grouped into Cohort objects for collective analysis.
+}
+\details{
+Use \code{\link[=subject_new]{subject_new()}} to construct Subject objects with species validation.
+Individual subjects are typically managed through Cohort objects.
+
+Access properties via the \code{@} operator:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{subject@subject_id
+subject@species
+subject@sex
+subject@strain
+subject@genotype
+subject@cohort
+subject@timepoint
+subject@notes
+}\if{html}{\out{</div>}}
+}
+\seealso{
+\code{\link[=subject_new]{subject_new()}} for object construction,
+\link{Cohort} for managing groups of subjects
 }

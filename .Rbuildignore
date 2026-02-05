@@ -6,4 +6,6 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^DEVELOPMENT_WORKFLOW\.md$
+^CONTRIBUTING\.md$
+^data-raw$
 ^docs$

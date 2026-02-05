@@ -17,27 +17,59 @@ study_new(
 )
 }
 \arguments{
-\item{study_id}{Character scalar for study identifier.}
+\item{study_id}{Character scalar providing a unique identifier for the study.
+Must be at least 1 character long.}
 
-\item{title}{Character scalar for study title.}
+\item{title}{Character scalar with the study name/title. Must be at least 1
+character long.}
 
-\item{description}{Character scalar for study description.}
+\item{description}{Character scalar with optional longer description of the
+study purpose and design. Defaults to NA.}
 
-\item{hypotheses}{Character vector of study hypotheses.}
+\item{hypotheses}{Character vector of research hypotheses. Optional and
+defaults to empty vector.}
 
-\item{aims}{Character vector of study aims.}
+\item{aims}{Character vector of specific research aims. Optional and defaults
+to empty vector.}
 
-\item{assays}{Character vector of assay types.}
+\item{assays}{Character vector of assay types used in the study (e.g.,
+"WES", "snRNA-seq"). Optional and defaults to empty vector.}
 
-\item{genome_builds}{Named list of genome build information.}
+\item{genome_builds}{Named list mapping species names to genome build versions
+(e.g., \code{list(rat = "rn6", mouse = "mm10")}). Optional and defaults to empty list.}
 
-\item{created_at}{POSIXct timestamp for study creation.}
+\item{created_at}{POSIXct timestamp for study creation. Defaults to current time.}
 
-\item{tags}{Character vector of tags.}
+\item{tags}{Character vector of arbitrary tags for categorization. Optional
+and defaults to empty vector.}
 }
 \value{
-A Study object.
+A Study object containing the provided metadata.
 }
 \description{
-Create a Study object
+Constructs a Study object to describe the overall research project, including
+study metadata, research hypotheses and aims, assay types, and genome build
+information. Studies serve as the container for cohorts and provide context
+for cross-species genomics analysis.
+}
+\details{
+Study objects are S7 classes that immutably store research project metadata.
+They provide context for cohorts and support cross-species genomics analysis.
+The study_id and title are required; all other fields are optional.
+}
+\examples{
+study <- study_new(
+  study_id = "STUDY001",
+  title = "Cross-species genomics comparison",
+  description = "Comparing rat and mouse genomes",
+  hypotheses = "Orthologous genes show conserved expression",
+  aims = "Map regulatory regions",
+  assays = c("WES", "snRNA-seq"),
+  genome_builds = list(rat = "rn6", mouse = "mm10", human = "hg38")
+)
+print(study)
+
+}
+\seealso{
+\link{Cohort} for combining studies with subject data
 }
