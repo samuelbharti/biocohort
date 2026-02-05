@@ -1,6 +1,9 @@
 # S7 Subject class
 
-S7 Subject class
+An immutable S7 class for storing individual-level metadata in
+cross-species genomics studies. Subject objects represent individual
+animals or biological samples and are grouped into Cohort objects for
+collective analysis.
 
 ## Usage
 
@@ -21,32 +24,60 @@ Subject(
 
 - subject_id:
 
-  Character scalar for subject identifier.
+  Character scalar for unique subject identifier.
 
 - species:
 
-  Character scalar for species (rat/mouse/human).
+  Character scalar for species designation. Must be one of: "rat",
+  "mouse", or "human" (validated by
+  [`subject_new()`](http://www.samuelbharti.com/myceliumr/reference/subject_new.md)).
 
 - sex:
 
-  Character scalar for biological sex.
+  Character scalar for biological sex (e.g., "M", "F"). Optional.
 
 - strain:
 
-  Character scalar for strain/breed.
+  Character scalar for strain or breed designation. Optional.
 
 - genotype:
 
-  Character scalar for genotype.
+  Character scalar for genetic background or modification (e.g., "WT",
+  "KO"). Optional.
 
 - cohort:
 
-  Character scalar for cohort membership.
+  Character scalar for cohort membership or treatment group. Optional.
 
 - timepoint:
 
-  Character scalar for timepoint.
+  Character scalar for study timepoint or collection date. Optional.
 
 - notes:
 
-  Character scalar for notes.
+  Character scalar for free-form annotations. Optional.
+
+## Details
+
+Use
+[`subject_new()`](http://www.samuelbharti.com/myceliumr/reference/subject_new.md)
+to construct Subject objects with species validation. Individual
+subjects are typically managed through Cohort objects.
+
+Access properties via the `@` operator:
+
+    subject@subject_id
+    subject@species
+    subject@sex
+    subject@strain
+    subject@genotype
+    subject@cohort
+    subject@timepoint
+    subject@notes
+
+## See also
+
+[`subject_new()`](http://www.samuelbharti.com/myceliumr/reference/subject_new.md)
+for object construction,
+[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md) for
+managing groups of subjects

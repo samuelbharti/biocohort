@@ -1,6 +1,9 @@
 # Create a Subject object
 
-Create a Subject object
+Constructs a Subject object representing an individual animal or
+biological sample in a study. Subjects must have a unique identifier and
+valid species designation (rat, mouse, or human). All other attributes
+are optional.
 
 ## Usage
 
@@ -21,36 +24,99 @@ subject_new(
 
 - subject_id:
 
-  Character scalar for subject identifier.
+  Character scalar providing a unique identifier for the subject. Must
+  be at least 1 character long.
 
 - species:
 
-  Character scalar for species (rat/mouse/human).
+  Character scalar specifying the species. Must be one of: "rat",
+  "mouse", or "human". Case-insensitive. Required.
 
 - sex:
 
-  Character scalar for biological sex.
+  Character scalar indicating biological sex (e.g., "M", "F"). Optional
+  and defaults to NA.
 
 - strain:
 
-  Character scalar for strain/breed.
+  Character scalar for strain or breed designation. Optional and
+  defaults to NA.
 
 - genotype:
 
-  Character scalar for genotype.
+  Character scalar describing the genetic background or modification
+  (e.g., "WT", "KO"). Optional and defaults to NA.
 
 - cohort:
 
-  Character scalar for cohort membership.
+  Character scalar for cohort membership or treatment group. Optional
+  and defaults to NA.
 
 - timepoint:
 
-  Character scalar for timepoint.
+  Character scalar indicating study timepoint or collection date.
+  Optional and defaults to NA.
 
 - notes:
 
-  Character scalar for notes.
+  Character scalar for additional metadata or observations. Optional and
+  defaults to NA.
 
 ## Value
 
-A Subject object.
+A Subject object with validated species specification.
+
+## Details
+
+Subject objects are S7 classes for storing individual-level metadata in
+cross-species studies. Species validation ensures compatibility across
+supported organisms (rat, mouse, human). Individual subjects are
+typically grouped into Cohort objects for collective analysis.
+
+## See also
+
+[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md) for
+managing groups of subjects
+
+## Examples
+
+``` r
+# Create a rat subject
+rat_subject <- subject_new(
+  subject_id = "RAT001",
+  species = "rat",
+  sex = "M",
+  strain = "Lewis",
+  genotype = "WT",
+  cohort = "Control"
+)
+print(rat_subject)
+#> <myceliumr::Subject>
+#>  @ subject_id: chr "RAT001"
+#>  @ species   : chr "rat"
+#>  @ sex       : chr "M"
+#>  @ strain    : chr "Lewis"
+#>  @ genotype  : chr "WT"
+#>  @ cohort    : chr "Control"
+#>  @ timepoint : chr NA
+#>  @ notes     : chr NA
+
+# Create a mouse subject
+mouse_subject <- subject_new(
+  subject_id = "MOUSE001",
+  species = "mouse",
+  sex = "F",
+  strain = "C57BL/6",
+  genotype = "KO"
+)
+print(mouse_subject)
+#> <myceliumr::Subject>
+#>  @ subject_id: chr "MOUSE001"
+#>  @ species   : chr "mouse"
+#>  @ sex       : chr "F"
+#>  @ strain    : chr "C57BL/6"
+#>  @ genotype  : chr "KO"
+#>  @ cohort    : chr NA
+#>  @ timepoint : chr NA
+#>  @ notes     : chr NA
+```

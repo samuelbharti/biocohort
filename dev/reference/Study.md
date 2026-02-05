@@ -1,6 +1,9 @@
 # S7 Study class
 
-S7 Study class
+An immutable S7 class for storing research project metadata in
+cross-species genomics studies. Study objects provide high-level context
+and configuration for cohorts and analyses involving rat, mouse, and
+human subjects.
 
 ## Usage
 
@@ -13,7 +16,7 @@ Study(
   aims = character(0),
   assays = character(0),
   genome_builds = list(),
-  created_at = structure(1770265130.10862, class = c("POSIXct", "POSIXt")),
+  created_at = structure(1770266595.37765, class = c("POSIXct", "POSIXt")),
   tags = character(0)
 )
 ```
@@ -22,36 +25,64 @@ Study(
 
 - study_id:
 
-  Character scalar for study identifier.
+  Character scalar for study identifier. Unique within a project.
 
 - title:
 
-  Character scalar for study title.
+  Character scalar for study name/title.
 
 - description:
 
-  Character scalar for study description.
+  Character scalar for longer description of study purpose, design, or
+  protocols. Optional.
 
 - hypotheses:
 
-  Character vector of study hypotheses.
+  Character vector of research hypotheses. Optional.
 
 - aims:
 
-  Character vector of study aims.
+  Character vector of specific research aims. Optional.
 
 - assays:
 
-  Character vector of assay types.
+  Character vector of assay types used (e.g., "WES", "snRNA-seq").
+  Optional.
 
 - genome_builds:
 
-  Named list of genome build information.
+  Named list mapping species to genome build versions (e.g.,
+  `list(rat = "rn6", mouse = "mm10", human = "hg38")`). Optional.
 
 - created_at:
 
-  POSIXct timestamp for study creation.
+  POSIXct timestamp for creation. Defaults to current time.
 
 - tags:
 
-  Character vector of tags.
+  Character vector of arbitrary tags for categorization. Optional.
+
+## Details
+
+Use
+[`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md)
+to construct Study objects with immediate validation.
+
+Access properties via the `@` operator:
+
+    study@study_id
+    study@title
+    study@description
+    study@hypotheses
+    study@aims
+    study@assays
+    study@genome_builds
+    study@created_at
+    study@tags
+
+## See also
+
+[`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md)
+for object construction,
+[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md) for
+combining studies with subject data

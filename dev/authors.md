@@ -4,6 +4,9 @@
 
 - **Samuel Bharti**. Author, maintainer.
 
+- **GitHub Copilot**. Contributor.  
+  Development assistance
+
 ## Citation
 
 Source:

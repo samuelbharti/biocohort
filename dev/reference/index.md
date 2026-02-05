@@ -29,13 +29,13 @@ Create and validate objects
 Read and write data
 
 - [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md)
-  : Read a manifest CSV file
+  : Read and validate a manifest CSV file
 
 ## Validation
 
 Data validation functions
 
 - [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
-  : Validate a manifest table
+  : Validate and structure a manifest table
 - [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
   : Validate a Cohort object
