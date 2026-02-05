@@ -1,14 +1,15 @@
 Package: myceliumr
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Cross-Species Cohort Framework for Genomics Data
+Version: 0.01
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: An R package for managing cross-species study data and analysis
-    artifacts. Provides a cohort framework for rat/mouse/human projects with
-    ortholog-aware annotation and lightweight storage for WES and snRNA outputs.
+    person("Samuel", "Bharti", , "samuelbharti.io@gmail.com", role = c("aut", "cre"))
+Description: A lightweight R package for managing cross-species study data
+    and analysis artifacts. Provides S7 classes for rat/mouse/human cohorts
+    with manifest validation, ortholog-aware annotation support, and
+    standardized storage for WES and snRNA-seq outputs.
 License: MIT + file LICENSE
-URL: https://github.com/yourusername/myceliumr, https://yourusername.github.io/myceliumr/, http://www.samuelbharti.com/myceliumr/
-BugReports: https://github.com/yourusername/myceliumr/issues
+URL: http://www.samuelbharti.com/myceliumr/, https://github.com/samuelbharti/myceliumr
+BugReports: https://github.com/samuelbharti/myceliumr/issues
 Imports:
     S7,
     cli,

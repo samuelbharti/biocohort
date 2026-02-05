@@ -90,9 +90,9 @@ validate_manifest <- function(manifest) {
   subject_tbl <- dplyr::select(manifest_tbl, dplyr::any_of(subject_fields))
   sample_fields <- setdiff(names(manifest_tbl), subject_fields)
   if (length(sample_fields) == 0) {
-    sample_map <- dplyr::select(manifest_tbl, .data$subject_id)
+    sample_map <- dplyr::select(manifest_tbl, "subject_id")
   } else {
-    sample_map <- dplyr::select(manifest_tbl, .data$subject_id, dplyr::all_of(sample_fields))
+    sample_map <- dplyr::select(manifest_tbl, "subject_id", dplyr::all_of(sample_fields))
   }
 
   list(
