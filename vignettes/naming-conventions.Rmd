@@ -90,8 +90,8 @@ While myceliumr does not enforce specific sample ID formats, adopt a consistent 
 
 ### R Objects and Variables
 
-- **Study objects**: PascalCase, descriptive (e.g., `my_study`, `nf1_study`) or explicitly named `study` in examples.
-- **Cohort objects**: PascalCase or snake_case (e.g., `cohort`, `nf1_cohort`, `study_cohort`).
+- **Study objects**: snake_case, descriptive (e.g., `my_study`, `nf1_study`) or explicitly named `study` in examples.
+- **Cohort objects**: snake_case (e.g., `cohort`, `nf1_cohort`, `study_cohort`).
 - **Subject objects**: Rarely used directly; accessed via `cohort@subjects[[subject_id]]`.
 - **AnalysisSpec objects**: Use spec name as primary identifier (stored in registry with name as key).
 - **Data tables**: snake_case with `_tbl` suffix or use descriptive names like `subject_data`, `wes_samples`.
