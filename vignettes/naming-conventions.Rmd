@@ -1,8 +1,8 @@
 ---
-title: "Naming Conventions"
+title: "Naming conventions"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Naming Conventions}
+  %\VignetteIndexEntry{Naming conventions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
