@@ -1,4 +1,4 @@
-# Naming Conventions
+# Naming conventions
 
 This document describes standardized naming conventions used in
 myceliumr for data columns, R objects, functions, and file names.
