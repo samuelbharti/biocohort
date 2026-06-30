@@ -16,7 +16,7 @@ Study(
   aims = character(0),
   assays = character(0),
   genome_builds = list(),
-  created_at = structure(1770266595.37765, class = c("POSIXct", "POSIXt")),
+  created_at = NULL,
   tags = character(0)
 )
 ```
@@ -34,15 +34,18 @@ Study(
 - description:
 
   Character scalar for longer description of study purpose, design, or
-  protocols. Optional.
+  protocols. Can be a file path (ending with .md, .txt, or .rtf) to read
+  README content. Optional.
 
 - hypotheses:
 
-  Character vector of research hypotheses. Optional.
+  Character vector of research hypotheses. Accepts multiple hypotheses.
+  Optional.
 
 - aims:
 
-  Character vector of specific research aims. Optional.
+  Character vector of specific research aims. Accepts multiple aims.
+  Optional.
 
 - assays:
 
@@ -52,7 +55,9 @@ Study(
 - genome_builds:
 
   Named list mapping species to genome build versions (e.g.,
-  `list(rat = "rn6", mouse = "mm10", human = "hg38")`). Optional.
+  `list(rat = "rn7", mouse = "mm10", human = "hg38")`). Supports rn6,
+  rn7 for rat; mm9, mm10, mm39 for mouse; hg19, hg38 for human.
+  Optional.
 
 - created_at:
 

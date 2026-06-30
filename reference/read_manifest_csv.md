@@ -1,14 +1,16 @@
-# Read and validate a manifest CSV file
+# Read and validate a long-format manifest CSV file
 
-Reads a CSV file containing cross-species subject metadata and sample
-mappings, then validates and structures the data into subject and sample
-tables suitable for creating a Cohort object. This is the primary entry
-point for loading external manifest data.
+Reads a tidy, long-format manifest CSV (one row per sample) and
+delegates to
+[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+for validation and structuring. This is the primary entry point for
+loading external manifest data and is the single source of truth for
+manifest parsing rules.
 
 ## Usage
 
 ``` r
-read_manifest_csv(path, ...)
+read_manifest_csv(path, ..., allow_duplicates = FALSE)
 ```
 
 ## Arguments
@@ -16,7 +18,7 @@ read_manifest_csv(path, ...)
 - path:
 
   Character scalar with file path to a CSV manifest file. Path must
-  exist and file must be readable.
+  exist and the file must be readable.
 
 - ...:
 
@@ -24,44 +26,39 @@ read_manifest_csv(path, ...)
   [`readr::read_csv()`](https://readr.tidyverse.org/reference/read_delim.html),
   such as `col_types`, `skip`, `comment`, etc.
 
+- allow_duplicates:
+
+  Logical. If `TRUE`, repeated `(subject_id, assay, sample_id)`
+  combinations are permitted. If `FALSE` (default), duplicates raise an
+  error. Passed through to
+  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md).
+
 ## Value
 
-A list with two elements:
-
-- `subject_tbl`: Tibble containing subject-level metadata (subject_id,
-  species, sex, strain, genotype, cohort, timepoint, notes)
-
-- `sample_map`: Tibble mapping subjects to assay-specific sample IDs
+The list returned by
+[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md):
+`subject_tbl`, `sample_map`, and `completeness_tbl`.
 
 ## Details
 
-The manifest CSV must contain at least two columns:
+The CSV must be in long format with one row per sample. Required
+columns:
 
-- `subject_id`: Unique identifier for each subject (character)
+- `subject_id`: subject the sample belongs to
 
-- `species`: Species designation - one of "rat", "mouse", or "human"
-  (character)
+- `assay`: assay type, e.g. `wgs`, `wes`, `atac`, `bulk_rna`, `scrna`
 
-Optional subject metadata columns are automatically detected:
+- `sample_id`: unique sample identifier
 
-- `sex`: Biological sex
+Optional sample-level column:
 
-- `strain`: Strain or breed designation
+- `role`: role within the assay, e.g. `tumor`, `normal`
 
-- `genotype`: Genetic background or modification
-
-- `cohort`: Treatment group or cohort membership
-
-- `timepoint`: Study timepoint or collection date
-
-- `notes`: Free-form notes
-
-Any additional columns are treated as sample/assay IDs and placed in the
-returned `sample_map`. Typical assay columns include:
-
-- `assay_wes_id`: WES sample identifier
-
-- `assay_snrna_id`: snRNA-seq sample identifier
+Any remaining columns (e.g. `species`, `sex`, `strain`, `genotype`,
+`cohort`, `timepoint`, `notes`) are treated as subject-level metadata
+and must be constant within a `subject_id`. See
+[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+for the full validation rules.
 
 ## See also
 
@@ -73,29 +70,44 @@ for creating a Cohort from manifest data
 ## Examples
 
 ``` r
-# Create a temporary CSV manifest
+# Create a temporary long-format CSV manifest
 manifest_file <- tempfile(fileext = ".csv")
 writeLines(
   c(
-    "subject_id,species,sex,strain,assay_wes_id",
-    "RAT001,rat,M,Lewis,WES_R001",
-    "MOUSE001,mouse,F,C57BL/6,WES_M001"
+    "subject_id,species,assay,sample_id,role",
+    "RAT001,rat,wes,WES_T1,tumor",
+    "RAT001,rat,wes,WES_N1,normal",
+    "RAT001,rat,scrna,RNA_1,tumor",
+    "MOUSE1,mouse,atac,ATAC_1,NA",
+    "HUM01,human,wgs,WGS_T1,tumor"
   ),
   manifest_file
 )
 
 # Read and validate the manifest
-manifest_split <- read_manifest_csv(manifest_file)
-print(manifest_split$subject_tbl)
-#> # A tibble: 2 × 4
-#>   subject_id species sex   strain 
-#>   <chr>      <chr>   <chr> <chr>  
-#> 1 RAT001     rat     M     Lewis  
-#> 2 MOUSE001   mouse   F     C57BL/6
-print(manifest_split$sample_map)
-#> # A tibble: 2 × 2
-#>   subject_id assay_wes_id
-#>   <chr>      <chr>       
-#> 1 RAT001     WES_R001    
-#> 2 MOUSE001   WES_M001    
+parsed <- read_manifest_csv(manifest_file)
+parsed$subject_tbl
+#> # A tibble: 3 × 2
+#>   subject_id species
+#>   <chr>      <chr>  
+#> 1 RAT001     rat    
+#> 2 MOUSE1     mouse  
+#> 3 HUM01      human  
+parsed$sample_map
+#> # A tibble: 5 × 4
+#>   subject_id assay sample_id role  
+#>   <chr>      <chr> <chr>     <chr> 
+#> 1 RAT001     wes   WES_T1    tumor 
+#> 2 RAT001     wes   WES_N1    normal
+#> 3 RAT001     scrna RNA_1     tumor 
+#> 4 MOUSE1     atac  ATAC_1    NA    
+#> 5 HUM01      wgs   WGS_T1    tumor 
+parsed$completeness_tbl
+#> # A tibble: 4 × 3
+#>   subject_id assay n_samples
+#>   <chr>      <chr>     <int>
+#> 1 HUM01      wgs           1
+#> 2 MOUSE1     atac          1
+#> 3 RAT001     scrna         1
+#> 4 RAT001     wes           2
 ```

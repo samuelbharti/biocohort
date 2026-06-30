@@ -1,6 +1,7 @@
 # Articles
 
-### Tutorials
+### Reference
 
-- [Getting Started with
-  myceliumr](http://www.samuelbharti.com/myceliumr/articles/getting-started.md):
+- [Glossary](http://www.samuelbharti.com/myceliumr/articles/glossary.md):
+- [Naming
+  conventions](http://www.samuelbharti.com/myceliumr/articles/naming-conventions.md):

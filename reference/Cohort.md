@@ -11,12 +11,13 @@ mouse, and human studies.
 ``` r
 Cohort(
   study = NULL,
-  subject_tbl = structure(list(), class = c("tbl_df", "tbl", "data.frame"), row.names =
-    integer(0), names = character(0)),
-  sample_map = structure(list(), class = c("tbl_df", "tbl", "data.frame"), row.names =
-    integer(0), names = character(0)),
+  subjects = list(),
+  subject_tbl = NULL,
+  sample_map = NULL,
   paths = list(),
-  analyses = list()
+  analyses = list(),
+  registry = list(),
+  cache = list()
 )
 ```
 
@@ -26,6 +27,12 @@ Cohort(
 
   A Study object providing project-level context and metadata, or NULL
   if not applicable. Optional.
+
+- subjects:
+
+  Named list of Subject objects, automatically created from subject_tbl
+  rows during cohort construction. Names are subject IDs. Access
+  individual subjects via: `cohort@subjects[["RAT001"]]`.
 
 - subject_tbl:
 
@@ -37,9 +44,9 @@ Cohort(
 
 - sample_map:
 
-  A tibble mapping subjects to assay-specific sample IDs. Must include
-  `subject_id` column for referential integrity. Additional columns
-  typically include `assay_wes_id`, `assay_snrna_id`, etc. Validated by
+  A canonical long-format tibble mapping subjects to samples, one row
+  per sample. Columns: `subject_id`, `assay`, `sample_id`, `role`. New
+  assays are represented as new rows, never new columns. Validated by
   [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md).
 
 - paths:
@@ -51,6 +58,16 @@ Cohort(
 
   Named list containing analysis results, intermediate tables, or other
   data objects for later retrieval. Optional, defaults to empty list.
+
+- registry:
+
+  Named list of AnalysisSpec objects defining registered analyses. Names
+  correspond to spec@name. Optional, defaults to empty list.
+
+- cache:
+
+  Named list for optional memoization of loaded analysis data. Optional,
+  defaults to empty list.
 
 ## Details
 
@@ -69,11 +86,15 @@ ensures:
 
 Access properties via the `@` operator:
 
-    cohort@study       # Study object or NULL
-    cohort@subject_tbl # Subject metadata table
-    cohort@sample_map  # Sample mapping table
-    cohort@paths       # File paths
-    cohort@analyses    # Stored analysis results
+    cohort@study         # Study object or NULL
+    cohort@subjects      # Named list of Subject objects
+    cohort@subjects[["RAT001"]]  # Individual Subject object
+    cohort@subject_tbl   # Subject metadata table (for bulk operations)
+    cohort@sample_map    # Sample mapping table
+    cohort@paths         # File paths
+    cohort@analyses      # Stored analysis results
+    cohort@registry      # Named list of AnalysisSpec objects
+    cohort@cache         # Memoization cache
 
 ## See also
 
@@ -84,4 +105,6 @@ for validation details,
 [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
 for manifest preparation,
 [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md)
-for loading manifest from file
+for loading manifest from file,
+[`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md)
+for registering analyses
