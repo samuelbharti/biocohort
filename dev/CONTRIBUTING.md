@@ -10,6 +10,7 @@
 ## Setup
 
 ``` r
+
 # Clone repository
 # Install dependencies
 devtools::install_deps(dependencies = TRUE)
@@ -21,6 +22,7 @@ devtools::load_all()
 ## Testing
 
 ``` r
+
 devtools::test()
 devtools::check()
 ```
@@ -32,6 +34,7 @@ The pkgdown website auto-builds on push via GitHub Actions.
 To build locally (requires Pandoc):
 
 ``` r
+
 pkgdown::build_site()
 ```
 

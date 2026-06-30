@@ -7,62 +7,62 @@ myceliumr for data columns, R objects, functions, and file names.
 
 ### Subject-Level Metadata (`subject_tbl`)
 
-| Column                   | Type              | Description                                                                                           |
-|--------------------------|-------------------|-------------------------------------------------------------------------------------------------------|
+| Column | Type | Description |
+|----|----|----|
 | `subject_id` or `rat_id` | character/numeric | Unique subject identifier. Use `rat_id` for rat-specific studies; use `subject_id` for cross-species. |
-| `species`                | character         | Species designation: “rat”, “mouse”, or “human”.                                                      |
-| `sex`                    | character         | Biological sex: “M” (male), “F” (female), or NA if unknown.                                           |
-| `strain`                 | character         | Strain or breed (e.g., “Fischer 344”, “B6”).                                                          |
-| `genotype`               | character         | Genetic background or modification (e.g., “WT”, “KO”, “NF1+/-”).                                      |
-| `cohort`                 | character         | Treatment group or cohort membership (e.g., “Control”, “Treatment_A”).                                |
-| `timepoint`              | character         | Study visit, age, or collection date (e.g., “Day_0”, “Week_12”, “8wks”).                              |
-| `notes`                  | character         | Free-form annotations or additional metadata.                                                         |
+| `species` | character | Species designation: “rat”, “mouse”, or “human”. |
+| `sex` | character | Biological sex: “M” (male), “F” (female), or NA if unknown. |
+| `strain` | character | Strain or breed (e.g., “Fischer 344”, “B6”). |
+| `genotype` | character | Genetic background or modification (e.g., “WT”, “KO”, “NF1+/-”). |
+| `cohort` | character | Treatment group or cohort membership (e.g., “Control”, “Treatment_A”). |
+| `timepoint` | character | Study visit, age, or collection date (e.g., “Day_0”, “Week_12”, “8wks”). |
+| `notes` | character | Free-form annotations or additional metadata. |
 
 ### DNA/WES Sample Columns (`dna_tbl`)
 
-| Column             | Type      | Description                                                                               |
-|--------------------|-----------|-------------------------------------------------------------------------------------------|
-| `subject_id`       | character | Reference to subject in `subject_tbl`.                                                    |
-| `assay`            | character | Assay type: “dna_wes” for whole exome sequencing.                                         |
-| `tumor_sample_id`  | character | Unique identifier for DNA tumor sample.                                                   |
-| `normal_sample_id` | character | Unique identifier for DNA normal sample.                                                  |
-| `pair_id`          | character | Composite ID linking tumor and normal: `paste0(tumor_sample_id, "__", normal_sample_id)`. |
+| Column | Type | Description |
+|----|----|----|
+| `subject_id` | character | Reference to subject in `subject_tbl`. |
+| `assay` | character | Assay type: “dna_wes” for whole exome sequencing. |
+| `tumor_sample_id` | character | Unique identifier for DNA tumor sample. |
+| `normal_sample_id` | character | Unique identifier for DNA normal sample. |
+| `pair_id` | character | Composite ID linking tumor and normal: `paste0(tumor_sample_id, "__", normal_sample_id)`. |
 
 ### RNA/snRNA-seq Sample Columns (`rna_tbl`)
 
-| Column            | Type      | Description                                                                                                    |
-|-------------------|-----------|----------------------------------------------------------------------------------------------------------------|
-| `subject_id`      | character | Reference to subject in `subject_tbl`.                                                                         |
-| `assay`           | character | Assay type: “rna_snrna” for single-nucleus RNA-seq.                                                            |
+| Column | Type | Description |
+|----|----|----|
+| `subject_id` | character | Reference to subject in `subject_tbl`. |
+| `assay` | character | Assay type: “rna_snrna” for single-nucleus RNA-seq. |
 | `tumor_sample_id` | character | Unique identifier for RNA sample library. (Note: “tumor” refers to tissue origin, not necessarily malignancy.) |
 
 ### Sample Mapping Columns (`sample_map`)
 
-| Column       | Type      | Description                                                                              |
-|--------------|-----------|------------------------------------------------------------------------------------------|
-| `subject_id` | character | Reference to subject in `subject_tbl`.                                                   |
-| `assay`      | character | Assay type: “dna_wes” or “rna_snrna”.                                                    |
-| `sample_id`  | character | Unique sample identifier (can match tumor_sample_id or normal_sample_id).                |
-| `role`       | character | Sample role: “tumor” or “normal”. (Only for DNA; RNA samples use “tumor” by convention.) |
+| Column | Type | Description |
+|----|----|----|
+| `subject_id` | character | Reference to subject in `subject_tbl`. |
+| `assay` | character | Assay type: “dna_wes” or “rna_snrna”. |
+| `sample_id` | character | Unique sample identifier (can match tumor_sample_id or normal_sample_id). |
+| `role` | character | Sample role: “tumor” or “normal”. (Only for DNA; RNA samples use “tumor” by convention.) |
 
 ### Completeness Summary Columns (`completeness_tbl`)
 
-| Column           | Type      | Description                                                          |
-|------------------|-----------|----------------------------------------------------------------------|
-| `subject_id`     | character | Reference to subject in `subject_tbl`.                               |
-| `has_dna_tumor`  | logical   | TRUE if subject has DNA tumor sample.                                |
-| `has_dna_normal` | logical   | TRUE if subject has DNA normal sample.                               |
-| `has_dna_pair`   | logical   | TRUE if subject has both DNA tumor and normal (can compute pair_id). |
-| `n_rna_samples`  | integer   | Number of snRNA-seq libraries available for subject.                 |
+| Column | Type | Description |
+|----|----|----|
+| `subject_id` | character | Reference to subject in `subject_tbl`. |
+| `has_dna_tumor` | logical | TRUE if subject has DNA tumor sample. |
+| `has_dna_normal` | logical | TRUE if subject has DNA normal sample. |
+| `has_dna_pair` | logical | TRUE if subject has both DNA tumor and normal (can compute pair_id). |
+| `n_rna_samples` | integer | Number of snRNA-seq libraries available for subject. |
 
 ## Assay Type Values
 
 Use these standardized values in the `assay` column:
 
-| Assay                               | Code          | Description                                                 |
-|-------------------------------------|---------------|-------------------------------------------------------------|
-| DNA (Whole Exome Sequencing)        | `"dna_wes"`   | Exome capture and sequencing for somatic variant discovery. |
-| RNA (Single-Nucleus RNA-sequencing) | `"rna_snrna"` | Single-nucleus transcriptomics.                             |
+| Assay | Code | Description |
+|----|----|----|
+| DNA (Whole Exome Sequencing) | `"dna_wes"` | Exome capture and sequencing for somatic variant discovery. |
+| RNA (Single-Nucleus RNA-sequencing) | `"rna_snrna"` | Single-nucleus transcriptomics. |
 
 ## Sample ID Formats
 
@@ -96,6 +96,7 @@ consistent project-wide convention:
 ### Example Object Creation
 
 ``` r
+
 # Study
 study <- study_new(
   study_id = "NF1_001",

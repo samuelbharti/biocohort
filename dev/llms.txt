@@ -9,6 +9,7 @@ WES and snRNA-seq outputs.
 ## Installation
 
 ``` r
+
 # From GitHub
 devtools::install_github("samuelbharti/myceliumr")
 
@@ -19,6 +20,7 @@ devtools::install()
 ## Quick Start
 
 ``` r
+
 library(myceliumr)
 
 # Create a study
@@ -77,6 +79,7 @@ Started](http://www.samuelbharti.com/myceliumr/articles/getting-started.md)**
 To build the site locally:
 
 ``` r
+
 pkgdown::build_site()
 ```
 
@@ -158,8 +161,6 @@ Data validation functions
   : Validate a Cohort object
 
 # Articles
-
-### Tutorials
 
 ### Reference
 

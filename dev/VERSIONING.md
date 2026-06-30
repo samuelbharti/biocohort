@@ -54,18 +54,21 @@ myceliumr follows semantic versioning: **MAJOR.MINOR.PATCH**
 3.  **Regenerate documentation**
 
     ``` r
+
     devtools::document()
     ```
 
 4.  **Run tests**
 
     ``` r
+
     devtools::test()
     ```
 
 5.  **Build and install**
 
     ``` r
+
     devtools::install()
     ```
 
@@ -83,6 +86,7 @@ myceliumr follows semantic versioning: **MAJOR.MINOR.PATCH**
 The package displays its version when loaded:
 
 ``` r
+
 library(myceliumr)
 # myceliumr version 0.1.1
 # Cross-Species Cohort Framework for Genomics Data
@@ -96,6 +100,7 @@ This is handled by the `.onAttach()` function in `R/zzz.R`.
 Within R:
 
 ``` r
+
 packageVersion("myceliumr")
 ```
 
