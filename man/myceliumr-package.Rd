@@ -57,6 +57,11 @@ supported by using a consistent label in the \code{assay} column, for example:
 \item \code{\link[=validate_manifest]{validate_manifest()}} — Validate and structure manifest data
 }
 
+\strong{Samples:}
+\itemize{
+\item \code{\link[=sample_pairs]{sample_pairs()}} — Derive tumor/normal sample pairs from a sample map
+}
+
 \strong{Validation:}
 \itemize{
 \item \code{\link[=validate_cohort]{validate_cohort()}} — Validate a Cohort object

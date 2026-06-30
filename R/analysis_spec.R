@@ -7,15 +7,23 @@
 #' @param name Character scalar for unique analysis name (key in registry).
 #' @param assay Character scalar for assay type (e.g., "wes_somatic",
 #'   "wes_germline", "snrna"). Required.
-#' @param level Character scalar for data organization level. Must be one of:
-#'   "subject", "pair", or "cohort". Required.
+#' @param level Character scalar for the granularity at which the analysis
+#'   produces results. Must be one of:
+#'   - `"subject"`: one result per subject.
+#'   - `"pair"`: one result per tumor/normal (case/control) pair, as derived by
+#'     [sample_pairs()] from the cohort's `sample_map`.
+#'   - `"cohort"`: a single result for the whole cohort.
+#'
+#'   Required.
 #' @param format Character scalar for file format (e.g., "rds", "tsv", "txt").
 #'   Required.
 #' @param description Character scalar for human-readable description of the
 #'   analysis. Optional, defaults to NA.
 #' @param path_template Character scalar for templated path to analysis output.
-#'   Supports substitution tokens: `{root}`, `{subject_id}`, `{tumor_id}`,
-#'   `{normal_id}`, `{pair_id}`. Optional, defaults to NA.
+#'   Supports substitution tokens: `{root}` (from `root_key`), `{subject_id}`,
+#'   and the pair tokens `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}`
+#'   (the latter three supplied by [sample_pairs()] for `level = "pair"`).
+#'   Optional, defaults to NA.
 #' @param root_key Character scalar for key in cohort@paths list to use as
 #'   the `{root}` template value (e.g., "msi_root", "sig_root", "wes_root").
 #'   Optional, defaults to NA.
@@ -73,15 +81,18 @@ AnalysisSpec <- S7::new_class(
 #'   1 character long. Serves as key in the cohort registry.
 #' @param assay Character scalar for assay type (e.g., "wes_somatic",
 #'   "wes_germline", "snrna"). Required.
-#' @param level Character scalar for data organization level.
-#'   Must be one of: "subject", "pair", or "cohort". Required.
+#' @param level Character scalar for the granularity at which the analysis
+#'   produces results. Must be one of `"subject"` (one result per subject),
+#'   `"pair"` (one result per tumor/normal pair, see [sample_pairs()]), or
+#'   `"cohort"` (a single result for the whole cohort). Required.
 #' @param format Character scalar for file format (e.g., "rds", "tsv", "txt").
 #'   Required.
 #' @param description Character scalar for human-readable description.
 #'   Optional, defaults to NA.
 #' @param path_template Character scalar for templated file path. Supports
-#'   tokens: `{root}` (from root_key), `{subject_id}`, `{tumor_id}`,
-#'   `{normal_id}`, `{pair_id}`. Optional, defaults to NA.
+#'   tokens: `{root}` (from `root_key`), `{subject_id}`, and the pair tokens
+#'   `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}` (from
+#'   [sample_pairs()]). Optional, defaults to NA.
 #' @param root_key Character scalar for key in cohort@paths to use as `{root}`.
 #'   Optional, defaults to NA.
 #' @param reader Character scalar for reader function name (e.g., "read_rds",

@@ -1,5 +1,13 @@
 # myceliumr 0.3.0
 
+## New features
+
+- **`sample_pairs()`**: derive tumor/normal (case/control) sample pairs from a
+  long-format `sample_map`. Pairing is assay-agnostic and computed on demand
+  rather than stored, replacing the old WES-specific `pair_id` column. Returns
+  `subject_id`, `assay`, `tumor_sample_id`, `normal_sample_id`, `pair_id`, with
+  configurable role labels via `tumor_role`/`normal_role`.
+
 ## Breaking changes
 
 - **Generic, species- and assay-agnostic manifest layer** (#7). The manifest
