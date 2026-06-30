@@ -10,15 +10,17 @@
 #' @param title Character scalar with the study name/title. Must be at least 1
 #'   character long.
 #' @param description Character scalar with optional longer description of the
-#'   study purpose and design. Defaults to NA.
-#' @param hypotheses Character vector of research hypotheses. Optional and
-#'   defaults to empty vector.
-#' @param aims Character vector of specific research aims. Optional and defaults
-#'   to empty vector.
+#'   study purpose and design. Can be a file path (ending with .md, .txt, or .rtf)
+#'   which will be read into the description field. Defaults to NA.
+#' @param hypotheses Character vector of research hypotheses. Accepts multiple
+#'   hypotheses. Optional and defaults to empty vector.
+#' @param aims Character vector of specific research aims. Accepts multiple aims.
+#'   Optional and defaults to empty vector.
 #' @param assays Character vector of assay types used in the study (e.g.,
 #'   "WES", "snRNA-seq"). Optional and defaults to empty vector.
 #' @param genome_builds Named list mapping species names to genome build versions
-#'   (e.g., `list(rat = "rn6", mouse = "mm10")`). Optional and defaults to empty list.
+#'   (e.g., `list(rat = "rn7", mouse = "mm10")`). Supports rn6, rn7 for rat;
+#'   mm9, mm10, mm39 for mouse; hg19, hg38 for human. Optional and defaults to empty list.
 #' @param created_at POSIXct timestamp for study creation. Defaults to current time.
 #' @param tags Character vector of arbitrary tags for categorization. Optional
 #'   and defaults to empty vector.
@@ -30,17 +32,36 @@
 #' They provide context for cohorts and support cross-species genomics analysis.
 #' The study_id and title are required; all other fields are optional.
 #'
+#' The description parameter accepts either plain text or a file path. If a file
+#' path ending with .md, .txt, or .rtf is provided, the file contents will be
+#' read and stored in the description field. This allows storing detailed README
+#' content within the study metadata.
+#'
 #' @examples
+#' # Example with multiple hypotheses and aims
 #' study <- study_new(
 #'   study_id = "STUDY001",
 #'   title = "Cross-species genomics comparison",
 #'   description = "Comparing rat and mouse genomes",
-#'   hypotheses = "Orthologous genes show conserved expression",
-#'   aims = "Map regulatory regions",
+#'   hypotheses = c(
+#'     "Orthologous genes show conserved expression patterns",
+#'     "Disease genes are enriched in specific pathways"
+#'   ),
+#'   aims = c(
+#'     "Map regulatory regions across species",
+#'     "Identify conserved non-coding elements"
+#'   ),
 #'   assays = c("WES", "snRNA-seq"),
-#'   genome_builds = list(rat = "rn6", mouse = "mm10", human = "hg38")
+#'   genome_builds = list(rat = "rn7", mouse = "mm10", human = "hg38")
 #' )
 #' print(study)
+#'
+#' # Example with README file as description
+#' # study <- study_new(
+#' #   study_id = "STUDY002",
+#' #   title = "My Study",
+#' #   description = "path/to/README.md"
+#' # )
 #'
 #' @seealso [Cohort] for combining studies with subject data
 #' @export
@@ -61,6 +82,18 @@ study_new <- function(
   checkmate::assert_character(aims, any.missing = FALSE)
   checkmate::assert_character(assays, any.missing = FALSE)
   checkmate::assert_list(genome_builds)
+
+  # Handle description: if it's a file path, read the file
+  if (!is.na(description) && nchar(description) > 0) {
+    if (grepl("\\.(md|txt|rtf)$", description, ignore.case = TRUE)) {
+      if (file.exists(description)) {
+        description <- paste(readLines(description, warn = FALSE), collapse = "\n")
+      } else {
+        cli::cli_warn("Description file not found: {description}. Using as plain text.")
+      }
+    }
+  }
+
   Study(
     study_id = study_id,
     title = title,
@@ -166,9 +199,9 @@ subject_new <- function(
 #'   `subject_id` (character) and `species` (rat/mouse/human). Optional columns:
 #'   `sex`, `strain`, `genotype`, `cohort`, `timepoint`, `notes`. Typically
 #'   obtained from [validate_manifest()].
-#' @param sample_map A tibble mapping subjects to assay-specific sample IDs.
+#' @param sample_map A canonical long-format tibble mapping subjects to samples,
+#'   one row per sample. Columns: `subject_id`, `assay`, `sample_id`, `role`.
 #'   Must have at least a `subject_id` column to link to `subject_tbl`.
-#'   Additional columns can include `assay_wes_id`, `assay_snrna_id`, etc.
 #'   Typically obtained from [validate_manifest()].
 #' @param study A Study object providing project-level metadata and context,
 #'   or NULL if not applicable. Defaults to NULL.
@@ -188,9 +221,16 @@ subject_new <- function(
 #' - No duplicate subject IDs
 #' - Sample map can be linked to subjects
 #'
+#' **Automatic Subject Object Creation:**
+#' Subject objects are automatically created from each row in `subject_tbl`.
+#' These are stored in the `subjects` property as a named list, accessible by
+#' subject_id. This eliminates the need to manually create Subject objects.
+#'
 #' Use the `@` operator to access cohort components:
 #' - `cohort@study` - Study metadata
-#' - `cohort@subject_tbl` - Subject table
+#' - `cohort@subjects` - Named list of Subject objects
+#' - `cohort@subjects[[\"RAT001\"]]` - Access individual Subject
+#' - `cohort@subject_tbl` - Subject table (for bulk operations)
 #' - `cohort@sample_map` - Sample mapping
 #'
 #' @examples
@@ -201,12 +241,14 @@ subject_new <- function(
 #'   assays = c("WES", "snRNA-seq")
 #' )
 #'
-#' # Create manifest data
+#' # Create manifest data (long format: one row per sample)
 #' manifest <- data.frame(
-#'   subject_id = c("RAT001", "MOUSE001"),
-#'   species = c("rat", "mouse"),
-#'   sex = c("M", "F"),
-#'   assay_wes_id = c("WES_R001", "WES_M001")
+#'   subject_id = c("RAT001", "RAT001", "MOUSE1", "MOUSE1"),
+#'   species = c("rat", "rat", "mouse", "mouse"),
+#'   sex = c("M", "M", "F", "F"),
+#'   assay = c("wes", "scrna", "wes", "atac"),
+#'   sample_id = c("WES_T1", "RNA_1", "WES_T2", "ATAC_1"),
+#'   role = c("tumor", "tumor", "tumor", NA)
 #' )
 #'
 #' # Validate and create cohort
@@ -217,6 +259,10 @@ subject_new <- function(
 #'   sample_map = manifest_split$sample_map
 #' )
 #' print(cohort)
+#'
+#' # Access individual Subject objects (automatically created)
+#' rat_subject <- cohort@subjects[["RAT001"]]
+#' print(rat_subject)
 #'
 #' @seealso [validate_manifest()] for preparing input tables,
 #'   [validate_cohort()] for detailed validation,
@@ -235,8 +281,28 @@ cohort_new <- function(
     cli::cli_abort("`study` must be a Study object or NULL.")
   }
 
+  # Automatically create Subject objects from subject_tbl
+  subjects <- list()
+  if (nrow(subject_tbl) > 0) {
+    for (i in seq_len(nrow(subject_tbl))) {
+      row <- subject_tbl[i, ]
+      subject_obj <- subject_new(
+        subject_id = row$subject_id,
+        species = row$species,
+        sex = if ("sex" %in% names(row)) row$sex else NA_character_,
+        strain = if ("strain" %in% names(row)) row$strain else NA_character_,
+        genotype = if ("genotype" %in% names(row)) row$genotype else NA_character_,
+        cohort = if ("cohort" %in% names(row)) row$cohort else NA_character_,
+        timepoint = if ("timepoint" %in% names(row)) row$timepoint else NA_character_,
+        notes = if ("notes" %in% names(row)) row$notes else NA_character_
+      )
+      subjects[[row$subject_id]] <- subject_obj
+    }
+  }
+
   cohort <- Cohort(
     study = study,
+    subjects = subjects,
     subject_tbl = subject_tbl,
     sample_map = sample_map,
     paths = paths,

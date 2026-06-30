@@ -2,71 +2,70 @@
 % Please edit documentation in R/io.R
 \name{read_manifest_csv}
 \alias{read_manifest_csv}
-\title{Read and validate a manifest CSV file}
+\title{Read and validate a long-format manifest CSV file}
 \usage{
-read_manifest_csv(path, ...)
+read_manifest_csv(path, ..., allow_duplicates = FALSE)
 }
 \arguments{
 \item{path}{Character scalar with file path to a CSV manifest file.
-Path must exist and file must be readable.}
+Path must exist and the file must be readable.}
 
-\item{...}{Additional named arguments passed to \code{\link[readr:read_delim]{readr::read_csv()}},
+\item{...}{Additional named arguments passed to \code{\link[readr:read_csv]{readr::read_csv()}},
 such as \code{col_types}, \code{skip}, \code{comment}, etc.}
+
+\item{allow_duplicates}{Logical. If \code{TRUE}, repeated
+\verb{(subject_id, assay, sample_id)} combinations are permitted. If \code{FALSE}
+(default), duplicates raise an error. Passed through to
+\code{\link[=validate_manifest]{validate_manifest()}}.}
 }
 \value{
-A list with two elements:
-\itemize{
-\item \code{subject_tbl}: Tibble containing subject-level metadata (subject_id,
-species, sex, strain, genotype, cohort, timepoint, notes)
-\item \code{sample_map}: Tibble mapping subjects to assay-specific sample IDs
-}
+The list returned by \code{\link[=validate_manifest]{validate_manifest()}}: \code{subject_tbl},
+\code{sample_map}, and \code{completeness_tbl}.
 }
 \description{
-Reads a CSV file containing cross-species subject metadata and sample mappings,
-then validates and structures the data into subject and sample tables suitable
-for creating a Cohort object. This is the primary entry point for loading
-external manifest data.
+Reads a tidy, long-format manifest CSV (one row per sample) and delegates to
+\code{\link[=validate_manifest]{validate_manifest()}} for validation and structuring. This is the primary
+entry point for loading external manifest data and is the single source of
+truth for manifest parsing rules.
 }
 \details{
-The manifest CSV must contain at least two columns:
+The CSV must be in long format with one row per sample. Required columns:
 \itemize{
-\item \code{subject_id}: Unique identifier for each subject (character)
-\item \code{species}: Species designation - one of "rat", "mouse", or "human" (character)
+\item \code{subject_id}: subject the sample belongs to
+\item \code{assay}: assay type, e.g. \code{wgs}, \code{wes}, \code{atac}, \code{bulk_rna}, \code{scrna}
+\item \code{sample_id}: unique sample identifier
 }
 
-Optional subject metadata columns are automatically detected:
+Optional sample-level column:
 \itemize{
-\item \code{sex}: Biological sex
-\item \code{strain}: Strain or breed designation
-\item \code{genotype}: Genetic background or modification
-\item \code{cohort}: Treatment group or cohort membership
-\item \code{timepoint}: Study timepoint or collection date
-\item \code{notes}: Free-form notes
+\item \code{role}: role within the assay, e.g. \code{tumor}, \code{normal}
 }
 
-Any additional columns are treated as sample/assay IDs and placed in the
-returned \code{sample_map}. Typical assay columns include:
-\itemize{
-\item \code{assay_wes_id}: WES sample identifier
-\item \code{assay_snrna_id}: snRNA-seq sample identifier
-}
+Any remaining columns (e.g. \code{species}, \code{sex}, \code{strain}, \code{genotype},
+\code{cohort}, \code{timepoint}, \code{notes}) are treated as subject-level metadata and
+must be constant within a \code{subject_id}. See \code{\link[=validate_manifest]{validate_manifest()}} for the
+full validation rules.
 }
 \examples{
-# Create a temporary CSV manifest
+# Create a temporary long-format CSV manifest
 manifest_file <- tempfile(fileext = ".csv")
 writeLines(
   c(
-    "subject_id,species,sex,strain,assay_wes_id",
-    "RAT001,rat,M,Lewis,WES_R001",
-    "MOUSE001,mouse,F,C57BL/6,WES_M001"
+    "subject_id,species,assay,sample_id,role",
+    "RAT001,rat,wes,WES_T1,tumor",
+    "RAT001,rat,wes,WES_N1,normal",
+    "RAT001,rat,scrna,RNA_1,tumor",
+    "MOUSE1,mouse,atac,ATAC_1,NA",
+    "HUM01,human,wgs,WGS_T1,tumor"
   ),
   manifest_file
 )
 
 # Read and validate the manifest
-manifest_split <- read_manifest_csv(manifest_file)
-print(manifest_split$subject_tbl)
-print(manifest_split$sample_map)
+parsed <- read_manifest_csv(manifest_file)
+parsed$subject_tbl
+parsed$sample_map
+parsed$completeness_tbl
 
 }
 \seealso{

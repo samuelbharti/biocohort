@@ -18,9 +18,9 @@ cohort_new(
 \code{sex}, \code{strain}, \code{genotype}, \code{cohort}, \code{timepoint}, \code{notes}. Typically
 obtained from \code{\link[=validate_manifest]{validate_manifest()}}.}
 
-\item{sample_map}{A tibble mapping subjects to assay-specific sample IDs.
+\item{sample_map}{A canonical long-format tibble mapping subjects to samples,
+one row per sample. Columns: \code{subject_id}, \code{assay}, \code{sample_id}, \code{role}.
 Must have at least a \code{subject_id} column to link to \code{subject_tbl}.
-Additional columns can include \code{assay_wes_id}, \code{assay_snrna_id}, etc.
 Typically obtained from \code{\link[=validate_manifest]{validate_manifest()}}.}
 
 \item{study}{A Study object providing project-level metadata and context,
@@ -52,10 +52,17 @@ Construction automatically runs \code{\link[=validate_cohort]{validate_cohort()}
 \item Sample map can be linked to subjects
 }
 
+\strong{Automatic Subject Object Creation:}
+Subject objects are automatically created from each row in \code{subject_tbl}.
+These are stored in the \code{subjects} property as a named list, accessible by
+subject_id. This eliminates the need to manually create Subject objects.
+
 Use the \code{@} operator to access cohort components:
 \itemize{
 \item \code{cohort@study} - Study metadata
-\item \code{cohort@subject_tbl} - Subject table
+\item \code{cohort@subjects} - Named list of Subject objects
+\item \verb{cohort@subjects[[\\"RAT001\\"]]} - Access individual Subject
+\item \code{cohort@subject_tbl} - Subject table (for bulk operations)
 \item \code{cohort@sample_map} - Sample mapping
 }
 }
@@ -67,12 +74,14 @@ study <- study_new(
   assays = c("WES", "snRNA-seq")
 )
 
-# Create manifest data
+# Create manifest data (long format: one row per sample)
 manifest <- data.frame(
-  subject_id = c("RAT001", "MOUSE001"),
-  species = c("rat", "mouse"),
-  sex = c("M", "F"),
-  assay_wes_id = c("WES_R001", "WES_M001")
+  subject_id = c("RAT001", "RAT001", "MOUSE1", "MOUSE1"),
+  species = c("rat", "rat", "mouse", "mouse"),
+  sex = c("M", "M", "F", "F"),
+  assay = c("wes", "scrna", "wes", "atac"),
+  sample_id = c("WES_T1", "RNA_1", "WES_T2", "ATAC_1"),
+  role = c("tumor", "tumor", "tumor", NA)
 )
 
 # Validate and create cohort
@@ -83,6 +92,10 @@ cohort <- cohort_new(
   sample_map = manifest_split$sample_map
 )
 print(cohort)
+
+# Access individual Subject objects (automatically created)
+rat_subject <- cohort@subjects[["RAT001"]]
+print(rat_subject)
 
 }
 \seealso{

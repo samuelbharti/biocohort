@@ -24,19 +24,21 @@ Must be at least 1 character long.}
 character long.}
 
 \item{description}{Character scalar with optional longer description of the
-study purpose and design. Defaults to NA.}
+study purpose and design. Can be a file path (ending with .md, .txt, or .rtf)
+which will be read into the description field. Defaults to NA.}
 
-\item{hypotheses}{Character vector of research hypotheses. Optional and
-defaults to empty vector.}
+\item{hypotheses}{Character vector of research hypotheses. Accepts multiple
+hypotheses. Optional and defaults to empty vector.}
 
-\item{aims}{Character vector of specific research aims. Optional and defaults
-to empty vector.}
+\item{aims}{Character vector of specific research aims. Accepts multiple aims.
+Optional and defaults to empty vector.}
 
 \item{assays}{Character vector of assay types used in the study (e.g.,
 "WES", "snRNA-seq"). Optional and defaults to empty vector.}
 
 \item{genome_builds}{Named list mapping species names to genome build versions
-(e.g., \code{list(rat = "rn6", mouse = "mm10")}). Optional and defaults to empty list.}
+(e.g., \code{list(rat = "rn7", mouse = "mm10")}). Supports rn6, rn7 for rat;
+mm9, mm10, mm39 for mouse; hg19, hg38 for human. Optional and defaults to empty list.}
 
 \item{created_at}{POSIXct timestamp for study creation. Defaults to current time.}
 
@@ -56,18 +58,37 @@ for cross-species genomics analysis.
 Study objects are S7 classes that immutably store research project metadata.
 They provide context for cohorts and support cross-species genomics analysis.
 The study_id and title are required; all other fields are optional.
+
+The description parameter accepts either plain text or a file path. If a file
+path ending with .md, .txt, or .rtf is provided, the file contents will be
+read and stored in the description field. This allows storing detailed README
+content within the study metadata.
 }
 \examples{
+# Example with multiple hypotheses and aims
 study <- study_new(
   study_id = "STUDY001",
   title = "Cross-species genomics comparison",
   description = "Comparing rat and mouse genomes",
-  hypotheses = "Orthologous genes show conserved expression",
-  aims = "Map regulatory regions",
+  hypotheses = c(
+    "Orthologous genes show conserved expression patterns",
+    "Disease genes are enriched in specific pathways"
+  ),
+  aims = c(
+    "Map regulatory regions across species",
+    "Identify conserved non-coding elements"
+  ),
   assays = c("WES", "snRNA-seq"),
-  genome_builds = list(rat = "rn6", mouse = "mm10", human = "hg38")
+  genome_builds = list(rat = "rn7", mouse = "mm10", human = "hg38")
 )
 print(study)
+
+# Example with README file as description
+# study <- study_new(
+#   study_id = "STUDY002",
+#   title = "My Study",
+#   description = "path/to/README.md"
+# )
 
 }
 \seealso{
