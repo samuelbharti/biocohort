@@ -2,6 +2,19 @@
 
 ## New features
 
+- **Cross-species translation (experimental)**: first-class coordinate
+  translation across assemblies and species.
+  - `orthologize()` — modality-dispatching front door (`"liftover"` strategy
+    implemented; `"ortholog"` strategy is a documented placeholder pending an
+    `orthogene`/`babelgene` backend).
+  - `liftover_intervals()` — translate intervals (variants, peaks, regions) via
+    a chain file, returning a `TranslationResult` that retains both mapped and
+    **unmapped** features so loss is never silent.
+  - Pluggable backends via `register_liftover_backend()` / `liftover_backends()`:
+    an R-native `rtracklayer` default, plus a `crossmap` adapter and the
+    allele-aware `liftover_vcf()` wrapper for the external CrossMap tool.
+  - `TranslationResult` S7 class and `translation_stats()` for mapped/unmapped/
+    multi-mapped accounting.
 - **`sample_pairs()`**: derive tumor/normal (case/control) sample pairs from a
   long-format `sample_map`. Pairing is assay-agnostic and computed on demand
   rather than stored, replacing the old WES-specific `pair_id` column. Returns
