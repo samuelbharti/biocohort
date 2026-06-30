@@ -27,9 +27,6 @@ navbar:
       href: https://github.com/samuelbharti/myceliumr
       aria-label: GitHub
 articles:
-- title: Tutorials
-  contents:
-  - starts_with("getting")
 - title: Reference
   contents:
   - starts_with("glossary")
