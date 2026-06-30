@@ -39,7 +39,9 @@
 <ul><li>
 <strong>Cross-species translation (experimental)</strong>: first-class coordinate translation across assemblies and species.
 <ul><li>
-<code><a href="../reference/orthologize.html">orthologize()</a></code> — modality-dispatching front door (<code>"liftover"</code> strategy implemented; <code>"ortholog"</code> strategy is a documented placeholder pending an <code>orthogene</code>/<code>babelgene</code> backend).</li>
+<code><a href="../reference/orthologize.html">orthologize()</a></code> — modality-dispatching front door routing coordinate features to liftover and gene features to ortholog mapping.</li>
+<li>
+<code><a href="../reference/ortholog_genes.html">ortholog_genes()</a></code> — gene-level cross-species mapping returning a <code>TranslationResult</code>; pluggable backends via <code><a href="../reference/register_ortholog_backend.html">register_ortholog_backend()</a></code> / <code><a href="../reference/ortholog_backends.html">ortholog_backends()</a></code>, with an offline <code>babelgene</code> default (<code><a href="../reference/ortholog_babelgene.html">ortholog_babelgene()</a></code>). Model-to-model pairs (e.g. rat-to-mouse) are pivoted through human.</li>
 <li>
 <code><a href="../reference/liftover_intervals.html">liftover_intervals()</a></code> — translate intervals (variants, peaks, regions) via a chain file, returning a <code>TranslationResult</code> that retains both mapped and <strong>unmapped</strong> features so loss is never silent.</li>
 <li>Pluggable backends via <code><a href="../reference/register_liftover_backend.html">register_liftover_backend()</a></code> / <code><a href="../reference/liftover_backends.html">liftover_backends()</a></code>: an R-native <code>rtracklayer</code> default, plus a <code>crossmap</code> adapter and the allele-aware <code><a href="../reference/liftover_vcf.html">liftover_vcf()</a></code> wrapper for the external CrossMap tool.</li>

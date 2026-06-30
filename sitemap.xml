@@ -27,9 +27,13 @@
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/liftover_rtracklayer.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/myceliumr-package.html</loc></url>
+<url><loc>http://www.samuelbharti.com/myceliumr/reference/ortholog_babelgene.html</loc></url>
+<url><loc>http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.html</loc></url>
+<url><loc>http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/orthologize.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/register_liftover_backend.html</loc></url>
+<url><loc>http://www.samuelbharti.com/myceliumr/reference/register_ortholog_backend.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/sample_pairs.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/study_new.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/subject_new.html</loc></url>

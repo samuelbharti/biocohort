@@ -7,9 +7,17 @@
 - **Cross-species translation (experimental)**: first-class coordinate
   translation across assemblies and species.
   - [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
-    — modality-dispatching front door (`"liftover"` strategy
-    implemented; `"ortholog"` strategy is a documented placeholder
-    pending an `orthogene`/`babelgene` backend).
+    — modality-dispatching front door routing coordinate features to
+    liftover and gene features to ortholog mapping.
+  - [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)
+    — gene-level cross-species mapping returning a `TranslationResult`;
+    pluggable backends via
+    [`register_ortholog_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_ortholog_backend.md)
+    /
+    [`ortholog_backends()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.md),
+    with an offline `babelgene` default
+    ([`ortholog_babelgene()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_babelgene.md)).
+    Model-to-model pairs (e.g. rat-to-mouse) are pivoted through human.
   - [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)
     — translate intervals (variants, peaks, regions) via a chain file,
     returning a `TranslationResult` that retains both mapped and

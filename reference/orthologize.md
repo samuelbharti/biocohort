@@ -15,7 +15,7 @@ orthologize(
   from = NA_character_,
   strategy = c("liftover", "ortholog"),
   chain = NULL,
-  backend = "rtracklayer",
+  backend = NULL,
   ...
 )
 ```
@@ -41,11 +41,11 @@ orthologize(
 
   Translation strategy. One of:
 
-  - `"liftover"`: coordinate liftover via a chain file (implemented; see
+  - `"liftover"`: coordinate liftover via a chain file (see
     [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)).
 
-  - `"ortholog"`: gene-level ortholog mapping (not yet implemented;
-    planned via `orthogene`/`babelgene`).
+  - `"ortholog"`: gene-level ortholog mapping (see
+    [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)).
 
 - chain:
 
@@ -53,13 +53,16 @@ orthologize(
 
 - backend:
 
-  For `strategy = "liftover"`, the liftover backend (see
-  [`liftover_backends()`](http://www.samuelbharti.com/myceliumr/reference/liftover_backends.md)).
-  Defaults to `"rtracklayer"`.
+  The translation backend. Defaults to `"rtracklayer"` for `"liftover"`
+  and `"babelgene"` for `"ortholog"`. See
+  [`liftover_backends()`](http://www.samuelbharti.com/myceliumr/reference/liftover_backends.md)
+  and
+  [`ortholog_backends()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.md).
 
 - ...:
 
-  Additional arguments passed to the underlying strategy.
+  Additional arguments passed to the underlying strategy, e.g.
+  `gene_col`/`id_type` for `"ortholog"`.
 
 ## Value
 
@@ -69,14 +72,15 @@ A
 ## Details
 
 This function is the modality dispatcher that makes cross-species
-translation a single, first-class operation. It is **experimental**: the
-`"liftover"` strategy is functional, while `"ortholog"` is a documented
-placeholder so the intended shape of the API is stable while the
-gene-level backend lands.
+translation a single, first-class operation: coordinate features route
+through liftover, gene features through ortholog mapping. It is
+**experimental** while the API settles and Cohort-level orchestration
+lands.
 
 ## See also
 
 [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md),
+[`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md),
 [`liftover_vcf()`](http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.md),
 [TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
 

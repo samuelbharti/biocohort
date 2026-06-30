@@ -185,6 +185,14 @@ Translate features across assemblies and species (experimental)
   : Register a liftover backend
 - [`liftover_backends()`](http://www.samuelbharti.com/myceliumr/reference/liftover_backends.md)
   : List registered liftover backends
+- [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)
+  : Map gene-level features to orthologs in another species
+- [`ortholog_babelgene()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_babelgene.md)
+  : Ortholog backend backed by babelgene
+- [`register_ortholog_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_ortholog_backend.md)
+  : Register a gene-ortholog backend
+- [`ortholog_backends()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.md)
+  : List registered ortholog backends
 - [`TranslationResult()`](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
   : Result of a cross-species or cross-assembly translation
 - [`translation_stats()`](http://www.samuelbharti.com/myceliumr/reference/translation_stats.md)
