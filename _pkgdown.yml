@@ -69,6 +69,12 @@ reference:
   desc: Work with the sample map
   contents:
   - sample_pairs
+- title: Analysis loading
+  desc: Read analysis feature tables from disk (experimental)
+  contents:
+  - load_analysis
+  - load_analyses
+  - analysis_files
 - title: Cross-species translation
   desc: Translate features across assemblies and species (experimental)
   contents:
