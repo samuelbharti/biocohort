@@ -54,7 +54,10 @@ level constraints.</p>
 <span>  path_template <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
 <span>  root_key <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
 <span>  <span class="va">reader</span>,</span>
-<span>  <span class="va">key_cols</span></span>
+<span>  <span class="va">key_cols</span>,</span>
+<span>  feature_type <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  gene_col <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  id_type <span class="op">=</span> <span class="cn">NA_character_</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -111,6 +114,25 @@ Optional, defaults to NA.</p></dd>
 Examples: <code>c("subject_id")</code>, <code>c("pair_id")</code>.
 Required.</p></dd>
 
+
+<dt id="arg-feature-type">feature_type<a class="anchor" aria-label="anchor" href="#arg-feature-type"></a></dt>
+<dd><p>Optional character scalar declaring how this analysis's
+features are translated across species by <code><a href="orthologize.html">orthologize()</a></code>. One of
+<code>"interval"</code> (coordinate features, translated by liftover) or <code>"gene"</code>
+(gene-level features, translated by ortholog mapping). Defaults to NA
+(analysis is skipped by cohort-level translation).</p></dd>
+
+
+<dt id="arg-gene-col">gene_col<a class="anchor" aria-label="anchor" href="#arg-gene-col"></a></dt>
+<dd><p>Optional character scalar naming the gene-identifier column,
+used when <code>feature_type = "gene"</code>. Defaults to NA (treated as <code>"gene"</code>).</p></dd>
+
+
+<dt id="arg-id-type">id_type<a class="anchor" aria-label="anchor" href="#arg-id-type"></a></dt>
+<dd><p>Optional gene identifier type for <code>feature_type = "gene"</code>: one
+of <code>"symbol"</code>, <code>"entrez"</code>, <code>"ensembl"</code>. Defaults to NA (treated as
+<code>"symbol"</code>).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -121,6 +143,8 @@ Required.</p></dd>
     <p>This constructor validates that:</p><ul><li><p><code>name</code>, <code>assay</code>, <code>format</code>, <code>reader</code> are non-empty strings</p></li>
 <li><p><code>level</code> is one of: "subject", "pair", "cohort"</p></li>
 <li><p><code>key_cols</code> is a non-empty character vector</p></li>
+<li><p><code>feature_type</code>, if given, is one of "interval" or "gene"</p></li>
+<li><p><code>id_type</code>, if given, is one of "symbol", "entrez", "ensembl"</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

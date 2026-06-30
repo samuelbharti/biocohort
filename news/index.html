@@ -39,7 +39,9 @@
 <ul><li>
 <strong>Cross-species translation (experimental)</strong>: first-class coordinate translation across assemblies and species.
 <ul><li>
-<code><a href="../reference/orthologize.html">orthologize()</a></code> — modality-dispatching front door routing coordinate features to liftover and gene features to ortholog mapping.</li>
+<code><a href="../reference/orthologize.html">orthologize()</a></code> — modality-dispatching front door routing coordinate features to liftover and gene features to ortholog mapping. Given a <code>Cohort</code>, it translates every registered analysis according to its <code>AnalysisSpec</code> <code>feature_type</code> and returns a new, target-species cohort (subjects and sample map unchanged); per-analysis results, including unmapped features, are retrievable with <code><a href="../reference/translation_report.html">translation_report()</a></code>.</li>
+<li>
+<code>AnalysisSpec</code> gains optional <code>feature_type</code> (<code>"interval"</code>/<code>"gene"</code>), <code>gene_col</code>, and <code>id_type</code> fields that drive cohort-level auto-dispatch.</li>
 <li>
 <code><a href="../reference/ortholog_genes.html">ortholog_genes()</a></code> — gene-level cross-species mapping returning a <code>TranslationResult</code>; pluggable backends via <code><a href="../reference/register_ortholog_backend.html">register_ortholog_backend()</a></code> / <code><a href="../reference/ortholog_backends.html">ortholog_backends()</a></code>, with an offline <code>babelgene</code> default (<code><a href="../reference/ortholog_babelgene.html">ortholog_babelgene()</a></code>). Model-to-model pairs (e.g. rat-to-mouse) are pivoted through human.</li>
 <li>

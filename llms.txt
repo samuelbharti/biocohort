@@ -172,7 +172,7 @@ Work with the sample map
 Translate features across assemblies and species (experimental)
 
 - [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
-  : Translate features across species or assemblies
+  : Translate features (or a whole cohort) across species or assemblies
 - [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)
   : Liftover a set of genomic intervals across assemblies or species
 - [`liftover_vcf()`](http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.md)
@@ -193,6 +193,8 @@ Translate features across assemblies and species (experimental)
   : Register a gene-ortholog backend
 - [`ortholog_backends()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.md)
   : List registered ortholog backends
+- [`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md)
+  : Retrieve per-analysis translation results from a cohort
 - [`TranslationResult()`](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
   : Result of a cross-species or cross-assembly translation
 - [`translation_stats()`](http://www.samuelbharti.com/myceliumr/reference/translation_stats.md)

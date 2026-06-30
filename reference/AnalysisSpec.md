@@ -16,7 +16,10 @@ AnalysisSpec(
   path_template = NA_character_,
   root_key = NA_character_,
   reader = character(0),
-  key_cols = character(0)
+  key_cols = character(0),
+  feature_type = NA_character_,
+  gene_col = NA_character_,
+  id_type = NA_character_
 )
 ```
 
@@ -83,6 +86,24 @@ AnalysisSpec(
   Character vector of column names to use as keys when loading the
   analysis table. Determines how rows are indexed (e.g.,
   `c("subject_id")` or `c("pair_id")`). Required.
+
+- feature_type:
+
+  Optional character scalar declaring how this analysis's features
+  translate across species in
+  [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md):
+  `"interval"` (liftover) or `"gene"` (ortholog mapping). Optional,
+  defaults to NA.
+
+- gene_col:
+
+  Optional character scalar naming the gene-identifier column for
+  `feature_type = "gene"`. Optional, defaults to NA.
+
+- id_type:
+
+  Optional gene identifier type for `feature_type = "gene"`: `"symbol"`,
+  `"entrez"`, or `"ensembl"`. Optional, defaults to NA.
 
 ## Details
 

@@ -1,33 +1,31 @@
-# Translate features across species or assemblies
+# Translate features (or a whole cohort) across species or assemblies
 
-High-level entry point for cross-species translation. `orthologize()`
-routes a set of features to the appropriate translation strategy:
-coordinate-based layers (variants, peaks, intervals) are translated by
-liftover, while gene-based layers are (in future) translated by ortholog
-mapping.
+High-level entry point for cross-species translation. `orthologize()` is
+the modality dispatcher that makes translation a single, first-class
+operation: coordinate features (variants, peaks, intervals) route to
+liftover, and gene-level features route to ortholog mapping. Given a
+[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md), it
+translates every registered analysis according to its
+[AnalysisSpec](http://www.samuelbharti.com/myceliumr/reference/AnalysisSpec.md)
+and returns a new, target-species cohort.
 
 ## Usage
 
 ``` r
-orthologize(
-  x,
-  to,
-  from = NA_character_,
-  strategy = c("liftover", "ortholog"),
-  chain = NULL,
-  backend = NULL,
-  ...
-)
+orthologize(x, to, from = NA_character_, ...)
 ```
 
 ## Arguments
 
 - x:
 
-  A data.frame/tibble of features to translate. For
-  `strategy = "liftover"`, an interval table with `seqnames`, `start`,
-  `end` (see
-  [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)).
+  The thing to translate. Either:
+
+  - a data.frame/tibble of features, or
+
+  - a
+    [Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md)
+    object.
 
 - to:
 
@@ -35,61 +33,73 @@ orthologize(
 
 - from:
 
-  Optional character scalar naming the source species/assembly.
-
-- strategy:
-
-  Translation strategy. One of:
-
-  - `"liftover"`: coordinate liftover via a chain file (see
-    [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)).
-
-  - `"ortholog"`: gene-level ortholog mapping (see
-    [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)).
-
-- chain:
-
-  For `strategy = "liftover"`, path to a chain file.
-
-- backend:
-
-  The translation backend. Defaults to `"rtracklayer"` for `"liftover"`
-  and `"babelgene"` for `"ortholog"`. See
-  [`liftover_backends()`](http://www.samuelbharti.com/myceliumr/reference/liftover_backends.md)
-  and
-  [`ortholog_backends()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.md).
+  Character scalar naming the source species/assembly. Required for the
+  `"ortholog"` strategy and for cohort-level translation.
 
 - ...:
 
-  Additional arguments passed to the underlying strategy, e.g.
-  `gene_col`/`id_type` for `"ortholog"`.
+  Strategy-specific arguments. For a **feature table**:
+
+  - `strategy`: `"liftover"` (coordinate features; see
+    [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md))
+    or `"ortholog"` (gene features; see
+    [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)).
+
+  - `chain`: chain-file path for `"liftover"`.
+
+  - `backend`: translation backend (defaults: `"rtracklayer"` for
+    liftover, `"babelgene"` for ortholog).
+
+  - plus backend arguments such as `gene_col`/`id_type` for orthologs.
+
+  For a **Cohort**:
+
+  - `chain`: chain-file path used for any `feature_type = "interval"`
+    analysis.
+
+  - `liftover_backend`, `ortholog_backend`: backends for the two
+    modalities.
+
+  - `analyses`: optional character vector restricting which analyses to
+    translate (defaults to all that have a registered spec with a
+    `feature_type`).
 
 ## Value
 
 A
-[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md).
+[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
+(feature table input) or a new
+[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md)
+whose analyses are expressed in `to` (Cohort input). For a cohort,
+per-analysis
+[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)s
+(including unmapped features) are retrievable with
+[`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md).
 
 ## Details
 
-This function is the modality dispatcher that makes cross-species
-translation a single, first-class operation: coordinate features route
-through liftover, gene features through ortholog mapping. It is
-**experimental** while the API settles and Cohort-level orchestration
-lands.
+This function is **experimental** while the API settles.
+
+Cohort-level translation keeps subjects and the sample map unchanged
+(the same biological subjects, viewed in another species'
+coordinate/gene space) and re-expresses each analysis's feature table.
+Analyses without a registered
+[AnalysisSpec](http://www.samuelbharti.com/myceliumr/reference/AnalysisSpec.md)
+or without a `feature_type` are skipped with a warning rather than
+guessed at.
 
 ## See also
 
 [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md),
 [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md),
-[`liftover_vcf()`](http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.md),
+[`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md),
 [TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
 
 ## Examples
 
 ``` r
-ints <- data.frame(
-  seqnames = "chr1", start = 100, end = 200
-)
+# Feature-table input -----------------------------------------------------
+ints <- data.frame(seqnames = "chr1", start = 100, end = 200)
 backend <- function(intervals, chain, ...) {
   list(
     mapped = tibble::tibble(

@@ -54,7 +54,10 @@ output files with templated paths and standardized readers.</p>
 <span>  path_template <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
 <span>  root_key <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
 <span>  reader <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
-<span>  key_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span>  key_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  feature_type <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  gene_col <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  id_type <span class="op">=</span> <span class="cn">NA_character_</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -114,6 +117,22 @@ name. Required.</p></dd>
 <dd><p>Character vector of column names to use as keys when
 loading the analysis table. Determines how rows are indexed
 (e.g., <code>c("subject_id")</code> or <code>c("pair_id")</code>). Required.</p></dd>
+
+
+<dt id="arg-feature-type">feature_type<a class="anchor" aria-label="anchor" href="#arg-feature-type"></a></dt>
+<dd><p>Optional character scalar declaring how this analysis's
+features translate across species in <code><a href="orthologize.html">orthologize()</a></code>: <code>"interval"</code>
+(liftover) or <code>"gene"</code> (ortholog mapping). Optional, defaults to NA.</p></dd>
+
+
+<dt id="arg-gene-col">gene_col<a class="anchor" aria-label="anchor" href="#arg-gene-col"></a></dt>
+<dd><p>Optional character scalar naming the gene-identifier column
+for <code>feature_type = "gene"</code>. Optional, defaults to NA.</p></dd>
+
+
+<dt id="arg-id-type">id_type<a class="anchor" aria-label="anchor" href="#arg-id-type"></a></dt>
+<dd><p>Optional gene identifier type for <code>feature_type = "gene"</code>:
+<code>"symbol"</code>, <code>"entrez"</code>, or <code>"ensembl"</code>. Optional, defaults to NA.</p></dd>
 
 </dl></div>
     <div class="section level2">

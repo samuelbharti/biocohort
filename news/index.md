@@ -8,7 +8,15 @@
   translation across assemblies and species.
   - [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
     — modality-dispatching front door routing coordinate features to
-    liftover and gene features to ortholog mapping.
+    liftover and gene features to ortholog mapping. Given a `Cohort`, it
+    translates every registered analysis according to its `AnalysisSpec`
+    `feature_type` and returns a new, target-species cohort (subjects
+    and sample map unchanged); per-analysis results, including unmapped
+    features, are retrievable with
+    [`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md).
+  - `AnalysisSpec` gains optional `feature_type`
+    (`"interval"`/`"gene"`), `gene_col`, and `id_type` fields that drive
+    cohort-level auto-dispatch.
   - [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)
     — gene-level cross-species mapping returning a `TranslationResult`;
     pluggable backends via

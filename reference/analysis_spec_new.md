@@ -16,7 +16,10 @@ analysis_spec_new(
   path_template = NA_character_,
   root_key = NA_character_,
   reader,
-  key_cols
+  key_cols,
+  feature_type = NA_character_,
+  gene_col = NA_character_,
+  id_type = NA_character_
 )
 ```
 
@@ -73,6 +76,26 @@ analysis_spec_new(
   Character vector of column names for indexing loaded tables. Examples:
   `c("subject_id")`, `c("pair_id")`. Required.
 
+- feature_type:
+
+  Optional character scalar declaring how this analysis's features are
+  translated across species by
+  [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md).
+  One of `"interval"` (coordinate features, translated by liftover) or
+  `"gene"` (gene-level features, translated by ortholog mapping).
+  Defaults to NA (analysis is skipped by cohort-level translation).
+
+- gene_col:
+
+  Optional character scalar naming the gene-identifier column, used when
+  `feature_type = "gene"`. Defaults to NA (treated as `"gene"`).
+
+- id_type:
+
+  Optional gene identifier type for `feature_type = "gene"`: one of
+  `"symbol"`, `"entrez"`, `"ensembl"`. Defaults to NA (treated as
+  `"symbol"`).
+
 ## Value
 
 An AnalysisSpec object with validated fields.
@@ -86,6 +109,10 @@ This constructor validates that:
 - `level` is one of: "subject", "pair", "cohort"
 
 - `key_cols` is a non-empty character vector
+
+- `feature_type`, if given, is one of "interval" or "gene"
+
+- `id_type`, if given, is one of "symbol", "entrez", "ensembl"
 
 ## See also
 
