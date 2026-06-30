@@ -79,6 +79,10 @@ reference:
   - liftover_crossmap
   - register_liftover_backend
   - liftover_backends
+  - ortholog_genes
+  - ortholog_babelgene
+  - register_ortholog_backend
+  - ortholog_backends
   - TranslationResult
   - translation_stats
 

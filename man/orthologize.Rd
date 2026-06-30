@@ -10,7 +10,7 @@ orthologize(
   from = NA_character_,
   strategy = c("liftover", "ortholog"),
   chain = NULL,
-  backend = "rtracklayer",
+  backend = NULL,
   ...
 )
 }
@@ -25,18 +25,19 @@ orthologize(
 
 \item{strategy}{Translation strategy. One of:
 \itemize{
-\item \code{"liftover"}: coordinate liftover via a chain file (implemented; see
+\item \code{"liftover"}: coordinate liftover via a chain file (see
 \code{\link[=liftover_intervals]{liftover_intervals()}}).
-\item \code{"ortholog"}: gene-level ortholog mapping (not yet implemented; planned
-via \code{orthogene}/\code{babelgene}).
+\item \code{"ortholog"}: gene-level ortholog mapping (see \code{\link[=ortholog_genes]{ortholog_genes()}}).
 }}
 
 \item{chain}{For \code{strategy = "liftover"}, path to a chain file.}
 
-\item{backend}{For \code{strategy = "liftover"}, the liftover backend (see
-\code{\link[=liftover_backends]{liftover_backends()}}). Defaults to \code{"rtracklayer"}.}
+\item{backend}{The translation backend. Defaults to \code{"rtracklayer"} for
+\code{"liftover"} and \code{"babelgene"} for \code{"ortholog"}. See \code{\link[=liftover_backends]{liftover_backends()}}
+and \code{\link[=ortholog_backends]{ortholog_backends()}}.}
 
-\item{...}{Additional arguments passed to the underlying strategy.}
+\item{...}{Additional arguments passed to the underlying strategy, e.g.
+\code{gene_col}/\code{id_type} for \code{"ortholog"}.}
 }
 \value{
 A \link{TranslationResult}.
@@ -49,9 +50,9 @@ gene-based layers are (in future) translated by ortholog mapping.
 }
 \details{
 This function is the modality dispatcher that makes cross-species translation
-a single, first-class operation. It is \strong{experimental}: the \code{"liftover"}
-strategy is functional, while \code{"ortholog"} is a documented placeholder so the
-intended shape of the API is stable while the gene-level backend lands.
+a single, first-class operation: coordinate features route through liftover,
+gene features through ortholog mapping. It is \strong{experimental} while the API
+settles and Cohort-level orchestration lands.
 }
 \examples{
 ints <- data.frame(
@@ -74,5 +75,6 @@ orthologize(
 
 }
 \seealso{
-\code{\link[=liftover_intervals]{liftover_intervals()}}, \code{\link[=liftover_vcf]{liftover_vcf()}}, \link{TranslationResult}
+\code{\link[=liftover_intervals]{liftover_intervals()}}, \code{\link[=ortholog_genes]{ortholog_genes()}}, \code{\link[=liftover_vcf]{liftover_vcf()}},
+\link{TranslationResult}
 }

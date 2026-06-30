@@ -11,22 +11,23 @@
 #' @param to Character scalar naming the target species/assembly.
 #' @param from Optional character scalar naming the source species/assembly.
 #' @param strategy Translation strategy. One of:
-#'   - `"liftover"`: coordinate liftover via a chain file (implemented; see
+#'   - `"liftover"`: coordinate liftover via a chain file (see
 #'     [liftover_intervals()]).
-#'   - `"ortholog"`: gene-level ortholog mapping (not yet implemented; planned
-#'     via `orthogene`/`babelgene`).
+#'   - `"ortholog"`: gene-level ortholog mapping (see [ortholog_genes()]).
 #' @param chain For `strategy = "liftover"`, path to a chain file.
-#' @param backend For `strategy = "liftover"`, the liftover backend (see
-#'   [liftover_backends()]). Defaults to `"rtracklayer"`.
-#' @param ... Additional arguments passed to the underlying strategy.
+#' @param backend The translation backend. Defaults to `"rtracklayer"` for
+#'   `"liftover"` and `"babelgene"` for `"ortholog"`. See [liftover_backends()]
+#'   and [ortholog_backends()].
+#' @param ... Additional arguments passed to the underlying strategy, e.g.
+#'   `gene_col`/`id_type` for `"ortholog"`.
 #'
 #' @return A [TranslationResult].
 #'
 #' @details
 #' This function is the modality dispatcher that makes cross-species translation
-#' a single, first-class operation. It is **experimental**: the `"liftover"`
-#' strategy is functional, while `"ortholog"` is a documented placeholder so the
-#' intended shape of the API is stable while the gene-level backend lands.
+#' a single, first-class operation: coordinate features route through liftover,
+#' gene features through ortholog mapping. It is **experimental** while the API
+#' settles and Cohort-level orchestration lands.
 #'
 #' @examples
 #' ints <- data.frame(
@@ -47,7 +48,8 @@
 #'   strategy = "liftover", chain = "none", backend = backend
 #' )
 #'
-#' @seealso [liftover_intervals()], [liftover_vcf()], [TranslationResult]
+#' @seealso [liftover_intervals()], [ortholog_genes()], [liftover_vcf()],
+#'   [TranslationResult]
 #' @export
 orthologize <- function(
   x,
@@ -55,32 +57,37 @@ orthologize <- function(
   from = NA_character_,
   strategy = c("liftover", "ortholog"),
   chain = NULL,
-  backend = "rtracklayer",
+  backend = NULL,
   ...
 ) {
   strategy <- match.arg(strategy)
   checkmate::assert_string(to, min.chars = 1)
 
-  if (strategy == "ortholog") {
-    cli::cli_abort(
-      c(
-        "The {.val ortholog} strategy is not yet implemented.",
-        "i" = "Gene-level ortholog mapping is planned via {.pkg orthogene}/{.pkg babelgene}.",
-        "i" = "For coordinate features, use {.code strategy = \"liftover\"}."
-      )
+  if (strategy == "liftover") {
+    if (is.null(chain)) {
+      cli::cli_abort("`chain` is required for {.code strategy = \"liftover\"}.")
+    }
+    liftover_intervals(
+      x,
+      chain = chain,
+      from = from,
+      to = to,
+      backend = backend %||% "rtracklayer",
+      ...
+    )
+  } else {
+    if (is.na(from)) {
+      cli::cli_abort("`from` is required for {.code strategy = \"ortholog\"}.")
+    }
+    ortholog_genes(
+      x,
+      from = from,
+      to = to,
+      backend = backend %||% "babelgene",
+      ...
     )
   }
-
-  if (is.null(chain)) {
-    cli::cli_abort("`chain` is required for {.code strategy = \"liftover\"}.")
-  }
-
-  liftover_intervals(
-    x,
-    chain = chain,
-    from = from,
-    to = to,
-    backend = backend,
-    ...
-  )
 }
+
+#' @importFrom rlang %||%
+NULL
