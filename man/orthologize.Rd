@@ -2,62 +2,67 @@
 % Please edit documentation in R/orthologize.R
 \name{orthologize}
 \alias{orthologize}
-\title{Translate features across species or assemblies}
+\title{Translate features (or a whole cohort) across species or assemblies}
 \usage{
-orthologize(
-  x,
-  to,
-  from = NA_character_,
-  strategy = c("liftover", "ortholog"),
-  chain = NULL,
-  backend = NULL,
-  ...
-)
+orthologize(x, to, from = NA_character_, ...)
 }
 \arguments{
-\item{x}{A data.frame/tibble of features to translate. For
-\code{strategy = "liftover"}, an interval table with \code{seqnames}, \code{start}, \code{end}
-(see \code{\link[=liftover_intervals]{liftover_intervals()}}).}
+\item{x}{The thing to translate. Either:
+\itemize{
+\item a data.frame/tibble of features, or
+\item a \link{Cohort} object.
+}}
 
 \item{to}{Character scalar naming the target species/assembly.}
 
-\item{from}{Optional character scalar naming the source species/assembly.}
+\item{from}{Character scalar naming the source species/assembly. Required for
+the \code{"ortholog"} strategy and for cohort-level translation.}
 
-\item{strategy}{Translation strategy. One of:
+\item{...}{Strategy-specific arguments. For a \strong{feature table}:
 \itemize{
-\item \code{"liftover"}: coordinate liftover via a chain file (see
-\code{\link[=liftover_intervals]{liftover_intervals()}}).
-\item \code{"ortholog"}: gene-level ortholog mapping (see \code{\link[=ortholog_genes]{ortholog_genes()}}).
+\item \code{strategy}: \code{"liftover"} (coordinate features; see \code{\link[=liftover_intervals]{liftover_intervals()}})
+or \code{"ortholog"} (gene features; see \code{\link[=ortholog_genes]{ortholog_genes()}}).
+\item \code{chain}: chain-file path for \code{"liftover"}.
+\item \code{backend}: translation backend (defaults: \code{"rtracklayer"} for liftover,
+\code{"babelgene"} for ortholog).
+\item plus backend arguments such as \code{gene_col}/\code{id_type} for orthologs.
+}
+
+For a \strong{Cohort}:
+\itemize{
+\item \code{chain}: chain-file path used for any \code{feature_type = "interval"} analysis.
+\item \code{liftover_backend}, \code{ortholog_backend}: backends for the two modalities.
+\item \code{analyses}: optional character vector restricting which analyses to
+translate (defaults to all that have a registered spec with a
+\code{feature_type}).
 }}
-
-\item{chain}{For \code{strategy = "liftover"}, path to a chain file.}
-
-\item{backend}{The translation backend. Defaults to \code{"rtracklayer"} for
-\code{"liftover"} and \code{"babelgene"} for \code{"ortholog"}. See \code{\link[=liftover_backends]{liftover_backends()}}
-and \code{\link[=ortholog_backends]{ortholog_backends()}}.}
-
-\item{...}{Additional arguments passed to the underlying strategy, e.g.
-\code{gene_col}/\code{id_type} for \code{"ortholog"}.}
 }
 \value{
-A \link{TranslationResult}.
+A \link{TranslationResult} (feature table input) or a new \link{Cohort} whose
+analyses are expressed in \code{to} (Cohort input). For a cohort, per-analysis
+\link{TranslationResult}s (including unmapped features) are retrievable with
+\code{\link[=translation_report]{translation_report()}}.
 }
 \description{
-High-level entry point for cross-species translation. \code{orthologize()} routes
-a set of features to the appropriate translation strategy: coordinate-based
-layers (variants, peaks, intervals) are translated by liftover, while
-gene-based layers are (in future) translated by ortholog mapping.
+High-level entry point for cross-species translation. \code{orthologize()} is the
+modality dispatcher that makes translation a single, first-class operation:
+coordinate features (variants, peaks, intervals) route to liftover, and
+gene-level features route to ortholog mapping. Given a \link{Cohort}, it translates
+every registered analysis according to its \link{AnalysisSpec} and returns a new,
+target-species cohort.
 }
 \details{
-This function is the modality dispatcher that makes cross-species translation
-a single, first-class operation: coordinate features route through liftover,
-gene features through ortholog mapping. It is \strong{experimental} while the API
-settles and Cohort-level orchestration lands.
+This function is \strong{experimental} while the API settles.
+
+Cohort-level translation keeps subjects and the sample map unchanged (the
+same biological subjects, viewed in another species' coordinate/gene space)
+and re-expresses each analysis's feature table. Analyses without a registered
+\link{AnalysisSpec} or without a \code{feature_type} are skipped with a warning rather
+than guessed at.
 }
 \examples{
-ints <- data.frame(
-  seqnames = "chr1", start = 100, end = 200
-)
+# Feature-table input -----------------------------------------------------
+ints <- data.frame(seqnames = "chr1", start = 100, end = 200)
 backend <- function(intervals, chain, ...) {
   list(
     mapped = tibble::tibble(
@@ -75,6 +80,6 @@ orthologize(
 
 }
 \seealso{
-\code{\link[=liftover_intervals]{liftover_intervals()}}, \code{\link[=ortholog_genes]{ortholog_genes()}}, \code{\link[=liftover_vcf]{liftover_vcf()}},
+\code{\link[=liftover_intervals]{liftover_intervals()}}, \code{\link[=ortholog_genes]{ortholog_genes()}}, \code{\link[=translation_report]{translation_report()}},
 \link{TranslationResult}
 }

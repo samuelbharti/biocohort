@@ -13,7 +13,10 @@ analysis_spec_new(
   path_template = NA_character_,
   root_key = NA_character_,
   reader,
-  key_cols
+  key_cols,
+  feature_type = NA_character_,
+  gene_col = NA_character_,
+  id_type = NA_character_
 )
 }
 \arguments{
@@ -48,6 +51,19 @@ Optional, defaults to NA.}
 \item{key_cols}{Character vector of column names for indexing loaded tables.
 Examples: \code{c("subject_id")}, \code{c("pair_id")}.
 Required.}
+
+\item{feature_type}{Optional character scalar declaring how this analysis's
+features are translated across species by \code{\link[=orthologize]{orthologize()}}. One of
+\code{"interval"} (coordinate features, translated by liftover) or \code{"gene"}
+(gene-level features, translated by ortholog mapping). Defaults to NA
+(analysis is skipped by cohort-level translation).}
+
+\item{gene_col}{Optional character scalar naming the gene-identifier column,
+used when \code{feature_type = "gene"}. Defaults to NA (treated as \code{"gene"}).}
+
+\item{id_type}{Optional gene identifier type for \code{feature_type = "gene"}: one
+of \code{"symbol"}, \code{"entrez"}, \code{"ensembl"}. Defaults to NA (treated as
+\code{"symbol"}).}
 }
 \value{
 An AnalysisSpec object with validated fields.
@@ -63,6 +79,8 @@ This constructor validates that:
 \item \code{name}, \code{assay}, \code{format}, \code{reader} are non-empty strings
 \item \code{level} is one of: "subject", "pair", "cohort"
 \item \code{key_cols} is a non-empty character vector
+\item \code{feature_type}, if given, is one of "interval" or "gene"
+\item \code{id_type}, if given, is one of "symbol", "entrez", "ensembl"
 }
 }
 \examples{
