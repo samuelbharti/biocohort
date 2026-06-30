@@ -268,6 +268,11 @@ ID can aid readability:</p>
 <code>{assay}_{subject}_{rep}</code> (e.g., “scrna_101_1”,
 “bulk_rna_101_2”)</li>
 </ul>
+<p>Tumor/normal <strong>pairs</strong> are not stored in
+<code>sample_map</code>; derive them on demand with
+<code><a href="../reference/sample_pairs.html">sample_pairs()</a></code>, which yields a <code>pair_id</code> of
+<code>{tumor_sample_id}__{normal_sample_id}</code> (e.g.,
+“wes_T101__wes_N101”).</p>
 </div>
 <div class="section level2">
 <h2 id="object-names">Object Names<a class="anchor" aria-label="anchor" href="#object-names"></a>
@@ -341,7 +346,7 @@ suffix or use descriptive names like <code>subject_data</code>,
 <code><a href="../reference/read_manifest_csv.html">read_manifest_csv()</a></code>)</li>
 <li>
 <strong>Helper functions</strong>: lowercase with underscores (e.g.,
-<code>extract_pair_ids()</code>)</li>
+<code><a href="../reference/sample_pairs.html">sample_pairs()</a></code>)</li>
 <li>
 <strong>S7 methods</strong>: Dispatch on class; function name
 describes operation (e.g., <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method for Cohort)</li>

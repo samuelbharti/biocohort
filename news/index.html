@@ -35,6 +35,11 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="myceliumr-030">myceliumr 0.3.0<a class="anchor" aria-label="anchor" href="#myceliumr-030"></a></h2>
 <div class="section level3">
+<h3 id="new-features-0-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h3>
+<ul><li>
+<strong><code><a href="../reference/sample_pairs.html">sample_pairs()</a></code></strong>: derive tumor/normal (case/control) sample pairs from a long-format <code>sample_map</code>. Pairing is assay-agnostic and computed on demand rather than stored, replacing the old WES-specific <code>pair_id</code> column. Returns <code>subject_id</code>, <code>assay</code>, <code>tumor_sample_id</code>, <code>normal_sample_id</code>, <code>pair_id</code>, with configurable role labels via <code>tumor_role</code>/<code>normal_role</code>.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="breaking-changes-0-3-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-3-0"></a></h3>
 <ul><li>
 <strong>Generic, species- and assay-agnostic manifest layer</strong> (<a href="https://github.com/samuelbharti/myceliumr/issues/7" class="external-link">#7</a>). The manifest model is no longer hardcoded to rat / WES / snRNA-seq. The canonical representation is a tidy, long-format <code>sample_map</code> with columns <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>, <code>role</code>, where <code>assay</code> is a free-form value (<code>wgs</code>, <code>wes</code>, <code>atac</code>, <code>bulk_rna</code>, <code>scrna</code>, …). New assays are new rows, never new columns or per-assay tables.</li>

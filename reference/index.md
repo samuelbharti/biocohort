@@ -62,3 +62,10 @@ Data validation functions
   : Validate and structure a long-format sample manifest
 - [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
   : Validate a Cohort object
+
+## Samples
+
+Work with the sample map
+
+- [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
+  : Derive sample pairs from a sample map

@@ -72,8 +72,12 @@ output files with templated paths and standardized readers.</p>
 
 
 <dt id="arg-level">level<a class="anchor" aria-label="anchor" href="#arg-level"></a></dt>
-<dd><p>Character scalar for data organization level. Must be one of:
-"subject", "pair", or "cohort". Required.</p></dd>
+<dd><p>Character scalar for the granularity at which the analysis
+produces results. Must be one of:</p><ul><li><p><code>"subject"</code>: one result per subject.</p></li>
+<li><p><code>"pair"</code>: one result per tumor/normal (case/control) pair, as derived by
+<code><a href="sample_pairs.html">sample_pairs()</a></code> from the cohort's <code>sample_map</code>.</p></li>
+<li><p><code>"cohort"</code>: a single result for the whole cohort.</p></li>
+</ul><p>Required.</p></dd>
 
 
 <dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
@@ -88,8 +92,10 @@ analysis. Optional, defaults to NA.</p></dd>
 
 <dt id="arg-path-template">path_template<a class="anchor" aria-label="anchor" href="#arg-path-template"></a></dt>
 <dd><p>Character scalar for templated path to analysis output.
-Supports substitution tokens: <code>{root}</code>, <code>{subject_id}</code>, <code>{tumor_id}</code>,
-<code>{normal_id}</code>, <code>{pair_id}</code>. Optional, defaults to NA.</p></dd>
+Supports substitution tokens: <code>{root}</code> (from <code>root_key</code>), <code>{subject_id}</code>,
+and the pair tokens <code>{tumor_sample_id}</code>, <code>{normal_sample_id}</code>, <code>{pair_id}</code>
+(the latter three supplied by <code><a href="sample_pairs.html">sample_pairs()</a></code> for <code>level = "pair"</code>).
+Optional, defaults to NA.</p></dd>
 
 
 <dt id="arg-root-key">root_key<a class="anchor" aria-label="anchor" href="#arg-root-key"></a></dt>

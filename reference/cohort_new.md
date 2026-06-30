@@ -134,7 +134,7 @@ print(cohort)
 #>  .. @ aims         : chr(0) 
 #>  .. @ assays       : chr [1:2] "WES" "snRNA-seq"
 #>  .. @ genome_builds: list()
-#>  .. @ created_at   : POSIXct[1:1], format: "2026-06-30 08:33:00"
+#>  .. @ created_at   : POSIXct[1:1], format: "2026-06-30 08:53:43"
 #>  .. @ tags         : chr(0) 
 #>  @ subjects   :List of 2
 #>  .. $ RAT001: <myceliumr::Subject>

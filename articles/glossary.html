@@ -153,6 +153,15 @@ calling.</td>
 subject ID. Allows samples from the same subject to be
 distinguished.</td>
 </tr>
+<tr class="odd">
+<td>
+<strong>Pair</strong> (<code>pair_id</code>)</td>
+<td>A tumor/normal (case/control) pairing of two samples of the same
+assay for one subject, derived on demand from <code>sample_map</code>
+via <code><a href="../reference/sample_pairs.html">sample_pairs()</a></code>. The <code>pair_id</code> is
+<code>paste0(tumor_sample_id, "__", normal_sample_id)</code>. Pairing is
+assay-agnostic and is not stored in <code>sample_map</code> itself.</td>
+</tr>
 </tbody>
 </table>
 </div>

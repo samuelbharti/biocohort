@@ -34,8 +34,11 @@ analysis_spec_new(
 
 - level:
 
-  Character scalar for data organization level. Must be one of:
-  "subject", "pair", or "cohort". Required.
+  Character scalar for the granularity at which the analysis produces
+  results. Must be one of `"subject"` (one result per subject), `"pair"`
+  (one result per tumor/normal pair, see
+  [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)),
+  or `"cohort"` (a single result for the whole cohort). Required.
 
 - format:
 
@@ -50,8 +53,10 @@ analysis_spec_new(
 - path_template:
 
   Character scalar for templated file path. Supports tokens: `{root}`
-  (from root_key), `{subject_id}`, `{tumor_id}`, `{normal_id}`,
-  `{pair_id}`. Optional, defaults to NA.
+  (from `root_key`), `{subject_id}`, and the pair tokens
+  `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}` (from
+  [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)).
+  Optional, defaults to NA.
 
 - root_key:
 
