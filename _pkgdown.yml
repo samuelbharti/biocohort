@@ -65,4 +65,8 @@ reference:
   contents:
   - validate_manifest
   - validate_cohort
+- title: Samples
+  desc: Work with the sample map
+  contents:
+  - sample_pairs
 
