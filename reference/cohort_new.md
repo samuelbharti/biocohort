@@ -125,49 +125,7 @@ cohort <- cohort_new(
   sample_map = manifest_split$sample_map
 )
 print(cohort)
-#> <myceliumr::Cohort>
-#>  @ study      : <myceliumr::Study>
-#>  .. @ study_id     : chr "STUDY001"
-#>  .. @ title        : chr "Cross-species study"
-#>  .. @ description  : chr NA
-#>  .. @ hypotheses   : chr(0) 
-#>  .. @ aims         : chr(0) 
-#>  .. @ assays       : chr [1:2] "WES" "snRNA-seq"
-#>  .. @ genome_builds: list()
-#>  .. @ created_at   : POSIXct[1:1], format: "2026-06-30 08:53:43"
-#>  .. @ tags         : chr(0) 
-#>  @ subjects   :List of 2
-#>  .. $ RAT001: <myceliumr::Subject>
-#>  ..  ..@ subject_id: chr "RAT001"
-#>  ..  ..@ species   : chr "rat"
-#>  ..  ..@ sex       : chr "M"
-#>  ..  ..@ strain    : chr NA
-#>  ..  ..@ genotype  : chr NA
-#>  ..  ..@ cohort    : chr NA
-#>  ..  ..@ timepoint : chr NA
-#>  ..  ..@ notes     : chr NA
-#>  .. $ MOUSE1: <myceliumr::Subject>
-#>  ..  ..@ subject_id: chr "MOUSE1"
-#>  ..  ..@ species   : chr "mouse"
-#>  ..  ..@ sex       : chr "F"
-#>  ..  ..@ strain    : chr NA
-#>  ..  ..@ genotype  : chr NA
-#>  ..  ..@ cohort    : chr NA
-#>  ..  ..@ timepoint : chr NA
-#>  ..  ..@ notes     : chr NA
-#>  @ subject_tbl: tibble [2 × 3] (S3: tbl_df/tbl/data.frame)
-#>  $ subject_id: chr [1:2] "RAT001" "MOUSE1"
-#>  $ species   : chr [1:2] "rat" "mouse"
-#>  $ sex       : chr [1:2] "M" "F"
-#>  @ sample_map : tibble [4 × 4] (S3: tbl_df/tbl/data.frame)
-#>  $ subject_id: chr [1:4] "RAT001" "RAT001" "MOUSE1" "MOUSE1"
-#>  $ assay     : chr [1:4] "wes" "scrna" "wes" "atac"
-#>  $ sample_id : chr [1:4] "WES_T1" "RNA_1" "WES_T2" "ATAC_1"
-#>  $ role      : chr [1:4] "tumor" "tumor" "tumor" NA
-#>  @ paths      : list()
-#>  @ analyses   : list()
-#>  @ registry   : list()
-#>  @ cache      : list()
+#> Cohort: 2 subjects, 4 sample rows 
 
 # Access individual Subject objects (automatically created)
 rat_subject <- cohort@subjects[["RAT001"]]

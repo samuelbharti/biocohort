@@ -37,6 +37,16 @@
 <div class="section level3">
 <h3 id="new-features-0-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h3>
 <ul><li>
+<strong>Cross-species translation (experimental)</strong>: first-class coordinate translation across assemblies and species.
+<ul><li>
+<code><a href="../reference/orthologize.html">orthologize()</a></code> — modality-dispatching front door (<code>"liftover"</code> strategy implemented; <code>"ortholog"</code> strategy is a documented placeholder pending an <code>orthogene</code>/<code>babelgene</code> backend).</li>
+<li>
+<code><a href="../reference/liftover_intervals.html">liftover_intervals()</a></code> — translate intervals (variants, peaks, regions) via a chain file, returning a <code>TranslationResult</code> that retains both mapped and <strong>unmapped</strong> features so loss is never silent.</li>
+<li>Pluggable backends via <code><a href="../reference/register_liftover_backend.html">register_liftover_backend()</a></code> / <code><a href="../reference/liftover_backends.html">liftover_backends()</a></code>: an R-native <code>rtracklayer</code> default, plus a <code>crossmap</code> adapter and the allele-aware <code><a href="../reference/liftover_vcf.html">liftover_vcf()</a></code> wrapper for the external CrossMap tool.</li>
+<li>
+<code>TranslationResult</code> S7 class and <code><a href="../reference/translation_stats.html">translation_stats()</a></code> for mapped/unmapped/ multi-mapped accounting.</li>
+</ul></li>
+<li>
 <strong><code><a href="../reference/sample_pairs.html">sample_pairs()</a></code></strong>: derive tumor/normal (case/control) sample pairs from a long-format <code>sample_map</code>. Pairing is assay-agnostic and computed on demand rather than stored, replacing the old WES-specific <code>pair_id</code> column. Returns <code>subject_id</code>, <code>assay</code>, <code>tumor_sample_id</code>, <code>normal_sample_id</code>, <code>pair_id</code>, with configurable role labels via <code>tumor_role</code>/<code>normal_role</code>.</li>
 </ul></div>
 <div class="section level3">

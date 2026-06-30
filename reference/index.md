@@ -69,3 +69,26 @@ Work with the sample map
 
 - [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
   : Derive sample pairs from a sample map
+
+## Cross-species translation
+
+Translate features across assemblies and species (experimental)
+
+- [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
+  : Translate features across species or assemblies
+- [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)
+  : Liftover a set of genomic intervals across assemblies or species
+- [`liftover_vcf()`](http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.md)
+  : Liftover a VCF of variants with CrossMap (allele-aware)
+- [`liftover_rtracklayer()`](http://www.samuelbharti.com/myceliumr/reference/liftover_rtracklayer.md)
+  : Liftover backend backed by rtracklayer
+- [`liftover_crossmap()`](http://www.samuelbharti.com/myceliumr/reference/liftover_crossmap.md)
+  : Liftover backend backed by CrossMap
+- [`register_liftover_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_liftover_backend.md)
+  : Register a liftover backend
+- [`liftover_backends()`](http://www.samuelbharti.com/myceliumr/reference/liftover_backends.md)
+  : List registered liftover backends
+- [`TranslationResult()`](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
+  : Result of a cross-species or cross-assembly translation
+- [`translation_stats()`](http://www.samuelbharti.com/myceliumr/reference/translation_stats.md)
+  : Summary statistics for a translation

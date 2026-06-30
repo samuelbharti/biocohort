@@ -4,6 +4,27 @@
 
 ### New features
 
+- **Cross-species translation (experimental)**: first-class coordinate
+  translation across assemblies and species.
+  - [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
+    — modality-dispatching front door (`"liftover"` strategy
+    implemented; `"ortholog"` strategy is a documented placeholder
+    pending an `orthogene`/`babelgene` backend).
+  - [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)
+    — translate intervals (variants, peaks, regions) via a chain file,
+    returning a `TranslationResult` that retains both mapped and
+    **unmapped** features so loss is never silent.
+  - Pluggable backends via
+    [`register_liftover_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_liftover_backend.md)
+    /
+    [`liftover_backends()`](http://www.samuelbharti.com/myceliumr/reference/liftover_backends.md):
+    an R-native `rtracklayer` default, plus a `crossmap` adapter and the
+    allele-aware
+    [`liftover_vcf()`](http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.md)
+    wrapper for the external CrossMap tool.
+  - `TranslationResult` S7 class and
+    [`translation_stats()`](http://www.samuelbharti.com/myceliumr/reference/translation_stats.md)
+    for mapped/unmapped/ multi-mapped accounting.
 - **[`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)**:
   derive tumor/normal (case/control) sample pairs from a long-format
   `sample_map`. Pairing is assay-agnostic and computed on demand rather
