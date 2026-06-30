@@ -82,10 +82,10 @@ consistent project-wide convention:
 
 ### R Objects and Variables
 
-- **Study objects**: PascalCase, descriptive (e.g., `my_study`,
+- **Study objects**: snake_case, descriptive (e.g., `my_study`,
   `nf1_study`) or explicitly named `study` in examples.
-- **Cohort objects**: PascalCase or snake_case (e.g., `cohort`,
-  `nf1_cohort`, `study_cohort`).
+- **Cohort objects**: snake_case (e.g., `cohort`, `nf1_cohort`,
+  `study_cohort`).
 - **Subject objects**: Rarely used directly; accessed via
   `cohort@subjects[[subject_id]]`.
 - **AnalysisSpec objects**: Use spec name as primary identifier (stored
