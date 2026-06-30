@@ -40,6 +40,9 @@
 #' - [read_manifest_csv()] — Read and validate manifest CSV
 #' - [validate_manifest()] — Validate and structure manifest data
 #'
+#' **Samples:**
+#' - [sample_pairs()] — Derive tumor/normal sample pairs from a sample map
+#'
 #' **Validation:**
 #' - [validate_cohort()] — Validate a Cohort object
 #'

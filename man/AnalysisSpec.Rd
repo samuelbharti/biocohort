@@ -22,8 +22,16 @@ AnalysisSpec(
 \item{assay}{Character scalar for assay type (e.g., "wes_somatic",
 "wes_germline", "snrna"). Required.}
 
-\item{level}{Character scalar for data organization level. Must be one of:
-"subject", "pair", or "cohort". Required.}
+\item{level}{Character scalar for the granularity at which the analysis
+produces results. Must be one of:
+\itemize{
+\item \code{"subject"}: one result per subject.
+\item \code{"pair"}: one result per tumor/normal (case/control) pair, as derived by
+\code{\link[=sample_pairs]{sample_pairs()}} from the cohort's \code{sample_map}.
+\item \code{"cohort"}: a single result for the whole cohort.
+}
+
+Required.}
 
 \item{format}{Character scalar for file format (e.g., "rds", "tsv", "txt").
 Required.}
@@ -32,8 +40,10 @@ Required.}
 analysis. Optional, defaults to NA.}
 
 \item{path_template}{Character scalar for templated path to analysis output.
-Supports substitution tokens: \code{{root}}, \code{{subject_id}}, \code{{tumor_id}},
-\code{{normal_id}}, \code{{pair_id}}. Optional, defaults to NA.}
+Supports substitution tokens: \code{{root}} (from \code{root_key}), \code{{subject_id}},
+and the pair tokens \code{{tumor_sample_id}}, \code{{normal_sample_id}}, \code{{pair_id}}
+(the latter three supplied by \code{\link[=sample_pairs]{sample_pairs()}} for \code{level = "pair"}).
+Optional, defaults to NA.}
 
 \item{root_key}{Character scalar for key in cohort@paths list to use as
 the \code{{root}} template value (e.g., "msi_root", "sig_root", "wes_root").

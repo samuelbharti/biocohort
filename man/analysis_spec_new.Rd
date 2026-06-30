@@ -23,8 +23,10 @@ analysis_spec_new(
 \item{assay}{Character scalar for assay type (e.g., "wes_somatic",
 "wes_germline", "snrna"). Required.}
 
-\item{level}{Character scalar for data organization level.
-Must be one of: "subject", "pair", or "cohort". Required.}
+\item{level}{Character scalar for the granularity at which the analysis
+produces results. Must be one of \code{"subject"} (one result per subject),
+\code{"pair"} (one result per tumor/normal pair, see \code{\link[=sample_pairs]{sample_pairs()}}), or
+\code{"cohort"} (a single result for the whole cohort). Required.}
 
 \item{format}{Character scalar for file format (e.g., "rds", "tsv", "txt").
 Required.}
@@ -33,8 +35,9 @@ Required.}
 Optional, defaults to NA.}
 
 \item{path_template}{Character scalar for templated file path. Supports
-tokens: \code{{root}} (from root_key), \code{{subject_id}}, \code{{tumor_id}},
-\code{{normal_id}}, \code{{pair_id}}. Optional, defaults to NA.}
+tokens: \code{{root}} (from \code{root_key}), \code{{subject_id}}, and the pair tokens
+\code{{tumor_sample_id}}, \code{{normal_sample_id}}, \code{{pair_id}} (from
+\code{\link[=sample_pairs]{sample_pairs()}}). Optional, defaults to NA.}
 
 \item{root_key}{Character scalar for key in cohort@paths to use as \code{{root}}.
 Optional, defaults to NA.}

@@ -73,6 +73,10 @@ While myceliumr does not enforce specific sample ID formats, adopt a consistent 
 - **Normal**: `{assay}_N{subject}` (e.g., "wes_N101", "wgs_N001")
 - **Single-cell/RNA**: `{assay}_{subject}_{rep}` (e.g., "scrna_101_1", "bulk_rna_101_2")
 
+Tumor/normal **pairs** are not stored in `sample_map`; derive them on demand with
+`sample_pairs()`, which yields a `pair_id` of
+`{tumor_sample_id}__{normal_sample_id}` (e.g., "wes_T101__wes_N101").
+
 ## Object Names
 
 ### R Objects and Variables
@@ -112,7 +116,7 @@ result <- cohort@analyses[["my_analysis_name"]]
 - **Validation functions**: `validate_{noun}()` (e.g., `validate_manifest()`, `validate_cohort()`)
 - **Accessor/getter functions**: `get_{property}()` or simply reference property directly (e.g., `cohort@subject_tbl`)
 - **IO functions**: `read_{format}()` or `write_{format}()` (e.g., `read_manifest_csv()`)
-- **Helper functions**: lowercase with underscores (e.g., `extract_pair_ids()`)
+- **Helper functions**: lowercase with underscores (e.g., `sample_pairs()`)
 - **S7 methods**: Dispatch on class; function name describes operation (e.g., `print()` method for Cohort)
 
 ## File Names
