@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">myceliumr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,12 +79,10 @@ myceliumr for data columns, R objects, functions, and file names.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>
-<code>subject_id</code> or <code>rat_id</code>
-</td>
-<td>character/numeric</td>
-<td>Unique subject identifier. Use <code>rat_id</code> for rat-specific
-studies; use <code>subject_id</code> for cross-species.</td>
+<td><code>subject_id</code></td>
+<td>character</td>
+<td>Unique subject identifier. Species-agnostic; use the same column for
+rat, mouse, or human studies.</td>
 </tr>
 <tr class="even">
 <td><code>species</code></td>
@@ -128,86 +126,12 @@ studies; use <code>subject_id</code> for cross-species.</td>
 </table>
 </div>
 <div class="section level3">
-<h3 id="dnawes-sample-columns-dna_tbl">DNA/WES Sample Columns (<code>dna_tbl</code>)<a class="anchor" aria-label="anchor" href="#dnawes-sample-columns-dna_tbl"></a>
-</h3>
-<table class="table">
-<colgroup>
-<col width="29%">
-<col width="22%">
-<col width="48%">
-</colgroup>
-<thead><tr class="header">
-<th>Column</th>
-<th>Type</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>subject_id</code></td>
-<td>character</td>
-<td>Reference to subject in <code>subject_tbl</code>.</td>
-</tr>
-<tr class="even">
-<td><code>assay</code></td>
-<td>character</td>
-<td>Assay type: “dna_wes” for whole exome sequencing.</td>
-</tr>
-<tr class="odd">
-<td><code>tumor_sample_id</code></td>
-<td>character</td>
-<td>Unique identifier for DNA tumor sample.</td>
-</tr>
-<tr class="even">
-<td><code>normal_sample_id</code></td>
-<td>character</td>
-<td>Unique identifier for DNA normal sample.</td>
-</tr>
-<tr class="odd">
-<td><code>pair_id</code></td>
-<td>character</td>
-<td>Composite ID linking tumor and normal:
-<code>paste0(tumor_sample_id, "__", normal_sample_id)</code>.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level3">
-<h3 id="rnasnrna-seq-sample-columns-rna_tbl">RNA/snRNA-seq Sample Columns (<code>rna_tbl</code>)<a class="anchor" aria-label="anchor" href="#rnasnrna-seq-sample-columns-rna_tbl"></a>
-</h3>
-<table class="table">
-<colgroup>
-<col width="29%">
-<col width="22%">
-<col width="48%">
-</colgroup>
-<thead><tr class="header">
-<th>Column</th>
-<th>Type</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>subject_id</code></td>
-<td>character</td>
-<td>Reference to subject in <code>subject_tbl</code>.</td>
-</tr>
-<tr class="even">
-<td><code>assay</code></td>
-<td>character</td>
-<td>Assay type: “rna_snrna” for single-nucleus RNA-seq.</td>
-</tr>
-<tr class="odd">
-<td><code>tumor_sample_id</code></td>
-<td>character</td>
-<td>Unique identifier for RNA sample library. (Note: “tumor” refers to
-tissue origin, not necessarily malignancy.)</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level3">
 <h3 id="sample-mapping-columns-sample_map">Sample Mapping Columns (<code>sample_map</code>)<a class="anchor" aria-label="anchor" href="#sample-mapping-columns-sample_map"></a>
 </h3>
+<p>The <code>sample_map</code> is the canonical, long-format sample
+table: one row per sample, with any number of assays and roles. New
+assays are represented as new rows, never new columns or per-assay
+tables.</p>
 <table class="table">
 <colgroup>
 <col width="29%">
@@ -228,19 +152,20 @@ tissue origin, not necessarily malignancy.)</td>
 <tr class="even">
 <td><code>assay</code></td>
 <td>character</td>
-<td>Assay type: “dna_wes” or “rna_snrna”.</td>
+<td>Assay type (free-form value), e.g. <code>"wgs"</code>,
+<code>"wes"</code>, <code>"atac"</code>, <code>"bulk_rna"</code>,
+<code>"scrna"</code>.</td>
 </tr>
 <tr class="odd">
 <td><code>sample_id</code></td>
 <td>character</td>
-<td>Unique sample identifier (can match tumor_sample_id or
-normal_sample_id).</td>
+<td>Unique sample identifier.</td>
 </tr>
 <tr class="even">
 <td><code>role</code></td>
 <td>character</td>
-<td>Sample role: “tumor” or “normal”. (Only for DNA; RNA samples use
-“tumor” by convention.)</td>
+<td>Sample role within its assay, e.g. <code>"tumor"</code>,
+<code>"normal"</code>, or <code>NA</code> when not applicable.</td>
 </tr>
 </tbody>
 </table>
@@ -266,25 +191,14 @@ normal_sample_id).</td>
 <td>Reference to subject in <code>subject_tbl</code>.</td>
 </tr>
 <tr class="even">
-<td><code>has_dna_tumor</code></td>
-<td>logical</td>
-<td>TRUE if subject has DNA tumor sample.</td>
+<td><code>assay</code></td>
+<td>character</td>
+<td>Assay type, matching values in <code>sample_map</code>.</td>
 </tr>
 <tr class="odd">
-<td><code>has_dna_normal</code></td>
-<td>logical</td>
-<td>TRUE if subject has DNA normal sample.</td>
-</tr>
-<tr class="even">
-<td><code>has_dna_pair</code></td>
-<td>logical</td>
-<td>TRUE if subject has both DNA tumor and normal (can compute
-pair_id).</td>
-</tr>
-<tr class="odd">
-<td><code>n_rna_samples</code></td>
+<td><code>n_samples</code></td>
 <td>integer</td>
-<td>Number of snRNA-seq libraries available for subject.</td>
+<td>Number of samples available for the subject within the assay.</td>
 </tr>
 </tbody>
 </table>
@@ -293,7 +207,9 @@ pair_id).</td>
 <div class="section level2">
 <h2 id="assay-type-values">Assay Type Values<a class="anchor" aria-label="anchor" href="#assay-type-values"></a>
 </h2>
-<p>Use these standardized values in the <code>assay</code> column:</p>
+<p><code>assay</code> is a free-form lowercase value, not a fixed
+enumeration. Pick a stable label per assay and reuse it consistently.
+Common examples:</p>
 <table class="table">
 <colgroup>
 <col width="26%">
@@ -307,14 +223,29 @@ pair_id).</td>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>DNA (Whole Exome Sequencing)</td>
-<td><code>"dna_wes"</code></td>
-<td>Exome capture and sequencing for somatic variant discovery.</td>
+<td>Whole genome sequencing</td>
+<td><code>"wgs"</code></td>
+<td>Whole genome DNA sequencing.</td>
 </tr>
 <tr class="even">
-<td>RNA (Single-Nucleus RNA-sequencing)</td>
-<td><code>"rna_snrna"</code></td>
-<td>Single-nucleus transcriptomics.</td>
+<td>Whole exome sequencing</td>
+<td><code>"wes"</code></td>
+<td>Exome capture and sequencing.</td>
+</tr>
+<tr class="odd">
+<td>ATAC-seq</td>
+<td><code>"atac"</code></td>
+<td>Chromatin accessibility.</td>
+</tr>
+<tr class="even">
+<td>Bulk RNA-seq</td>
+<td><code>"bulk_rna"</code></td>
+<td>Bulk transcriptomics.</td>
+</tr>
+<tr class="odd">
+<td>Single-cell / single-nucleus RNA-seq</td>
+<td><code>"scrna"</code></td>
+<td>Single-cell/nucleus transcriptomics.</td>
 </tr>
 </tbody>
 </table>
@@ -323,21 +254,19 @@ pair_id).</td>
 <h2 id="sample-id-formats">Sample ID Formats<a class="anchor" aria-label="anchor" href="#sample-id-formats"></a>
 </h2>
 <p>While myceliumr does not enforce specific sample ID formats, adopt a
-consistent project-wide convention:</p>
+consistent project-wide convention. Encoding the assay and role in the
+ID can aid readability:</p>
 <ul>
 <li>
-<strong>WES Tumor</strong>: <code>WES_T{subject}</code> or
-<code>DNA_T{number}</code> (e.g., “WES_T101”, “DNA_T001”)</li>
+<strong>Tumor</strong>: <code>{assay}_T{subject}</code> (e.g.,
+“wes_T101”, “wgs_T001”)</li>
 <li>
-<strong>WES Normal</strong>: <code>WES_N{subject}</code> or
-<code>DNA_N{number}</code> (e.g., “WES_N101”, “DNA_N001”)</li>
+<strong>Normal</strong>: <code>{assay}_N{subject}</code> (e.g.,
+“wes_N101”, “wgs_N001”)</li>
 <li>
-<strong>snRNA-seq</strong>: <code>SN{subject}_{library}</code> or
-<code>RNA_{subject}_{rep}</code> (e.g., “SN101_1”, “RNA_T101_2”)</li>
-<li>
-<strong>Pair ID</strong>:
-<code>{tumor_sample_id}__{normal_sample_id}</code> (e.g.,
-“WES_T101__WES_N101”, “DNA_T001__DNA_N001”)</li>
+<strong>Single-cell/RNA</strong>:
+<code>{assay}_{subject}_{rep}</code> (e.g., “scrna_101_1”,
+“bulk_rna_101_2”)</li>
 </ul>
 </div>
 <div class="section level2">
@@ -480,7 +409,7 @@ describes operation (e.g., <code><a href="https://rdrr.io/r/base/print.html" cla
 <ul>
 <li>
 <strong>Input data</strong>: Describe clearly (e.g.,
-<code>meta_rats</code>, <code>subject_tbl</code>,
+<code>manifest</code>, <code>subject_tbl</code>,
 <code>sample_map</code>)</li>
 <li>
 <strong>Flags</strong>: Prefix with <code>is_</code> or
@@ -492,7 +421,7 @@ describes operation (e.g., <code><a href="https://rdrr.io/r/base/print.html" cla
 <li>
 <strong>Logical conditions</strong>: <code>strict</code>,
 <code>verbose</code>, <code>allow_*</code> (e.g.,
-<code>allow_rna_duplicates</code>)</li>
+<code>allow_duplicates</code>)</li>
 </ul>
 </div>
 <div class="section level3">
@@ -515,8 +444,7 @@ names (e.g., <code>cohort@subjects[["RAT_101"]]</code>)</li>
 <h3 id="vignette-titles">Vignette Titles<a class="anchor" aria-label="anchor" href="#vignette-titles"></a>
 </h3>
 <ul>
-<li>Use sentence case (e.g., “Getting started”, “Glossary”, “Naming
-conventions”)</li>
+<li>Use sentence case (e.g., “Glossary”, “Naming conventions”)</li>
 <li>Markdown files: <code>{title_snake_case}.Rmd</code> (e.g.,
 <code>glossary.Rmd</code>, <code>naming-conventions.Rmd</code>)</li>
 </ul>
@@ -544,8 +472,8 @@ sections</li>
 variables</label></li>
 <li><label><input type="checkbox">Uses PascalCase for S7 classes
 (Study, Subject, Cohort)</label></li>
-<li><label><input type="checkbox">Assay column values are lowercase
-with underscores (e.g., “dna_wes”, “rna_snrna”)</label></li>
+<li><label><input type="checkbox">Assay column values are lowercase,
+free-form labels (e.g., “wes”, “atac”, “scrna”)</label></li>
 <li><label><input type="checkbox">Sample ID columns end with
 <code>_id</code> or <code>_sample_id</code></label></li>
 <li><label><input type="checkbox">Logical columns begin with

@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">myceliumr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,11 +74,10 @@ myceliumr documentation and code.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>
-<strong>Subject</strong> (or <strong>rat_id</strong>)</td>
+<td><strong>Subject</strong></td>
 <td>An individual biological organism (rat, mouse, or human) in a study.
-Each subject has a unique identifier and associated metadata (species,
-genotype, cohort, etc.). Represented as a row in
+Each subject has a unique <code>subject_id</code> and associated
+metadata (species, genotype, cohort, etc.). Represented as a row in
 <code>subject_tbl</code>.</td>
 </tr>
 <tr class="even">
@@ -122,49 +121,37 @@ samples).</td>
 </tr>
 <tr class="even">
 <td><strong>Assay</strong></td>
-<td>A high-throughput molecular technique applied to samples. Common
-assays in myceliumr: WES (whole exome sequencing, DNA assay) and
-snRNA-seq (single nucleus RNA-sequencing, RNA assay).</td>
-</tr>
-<tr class="odd">
-<td><strong>WES</strong></td>
-<td>Whole Exome Sequencing. A DNA assay capturing and sequencing the
-protein-coding regions of the genome. Used to detect somatic mutations
-and variants.</td>
-</tr>
-<tr class="even">
-<td><strong>snRNA-seq</strong></td>
-<td>Single Nucleus RNA-sequencing. An RNA assay measuring gene
-expression in individual nuclei, enabling cell-type-specific
-transcriptomic profiling.</td>
+<td>A high-throughput molecular technique applied to samples. Assays are
+free-form values, not a fixed list, e.g. <code>wgs</code>,
+<code>wes</code>, <code>atac</code>, <code>bulk_rna</code>,
+<code>scrna</code>. New assays are added simply by using a new label in
+the <code>assay</code> column.</td>
 </tr>
 <tr class="odd">
 <td>
-<strong>Tumor Sample</strong> (<code>tumor_sample_id</code>)</td>
-<td>A sample collected from tumor tissue or neoplastic cells. Identified
-by a unique sample ID.</td>
+<strong>Role</strong> (<code>role</code>)</td>
+<td>The role a sample plays within its assay, e.g. <code>"tumor"</code>
+or <code>"normal"</code>. Designs without a tumor/normal distinction may
+leave <code>role</code> as <code>NA</code>.</td>
 </tr>
 <tr class="even">
-<td>
-<strong>Normal Sample</strong> (<code>normal_sample_id</code>)</td>
-<td>A sample collected from non-neoplastic tissue or control cells.
-Identified by a unique sample ID. In DNA analysis, a baseline for
-somatic mutation calling.</td>
+<td><strong>Tumor Sample</strong></td>
+<td>A sample collected from tumor tissue or neoplastic cells, recorded
+as a <code>sample_map</code> row with <code>role = "tumor"</code>.</td>
 </tr>
 <tr class="odd">
+<td><strong>Normal Sample</strong></td>
+<td>A sample collected from non-neoplastic tissue or control cells,
+recorded as a <code>sample_map</code> row with
+<code>role = "normal"</code>. A baseline for somatic mutation
+calling.</td>
+</tr>
+<tr class="even">
 <td>
 <strong>Sample ID</strong> (<code>sample_id</code>)</td>
 <td>A unique identifier for an individual sample, independent of the
 subject ID. Allows samples from the same subject to be
 distinguished.</td>
-</tr>
-<tr class="even">
-<td>
-<strong>Pair ID</strong> (<code>pair_id</code>)</td>
-<td>A composite identifier linking DNA tumor and normal samples from the
-same subject. Computed as
-<code>paste0(tumor_sample_id, "__", normal_sample_id)</code>. Used only
-for WES assays.</td>
 </tr>
 </tbody>
 </table>
@@ -188,43 +175,27 @@ for WES assays.</td>
 <td><strong>subject_tbl</strong></td>
 <td>Subject-level metadata with one row per subject.</td>
 <td>
-<code>subject_id</code> (or <code>rat_id</code>),
-<code>species</code>, <code>sex</code>, <code>strain</code>,
-<code>genotype</code>, <code>cohort</code>, <code>timepoint</code>,
-<code>notes</code>
+<code>subject_id</code>, <code>species</code>, <code>sex</code>,
+<code>strain</code>, <code>genotype</code>, <code>cohort</code>,
+<code>timepoint</code>, <code>notes</code>
 </td>
-</tr>
-<tr class="even">
-<td><strong>dna_tbl</strong></td>
-<td>DNA (WES) sample identifiers with one row per subject.</td>
-<td>
-<code>subject_id</code>, <code>assay</code> = “dna_wes”,
-<code>tumor_sample_id</code>, <code>normal_sample_id</code>,
-<code>pair_id</code>
-</td>
-</tr>
-<tr class="odd">
-<td><strong>rna_tbl</strong></td>
-<td>RNA (snRNA-seq) sample identifiers with zero or more rows per
-subject.</td>
-<td>
-<code>subject_id</code>, <code>assay</code> = “rna_snrna”,
-<code>tumor_sample_id</code> (the RNA sample ID)</td>
 </tr>
 <tr class="even">
 <td><strong>sample_map</strong></td>
-<td>Long-format mapping of subjects to samples.</td>
+<td>Canonical long-format mapping of subjects to samples, one row per
+sample. New assays are new rows, never new columns.</td>
 <td>
 <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>,
-<code>role</code> (“tumor” or “normal”)</td>
+<code>role</code>
+</td>
 </tr>
 <tr class="odd">
 <td><strong>completeness_tbl</strong></td>
-<td>Data availability summary with one row per subject.</td>
+<td>Per-assay sample counts, one row per <code>subject_id</code> x
+<code>assay</code>.</td>
 <td>
-<code>subject_id</code>, <code>has_dna_tumor</code>,
-<code>has_dna_normal</code>, <code>has_dna_pair</code>,
-<code>n_rna_samples</code>
+<code>subject_id</code>, <code>assay</code>,
+<code>n_samples</code>
 </td>
 </tr>
 </tbody>
@@ -289,12 +260,12 @@ create structured subject and sample tables.</td>
 </tr>
 <tr class="even">
 <td><strong>Manifest CSV</strong></td>
-<td>A comma-separated text file with columns for subject_id, species,
-sample IDs (DNA and RNA), and optional metadata. Required columns vary
-by assay type. Example columns: <code>rat_id</code>,
-<code>rat_genotype</code>, <code>cohort</code>,
-<code>wes_tumor_id</code>, <code>wes_normal_id</code>,
-<code>sn_id</code>.</td>
+<td>A long-format, comma-separated text file with one row per sample.
+Required columns: <code>subject_id</code>, <code>assay</code>,
+<code>sample_id</code>. Optional: <code>role</code> plus any
+subject-level metadata (<code>species</code>, <code>sex</code>,
+<code>genotype</code>, <code>cohort</code>, …), which must be constant
+within a subject.</td>
 </tr>
 </tbody>
 </table>

@@ -13,7 +13,7 @@ container for WES and snRNA-seq analyses across rat, mouse, and human studies.">
 
     <a class="navbar-brand me-2" href="../index.html">myceliumr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,9 +83,9 @@ Optional columns: <code>sex</code>, <code>strain</code>, <code>genotype</code>, 
 
 
 <dt id="arg-sample-map">sample_map<a class="anchor" aria-label="anchor" href="#arg-sample-map"></a></dt>
-<dd><p>A tibble mapping subjects to assay-specific sample IDs.
-Must include <code>subject_id</code> column for referential integrity.
-Additional columns typically include <code>assay_wes_id</code>, <code>assay_snrna_id</code>, etc.
+<dd><p>A canonical long-format tibble mapping subjects to samples,
+one row per sample. Columns: <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>, <code>role</code>.
+New assays are represented as new rows, never new columns.
 Validated by <code><a href="validate_cohort.html">validate_cohort()</a></code>.</p></dd>
 
 

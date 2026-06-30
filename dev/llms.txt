@@ -138,7 +138,7 @@ Create and validate objects
 Read and write data
 
 - [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md)
-  : Read and validate a manifest CSV file
+  : Read and validate a long-format manifest CSV file
 
 ## Analysis Registry
 
@@ -156,7 +156,7 @@ Register and list analyses
 Data validation functions
 
 - [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
-  : Validate and structure a manifest for cross-species genomics study
+  : Validate and structure a long-format sample manifest
 - [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
   : Validate a Cohort object
 

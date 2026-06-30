@@ -7,7 +7,7 @@ documentation and code.
 
 | Term | Definition |
 |----|----|
-| **Subject** (or **rat_id**) | An individual biological organism (rat, mouse, or human) in a study. Each subject has a unique identifier and associated metadata (species, genotype, cohort, etc.). Represented as a row in `subject_tbl`. |
+| **Subject** | An individual biological organism (rat, mouse, or human) in a study. Each subject has a unique `subject_id` and associated metadata (species, genotype, cohort, etc.). Represented as a row in `subject_tbl`. |
 | **Species** | The biological species of a subject: one of “rat”, “mouse”, or “human”. Required field in subject metadata. |
 | **Cohort** | A collection of subjects grouped for analysis. A cohort combines subject-level metadata, sample-to-assay mappings, and optional study context. The primary data container in myceliumr. |
 | **Study** | Project-level metadata including study ID, title, research hypotheses, aims, assay types, and genome build versions. Optional context for a cohort. |
@@ -17,23 +17,19 @@ documentation and code.
 | Term | Definition |
 |----|----|
 | **Sample** | A biospecimen (tissue or cells) collected from a subject for assay. Samples are identified by unique IDs (e.g., tumor or normal samples). |
-| **Assay** | A high-throughput molecular technique applied to samples. Common assays in myceliumr: WES (whole exome sequencing, DNA assay) and snRNA-seq (single nucleus RNA-sequencing, RNA assay). |
-| **WES** | Whole Exome Sequencing. A DNA assay capturing and sequencing the protein-coding regions of the genome. Used to detect somatic mutations and variants. |
-| **snRNA-seq** | Single Nucleus RNA-sequencing. An RNA assay measuring gene expression in individual nuclei, enabling cell-type-specific transcriptomic profiling. |
-| **Tumor Sample** (`tumor_sample_id`) | A sample collected from tumor tissue or neoplastic cells. Identified by a unique sample ID. |
-| **Normal Sample** (`normal_sample_id`) | A sample collected from non-neoplastic tissue or control cells. Identified by a unique sample ID. In DNA analysis, a baseline for somatic mutation calling. |
+| **Assay** | A high-throughput molecular technique applied to samples. Assays are free-form values, not a fixed list, e.g. `wgs`, `wes`, `atac`, `bulk_rna`, `scrna`. New assays are added simply by using a new label in the `assay` column. |
+| **Role** (`role`) | The role a sample plays within its assay, e.g. `"tumor"` or `"normal"`. Designs without a tumor/normal distinction may leave `role` as `NA`. |
+| **Tumor Sample** | A sample collected from tumor tissue or neoplastic cells, recorded as a `sample_map` row with `role = "tumor"`. |
+| **Normal Sample** | A sample collected from non-neoplastic tissue or control cells, recorded as a `sample_map` row with `role = "normal"`. A baseline for somatic mutation calling. |
 | **Sample ID** (`sample_id`) | A unique identifier for an individual sample, independent of the subject ID. Allows samples from the same subject to be distinguished. |
-| **Pair ID** (`pair_id`) | A composite identifier linking DNA tumor and normal samples from the same subject. Computed as `paste0(tumor_sample_id, "__", normal_sample_id)`. Used only for WES assays. |
 
 ## Data Tables
 
 | Table | Purpose | Common Columns |
 |----|----|----|
-| **subject_tbl** | Subject-level metadata with one row per subject. | `subject_id` (or `rat_id`), `species`, `sex`, `strain`, `genotype`, `cohort`, `timepoint`, `notes` |
-| **dna_tbl** | DNA (WES) sample identifiers with one row per subject. | `subject_id`, `assay` = “dna_wes”, `tumor_sample_id`, `normal_sample_id`, `pair_id` |
-| **rna_tbl** | RNA (snRNA-seq) sample identifiers with zero or more rows per subject. | `subject_id`, `assay` = “rna_snrna”, `tumor_sample_id` (the RNA sample ID) |
-| **sample_map** | Long-format mapping of subjects to samples. | `subject_id`, `assay`, `sample_id`, `role` (“tumor” or “normal”) |
-| **completeness_tbl** | Data availability summary with one row per subject. | `subject_id`, `has_dna_tumor`, `has_dna_normal`, `has_dna_pair`, `n_rna_samples` |
+| **subject_tbl** | Subject-level metadata with one row per subject. | `subject_id`, `species`, `sex`, `strain`, `genotype`, `cohort`, `timepoint`, `notes` |
+| **sample_map** | Canonical long-format mapping of subjects to samples, one row per sample. New assays are new rows, never new columns. | `subject_id`, `assay`, `sample_id`, `role` |
+| **completeness_tbl** | Per-assay sample counts, one row per `subject_id` x `assay`. | `subject_id`, `assay`, `n_samples` |
 
 ## Registry and Analysis
 
@@ -48,7 +44,7 @@ documentation and code.
 | Term | Definition |
 |----|----|
 | **Manifest** | A CSV (or other tabular) file containing metadata and sample identifiers for all subjects in a study. Validated by [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md) and [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md) to create structured subject and sample tables. |
-| **Manifest CSV** | A comma-separated text file with columns for subject_id, species, sample IDs (DNA and RNA), and optional metadata. Required columns vary by assay type. Example columns: `rat_id`, `rat_genotype`, `cohort`, `wes_tumor_id`, `wes_normal_id`, `sn_id`. |
+| **Manifest CSV** | A long-format, comma-separated text file with one row per sample. Required columns: `subject_id`, `assay`, `sample_id`. Optional: `role` plus any subject-level metadata (`species`, `sex`, `genotype`, `cohort`, …), which must be constant within a subject. |
 
 ## Genotype and Phenotype
 

@@ -44,9 +44,9 @@ Cohort(
 
 - sample_map:
 
-  A tibble mapping subjects to assay-specific sample IDs. Must include
-  `subject_id` column for referential integrity. Additional columns
-  typically include `assay_wes_id`, `assay_snrna_id`, etc. Validated by
+  A canonical long-format tibble mapping subjects to samples, one row
+  per sample. Columns: `subject_id`, `assay`, `sample_id`, `role`. New
+  assays are represented as new rows, never new columns. Validated by
   [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md).
 
 - paths:

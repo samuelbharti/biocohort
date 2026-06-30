@@ -1,14 +1,16 @@
-# Read and validate a manifest CSV file
+# Read and validate a long-format manifest CSV file
 
-Reads a CSV file containing cross-species subject metadata, DNA sample
-identifiers, and optional RNA sample identifiers. Validates and
-structures the data into subject-level, WES pair-level, RNA-level, and
-sample mapping tables suitable for creating a Cohort object.
+Reads a tidy, long-format manifest CSV (one row per sample) and
+delegates to
+[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+for validation and structuring. This is the primary entry point for
+loading external manifest data and is the single source of truth for
+manifest parsing rules.
 
 ## Usage
 
 ``` r
-read_manifest_csv(path, ..., allow_rna_duplicates = FALSE)
+read_manifest_csv(path, ..., allow_duplicates = FALSE)
 ```
 
 ## Arguments
@@ -16,7 +18,7 @@ read_manifest_csv(path, ..., allow_rna_duplicates = FALSE)
 - path:
 
   Character scalar with file path to a CSV manifest file. Path must
-  exist and file must be readable.
+  exist and the file must be readable.
 
 - ...:
 
@@ -24,65 +26,39 @@ read_manifest_csv(path, ..., allow_rna_duplicates = FALSE)
   [`readr::read_csv()`](https://readr.tidyverse.org/reference/read_delim.html),
   such as `col_types`, `skip`, `comment`, etc.
 
-- allow_rna_duplicates:
+- allow_duplicates:
 
-  Logical. If TRUE, allows the same rna_sample_id to appear multiple
-  times for a subject_id. If FALSE (default), errors on duplicates.
-  Default: FALSE.
+  Logical. If `TRUE`, repeated `(subject_id, assay, sample_id)`
+  combinations are permitted. If `FALSE` (default), duplicates raise an
+  error. Passed through to
+  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md).
 
 ## Value
 
-A list with four elements:
-
-- `subject_tbl`: Tibble with one row per subject_id
-
-- `wes_pair_tbl`: Tibble with one row per subject_id (includes DNA/WES
-  IDs)
-
-- `rna_tbl`: Tibble with zero or more rows per subject_id
-
-- `sample_map`: Long-format tibble with columns: subject_id, assay,
-  sample_id, role
+The list returned by
+[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md):
+`subject_tbl`, `sample_map`, and `completeness_tbl`.
 
 ## Details
 
-Each subject must have exactly one DNA tumor sample and one DNA normal
-sample. Each subject can have zero or more RNA tumor samples. The
-manifest can have multiple rows per subject if they differ in
-rna_sample_id.
+The CSV must be in long format with one row per sample. Required
+columns:
 
-The manifest CSV must contain these required columns:
+- `subject_id`: subject the sample belongs to
 
-- `subject_id`: Unique identifier for each subject (character)
+- `assay`: assay type, e.g. `wgs`, `wes`, `atac`, `bulk_rna`, `scrna`
 
-- `species`: Species designation - one of "rat", "mouse", "human"
-  (character)
+- `sample_id`: unique sample identifier
 
-- `dna_tumor_id`: DNA tumor sample identifier (character)
+Optional sample-level column:
 
-- `dna_normal_id`: DNA normal sample identifier (character)
+- `role`: role within the assay, e.g. `tumor`, `normal`
 
-- `wes_tumor_sample_id`: WES tumor sample identifier (character)
-
-- `wes_normal_sample_id`: WES normal sample identifier (character)
-
-Optional subject metadata columns:
-
-- `sex`: Biological sex
-
-- `strain`: Strain or breed designation
-
-- `genotype`: Genetic background or modification
-
-- `cohort`: Treatment group or cohort membership
-
-- `timepoint`: Study timepoint or collection date
-
-- `notes`: Free-form annotations
-
-Optional sample column:
-
-- `rna_sample_id`: RNA tumor sample identifier (can repeat per subject)
+Any remaining columns (e.g. `species`, `sex`, `strain`, `genotype`,
+`cohort`, `timepoint`, `notes`) are treated as subject-level metadata
+and must be constant within a `subject_id`. See
+[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+for the full validation rules.
 
 ## See also
 
@@ -94,51 +70,44 @@ for creating a Cohort from manifest data
 ## Examples
 
 ``` r
-# Create a temporary CSV manifest
+# Create a temporary long-format CSV manifest
 manifest_file <- tempfile(fileext = ".csv")
-header <- paste0(
-  "subject_id,species,dna_tumor_id,dna_normal_id,",
-  "wes_tumor_sample_id,wes_normal_sample_id,rna_sample_id"
-)
 writeLines(
   c(
-    header,
-    "RAT001,rat,DNA_T1,DNA_N1,WES_T1,WES_N1,RNA_T1",
-    "RAT001,rat,DNA_T1,DNA_N1,WES_T1,WES_N1,RNA_T2",
-    "RAT002,rat,DNA_T2,DNA_N2,WES_T2,WES_N2,"
+    "subject_id,species,assay,sample_id,role",
+    "RAT001,rat,wes,WES_T1,tumor",
+    "RAT001,rat,wes,WES_N1,normal",
+    "RAT001,rat,scrna,RNA_1,tumor",
+    "MOUSE1,mouse,atac,ATAC_1,NA",
+    "HUM01,human,wgs,WGS_T1,tumor"
   ),
   manifest_file
 )
 
 # Read and validate the manifest
-manifest_split <- read_manifest_csv(manifest_file)
-print(manifest_split$subject_tbl)
-#> # A tibble: 2 × 2
+parsed <- read_manifest_csv(manifest_file)
+parsed$subject_tbl
+#> # A tibble: 3 × 2
 #>   subject_id species
 #>   <chr>      <chr>  
 #> 1 RAT001     rat    
-#> 2 RAT002     rat    
-print(manifest_split$wes_pair_tbl)
-#> # A tibble: 2 × 6
-#>   subject_id dna_tumor_id dna_normal_id wes_tumor_sample_id wes_normal_sample_id
-#>   <chr>      <chr>        <chr>         <chr>               <chr>               
-#> 1 RAT001     DNA_T1       DNA_N1        WES_T1              WES_N1              
-#> 2 RAT002     DNA_T2       DNA_N2        WES_T2              WES_N2              
-#> # ℹ 1 more variable: pair_id <chr>
-print(manifest_split$rna_tbl)
-#> # A tibble: 2 × 3
-#>   subject_id assay     tumor_sample_id
-#>   <chr>      <chr>     <chr>          
-#> 1 RAT001     rna_snrna RNA_T1         
-#> 2 RAT001     rna_snrna RNA_T2         
-print(manifest_split$sample_map)
-#> # A tibble: 6 × 4
-#>   subject_id assay     sample_id role  
-#>   <chr>      <chr>     <chr>     <chr> 
-#> 1 RAT001     dna_wes   WES_T1    tumor 
-#> 2 RAT002     dna_wes   WES_T2    tumor 
-#> 3 RAT001     dna_wes   WES_N1    normal
-#> 4 RAT002     dna_wes   WES_N2    normal
-#> 5 RAT001     rna_snrna RNA_T1    tumor 
-#> 6 RAT001     rna_snrna RNA_T2    tumor 
+#> 2 MOUSE1     mouse  
+#> 3 HUM01      human  
+parsed$sample_map
+#> # A tibble: 5 × 4
+#>   subject_id assay sample_id role  
+#>   <chr>      <chr> <chr>     <chr> 
+#> 1 RAT001     wes   WES_T1    tumor 
+#> 2 RAT001     wes   WES_N1    normal
+#> 3 RAT001     scrna RNA_1     tumor 
+#> 4 MOUSE1     atac  ATAC_1    NA    
+#> 5 HUM01      wgs   WGS_T1    tumor 
+parsed$completeness_tbl
+#> # A tibble: 4 × 3
+#>   subject_id assay n_samples
+#>   <chr>      <chr>     <int>
+#> 1 HUM01      wgs           1
+#> 2 MOUSE1     atac          1
+#> 3 RAT001     scrna         1
+#> 4 RAT001     wes           2
 ```

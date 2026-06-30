@@ -30,10 +30,10 @@ cohort_new(
 
 - sample_map:
 
-  A tibble mapping subjects to assay-specific sample IDs. Must have at
-  least a `subject_id` column to link to `subject_tbl`. Additional
-  columns can include `assay_wes_id`, `assay_snrna_id`, etc. Typically
-  obtained from
+  A canonical long-format tibble mapping subjects to samples, one row
+  per sample. Columns: `subject_id`, `assay`, `sample_id`, `role`. Must
+  have at least a `subject_id` column to link to `subject_tbl`.
+  Typically obtained from
   [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md).
 
 - study:
@@ -107,14 +107,14 @@ study <- study_new(
   assays = c("WES", "snRNA-seq")
 )
 
-# Create manifest data
+# Create manifest data (long format: one row per sample)
 manifest <- data.frame(
-  rat_id = c(101, 202),
-  species = c("rat", "mouse"),
-  sex = c("M", "F"),
-  wes_tumor_id = c("WES_T1", "WES_T2"),
-  wes_normal_id = c("WES_N1", "WES_N2"),
-  sn_id = I(list("RNA_T1", "RNA_T2"))
+  subject_id = c("RAT001", "RAT001", "MOUSE1", "MOUSE1"),
+  species = c("rat", "rat", "mouse", "mouse"),
+  sex = c("M", "M", "F", "F"),
+  assay = c("wes", "scrna", "wes", "atac"),
+  sample_id = c("WES_T1", "RNA_1", "WES_T2", "ATAC_1"),
+  role = c("tumor", "tumor", "tumor", NA)
 )
 
 # Validate and create cohort
@@ -134,11 +134,11 @@ print(cohort)
 #>  .. @ aims         : chr(0) 
 #>  .. @ assays       : chr [1:2] "WES" "snRNA-seq"
 #>  .. @ genome_builds: list()
-#>  .. @ created_at   : POSIXct[1:1], format: "2026-06-30 08:00:43"
+#>  .. @ created_at   : POSIXct[1:1], format: "2026-06-30 08:28:30"
 #>  .. @ tags         : chr(0) 
 #>  @ subjects   :List of 2
-#>  .. $ 101: <myceliumr::Subject>
-#>  ..  ..@ subject_id: chr "101"
+#>  .. $ RAT001: <myceliumr::Subject>
+#>  ..  ..@ subject_id: chr "RAT001"
 #>  ..  ..@ species   : chr "rat"
 #>  ..  ..@ sex       : chr "M"
 #>  ..  ..@ strain    : chr NA
@@ -146,8 +146,8 @@ print(cohort)
 #>  ..  ..@ cohort    : chr NA
 #>  ..  ..@ timepoint : chr NA
 #>  ..  ..@ notes     : chr NA
-#>  .. $ 202: <myceliumr::Subject>
-#>  ..  ..@ subject_id: chr "202"
+#>  .. $ MOUSE1: <myceliumr::Subject>
+#>  ..  ..@ subject_id: chr "MOUSE1"
 #>  ..  ..@ species   : chr "mouse"
 #>  ..  ..@ sex       : chr "F"
 #>  ..  ..@ strain    : chr NA
@@ -156,24 +156,24 @@ print(cohort)
 #>  ..  ..@ timepoint : chr NA
 #>  ..  ..@ notes     : chr NA
 #>  @ subject_tbl: tibble [2 × 3] (S3: tbl_df/tbl/data.frame)
-#>  $ subject_id: chr [1:2] "101" "202"
+#>  $ subject_id: chr [1:2] "RAT001" "MOUSE1"
 #>  $ species   : chr [1:2] "rat" "mouse"
 #>  $ sex       : chr [1:2] "M" "F"
-#>  @ sample_map : tibble [6 × 4] (S3: tbl_df/tbl/data.frame)
-#>  $ subject_id: chr [1:6] "101" "202" "101" "202" ...
-#>  $ assay     : chr [1:6] "dna_wes" "dna_wes" "dna_wes" "dna_wes" ...
-#>  $ sample_id : chr [1:6] "WES_T1" "WES_T2" "WES_N1" "WES_N2" ...
-#>  $ role      : chr [1:6] "tumor" "tumor" "normal" "normal" ...
+#>  @ sample_map : tibble [4 × 4] (S3: tbl_df/tbl/data.frame)
+#>  $ subject_id: chr [1:4] "RAT001" "RAT001" "MOUSE1" "MOUSE1"
+#>  $ assay     : chr [1:4] "wes" "scrna" "wes" "atac"
+#>  $ sample_id : chr [1:4] "WES_T1" "RNA_1" "WES_T2" "ATAC_1"
+#>  $ role      : chr [1:4] "tumor" "tumor" "tumor" NA
 #>  @ paths      : list()
 #>  @ analyses   : list()
 #>  @ registry   : list()
 #>  @ cache      : list()
 
 # Access individual Subject objects (automatically created)
-rat_subject <- cohort@subjects[["101"]]
+rat_subject <- cohort@subjects[["RAT001"]]
 print(rat_subject)
 #> <myceliumr::Subject>
-#>  @ subject_id: chr "101"
+#>  @ subject_id: chr "RAT001"
 #>  @ species   : chr "rat"
 #>  @ sex       : chr "M"
 #>  @ strain    : chr NA

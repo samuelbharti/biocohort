@@ -1,14 +1,15 @@
 # myceliumr: Cross-Species Cohort Framework
 
 myceliumr provides S7 classes and tools for organizing genomic study
-metadata across species (rat, mouse, human) with support for WES (DNA)
-and snRNA-seq (RNA) assays.
+metadata across species (rat, mouse, human) with support for any omics
+assay (WGS, WES, ATAC-seq, bulk RNA, single-cell, ...) via a generic,
+long-format sample model.
 
 ## Details
 
 A lightweight R package for managing cross-species cohort data
 (rat/mouse/human) with manifest validation and standardized storage for
-WES and snRNA-seq outputs.
+multi-omics outputs.
 
 ## Core Concepts
 
@@ -28,12 +29,19 @@ The package organizes study data using these main components:
 
 ## Assays
 
-Supported assays:
+Assays are free-form values, not a fixed enumeration. Any omics assay is
+supported by using a consistent label in the `assay` column, for
+example:
 
-- **dna_wes**: Whole exome sequencing (DNA) for somatic variant
-  detection
+- `wgs`: Whole genome sequencing
 
-- **rna_snrna**: Single-nucleus RNA-sequencing for transcriptomics
+- `wes`: Whole exome sequencing
+
+- `atac`: ATAC-seq
+
+- `bulk_rna`: Bulk RNA-sequencing
+
+- `scrna`: Single-cell / single-nucleus RNA-sequencing
 
 ## Key Functions
 
@@ -74,19 +82,15 @@ Supported assays:
 Cohorts use standardized tables:
 
 - **subject_tbl**: One row per subject; columns: `subject_id`,
-  `species`, `sex`, `strain`, `genotype`, `cohort`, `timepoint`, `notes`
+  `species`, and any subject-level metadata (`sex`, `strain`,
+  `genotype`, `cohort`, `timepoint`, `notes`, ...)
 
-- **dna_tbl**: One row per subject (WES); columns: `subject_id`,
-  `assay`, `tumor_sample_id`, `normal_sample_id`, `pair_id`
+- **sample_map**: Canonical long-format table, one row per sample;
+  columns: `subject_id`, `assay`, `sample_id`, `role`. New assays are
+  new rows, never new columns or tables.
 
-- **rna_tbl**: Zero or more rows per subject (snRNA-seq); columns:
-  `subject_id`, `assay`, `tumor_sample_id`
-
-- **sample_map**: Long-format; columns: `subject_id`, `assay`,
-  `sample_id`, `role`
-
-- **completeness_tbl**: One row per subject; columns: `subject_id`,
-  `has_dna_tumor`, `has_dna_normal`, `has_dna_pair`, `n_rna_samples`
+- **completeness_tbl**: One row per `subject_id` x `assay`; columns:
+  `subject_id`, `assay`, `n_samples`
 
 ## Documentation
 
@@ -96,9 +100,6 @@ For terminology and definitions, see the
 For standardized naming conventions (columns, objects, functions,
 files), see [Naming
 Conventions](http://www.samuelbharti.com/myceliumr/reference/articles/naming-conventions.md).
-
-For getting started with a worked example, see [Getting
-Started](http://www.samuelbharti.com/myceliumr/reference/articles/getting-started.md).
 
 ## See also
 
@@ -113,3 +114,7 @@ Useful links:
 ## Author
 
 **Maintainer**: Samuel Bharti <samuelbharti.io@gmail.com>
+
+Authors:
+
+- Samuel Bharti <samuelbharti.io@gmail.com>

@@ -11,7 +11,7 @@ data model. Includes a complete Study object with subject metadata."></head><bod
 
     <a class="navbar-brand me-2" href="../index.html">myceliumr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@ data model. Includes a complete Study object with subject metadata.</p>
     <p>A Cohort object (S7 class) with the following structure:</p><ul><li><p>study: A Study object with metadata for a cross-species genomics project</p></li>
 <li><p>subjects (named list): 4 Subject objects automatically created, accessible by subject_id</p></li>
 <li><p>subject_tbl (tibble): 4 subjects (2 rat, 2 mouse) with species, sex, strain, genotype, cohort, timepoint</p></li>
-<li><p>sample_map (tibble): Subjects mapped to assay sample IDs (WES, snRNA-seq)</p></li>
+<li><p>sample_map (tibble): Long-format map (subject_id, assay, sample_id, role) covering WES tumor/normal and snRNA-seq samples</p></li>
 <li><p>paths (list): Empty, ready for file paths</p></li>
 <li><p>analyses (list): Empty, ready for analysis results</p></li>
 </ul></div>
@@ -95,7 +95,7 @@ creating your own cohorts from real data.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ rat  : chr "rn7"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ mouse: chr "mm10"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ human: chr "hg38"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ created_at   : POSIXct[1:1], format: "2026-02-05 06:06:07"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  @ created_at   : POSIXct[1:1], format: "2026-06-30 08:25:15"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ tags         : chr(0) </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Access individual Subject objects (automatically created)</span></span></span>
@@ -112,22 +112,30 @@ creating your own cohorts from real data.</p>
 <span class="r-in"><span><span class="co"># View all subjects with metadata (tibble for bulk operations)</span></span></span>
 <span class="r-in"><span><span class="va">example_cohort</span><span class="op">@</span><span class="va">subject_tbl</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id species genotype sex   strain  cohort    timepoint</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> RAT001     rat     WT       M     Lewis   Control   Day0     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> RAT002     rat     WT       F     Lewis   Control   Day0     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> MOUSE001   mouse   WT       M     C57BL/6 Control   Day0     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> MOUSE002   mouse   KO       F     C57BL/6 Treatment Day0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id species sex   strain  genotype cohort    timepoint</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> RAT001     rat     M     Lewis   WT       Control   Day0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> RAT002     rat     F     Lewis   WT       Control   Day0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> MOUSE001   mouse   M     C57BL/6 WT       Control   Day0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> MOUSE002   mouse   F     C57BL/6 KO       Treatment Day0     </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># View sample mapping</span></span></span>
 <span class="r-in"><span><span class="va">example_cohort</span><span class="op">@</span><span class="va">sample_map</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id assay_wes_id assay_snrna_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> RAT001     WES_R001     SNRNA_R001    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> RAT002     WES_R002     SNRNA_R002    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> MOUSE001   WES_M001     SNRNA_M001    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> MOUSE002   WES_M002     SNRNA_M002    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    subject_id assay sample_id  role  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> RAT001     wes   WES_R001_T tumor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> RAT001     wes   WES_R001_N normal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> RAT001     scrna SNRNA_R001 tumor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> RAT002     wes   WES_R002_T tumor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> RAT002     wes   WES_R002_N normal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> RAT002     scrna SNRNA_R002 tumor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> MOUSE001   wes   WES_M001_T tumor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> MOUSE001   wes   WES_M001_N normal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> MOUSE001   scrna SNRNA_M001 tumor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> MOUSE002   wes   WES_M002_T tumor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> MOUSE002   wes   WES_M002_N normal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> MOUSE002   scrna SNRNA_M002 tumor </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get summary statistics</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">example_cohort</span><span class="op">@</span><span class="va">subject_tbl</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>  <span class="co"># Count by species</span></span></span>

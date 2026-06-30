@@ -122,7 +122,7 @@ print(study)
 #>  .. $ rat  : chr "rn7"
 #>  .. $ mouse: chr "mm10"
 #>  .. $ human: chr "hg38"
-#>  @ created_at   : POSIXct[1:1], format: "2026-06-30 08:00:45"
+#>  @ created_at   : POSIXct[1:1], format: "2026-06-30 08:28:32"
 #>  @ tags         : chr(0) 
 
 # Example with README file as description

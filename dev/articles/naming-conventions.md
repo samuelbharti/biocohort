@@ -9,7 +9,7 @@ myceliumr for data columns, R objects, functions, and file names.
 
 | Column | Type | Description |
 |----|----|----|
-| `subject_id` or `rat_id` | character/numeric | Unique subject identifier. Use `rat_id` for rat-specific studies; use `subject_id` for cross-species. |
+| `subject_id` | character | Unique subject identifier. Species-agnostic; use the same column for rat, mouse, or human studies. |
 | `species` | character | Species designation: “rat”, “mouse”, or “human”. |
 | `sex` | character | Biological sex: “M” (male), “F” (female), or NA if unknown. |
 | `strain` | character | Strain or breed (e.g., “Fischer 344”, “B6”). |
@@ -18,65 +18,50 @@ myceliumr for data columns, R objects, functions, and file names.
 | `timepoint` | character | Study visit, age, or collection date (e.g., “Day_0”, “Week_12”, “8wks”). |
 | `notes` | character | Free-form annotations or additional metadata. |
 
-### DNA/WES Sample Columns (`dna_tbl`)
-
-| Column | Type | Description |
-|----|----|----|
-| `subject_id` | character | Reference to subject in `subject_tbl`. |
-| `assay` | character | Assay type: “dna_wes” for whole exome sequencing. |
-| `tumor_sample_id` | character | Unique identifier for DNA tumor sample. |
-| `normal_sample_id` | character | Unique identifier for DNA normal sample. |
-| `pair_id` | character | Composite ID linking tumor and normal: `paste0(tumor_sample_id, "__", normal_sample_id)`. |
-
-### RNA/snRNA-seq Sample Columns (`rna_tbl`)
-
-| Column | Type | Description |
-|----|----|----|
-| `subject_id` | character | Reference to subject in `subject_tbl`. |
-| `assay` | character | Assay type: “rna_snrna” for single-nucleus RNA-seq. |
-| `tumor_sample_id` | character | Unique identifier for RNA sample library. (Note: “tumor” refers to tissue origin, not necessarily malignancy.) |
-
 ### Sample Mapping Columns (`sample_map`)
 
+The `sample_map` is the canonical, long-format sample table: one row per
+sample, with any number of assays and roles. New assays are represented
+as new rows, never new columns or per-assay tables.
+
 | Column | Type | Description |
 |----|----|----|
 | `subject_id` | character | Reference to subject in `subject_tbl`. |
-| `assay` | character | Assay type: “dna_wes” or “rna_snrna”. |
-| `sample_id` | character | Unique sample identifier (can match tumor_sample_id or normal_sample_id). |
-| `role` | character | Sample role: “tumor” or “normal”. (Only for DNA; RNA samples use “tumor” by convention.) |
+| `assay` | character | Assay type (free-form value), e.g. `"wgs"`, `"wes"`, `"atac"`, `"bulk_rna"`, `"scrna"`. |
+| `sample_id` | character | Unique sample identifier. |
+| `role` | character | Sample role within its assay, e.g. `"tumor"`, `"normal"`, or `NA` when not applicable. |
 
 ### Completeness Summary Columns (`completeness_tbl`)
 
 | Column | Type | Description |
 |----|----|----|
 | `subject_id` | character | Reference to subject in `subject_tbl`. |
-| `has_dna_tumor` | logical | TRUE if subject has DNA tumor sample. |
-| `has_dna_normal` | logical | TRUE if subject has DNA normal sample. |
-| `has_dna_pair` | logical | TRUE if subject has both DNA tumor and normal (can compute pair_id). |
-| `n_rna_samples` | integer | Number of snRNA-seq libraries available for subject. |
+| `assay` | character | Assay type, matching values in `sample_map`. |
+| `n_samples` | integer | Number of samples available for the subject within the assay. |
 
 ## Assay Type Values
 
-Use these standardized values in the `assay` column:
+`assay` is a free-form lowercase value, not a fixed enumeration. Pick a
+stable label per assay and reuse it consistently. Common examples:
 
 | Assay | Code | Description |
 |----|----|----|
-| DNA (Whole Exome Sequencing) | `"dna_wes"` | Exome capture and sequencing for somatic variant discovery. |
-| RNA (Single-Nucleus RNA-sequencing) | `"rna_snrna"` | Single-nucleus transcriptomics. |
+| Whole genome sequencing | `"wgs"` | Whole genome DNA sequencing. |
+| Whole exome sequencing | `"wes"` | Exome capture and sequencing. |
+| ATAC-seq | `"atac"` | Chromatin accessibility. |
+| Bulk RNA-seq | `"bulk_rna"` | Bulk transcriptomics. |
+| Single-cell / single-nucleus RNA-seq | `"scrna"` | Single-cell/nucleus transcriptomics. |
 
 ## Sample ID Formats
 
 While myceliumr does not enforce specific sample ID formats, adopt a
-consistent project-wide convention:
+consistent project-wide convention. Encoding the assay and role in the
+ID can aid readability:
 
-- **WES Tumor**: `WES_T{subject}` or `DNA_T{number}` (e.g., “WES_T101”,
-  “DNA_T001”)
-- **WES Normal**: `WES_N{subject}` or `DNA_N{number}` (e.g., “WES_N101”,
-  “DNA_N001”)
-- **snRNA-seq**: `SN{subject}_{library}` or `RNA_{subject}_{rep}` (e.g.,
-  “SN101_1”, “RNA_T101_2”)
-- **Pair ID**: `{tumor_sample_id}__{normal_sample_id}` (e.g.,
-  “WES_T101\_\_WES_N101”, “DNA_T001\_\_DNA_N001”)
+- **Tumor**: `{assay}_T{subject}` (e.g., “wes_T101”, “wgs_T001”)
+- **Normal**: `{assay}_N{subject}` (e.g., “wes_N101”, “wgs_N001”)
+- **Single-cell/RNA**: `{assay}_{subject}_{rep}` (e.g., “scrna_101_1”,
+  “bulk_rna_101_2”)
 
 ## Object Names
 
@@ -165,13 +150,13 @@ result <- cohort@analyses[["my_analysis_name"]]
 
 ### Parameters in Functions
 
-- **Input data**: Describe clearly (e.g., `meta_rats`, `subject_tbl`,
+- **Input data**: Describe clearly (e.g., `manifest`, `subject_tbl`,
   `sample_map`)
 - **Flags**: Prefix with `is_` or `has_` (e.g., `is_valid`,
   `has_missing`)
 - **Counts**: Prefix with `n_` (e.g., `n_subjects`, `n_samples`)
 - **Logical conditions**: `strict`, `verbose`, `allow_*` (e.g.,
-  `allow_rna_duplicates`)
+  `allow_duplicates`)
 
 ### Vector and List Names
 
@@ -184,8 +169,7 @@ result <- cohort@analyses[["my_analysis_name"]]
 
 ### Vignette Titles
 
-- Use sentence case (e.g., “Getting started”, “Glossary”, “Naming
-  conventions”)
+- Use sentence case (e.g., “Glossary”, “Naming conventions”)
 - Markdown files: `{title_snake_case}.Rmd` (e.g., `glossary.Rmd`,
   `naming-conventions.Rmd`)
 
@@ -203,8 +187,8 @@ Uses snake_case for functions and variables
 
 Uses PascalCase for S7 classes (Study, Subject, Cohort)
 
-Assay column values are lowercase with underscores (e.g., “dna_wes”,
-“rna_snrna”)
+Assay column values are lowercase, free-form labels (e.g., “wes”,
+“atac”, “scrna”)
 
 Sample ID columns end with `_id` or `_sample_id`
 

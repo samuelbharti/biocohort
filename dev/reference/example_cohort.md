@@ -24,8 +24,8 @@ A Cohort object (S7 class) with the following structure:
 - subject_tbl (tibble): 4 subjects (2 rat, 2 mouse) with species, sex,
   strain, genotype, cohort, timepoint
 
-- sample_map (tibble): Subjects mapped to assay sample IDs (WES,
-  snRNA-seq)
+- sample_map (tibble): Long-format map (subject_id, assay, sample_id,
+  role) covering WES tumor/normal and snRNA-seq samples
 
 - paths (list): Empty, ready for file paths
 
@@ -81,7 +81,7 @@ example_cohort@study
 #>  .. $ rat  : chr "rn7"
 #>  .. $ mouse: chr "mm10"
 #>  .. $ human: chr "hg38"
-#>  @ created_at   : POSIXct[1:1], format: "2026-02-05 06:06:07"
+#>  @ created_at   : POSIXct[1:1], format: "2026-06-30 08:25:15"
 #>  @ tags         : chr(0) 
 
 # Access individual Subject objects (automatically created)
@@ -98,22 +98,30 @@ names(example_cohort@subjects)
 # View all subjects with metadata (tibble for bulk operations)
 example_cohort@subject_tbl
 #> # A tibble: 4 × 7
-#>   subject_id species genotype sex   strain  cohort    timepoint
-#>   <chr>      <chr>   <chr>    <chr> <chr>   <chr>     <chr>    
-#> 1 RAT001     rat     WT       M     Lewis   Control   Day0     
-#> 2 RAT002     rat     WT       F     Lewis   Control   Day0     
-#> 3 MOUSE001   mouse   WT       M     C57BL/6 Control   Day0     
-#> 4 MOUSE002   mouse   KO       F     C57BL/6 Treatment Day0     
+#>   subject_id species sex   strain  genotype cohort    timepoint
+#>   <chr>      <chr>   <chr> <chr>   <chr>    <chr>     <chr>    
+#> 1 RAT001     rat     M     Lewis   WT       Control   Day0     
+#> 2 RAT002     rat     F     Lewis   WT       Control   Day0     
+#> 3 MOUSE001   mouse   M     C57BL/6 WT       Control   Day0     
+#> 4 MOUSE002   mouse   F     C57BL/6 KO       Treatment Day0     
 
 # View sample mapping
 example_cohort@sample_map
-#> # A tibble: 4 × 3
-#>   subject_id assay_wes_id assay_snrna_id
-#>   <chr>      <chr>        <chr>         
-#> 1 RAT001     WES_R001     SNRNA_R001    
-#> 2 RAT002     WES_R002     SNRNA_R002    
-#> 3 MOUSE001   WES_M001     SNRNA_M001    
-#> 4 MOUSE002   WES_M002     SNRNA_M002    
+#> # A tibble: 12 × 4
+#>    subject_id assay sample_id  role  
+#>    <chr>      <chr> <chr>      <chr> 
+#>  1 RAT001     wes   WES_R001_T tumor 
+#>  2 RAT001     wes   WES_R001_N normal
+#>  3 RAT001     scrna SNRNA_R001 tumor 
+#>  4 RAT002     wes   WES_R002_T tumor 
+#>  5 RAT002     wes   WES_R002_N normal
+#>  6 RAT002     scrna SNRNA_R002 tumor 
+#>  7 MOUSE001   wes   WES_M001_T tumor 
+#>  8 MOUSE001   wes   WES_M001_N normal
+#>  9 MOUSE001   scrna SNRNA_M001 tumor 
+#> 10 MOUSE002   wes   WES_M002_T tumor 
+#> 11 MOUSE002   wes   WES_M002_N normal
+#> 12 MOUSE002   scrna SNRNA_M002 tumor 
 
 # Get summary statistics
 table(example_cohort@subject_tbl$species)  # Count by species
