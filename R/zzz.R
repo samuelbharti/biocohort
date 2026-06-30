@@ -5,6 +5,9 @@
   # Register built-in liftover backends.
   register_liftover_backend("rtracklayer", liftover_rtracklayer)
   register_liftover_backend("crossmap", liftover_crossmap)
+
+  # Register built-in ortholog backends.
+  register_ortholog_backend("babelgene", ortholog_babelgene)
 }
 
 .onAttach <- function(libname, pkgname) {

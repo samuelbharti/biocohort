@@ -4,9 +4,13 @@
 
 - **Cross-species translation (experimental)**: first-class coordinate
   translation across assemblies and species.
-  - `orthologize()` — modality-dispatching front door (`"liftover"` strategy
-    implemented; `"ortholog"` strategy is a documented placeholder pending an
-    `orthogene`/`babelgene` backend).
+  - `orthologize()` — modality-dispatching front door routing coordinate
+    features to liftover and gene features to ortholog mapping.
+  - `ortholog_genes()` — gene-level cross-species mapping returning a
+    `TranslationResult`; pluggable backends via `register_ortholog_backend()` /
+    `ortholog_backends()`, with an offline `babelgene` default
+    (`ortholog_babelgene()`). Model-to-model pairs (e.g. rat-to-mouse) are
+    pivoted through human.
   - `liftover_intervals()` — translate intervals (variants, peaks, regions) via
     a chain file, returning a `TranslationResult` that retains both mapped and
     **unmapped** features so loss is never silent.
