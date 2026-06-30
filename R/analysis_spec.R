@@ -33,6 +33,13 @@
 #' @param key_cols Character vector of column names to use as keys when
 #'   loading the analysis table. Determines how rows are indexed
 #'   (e.g., `c("subject_id")` or `c("pair_id")`). Required.
+#' @param feature_type Optional character scalar declaring how this analysis's
+#'   features translate across species in [orthologize()]: `"interval"`
+#'   (liftover) or `"gene"` (ortholog mapping). Optional, defaults to NA.
+#' @param gene_col Optional character scalar naming the gene-identifier column
+#'   for `feature_type = "gene"`. Optional, defaults to NA.
+#' @param id_type Optional gene identifier type for `feature_type = "gene"`:
+#'   `"symbol"`, `"entrez"`, or `"ensembl"`. Optional, defaults to NA.
 #'
 #' @details
 #' Use [analysis_spec_new()] to construct AnalysisSpec objects with immediate
@@ -67,7 +74,10 @@ AnalysisSpec <- S7::new_class(
     path_template = S7::new_property(S7::class_character, default = NA_character_),
     root_key = S7::new_property(S7::class_character, default = NA_character_),
     reader = S7::new_property(S7::class_character),
-    key_cols = S7::new_property(S7::class_character)
+    key_cols = S7::new_property(S7::class_character),
+    feature_type = S7::new_property(S7::class_character, default = NA_character_),
+    gene_col = S7::new_property(S7::class_character, default = NA_character_),
+    id_type = S7::new_property(S7::class_character, default = NA_character_)
   )
 )
 
@@ -100,6 +110,16 @@ AnalysisSpec <- S7::new_class(
 #' @param key_cols Character vector of column names for indexing loaded tables.
 #'   Examples: `c("subject_id")`, `c("pair_id")`.
 #'   Required.
+#' @param feature_type Optional character scalar declaring how this analysis's
+#'   features are translated across species by [orthologize()]. One of
+#'   `"interval"` (coordinate features, translated by liftover) or `"gene"`
+#'   (gene-level features, translated by ortholog mapping). Defaults to NA
+#'   (analysis is skipped by cohort-level translation).
+#' @param gene_col Optional character scalar naming the gene-identifier column,
+#'   used when `feature_type = "gene"`. Defaults to NA (treated as `"gene"`).
+#' @param id_type Optional gene identifier type for `feature_type = "gene"`: one
+#'   of `"symbol"`, `"entrez"`, `"ensembl"`. Defaults to NA (treated as
+#'   `"symbol"`).
 #'
 #' @return An AnalysisSpec object with validated fields.
 #'
@@ -108,6 +128,8 @@ AnalysisSpec <- S7::new_class(
 #' - `name`, `assay`, `format`, `reader` are non-empty strings
 #' - `level` is one of: "subject", "pair", "cohort"
 #' - `key_cols` is a non-empty character vector
+#' - `feature_type`, if given, is one of "interval" or "gene"
+#' - `id_type`, if given, is one of "symbol", "entrez", "ensembl"
 #'
 #' @examples
 #' # Define a somatic variant spec
@@ -148,7 +170,10 @@ analysis_spec_new <- function(
   path_template = NA_character_,
   root_key = NA_character_,
   reader,
-  key_cols
+  key_cols,
+  feature_type = NA_character_,
+  gene_col = NA_character_,
+  id_type = NA_character_
 ) {
   checkmate::assert_string(name, min.chars = 1)
   checkmate::assert_string(assay, min.chars = 1)
@@ -156,12 +181,31 @@ analysis_spec_new <- function(
   checkmate::assert_string(format, min.chars = 1)
   checkmate::assert_string(reader, min.chars = 1)
   checkmate::assert_character(key_cols, min.len = 1, any.missing = FALSE)
+  checkmate::assert_string(gene_col, min.chars = 1, na.ok = TRUE)
 
   if (!(level %in% c("subject", "pair", "cohort"))) {
     cli::cli_abort(
       c(
         "`level` must be one of: 'subject', 'pair', 'cohort'.",
         "i" = "Received: {level}."
+      )
+    )
+  }
+
+  if (!is.na(feature_type) && !(feature_type %in% c("interval", "gene"))) {
+    cli::cli_abort(
+      c(
+        "`feature_type` must be one of: 'interval', 'gene'.",
+        "i" = "Received: {feature_type}."
+      )
+    )
+  }
+
+  if (!is.na(id_type) && !(id_type %in% c("symbol", "entrez", "ensembl"))) {
+    cli::cli_abort(
+      c(
+        "`id_type` must be one of: 'symbol', 'entrez', 'ensembl'.",
+        "i" = "Received: {id_type}."
       )
     )
   }
@@ -175,6 +219,9 @@ analysis_spec_new <- function(
     path_template = path_template,
     root_key = root_key,
     reader = reader,
-    key_cols = key_cols
+    key_cols = key_cols,
+    feature_type = feature_type,
+    gene_col = gene_col,
+    id_type = id_type
   )
 }

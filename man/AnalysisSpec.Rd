@@ -13,7 +13,10 @@ AnalysisSpec(
   path_template = NA_character_,
   root_key = NA_character_,
   reader = character(0),
-  key_cols = character(0)
+  key_cols = character(0),
+  feature_type = NA_character_,
+  gene_col = NA_character_,
+  id_type = NA_character_
 )
 }
 \arguments{
@@ -56,6 +59,16 @@ name. Required.}
 \item{key_cols}{Character vector of column names to use as keys when
 loading the analysis table. Determines how rows are indexed
 (e.g., \code{c("subject_id")} or \code{c("pair_id")}). Required.}
+
+\item{feature_type}{Optional character scalar declaring how this analysis's
+features translate across species in \code{\link[=orthologize]{orthologize()}}: \code{"interval"}
+(liftover) or \code{"gene"} (ortholog mapping). Optional, defaults to NA.}
+
+\item{gene_col}{Optional character scalar naming the gene-identifier column
+for \code{feature_type = "gene"}. Optional, defaults to NA.}
+
+\item{id_type}{Optional gene identifier type for \code{feature_type = "gene"}:
+\code{"symbol"}, \code{"entrez"}, or \code{"ensembl"}. Optional, defaults to NA.}
 }
 \description{
 An immutable S7 class for defining analysis specifications in a Cohort.

@@ -5,7 +5,13 @@
 - **Cross-species translation (experimental)**: first-class coordinate
   translation across assemblies and species.
   - `orthologize()` — modality-dispatching front door routing coordinate
-    features to liftover and gene features to ortholog mapping.
+    features to liftover and gene features to ortholog mapping. Given a
+    `Cohort`, it translates every registered analysis according to its
+    `AnalysisSpec` `feature_type` and returns a new, target-species cohort
+    (subjects and sample map unchanged); per-analysis results, including
+    unmapped features, are retrievable with `translation_report()`.
+  - `AnalysisSpec` gains optional `feature_type` (`"interval"`/`"gene"`),
+    `gene_col`, and `id_type` fields that drive cohort-level auto-dispatch.
   - `ortholog_genes()` — gene-level cross-species mapping returning a
     `TranslationResult`; pluggable backends via `register_ortholog_backend()` /
     `ortholog_backends()`, with an offline `babelgene` default

@@ -83,6 +83,7 @@ reference:
   - ortholog_babelgene
   - register_ortholog_backend
   - ortholog_backends
+  - translation_report
   - TranslationResult
   - translation_stats
 
