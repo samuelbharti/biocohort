@@ -125,9 +125,9 @@ Subject <- S7::new_class(
 #'   Required columns: `subject_id` (character), `species` (rat/mouse/human).
 #'   Optional columns: `sex`, `strain`, `genotype`, `cohort`, `timepoint`,
 #'   `notes`. Validated by [validate_cohort()].
-#' @param sample_map A tibble mapping subjects to assay-specific sample IDs.
-#'   Must include `subject_id` column for referential integrity.
-#'   Additional columns typically include `assay_wes_id`, `assay_snrna_id`, etc.
+#' @param sample_map A canonical long-format tibble mapping subjects to samples,
+#'   one row per sample. Columns: `subject_id`, `assay`, `sample_id`, `role`.
+#'   New assays are represented as new rows, never new columns.
 #'   Validated by [validate_cohort()].
 #' @param paths Named list of file paths to data files or results directories.
 #'   Optional, defaults to empty list.

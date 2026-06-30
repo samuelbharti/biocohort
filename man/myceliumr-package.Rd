@@ -7,11 +7,13 @@
 \title{myceliumr: Cross-Species Cohort Framework}
 \description{
 myceliumr provides S7 classes and tools for organizing genomic study metadata
-across species (rat, mouse, human) with support for WES (DNA) and snRNA-seq (RNA) assays.
+across species (rat, mouse, human) with support for any omics assay
+(WGS, WES, ATAC-seq, bulk RNA, single-cell, ...) via a generic, long-format
+sample model.
 }
 \details{
 A lightweight R package for managing cross-species cohort data (rat/mouse/human)
-with manifest validation and standardized storage for WES and snRNA-seq outputs.
+with manifest validation and standardized storage for multi-omics outputs.
 }
 \section{Core Concepts}{
 
@@ -28,10 +30,14 @@ The package organizes study data using these main components:
 \section{Assays}{
 
 
-Supported assays:
+Assays are free-form values, not a fixed enumeration. Any omics assay is
+supported by using a consistent label in the \code{assay} column, for example:
 \itemize{
-\item \strong{dna_wes}: Whole exome sequencing (DNA) for somatic variant detection
-\item \strong{rna_snrna}: Single-nucleus RNA-sequencing for transcriptomics
+\item \code{wgs}: Whole genome sequencing
+\item \code{wes}: Whole exome sequencing
+\item \code{atac}: ATAC-seq
+\item \code{bulk_rna}: Bulk RNA-sequencing
+\item \code{scrna}: Single-cell / single-nucleus RNA-sequencing
 }
 }
 
@@ -69,14 +75,13 @@ Supported assays:
 Cohorts use standardized tables:
 \itemize{
 \item \strong{subject_tbl}: One row per subject; columns: \code{subject_id}, \code{species},
-\code{sex}, \code{strain}, \code{genotype}, \code{cohort}, \code{timepoint}, \code{notes}
-\item \strong{dna_tbl}: One row per subject (WES); columns: \code{subject_id}, \code{assay},
-\code{tumor_sample_id}, \code{normal_sample_id}, \code{pair_id}
-\item \strong{rna_tbl}: Zero or more rows per subject (snRNA-seq); columns:
-\code{subject_id}, \code{assay}, \code{tumor_sample_id}
-\item \strong{sample_map}: Long-format; columns: \code{subject_id}, \code{assay}, \code{sample_id}, \code{role}
-\item \strong{completeness_tbl}: One row per subject; columns: \code{subject_id},
-\code{has_dna_tumor}, \code{has_dna_normal}, \code{has_dna_pair}, \code{n_rna_samples}
+and any subject-level metadata (\code{sex}, \code{strain}, \code{genotype}, \code{cohort},
+\code{timepoint}, \code{notes}, ...)
+\item \strong{sample_map}: Canonical long-format table, one row per sample; columns:
+\code{subject_id}, \code{assay}, \code{sample_id}, \code{role}. New assays are new rows, never
+new columns or tables.
+\item \strong{completeness_tbl}: One row per \code{subject_id} x \code{assay}; columns:
+\code{subject_id}, \code{assay}, \code{n_samples}
 }
 }
 
@@ -87,9 +92,6 @@ For terminology and definitions, see the \href{articles/glossary.html}{Glossary}
 
 For standardized naming conventions (columns, objects, functions, files),
 see \href{articles/naming-conventions.html}{Naming Conventions}.
-
-For getting started with a worked example,
-see \href{articles/getting-started.html}{Getting Started}.
 }
 
 \seealso{
@@ -103,5 +105,10 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Samuel Bharti \email{samuelbharti.io@gmail.com}
+
+Authors:
+\itemize{
+  \item Samuel Bharti \email{samuelbharti.io@gmail.com}
+}
 
 }

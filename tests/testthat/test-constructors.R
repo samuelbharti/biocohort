@@ -12,12 +12,15 @@ test_that("subject_new validates species", {
 })
 
 test_that("cohort_new validates structure", {
-  meta_rats <- data.frame(
-    rat_id = c(101, 102),
-    wes_tumor_id = c("DNA_T1", "DNA_T2"),
-    wes_normal_id = c("DNA_N1", "DNA_N2")
+  manifest <- data.frame(
+    subject_id = c("S1", "S1", "S2", "S2"),
+    species = c("rat", "rat", "rat", "rat"),
+    assay = c("wes", "wes", "wes", "wes"),
+    sample_id = c("DNA_T1", "DNA_N1", "DNA_T2", "DNA_N2"),
+    role = c("tumor", "normal", "tumor", "normal"),
+    stringsAsFactors = FALSE
   )
-  parsed <- validate_manifest(meta_rats)
+  parsed <- validate_manifest(manifest)
 
   cohort <- cohort_new(
     subject_tbl = parsed$subject_tbl,

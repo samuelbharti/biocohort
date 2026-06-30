@@ -8,7 +8,7 @@
 #'  - study: A Study object with metadata for a cross-species genomics project
 #'  - subjects (named list): 4 Subject objects automatically created, accessible by subject_id
 #'  - subject_tbl (tibble): 4 subjects (2 rat, 2 mouse) with species, sex, strain, genotype, cohort, timepoint
-#'  - sample_map (tibble): Subjects mapped to assay sample IDs (WES, snRNA-seq)
+#'  - sample_map (tibble): Long-format map (subject_id, assay, sample_id, role) covering WES tumor/normal and snRNA-seq samples
 #'  - paths (list): Empty, ready for file paths
 #'  - analyses (list): Empty, ready for analysis results
 #'

@@ -33,10 +33,11 @@ Validates that:
 # Create a cohort
 study <- study_new(study_id = "STUDY001", title = "My Study")
 manifest <- data.frame(
-  rat_id = c(101, 102),
-  wes_tumor_id = c("WES_T1", "WES_T2"),
-  wes_normal_id = c("WES_N1", "WES_N2"),
-  sn_id = I(list("RNA_T1", "RNA_T2"))
+  subject_id = c("S1", "S1", "S2", "S2"),
+  species = c("rat", "rat", "rat", "rat"),
+  assay = c("wes", "wes", "wes", "wes"),
+  sample_id = c("WES_T1", "WES_N1", "WES_T2", "WES_N2"),
+  role = c("tumor", "normal", "tumor", "normal")
 )
 parsed <- validate_manifest(manifest)
 cohort <- cohort_new(

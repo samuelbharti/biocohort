@@ -28,9 +28,9 @@ Required columns: \code{subject_id} (character), \code{species} (rat/mouse/human
 Optional columns: \code{sex}, \code{strain}, \code{genotype}, \code{cohort}, \code{timepoint},
 \code{notes}. Validated by \code{\link[=validate_cohort]{validate_cohort()}}.}
 
-\item{sample_map}{A tibble mapping subjects to assay-specific sample IDs.
-Must include \code{subject_id} column for referential integrity.
-Additional columns typically include \code{assay_wes_id}, \code{assay_snrna_id}, etc.
+\item{sample_map}{A canonical long-format tibble mapping subjects to samples,
+one row per sample. Columns: \code{subject_id}, \code{assay}, \code{sample_id}, \code{role}.
+New assays are represented as new rows, never new columns.
 Validated by \code{\link[=validate_cohort]{validate_cohort()}}.}
 
 \item{paths}{Named list of file paths to data files or results directories.

@@ -8,5 +8,5 @@
 }
 
 if (getRversion() >= "2.15.1") {
-  utils::globalVariables(c("rat_id", "subject_id", "n_rna_samples"))
+  utils::globalVariables(c("subject_id"))
 }

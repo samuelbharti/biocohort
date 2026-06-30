@@ -18,9 +18,9 @@ cohort_new(
 \code{sex}, \code{strain}, \code{genotype}, \code{cohort}, \code{timepoint}, \code{notes}. Typically
 obtained from \code{\link[=validate_manifest]{validate_manifest()}}.}
 
-\item{sample_map}{A tibble mapping subjects to assay-specific sample IDs.
+\item{sample_map}{A canonical long-format tibble mapping subjects to samples,
+one row per sample. Columns: \code{subject_id}, \code{assay}, \code{sample_id}, \code{role}.
 Must have at least a \code{subject_id} column to link to \code{subject_tbl}.
-Additional columns can include \code{assay_wes_id}, \code{assay_snrna_id}, etc.
 Typically obtained from \code{\link[=validate_manifest]{validate_manifest()}}.}
 
 \item{study}{A Study object providing project-level metadata and context,
@@ -74,14 +74,14 @@ study <- study_new(
   assays = c("WES", "snRNA-seq")
 )
 
-# Create manifest data
+# Create manifest data (long format: one row per sample)
 manifest <- data.frame(
-  rat_id = c(101, 202),
-  species = c("rat", "mouse"),
-  sex = c("M", "F"),
-  wes_tumor_id = c("WES_T1", "WES_T2"),
-  wes_normal_id = c("WES_N1", "WES_N2"),
-  sn_id = I(list("RNA_T1", "RNA_T2"))
+  subject_id = c("RAT001", "RAT001", "MOUSE1", "MOUSE1"),
+  species = c("rat", "rat", "mouse", "mouse"),
+  sex = c("M", "M", "F", "F"),
+  assay = c("wes", "scrna", "wes", "atac"),
+  sample_id = c("WES_T1", "RNA_1", "WES_T2", "ATAC_1"),
+  role = c("tumor", "tumor", "tumor", NA)
 )
 
 # Validate and create cohort
@@ -94,7 +94,7 @@ cohort <- cohort_new(
 print(cohort)
 
 # Access individual Subject objects (automatically created)
-rat_subject <- cohort@subjects[["101"]]
+rat_subject <- cohort@subjects[["RAT001"]]
 print(rat_subject)
 
 }

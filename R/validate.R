@@ -55,7 +55,9 @@ validate_species <- function(species) {
 #' )
 #' samples <- data.frame(
 #'   subject_id = "RAT001",
-#'   assay_wes_id = "WES_R001"
+#'   assay = "wes",
+#'   sample_id = "WES_R001",
+#'   role = "tumor"
 #' )
 #' cohort <- cohort_new(
 #'   subject_tbl = subjects,
