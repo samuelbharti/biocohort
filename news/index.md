@@ -17,6 +17,17 @@
   - `AnalysisSpec` gains optional `feature_type`
     (`"interval"`/`"gene"`), `gene_col`, and `id_type` fields that drive
     cohort-level auto-dispatch.
+  - [`load_analysis()`](http://www.samuelbharti.com/myceliumr/reference/load_analysis.md)
+    /
+    [`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md)
+    — read analysis feature tables from disk by resolving each
+    `AnalysisSpec`’s `path_template` (`{root}`, `{subject_id}`,
+    `{pair_id}`, …) per `level`, via the spec’s `reader`. Missing files
+    are reported, not silently skipped; manifests are retrievable with
+    [`analysis_files()`](http://www.samuelbharti.com/myceliumr/reference/analysis_files.md).
+    This takes a cohort from *paths* to *loaded feature tables*, ready
+    for
+    [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md).
   - [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)
     — gene-level cross-species mapping returning a `TranslationResult`;
     pluggable backends via

@@ -167,6 +167,17 @@ Work with the sample map
 - [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
   : Derive sample pairs from a sample map
 
+## Analysis loading
+
+Read analysis feature tables from disk (experimental)
+
+- [`load_analysis()`](http://www.samuelbharti.com/myceliumr/reference/load_analysis.md)
+  : Load an analysis's feature table from disk
+- [`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md)
+  : Load registered analyses into a cohort from disk
+- [`analysis_files()`](http://www.samuelbharti.com/myceliumr/reference/analysis_files.md)
+  : Retrieve analysis file manifests from a cohort
+
 ## Cross-species translation
 
 Translate features across assemblies and species (experimental)

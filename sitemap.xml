@@ -14,6 +14,7 @@
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/Study.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/Subject.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/TranslationResult.html</loc></url>
+<url><loc>http://www.samuelbharti.com/myceliumr/reference/analysis_files.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/analysis_list.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/analysis_register.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/analysis_spec.html</loc></url>
@@ -26,6 +27,8 @@
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/liftover_rtracklayer.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.html</loc></url>
+<url><loc>http://www.samuelbharti.com/myceliumr/reference/load_analyses.html</loc></url>
+<url><loc>http://www.samuelbharti.com/myceliumr/reference/load_analysis.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/myceliumr-package.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/ortholog_babelgene.html</loc></url>
 <url><loc>http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.html</loc></url>
