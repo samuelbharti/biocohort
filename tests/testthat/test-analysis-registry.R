@@ -198,8 +198,8 @@ test_that("analysis_register supports multiple specs", {
     key_cols = c("subject_id")
   )
 
-  cohort <- cohort %>%
-    analysis_register(spec1) %>%
+  cohort <- cohort |>
+    analysis_register(spec1) |>
     analysis_register(spec2)
 
   expect_length(cohort@registry, 2)
@@ -293,8 +293,8 @@ test_that("analysis_list handles multiple specs", {
     key_cols = c("subject_id")
   )
 
-  cohort <- cohort %>%
-    analysis_register(spec1) %>%
+  cohort <- cohort |>
+    analysis_register(spec1) |>
     analysis_register(spec2)
 
   result <- analysis_list(cohort)
@@ -389,8 +389,8 @@ test_that("analysis_spec shows available specs in error message", {
     key_cols = c("subject_id")
   )
 
-  cohort <- cohort %>%
-    analysis_register(spec1) %>%
+  cohort <- cohort |>
+    analysis_register(spec1) |>
     analysis_register(spec2)
 
   expect_error(

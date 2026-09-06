@@ -109,11 +109,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Samuel Bharti \email{samuelbharti.io@gmail.com}
+\strong{Maintainer}: Samuel Bharti \email{samuelbharti.io@gmail.com} (\href{https://orcid.org/0000-0003-4190-7058}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
-  \item Samuel Bharti \email{samuelbharti.io@gmail.com}
+  \item Samuel Bharti \email{samuelbharti.io@gmail.com} (\href{https://orcid.org/0000-0003-4190-7058}{ORCID}) [copyright holder]
 }
 
 }
