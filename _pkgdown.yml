@@ -98,3 +98,10 @@ reference:
   - translation_report
   - TranslationResult
   - translation_stats
+- title: Project paths
+  desc: Find the project root, build paths under it, and read a dotenv file
+  contents:
+  - project_root
+  - project_path
+  - ensure_dir
+  - read_dotenv
