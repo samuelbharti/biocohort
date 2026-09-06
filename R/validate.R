@@ -119,7 +119,9 @@ validate_cohort <- function(x) {
     )
   }
 
-  bad_species <- unique(subject_tbl$species[!tolower(subject_tbl$species) %in% .allowed_species])
+  bad_species <- unique(subject_tbl$species[
+    !tolower(subject_tbl$species) %in% .allowed_species
+  ])
   if (length(bad_species) > 0) {
     cli::cli_abort(
       c(

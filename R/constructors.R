@@ -87,9 +87,14 @@ study_new <- function(
   if (!is.na(description) && nchar(description) > 0) {
     if (grepl("\\.(md|txt|rtf)$", description, ignore.case = TRUE)) {
       if (file.exists(description)) {
-        description <- paste(readLines(description, warn = FALSE), collapse = "\n")
+        description <- paste(
+          readLines(description, warn = FALSE),
+          collapse = "\n"
+        )
       } else {
-        cli::cli_warn("Description file not found: {description}. Using as plain text.")
+        cli::cli_warn(
+          "Description file not found: {description}. Using as plain text."
+        )
       }
     }
   }
@@ -291,9 +296,17 @@ cohort_new <- function(
         species = row$species,
         sex = if ("sex" %in% names(row)) row$sex else NA_character_,
         strain = if ("strain" %in% names(row)) row$strain else NA_character_,
-        genotype = if ("genotype" %in% names(row)) row$genotype else NA_character_,
+        genotype = if ("genotype" %in% names(row)) {
+          row$genotype
+        } else {
+          NA_character_
+        },
         cohort = if ("cohort" %in% names(row)) row$cohort else NA_character_,
-        timepoint = if ("timepoint" %in% names(row)) row$timepoint else NA_character_,
+        timepoint = if ("timepoint" %in% names(row)) {
+          row$timepoint
+        } else {
+          NA_character_
+        },
         notes = if ("notes" %in% names(row)) row$notes else NA_character_
       )
       subjects[[row$subject_id]] <- subject_obj

@@ -35,7 +35,9 @@ NULL
 .render_path <- function(template, tokens, analysis = NA_character_) {
   for (k in names(tokens)) {
     template <- gsub(
-      paste0("{", k, "}"), as.character(tokens[[k]]), template,
+      paste0("{", k, "}"),
+      as.character(tokens[[k]]),
+      template,
       fixed = TRUE
     )
   }
@@ -77,12 +79,15 @@ NULL
       p <- pairs[i, ]
       list(
         keys = list(subject_id = p$subject_id, pair_id = p$pair_id),
-        tokens = c(base_tokens, list(
-          subject_id = p$subject_id,
-          tumor_sample_id = p$tumor_sample_id,
-          normal_sample_id = p$normal_sample_id,
-          pair_id = p$pair_id
-        ))
+        tokens = c(
+          base_tokens,
+          list(
+            subject_id = p$subject_id,
+            tumor_sample_id = p$tumor_sample_id,
+            normal_sample_id = p$normal_sample_id,
+            pair_id = p$pair_id
+          )
+        )
       )
     })
   }
@@ -150,7 +155,9 @@ load_analysis <- function(cohort, spec, reader = NULL) {
     spec <- analysis_spec(cohort, spec)
   }
   if (!S7::S7_inherits(spec, AnalysisSpec)) {
-    cli::cli_abort("`spec` must be an AnalysisSpec object or a registered name.")
+    cli::cli_abort(
+      "`spec` must be an AnalysisSpec object or a registered name."
+    )
   }
   if (is.na(spec@path_template)) {
     cli::cli_abort("Analysis {.val {spec@name}} has no {.field path_template}.")

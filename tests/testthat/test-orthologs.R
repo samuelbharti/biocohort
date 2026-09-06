@@ -26,7 +26,9 @@ test_that("ortholog_genes accounts for mapped/unmapped/multi via backend", {
   )
   res <- ortholog_genes(
     feats,
-    from = "rat", to = "human", backend = mock_ortho_backend
+    from = "rat",
+    to = "human",
+    backend = mock_ortho_backend
   )
 
   expect_true(S7::S7_inherits(res, TranslationResult))
@@ -41,7 +43,12 @@ test_that("ortholog_genes accounts for mapped/unmapped/multi via backend", {
 test_that("ortholog backend registry resolves names and rejects unknowns", {
   expect_true("babelgene" %in% ortholog_backends())
   expect_error(
-    ortholog_genes(data.frame(gene = "A"), from = "h", to = "m", backend = "nope"),
+    ortholog_genes(
+      data.frame(gene = "A"),
+      from = "h",
+      to = "m",
+      backend = "nope"
+    ),
     "Unknown ortholog backend"
   )
 })

@@ -9,8 +9,10 @@ A Cohort object (S7 class) with the following structure:
 \itemize{
 \item study: A Study object with metadata for a cross-species genomics project
 \item subjects (named list): 4 Subject objects automatically created, accessible by subject_id
-\item subject_tbl (tibble): 4 subjects (2 rat, 2 mouse) with species, sex, strain, genotype, cohort, timepoint
-\item sample_map (tibble): Long-format map (subject_id, assay, sample_id, role) covering WES tumor/normal and snRNA-seq samples
+\item subject_tbl (tibble): 4 subjects (2 rat, 2 mouse) with species, sex,
+strain, genotype, cohort, timepoint
+\item sample_map (tibble): Long-format map (subject_id, assay, sample_id,
+role) covering WES tumor/normal and snRNA-seq samples
 \item paths (list): Empty, ready for file paths
 \item analyses (list): Empty, ready for analysis results
 }

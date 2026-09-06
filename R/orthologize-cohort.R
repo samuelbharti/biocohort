@@ -63,12 +63,16 @@ NULL
       }
       liftover_intervals(
         feat,
-        chain = chain, from = from, to = to, backend = liftover_backend
+        chain = chain,
+        from = from,
+        to = to,
+        backend = liftover_backend
       )
     } else if (ft == "gene") {
       ortholog_genes(
         feat,
-        from = from, to = to,
+        from = from,
+        to = to,
         gene_col = .na_or(spec@gene_col, "gene"),
         id_type = .na_or(spec@id_type, "symbol"),
         backend = ortholog_backend

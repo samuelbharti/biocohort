@@ -52,7 +52,10 @@ test_that("liftover_intervals accounts for mapped/unmapped/multi via backend", {
 test_that("printing a TranslationResult works and is informative", {
   res <- liftover_intervals(
     make_intervals(4),
-    chain = "none", from = "rat", to = "human", backend = mock_backend
+    chain = "none",
+    from = "rat",
+    to = "human",
+    backend = mock_backend
   )
   expect_no_error(print(res))
   expect_identical(print(res), res)
@@ -62,7 +65,9 @@ test_that("printing a TranslationResult works and is informative", {
 
 test_that("translation_stats summarizes a result", {
   res <- liftover_intervals(
-    make_intervals(4), chain = "none", backend = mock_backend
+    make_intervals(4),
+    chain = "none",
+    backend = mock_backend
   )
   st <- translation_stats(res)
   expect_equal(st$n_input, 4)
@@ -126,7 +131,10 @@ test_that("liftover_rtracklayer maps in-block and drops out-of-block", {
   )
 
   res <- liftover_intervals(
-    ints, chain = chain, to = "target", backend = "rtracklayer"
+    ints,
+    chain = chain,
+    to = "target",
+    backend = "rtracklayer"
   )
 
   expect_equal(res@stats$n_mapped, 1)

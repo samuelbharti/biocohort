@@ -100,7 +100,9 @@ validate_manifest <- function(manifest, allow_duplicates = FALSE) {
   }
 
   incomplete <- which(
-    is.na(manifest$subject_id) | is.na(manifest$assay) | is.na(manifest$sample_id)
+    is.na(manifest$subject_id) |
+      is.na(manifest$assay) |
+      is.na(manifest$sample_id)
   )
   if (length(incomplete) > 0) {
     cli::cli_abort(
@@ -144,7 +146,12 @@ validate_manifest <- function(manifest, allow_duplicates = FALSE) {
 
   if (!allow_duplicates) {
     dups <- sample_map %>%
-      dplyr::count(.data$subject_id, .data$assay, .data$sample_id, name = "n") %>%
+      dplyr::count(
+        .data$subject_id,
+        .data$assay,
+        .data$sample_id,
+        name = "n"
+      ) %>%
       dplyr::filter(.data$n > 1)
     if (nrow(dups) > 0) {
       cli::cli_abort(

@@ -30,7 +30,9 @@ make_cohort <- function(analyses = NULL) {
   if (is.null(analyses)) {
     analyses <- list(
       somatic = data.frame(
-        seqnames = "chr1", start = c(100, 5000), end = c(200, 5100)
+        seqnames = "chr1",
+        start = c(100, 5000),
+        end = c(200, 5100)
       ),
       expr = data.frame(gene = c("TP53", "MYC"), value = c(1, 2))
     )
@@ -41,13 +43,24 @@ make_cohort <- function(analyses = NULL) {
     analyses = analyses
   )
   spec_i <- analysis_spec_new(
-    name = "somatic", assay = "wes", level = "pair", format = "tsv",
-    reader = "read_tsv", key_cols = "pair_id", feature_type = "interval"
+    name = "somatic",
+    assay = "wes",
+    level = "pair",
+    format = "tsv",
+    reader = "read_tsv",
+    key_cols = "pair_id",
+    feature_type = "interval"
   )
   spec_g <- analysis_spec_new(
-    name = "expr", assay = "rna", level = "subject", format = "rds",
-    reader = "readRDS", key_cols = "subject_id",
-    feature_type = "gene", gene_col = "gene", id_type = "symbol"
+    name = "expr",
+    assay = "rna",
+    level = "subject",
+    format = "rds",
+    reader = "readRDS",
+    key_cols = "subject_id",
+    feature_type = "gene",
+    gene_col = "gene",
+    id_type = "symbol"
   )
   coh <- analysis_register(coh, spec_i)
   coh <- analysis_register(coh, spec_g)
@@ -57,15 +70,26 @@ make_cohort <- function(analyses = NULL) {
 test_that("analysis_spec_new validates feature_type and id_type", {
   expect_error(
     analysis_spec_new(
-      name = "a", assay = "wes", level = "pair", format = "tsv",
-      reader = "r", key_cols = "k", feature_type = "bogus"
+      name = "a",
+      assay = "wes",
+      level = "pair",
+      format = "tsv",
+      reader = "r",
+      key_cols = "k",
+      feature_type = "bogus"
     ),
     "feature_type"
   )
   expect_error(
     analysis_spec_new(
-      name = "a", assay = "rna", level = "subject", format = "rds",
-      reader = "r", key_cols = "k", feature_type = "gene", id_type = "nope"
+      name = "a",
+      assay = "rna",
+      level = "subject",
+      format = "rds",
+      reader = "r",
+      key_cols = "k",
+      feature_type = "gene",
+      id_type = "nope"
     ),
     "id_type"
   )
@@ -75,8 +99,11 @@ test_that("orthologize(cohort) translates each analysis per its spec", {
   coh <- make_cohort()
   out <- orthologize(
     coh,
-    to = "human", from = "rat", chain = "none",
-    liftover_backend = lift_mock, ortholog_backend = gene_mock
+    to = "human",
+    from = "rat",
+    chain = "none",
+    liftover_backend = lift_mock,
+    ortholog_backend = gene_mock
   )
 
   expect_true(S7::S7_inherits(out, Cohort))
@@ -94,8 +121,11 @@ test_that("translation_report exposes per-analysis results", {
   coh <- make_cohort()
   out <- orthologize(
     coh,
-    to = "human", from = "rat", chain = "none",
-    liftover_backend = lift_mock, ortholog_backend = gene_mock
+    to = "human",
+    from = "rat",
+    chain = "none",
+    liftover_backend = lift_mock,
+    ortholog_backend = gene_mock
   )
   rep <- translation_report(out)
   expect_equal(rep$to, "human")
@@ -113,7 +143,8 @@ test_that("orthologize(cohort) requires a chain for interval analyses", {
   expect_error(
     orthologize(
       make_cohort(),
-      to = "human", from = "rat",
+      to = "human",
+      from = "rat",
       ortholog_backend = gene_mock
     ),
     "chain.*is required to translate interval"
@@ -124,8 +155,10 @@ test_that("orthologize(cohort) can restrict to specific analyses", {
   coh <- make_cohort()
   out <- orthologize(
     coh,
-    to = "human", from = "rat",
-    analyses = "expr", ortholog_backend = gene_mock
+    to = "human",
+    from = "rat",
+    analyses = "expr",
+    ortholog_backend = gene_mock
   )
   rep <- translation_report(out)
   expect_equal(names(rep$results), "expr")
@@ -134,18 +167,22 @@ test_that("orthologize(cohort) can restrict to specific analyses", {
 })
 
 test_that("orthologize(cohort) skips analyses without a spec, with a warning", {
-  coh <- make_cohort(analyses = list(
-    expr = data.frame(gene = c("TP53", "MYC")),
-    mystery = data.frame(x = 1:2)
-  ))
+  coh <- make_cohort(
+    analyses = list(
+      expr = data.frame(gene = c("TP53", "MYC")),
+      mystery = data.frame(x = 1:2)
+    )
+  )
   # Two warnings fire: the per-analysis skip, then the "nothing translated"
   # summary. Both are expected.
   expect_warning(
     expect_warning(
       orthologize(
         coh,
-        to = "human", from = "rat",
-        analyses = "mystery", ortholog_backend = gene_mock
+        to = "human",
+        from = "rat",
+        analyses = "mystery",
+        ortholog_backend = gene_mock
       ),
       "No registered spec"
     ),

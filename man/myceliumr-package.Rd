@@ -46,31 +46,31 @@ supported by using a consistent label in the \code{assay} column, for example:
 
 \strong{Constructors:}
 \itemize{
-\item \code{\link[=study_new]{study_new()}} — Create a Study object
-\item \code{\link[=subject_new]{subject_new()}} — Create a Subject object
-\item \code{\link[=cohort_new]{cohort_new()}} — Create a Cohort object
+\item \code{\link[=study_new]{study_new()}}: Create a Study object
+\item \code{\link[=subject_new]{subject_new()}}: Create a Subject object
+\item \code{\link[=cohort_new]{cohort_new()}}: Create a Cohort object
 }
 
 \strong{IO:}
 \itemize{
-\item \code{\link[=read_manifest_csv]{read_manifest_csv()}} — Read and validate manifest CSV
-\item \code{\link[=validate_manifest]{validate_manifest()}} — Validate and structure manifest data
+\item \code{\link[=read_manifest_csv]{read_manifest_csv()}}: Read and validate manifest CSV
+\item \code{\link[=validate_manifest]{validate_manifest()}}: Validate and structure manifest data
 }
 
 \strong{Samples:}
 \itemize{
-\item \code{\link[=sample_pairs]{sample_pairs()}} — Derive tumor/normal sample pairs from a sample map
+\item \code{\link[=sample_pairs]{sample_pairs()}}: Derive tumor/normal sample pairs from a sample map
 }
 
 \strong{Validation:}
 \itemize{
-\item \code{\link[=validate_cohort]{validate_cohort()}} — Validate a Cohort object
+\item \code{\link[=validate_cohort]{validate_cohort()}}: Validate a Cohort object
 }
 
 \strong{Registry:}
 \itemize{
-\item \code{\link[=analysis_register]{analysis_register()}} — Register an analysis in the cohort registry
-\item \code{\link[=analysis_spec_new]{analysis_spec_new()}} — Create an AnalysisSpec
+\item \code{\link[=analysis_register]{analysis_register()}}: Register an analysis in the cohort registry
+\item \code{\link[=analysis_spec_new]{analysis_spec_new()}}: Create an AnalysisSpec
 }
 }
 

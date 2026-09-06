@@ -12,7 +12,10 @@ study <- study_new(
     "Orthologous genes show conserved expression patterns",
     "Species-specific variants drive phenotypic differences"
   ),
-  aims = c("Map rat genes to mouse orthologs", "Identify conserved regulatory regions"),
+  aims = c(
+    "Map rat genes to mouse orthologs",
+    "Identify conserved regulatory regions"
+  ),
   assays = c("WES", "snRNA-seq"),
   genome_builds = list(rat = "rn7", mouse = "mm10", human = "hg38")
 )
@@ -31,19 +34,19 @@ subjects <- tibble::tibble(
 )
 
 samples <- tibble::tribble(
-  ~subject_id, ~assay,  ~sample_id,    ~role,
-  "RAT001",    "wes",   "WES_R001_T",  "tumor",
-  "RAT001",    "wes",   "WES_R001_N",  "normal",
-  "RAT001",    "scrna", "SNRNA_R001",  "tumor",
-  "RAT002",    "wes",   "WES_R002_T",  "tumor",
-  "RAT002",    "wes",   "WES_R002_N",  "normal",
-  "RAT002",    "scrna", "SNRNA_R002",  "tumor",
-  "MOUSE001",  "wes",   "WES_M001_T",  "tumor",
-  "MOUSE001",  "wes",   "WES_M001_N",  "normal",
-  "MOUSE001",  "scrna", "SNRNA_M001",  "tumor",
-  "MOUSE002",  "wes",   "WES_M002_T",  "tumor",
-  "MOUSE002",  "wes",   "WES_M002_N",  "normal",
-  "MOUSE002",  "scrna", "SNRNA_M002",  "tumor"
+  ~subject_id , ~assay  , ~sample_id   , ~role    ,
+  "RAT001"    , "wes"   , "WES_R001_T" , "tumor"  ,
+  "RAT001"    , "wes"   , "WES_R001_N" , "normal" ,
+  "RAT001"    , "scrna" , "SNRNA_R001" , "tumor"  ,
+  "RAT002"    , "wes"   , "WES_R002_T" , "tumor"  ,
+  "RAT002"    , "wes"   , "WES_R002_N" , "normal" ,
+  "RAT002"    , "scrna" , "SNRNA_R002" , "tumor"  ,
+  "MOUSE001"  , "wes"   , "WES_M001_T" , "tumor"  ,
+  "MOUSE001"  , "wes"   , "WES_M001_N" , "normal" ,
+  "MOUSE001"  , "scrna" , "SNRNA_M001" , "tumor"  ,
+  "MOUSE002"  , "wes"   , "WES_M002_T" , "tumor"  ,
+  "MOUSE002"  , "wes"   , "WES_M002_N" , "normal" ,
+  "MOUSE002"  , "scrna" , "SNRNA_M002" , "tumor"
 )
 
 manifest_df <- dplyr::left_join(samples, subjects, by = "subject_id")

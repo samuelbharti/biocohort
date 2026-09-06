@@ -4,7 +4,7 @@
 
 - **Cross-species translation (experimental)**: first-class coordinate
   translation across assemblies and species.
-  - `orthologize()` — modality-dispatching front door routing coordinate
+  - `orthologize()`: modality-dispatching front door routing coordinate
     features to liftover and gene features to ortholog mapping. Given a
     `Cohort`, it translates every registered analysis according to its
     `AnalysisSpec` `feature_type` and returns a new, target-species cohort
@@ -12,18 +12,18 @@
     unmapped features, are retrievable with `translation_report()`.
   - `AnalysisSpec` gains optional `feature_type` (`"interval"`/`"gene"`),
     `gene_col`, and `id_type` fields that drive cohort-level auto-dispatch.
-  - `load_analysis()` / `load_analyses()` — read analysis feature tables from
+  - `load_analysis()` / `load_analyses()`: read analysis feature tables from
     disk by resolving each `AnalysisSpec`'s `path_template` (`{root}`,
     `{subject_id}`, `{pair_id}`, ...) per `level`, via the spec's `reader`.
     Missing files are reported, not silently skipped; manifests are retrievable
     with `analysis_files()`. This takes a cohort from *paths* to *loaded feature
     tables*, ready for `orthologize()`.
-  - `ortholog_genes()` — gene-level cross-species mapping returning a
+  - `ortholog_genes()`: gene-level cross-species mapping returning a
     `TranslationResult`; pluggable backends via `register_ortholog_backend()` /
     `ortholog_backends()`, with an offline `babelgene` default
     (`ortholog_babelgene()`). Model-to-model pairs (e.g. rat-to-mouse) are
     pivoted through human.
-  - `liftover_intervals()` — translate intervals (variants, peaks, regions) via
+  - `liftover_intervals()`: translate intervals (variants, peaks, regions) via
     a chain file, returning a `TranslationResult` that retains both mapped and
     **unmapped** features so loss is never silent.
   - Pluggable backends via `register_liftover_backend()` / `liftover_backends()`:
