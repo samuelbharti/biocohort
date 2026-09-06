@@ -152,8 +152,18 @@ Read parts of a cohort
 
 Read and write data
 
+- [`read_manifest()`](https://www.samuelbharti.com/bioroster/reference/read_manifest.md)
+  : Read and validate a long-format manifest file
 - [`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md)
   : Read and validate a long-format manifest CSV file
+- [`manifest_from_wide()`](https://www.samuelbharti.com/bioroster/reference/manifest_from_wide.md)
+  : Reshape a wide sample table into a long-format manifest
+- [`write_manifest()`](https://www.samuelbharti.com/bioroster/reference/write_manifest.md)
+  : Write a manifest or a cohort's tables to a delimited file
+- [`cohort_save()`](https://www.samuelbharti.com/bioroster/reference/cohort_save.md)
+  : Save a cohort to an RDS file
+- [`cohort_read()`](https://www.samuelbharti.com/bioroster/reference/cohort_read.md)
+  : Read a cohort saved with cohort_save()
 
 ## Analysis Registry
 

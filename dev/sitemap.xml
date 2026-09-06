@@ -26,6 +26,8 @@
 <url><loc>https://www.samuelbharti.com/bioroster/reference/cohort-subject.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/cohort_filter.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/cohort_new.html</loc></url>
+<url><loc>https://www.samuelbharti.com/bioroster/reference/cohort_read.html</loc></url>
+<url><loc>https://www.samuelbharti.com/bioroster/reference/cohort_save.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/completeness.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/corrections_log.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/ensure_dir.html</loc></url>
@@ -38,6 +40,7 @@
 <url><loc>https://www.samuelbharti.com/bioroster/reference/liftover_vcf.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/load_analyses.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/load_analysis.html</loc></url>
+<url><loc>https://www.samuelbharti.com/bioroster/reference/manifest_from_wide.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/ortholog_babelgene.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/ortholog_backends.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/ortholog_genes.html</loc></url>
@@ -46,6 +49,7 @@
 <url><loc>https://www.samuelbharti.com/bioroster/reference/project_root.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/read_corrections.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/read_dotenv.html</loc></url>
+<url><loc>https://www.samuelbharti.com/bioroster/reference/read_manifest.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/register_liftover_backend.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/register_ortholog_backend.html</loc></url>
@@ -58,5 +62,6 @@
 <url><loc>https://www.samuelbharti.com/bioroster/reference/translation_stats.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/validate_cohort.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/validate_manifest.html</loc></url>
+<url><loc>https://www.samuelbharti.com/bioroster/reference/write_manifest.html</loc></url>
 </urlset>
 
