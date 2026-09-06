@@ -322,3 +322,70 @@ test_that("validate_manifest names duplicate sample ids, not only a count", {
   err <- expect_error(validate_manifest(manifest), "duplicate samples")
   expect_match(conditionMessage(err), "T1", fixed = TRUE)
 })
+
+test_that("validate_manifest keeps a recognized sample-level column without declaring it", {
+  manifest <- data.frame(
+    subject_id = c("S1", "S1"),
+    assay = "wes",
+    sample_id = c("T1", "N1"),
+    role = c("tumor", "normal"),
+    fastq_1 = c("t1_R1.fq.gz", "n1_R1.fq.gz"),
+    fastq_2 = c("t1_R2.fq.gz", "n1_R2.fq.gz"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- validate_manifest(manifest)
+
+  expect_true(all(c("fastq_1", "fastq_2") %in% names(result$sample_map)))
+  expect_false(any(c("fastq_1", "fastq_2") %in% names(result$subject_tbl)))
+  expect_equal(result$sample_map$fastq_1, c("t1_R1.fq.gz", "n1_R1.fq.gz"))
+})
+
+test_that("validate_manifest keeps a user column at the sample level via sample_cols", {
+  manifest <- data.frame(
+    subject_id = c("S1", "S1"),
+    assay = "wes",
+    sample_id = c("T1", "N1"),
+    lane_note = c("lane 1", "lane 2"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- validate_manifest(manifest, sample_cols = "lane_note")
+
+  expect_true("lane_note" %in% names(result$sample_map))
+  expect_false("lane_note" %in% names(result$subject_tbl))
+})
+
+test_that("validate_manifest errors with a hint when an undeclared column varies per sample", {
+  manifest <- data.frame(
+    subject_id = c("S1", "S1"),
+    assay = "wes",
+    sample_id = c("T1", "N1"),
+    lane_note = c("lane 1", "lane 2"),
+    stringsAsFactors = FALSE
+  )
+
+  err <- expect_error(
+    validate_manifest(manifest),
+    "conflicting subject-level metadata"
+  )
+  expect_match(conditionMessage(err), "lane_note", fixed = TRUE)
+  expect_match(conditionMessage(err), "sample_cols", fixed = TRUE)
+})
+
+test_that("validate_manifest puts sample_map key columns before extra ones", {
+  manifest <- data.frame(
+    subject_id = "S1",
+    fastq_1 = "t1_R1.fq.gz",
+    assay = "wes",
+    sample_id = "T1",
+    stringsAsFactors = FALSE
+  )
+
+  result <- validate_manifest(manifest)
+
+  expect_equal(
+    names(result$sample_map),
+    c("subject_id", "assay", "sample_id", "role", "fastq_1")
+  )
+})

@@ -24,6 +24,35 @@
   x
 }
 
+# The manifest columns that are always sample-level (subject_id is also
+# sample-level, as the foreign key into subject_tbl, but is handled
+# separately because it is also the key subject_tbl is built from).
+.manifest_key_cols <- c("assay", "sample_id", "role")
+
+# Sample-level columns validate_manifest() recognizes by name, so a manifest
+# with a fastq_1 or replicate column keeps it in sample_map instead of the
+# column tripping the subject-level conflict check. Declare any other
+# varying column with the `sample_cols` argument.
+.known_sample_cols <- c(
+  "specimen_id",
+  "library_id",
+  "vendor_id",
+  "replicate",
+  "lane",
+  "run",
+  "flowcell",
+  "strandedness",
+  "fastq_1",
+  "fastq_2",
+  "bam",
+  "cram",
+  "vcf",
+  "matrix_dir",
+  "h5",
+  "qc_status",
+  "qc_reason"
+)
+
 # Show at most `n` ids in a message.
 .head_ids <- function(x, n = 5) {
   if (length(x) > n) {

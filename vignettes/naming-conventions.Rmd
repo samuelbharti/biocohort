@@ -44,6 +44,12 @@ never new columns or per-assay tables.
 | `sample_id` | character | Unique sample identifier. |
 | `role` | character | Sample role within its assay, e.g. `"tumor"`, `"normal"`, or `NA` when not applicable. |
 
+Other sample-level columns (e.g. `fastq_1`, `fastq_2`, `bam`, `lane`,
+`replicate`, `qc_status`) stay in `sample_map` when their name is one
+`validate_manifest()` recognizes, or when passed in its `sample_cols`
+argument. A column that varies within a subject but is not recognized or
+declared trips the subject-level conflict check instead.
+
 ### Completeness Summary Columns (`completeness_tbl`)
 
 | Column | Type | Description |
