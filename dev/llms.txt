@@ -192,6 +192,17 @@ Work with the sample map
 - [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
   : Derive sample pairs from a sample map
 
+## Pipeline sample sheets
+
+Write the sample sheet a pipeline expects, and check its file paths
+
+- [`sample_sheet()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet.md)
+  : Write a pipeline sample sheet from a cohort
+- [`sample_sheet_templates()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet_templates.md)
+  : List the built-in sample sheet templates
+- [`check_paths()`](https://www.samuelbharti.com/bioroster/reference/check_paths.md)
+  : Check that a cohort's file paths exist on disk
+
 ## Analysis loading
 
 Read analysis feature tables from disk (experimental)
