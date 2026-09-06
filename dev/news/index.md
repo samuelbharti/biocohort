@@ -1,6 +1,6 @@
 # Changelog
 
-## bioroster (development version)
+## bioroster 0.1.0.9000
 
 The package is not released. The version restarts at 0.1.0.9000 while
 the API settles. Earlier drafts carried the numbers 0.1.0 to 0.3.0 under

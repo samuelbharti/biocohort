@@ -33,14 +33,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="bioroster-development-version">bioroster (development version)<a class="anchor" aria-label="anchor" href="#bioroster-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9000" id="bioroster-0109000">bioroster 0.1.0.9000<a class="anchor" aria-label="anchor" href="#bioroster-0109000"></a></h2>
 <p>The package is not released. The version restarts at 0.1.0.9000 while the API settles. Earlier drafts carried the numbers 0.1.0 to 0.3.0 under the name myceliumr and were never tagged.</p>
 <div class="section level3">
-<h3 id="name-development-version">Name<a class="anchor" aria-label="anchor" href="#name-development-version"></a></h3>
+<h3 id="name-0-1-0-9000">Name<a class="anchor" aria-label="anchor" href="#name-0-1-0-9000"></a></h3>
 <ul><li>The package is renamed from myceliumr to bioroster. The repository, the documentation site, and the S7 class prefix change with it.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="data-model-development-version">Data model<a class="anchor" aria-label="anchor" href="#data-model-development-version"></a></h3>
+<h3 id="data-model-0-1-0-9000">Data model<a class="anchor" aria-label="anchor" href="#data-model-0-1-0-9000"></a></h3>
 <ul><li>S7 classes <code>Study</code>, <code>Subject</code>, <code>Cohort</code>, and <code>AnalysisSpec</code>, built with <code><a href="../reference/study_new.html">study_new()</a></code>, <code><a href="../reference/subject_new.html">subject_new()</a></code>, <code><a href="../reference/cohort_new.html">cohort_new()</a></code>, and <code><a href="../reference/analysis_spec_new.html">analysis_spec_new()</a></code>.</li>
 <li>
 <code><a href="../reference/validate_manifest.html">validate_manifest()</a></code> takes one long-format manifest (one row per sample, required columns <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>, optional <code>role</code> plus subject-level columns) and returns <code>subject_tbl</code>, <code>sample_map</code>, and <code>completeness_tbl</code>. Species and assays are values, never columns.</li>
@@ -54,14 +54,14 @@
 <code>example_cohort</code> ships as a small demonstration dataset.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="analysis-registry-and-loading-development-version">Analysis registry and loading<a class="anchor" aria-label="anchor" href="#analysis-registry-and-loading-development-version"></a></h3>
+<h3 id="analysis-registry-and-loading-0-1-0-9000">Analysis registry and loading<a class="anchor" aria-label="anchor" href="#analysis-registry-and-loading-0-1-0-9000"></a></h3>
 <ul><li>
 <code><a href="../reference/analysis_register.html">analysis_register()</a></code>, <code><a href="../reference/analysis_list.html">analysis_list()</a></code>, and <code><a href="../reference/analysis_spec.html">analysis_spec()</a></code> manage <code>AnalysisSpec</code> entries in a cohort.</li>
 <li>
 <code><a href="../reference/load_analysis.html">load_analysis()</a></code> and <code><a href="../reference/load_analyses.html">load_analyses()</a></code> resolve a spec’s <code>path_template</code> per subject, per pair, or per cohort, read the files with the spec’s reader, and record which files were found. <code><a href="../reference/analysis_files.html">analysis_files()</a></code> returns that record.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="cross-species-translation-experimental-development-version">Cross-species translation (experimental)<a class="anchor" aria-label="anchor" href="#cross-species-translation-experimental-development-version"></a></h3>
+<h3 id="cross-species-translation-experimental-0-1-0-9000">Cross-species translation (experimental)<a class="anchor" aria-label="anchor" href="#cross-species-translation-experimental-0-1-0-9000"></a></h3>
 <ul><li>
 <code><a href="../reference/orthologize.html">orthologize()</a></code> dispatches coordinate features to liftover and gene features to ortholog mapping, for a feature table or for a whole cohort. <code><a href="../reference/translation_report.html">translation_report()</a></code> returns the per-analysis results.</li>
 <li>
@@ -72,7 +72,7 @@
 <code>TranslationResult</code> keeps mapped and unmapped features. <code><a href="../reference/translation_stats.html">translation_stats()</a></code> summarizes them.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="internal-development-version">Internal<a class="anchor" aria-label="anchor" href="#internal-development-version"></a></h3>
+<h3 id="internal-0-1-0-9000">Internal<a class="anchor" aria-label="anchor" href="#internal-0-1-0-9000"></a></h3>
 <ul><li>Formatting with air, hooks with prek, lintr config, and CI on pull requests into <code>dev</code> and <code>main</code>.</li>
 </ul></div>
 </div>
