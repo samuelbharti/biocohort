@@ -1,7 +1,7 @@
 # myceliumr
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/samuelbharti/myceliumr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/samuelbharti/myceliumr/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/samuelbharti/myceliumr/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/myceliumr/actions/workflows/r.yml)
 <!-- badges: end -->
 
 A lightweight R package for managing cross-species cohort data (rat/mouse/human) with manifest validation and standardized storage for WES and snRNA-seq outputs.
@@ -68,9 +68,9 @@ See [package documentation](http://www.samuelbharti.com/myceliumr/) for details.
 ## Documentation
 
 The package website includes:
-- **[Glossary](http://www.samuelbharti.com/myceliumr/articles/glossary.html)** — Key terms and definitions
-- **[Naming Conventions](http://www.samuelbharti.com/myceliumr/articles/naming-conventions.html)** — Standardized column, object, and file names
-- **[Getting Started](http://www.samuelbharti.com/myceliumr/articles/getting-started.html)** — Workflow and examples
+- **[Glossary](http://www.samuelbharti.com/myceliumr/articles/glossary.html)**: Key terms and definitions
+- **[Naming Conventions](http://www.samuelbharti.com/myceliumr/articles/naming-conventions.html)**: Standardized column, object, and file names
+- **[Getting Started](http://www.samuelbharti.com/myceliumr/articles/getting-started.html)**: Workflow and examples
 
 To build the site locally:
 
@@ -87,5 +87,3 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow.
 ## License
 
 MIT
-
-

@@ -1,10 +1,16 @@
 url: http://www.samuelbharti.com/myceliumr/
+
+# pkgdown defaults to docs/, but docs/local/ holds the working plans, so the
+# generated site gets its own directory instead of sharing one.
+destination: _site
+
 template:
   bootstrap: 5
   bootswatch: flatly
+  light-switch: true
 home:
   title: myceliumr
-  description: Cross-species cohort framework for rat/mouse/human analysis
+  description: Study manifests, sample sheets, and analysis registries for genomics projects
 navbar:
   structure:
     left:
@@ -92,4 +98,3 @@ reference:
   - translation_report
   - TranslationResult
   - translation_stats
-
