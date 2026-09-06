@@ -123,13 +123,14 @@ study_new <- function(
 #' Create a Subject object
 #'
 #' Constructs a Subject object representing an individual animal or biological
-#' sample in a study. Subjects must have a unique identifier and valid species
-#' designation (rat, mouse, or human). All other attributes are optional.
+#' sample in a study. Subjects must have a unique identifier and a species.
+#' All other attributes are optional.
 #'
 #' @param subject_id Character scalar providing a unique identifier for the subject.
 #'   Must be at least 1 character long.
-#' @param species Character scalar specifying the species. Must be one of:
-#'   "rat", "mouse", or "human". Case-insensitive. Required.
+#' @param species Character scalar naming the species (e.g., "rat", "mouse",
+#'   "human", "zebrafish"). Any value is allowed; it is stored lower-cased so
+#'   that "Rat" and "rat" are the same species. Required.
 #' @param sex Character scalar indicating biological sex (e.g., "M", "F").
 #'   Optional and defaults to NA.
 #' @param strain Character scalar for strain or breed designation.
@@ -143,13 +144,14 @@ study_new <- function(
 #' @param notes Character scalar for additional metadata or observations.
 #'   Optional and defaults to NA.
 #'
-#' @return A Subject object with validated species specification.
+#' @return A Subject object with the species stored lower-cased.
 #'
 #' @details
 #' Subject objects are S7 classes for storing individual-level metadata in
-#' cross-species studies. Species validation ensures compatibility across
-#' supported organisms (rat, mouse, human). Individual subjects are typically
-#' grouped into Cohort objects for collective analysis.
+#' cross-species studies. The design is species-agnostic: `species` is a
+#' free-form value, lower-cased so that a study can group subjects by species
+#' without also matching on case. Individual subjects are typically read from
+#' a Cohort with [subject()].
 #'
 #' @examples
 #' # Create a rat subject
@@ -187,11 +189,10 @@ subject_new <- function(
 ) {
   checkmate::assert_string(subject_id, min.chars = 1)
   checkmate::assert_string(species, min.chars = 1)
-  validate_species(species)
 
   Subject(
     subject_id = subject_id,
-    species = species,
+    species = .normalize_species(species),
     sex = sex,
     strain = strain,
     genotype = genotype,

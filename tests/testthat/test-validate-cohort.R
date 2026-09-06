@@ -169,16 +169,12 @@ test_that(".check_cohort_tables reports duplicate subject ids", {
   )
 })
 
-test_that(".check_cohort_tables reports unsupported species", {
+test_that(".check_cohort_tables accepts any species value", {
   tbls <- valid_tables()
   st <- tbls$subject_tbl
-  st$species[1] <- "cat"
+  st$species[1] <- "zebrafish"
 
-  expect_match(
-    .check_cohort_tables(st, tbls$sample_map),
-    "unsupported values: cat",
-    all = FALSE
-  )
+  expect_identical(.check_cohort_tables(st, tbls$sample_map), character())
 })
 
 test_that(".check_cohort_tables requires character sample_map columns", {

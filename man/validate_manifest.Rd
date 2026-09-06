@@ -4,7 +4,7 @@
 \alias{validate_manifest}
 \title{Validate and structure a long-format sample manifest}
 \usage{
-validate_manifest(manifest, allow_duplicates = FALSE)
+validate_manifest(manifest, species = NULL, allow_duplicates = FALSE)
 }
 \arguments{
 \item{manifest}{A data.frame or tibble in \strong{long format}, one row per
@@ -23,18 +23,21 @@ Optional sample-level column:
 }
 
 Any remaining columns (e.g. \code{species}, \code{sex}, \code{strain}, \code{genotype},
-\code{cohort}, \code{timepoint}, \code{notes}) are treated as \strong{subject-level metadata}
-and must be constant within a \code{subject_id}.}
+\code{cohort}, \code{timepoint}, \code{notes}) are treated as \strong{subject-level metadata},
+coerced to character, and must be constant within a \code{subject_id}.}
 
-\item{allow_duplicates}{Logical. If \code{FALSE} (default), repeated
-\verb{(subject_id, assay, sample_id)} combinations raise an error. If \code{TRUE},
-duplicates are kept.}
+\item{species}{Optional character scalar. When \code{manifest} has no \code{species}
+column, this value fills one. Ignored when \code{manifest} already has a
+\code{species} column. Defaults to \code{NULL} (no column added).}
+
+\item{allow_duplicates}{Logical. If \code{FALSE} (default), a repeated
+\code{sample_id} raises an error. If \code{TRUE}, duplicates are kept.}
 }
 \value{
 A list with three elements:
 \itemize{
 \item \code{subject_tbl}: Tibble with one row per \code{subject_id} containing the
-subject-level metadata columns.
+subject-level metadata columns, all character.
 \item \code{sample_map}: Canonical long-format tibble with columns \code{subject_id},
 \code{assay}, \code{sample_id}, \code{role}.
 \item \code{completeness_tbl}: Tibble with one row per \code{subject_id} x \code{assay}
@@ -49,10 +52,23 @@ assay (WGS, WES, ATAC-seq, bulk RNA, single-cell, ...) are represented as
 values, never as bespoke columns or per-assay tables.
 }
 \details{
-Empty strings in \code{subject_id}, \code{assay}, \code{sample_id}, and \code{role} are treated
-as missing. Every sample row must carry a non-missing \code{subject_id}, \code{assay},
-and \code{sample_id}. Per-assay wide views (e.g. tumor/normal pairs) are not part
-of the core contract; derive them on demand from \code{sample_map}.
+Every subject-level column is coerced to character, so a numeric,
+logical, or factor column never reaches \code{\link[=cohort_new]{cohort_new()}} in a form that
+would fail there. Empty strings in \code{subject_id}, \code{assay}, \code{sample_id},
+\code{role}, and every subject-level column are treated as missing. Every
+sample row must carry a non-missing \code{subject_id}, \code{assay}, and
+\code{sample_id}.
+
+\code{species}, when present (in the manifest or filled from the \code{species}
+argument), is lower-cased so that \code{"Rat"} and \code{"rat"} are the same
+subject-level value. Any species value is allowed; the manifest layer
+does not restrict it to a fixed list of organisms.
+
+\code{sample_id} must be unique across the whole manifest, not only within a
+subject or assay, unless \code{allow_duplicates = TRUE}.
+
+Per-assay wide views (e.g. tumor/normal pairs) are not part of the core
+contract; derive them on demand from \code{sample_map} with \code{\link[=sample_pairs]{sample_pairs()}}.
 }
 \examples{
 manifest <- data.frame(

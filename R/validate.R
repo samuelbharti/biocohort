@@ -1,24 +1,5 @@
 #' @importFrom rlang .data
-
-.allowed_species <- c("rat", "mouse", "human")
-
-validate_species <- function(species) {
-  if (!is.character(species) || length(species) != 1) {
-    cli::cli_abort("`species` must be a single character value.")
-  }
-
-  value <- species
-  if (!(tolower(value) %in% .allowed_species)) {
-    cli::cli_abort(
-      c(
-        "`species` must be one of: {toString(.allowed_species)}.",
-        "i" = "Received: {value}."
-      )
-    )
-  }
-
-  invisible(TRUE)
-}
+NULL
 
 #' Validate a Cohort object
 #'
@@ -37,8 +18,8 @@ validate_species <- function(species) {
 #' - `subject_tbl` and `sample_map` are data frames.
 #' - `subject_tbl` has the columns `subject_id` and `species`, both
 #'   character, with no missing value. An empty string counts as missing.
+#'   `species` is a free-form value; any organism is allowed.
 #' - `subject_tbl$subject_id` has no duplicate.
-#' - `subject_tbl$species` holds supported values.
 #' - `sample_map` has the columns `subject_id`, `assay`, `sample_id`, and
 #'   `role`, all character. The first three have no missing value.
 #' - Every `sample_map$subject_id` exists in `subject_tbl`.

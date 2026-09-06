@@ -18,8 +18,8 @@ Subject(
 \arguments{
 \item{subject_id}{Character scalar for unique subject identifier.}
 
-\item{species}{Character scalar for species designation. Must be one of:
-"rat", "mouse", or "human" (validated by \code{\link[=subject_new]{subject_new()}}).}
+\item{species}{Character scalar naming the species. Any value is allowed;
+\code{\link[=subject_new]{subject_new()}} stores it lower-cased.}
 
 \item{sex}{Character scalar for biological sex (e.g., "M", "F"). Optional.}
 
@@ -42,7 +42,7 @@ genomics studies. Subject objects represent individual animals or biological
 samples and are grouped into Cohort objects for collective analysis.
 }
 \details{
-Use \code{\link[=subject_new]{subject_new()}} to construct Subject objects with species validation.
+Use \code{\link[=subject_new]{subject_new()}} to construct Subject objects; it lower-cases \code{species}.
 Construction also validates that \code{subject_id} and \code{species} are present, so
 building a \code{Subject} any other way still enforces the two required fields.
 Individual subjects are typically read from a Cohort with \code{\link[=subject]{subject()}}.
