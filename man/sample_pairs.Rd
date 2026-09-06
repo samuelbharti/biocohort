@@ -8,7 +8,8 @@ sample_pairs(
   sample_map,
   assays = NULL,
   tumor_role = "tumor",
-  normal_role = "normal"
+  normal_role = "normal",
+  sep = "__"
 )
 }
 \arguments{
@@ -24,6 +25,9 @@ with columns \code{subject_id}, \code{assay}, \code{sample_id}, and \code{role}.
 
 \item{normal_role}{Character scalar naming the role treated as the normal (or
 "control") side of a pair. Default \code{"normal"}.}
+
+\item{sep}{Character scalar placed between the two sample ids in \code{pair_id}.
+Default \code{"__"}. Use the separator your pipeline puts in its file names.}
 }
 \value{
 A tibble with one row per derived pair and columns:
@@ -32,7 +36,7 @@ A tibble with one row per derived pair and columns:
 \item \code{assay}: assay the pair was derived within.
 \item \code{tumor_sample_id}: sample id of the \code{tumor_role} member.
 \item \code{normal_sample_id}: sample id of the \code{normal_role} member.
-\item \code{pair_id}: composite id, \code{paste0(tumor_sample_id, "__", normal_sample_id)}.
+\item \code{pair_id}: composite id, \code{paste0(tumor_sample_id, sep, normal_sample_id)}.
 }
 
 Subjects lacking either role within an assay contribute no rows. When a
@@ -62,6 +66,9 @@ sample_pairs(parsed$sample_map)
 
 # Restrict to specific assays
 sample_pairs(parsed$sample_map, assays = "wes")
+
+# Match a pipeline that names files tumor_vs_normal
+sample_pairs(parsed$sample_map, sep = "_vs_")
 
 }
 \seealso{
