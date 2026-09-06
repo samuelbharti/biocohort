@@ -28,9 +28,9 @@ Subject(
 
 - species:
 
-  Character scalar for species designation. Must be one of: "rat",
-  "mouse", or "human" (validated by
-  [`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md)).
+  Character scalar naming the species. Any value is allowed;
+  [`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md)
+  stores it lower-cased.
 
 - sex:
 
@@ -61,9 +61,9 @@ Subject(
 
 Use
 [`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md)
-to construct Subject objects with species validation. Construction also
-validates that `subject_id` and `species` are present, so building a
-`Subject` any other way still enforces the two required fields.
+to construct Subject objects; it lower-cases `species`. Construction
+also validates that `subject_id` and `species` are present, so building
+a `Subject` any other way still enforces the two required fields.
 Individual subjects are typically read from a Cohort with
 [`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md).
 

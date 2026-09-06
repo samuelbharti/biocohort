@@ -33,10 +33,9 @@ The checks are:
 
 - `subject_tbl` has the columns `subject_id` and `species`, both
   character, with no missing value. An empty string counts as missing.
+  `species` is a free-form value; any organism is allowed.
 
 - `subject_tbl$subject_id` has no duplicate.
-
-- `subject_tbl$species` holds supported values.
 
 - `sample_map` has the columns `subject_id`, `assay`, `sample_id`, and
   `role`, all character. The first three have no missing value.

@@ -66,9 +66,9 @@ that lists every problem found.</p>
     <p>The checks are:</p><ul><li><p><code>x</code> is a Cohort object.</p></li>
 <li><p><code>subject_tbl</code> and <code>sample_map</code> are data frames.</p></li>
 <li><p><code>subject_tbl</code> has the columns <code>subject_id</code> and <code>species</code>, both
-character, with no missing value. An empty string counts as missing.</p></li>
+character, with no missing value. An empty string counts as missing.
+<code>species</code> is a free-form value; any organism is allowed.</p></li>
 <li><p><code>subject_tbl$subject_id</code> has no duplicate.</p></li>
-<li><p><code>subject_tbl$species</code> holds supported values.</p></li>
 <li><p><code>sample_map</code> has the columns <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>, and
 <code>role</code>, all character. The first three have no missing value.</p></li>
 <li><p>Every <code>sample_map$subject_id</code> exists in <code>subject_tbl</code>.</p></li>

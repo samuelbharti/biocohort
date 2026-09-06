@@ -51,7 +51,7 @@ values, never as bespoke columns or per-assay tables.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_manifest</span><span class="op">(</span><span class="va">manifest</span>, allow_duplicates <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_manifest</span><span class="op">(</span><span class="va">manifest</span>, species <span class="op">=</span> <span class="cn">NULL</span>, allow_duplicates <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -67,20 +67,25 @@ sample. Required columns:</p><ul><li><p><code>subject_id</code> (character; coer
 </ul><p>Optional sample-level column:</p><ul><li><p><code>role</code> (character): role of the sample within its assay, e.g. <code>"tumor"</code>,
 <code>"normal"</code>. Defaults to <code>NA</code> when absent.</p></li>
 </ul><p>Any remaining columns (e.g. <code>species</code>, <code>sex</code>, <code>strain</code>, <code>genotype</code>,
-<code>cohort</code>, <code>timepoint</code>, <code>notes</code>) are treated as <strong>subject-level metadata</strong>
-and must be constant within a <code>subject_id</code>.</p></dd>
+<code>cohort</code>, <code>timepoint</code>, <code>notes</code>) are treated as <strong>subject-level metadata</strong>,
+coerced to character, and must be constant within a <code>subject_id</code>.</p></dd>
+
+
+<dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
+<dd><p>Optional character scalar. When <code>manifest</code> has no <code>species</code>
+column, this value fills one. Ignored when <code>manifest</code> already has a
+<code>species</code> column. Defaults to <code>NULL</code> (no column added).</p></dd>
 
 
 <dt id="arg-allow-duplicates">allow_duplicates<a class="anchor" aria-label="anchor" href="#arg-allow-duplicates"></a></dt>
-<dd><p>Logical. If <code>FALSE</code> (default), repeated
-<code>(subject_id, assay, sample_id)</code> combinations raise an error. If <code>TRUE</code>,
-duplicates are kept.</p></dd>
+<dd><p>Logical. If <code>FALSE</code> (default), a repeated
+<code>sample_id</code> raises an error. If <code>TRUE</code>, duplicates are kept.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list with three elements:</p><ul><li><p><code>subject_tbl</code>: Tibble with one row per <code>subject_id</code> containing the
-subject-level metadata columns.</p></li>
+subject-level metadata columns, all character.</p></li>
 <li><p><code>sample_map</code>: Canonical long-format tibble with columns <code>subject_id</code>,
 <code>assay</code>, <code>sample_id</code>, <code>role</code>.</p></li>
 <li><p><code>completeness_tbl</code>: Tibble with one row per <code>subject_id</code> x <code>assay</code>
@@ -88,10 +93,20 @@ summarising the number of samples (<code>n_samples</code>).</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Empty strings in <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>, and <code>role</code> are treated
-as missing. Every sample row must carry a non-missing <code>subject_id</code>, <code>assay</code>,
-and <code>sample_id</code>. Per-assay wide views (e.g. tumor/normal pairs) are not part
-of the core contract; derive them on demand from <code>sample_map</code>.</p>
+    <p>Every subject-level column is coerced to character, so a numeric,
+logical, or factor column never reaches <code><a href="cohort_new.html">cohort_new()</a></code> in a form that
+would fail there. Empty strings in <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>,
+<code>role</code>, and every subject-level column are treated as missing. Every
+sample row must carry a non-missing <code>subject_id</code>, <code>assay</code>, and
+<code>sample_id</code>.</p>
+<p><code>species</code>, when present (in the manifest or filled from the <code>species</code>
+argument), is lower-cased so that <code>"Rat"</code> and <code>"rat"</code> are the same
+subject-level value. Any species value is allowed; the manifest layer
+does not restrict it to a fixed list of organisms.</p>
+<p><code>sample_id</code> must be unique across the whole manifest, not only within a
+subject or assay, unless <code>allow_duplicates = TRUE</code>.</p>
+<p>Per-assay wide views (e.g. tumor/normal pairs) are not part of the core
+contract; derive them on demand from <code>sample_map</code> with <code><a href="sample_pairs.html">sample_pairs()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

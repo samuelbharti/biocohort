@@ -2,8 +2,7 @@
 
 Constructs a Subject object representing an individual animal or
 biological sample in a study. Subjects must have a unique identifier and
-valid species designation (rat, mouse, or human). All other attributes
-are optional.
+a species. All other attributes are optional.
 
 ## Usage
 
@@ -29,8 +28,9 @@ subject_new(
 
 - species:
 
-  Character scalar specifying the species. Must be one of: "rat",
-  "mouse", or "human". Case-insensitive. Required.
+  Character scalar naming the species (e.g., "rat", "mouse", "human",
+  "zebrafish"). Any value is allowed; it is stored lower-cased so that
+  "Rat" and "rat" are the same species. Required.
 
 - sex:
 
@@ -64,14 +64,16 @@ subject_new(
 
 ## Value
 
-A Subject object with validated species specification.
+A Subject object with the species stored lower-cased.
 
 ## Details
 
 Subject objects are S7 classes for storing individual-level metadata in
-cross-species studies. Species validation ensures compatibility across
-supported organisms (rat, mouse, human). Individual subjects are
-typically grouped into Cohort objects for collective analysis.
+cross-species studies. The design is species-agnostic: `species` is a
+free-form value, lower-cased so that a study can group subjects by
+species without also matching on case. Individual subjects are typically
+read from a Cohort with
+[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md).
 
 ## See also
 

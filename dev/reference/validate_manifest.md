@@ -9,7 +9,7 @@ are represented as values, never as bespoke columns or per-assay tables.
 ## Usage
 
 ``` r
-validate_manifest(manifest, allow_duplicates = FALSE)
+validate_manifest(manifest, species = NULL, allow_duplicates = FALSE)
 ```
 
 ## Arguments
@@ -33,20 +33,26 @@ validate_manifest(manifest, allow_duplicates = FALSE)
 
   Any remaining columns (e.g. `species`, `sex`, `strain`, `genotype`,
   `cohort`, `timepoint`, `notes`) are treated as **subject-level
-  metadata** and must be constant within a `subject_id`.
+  metadata**, coerced to character, and must be constant within a
+  `subject_id`.
+
+- species:
+
+  Optional character scalar. When `manifest` has no `species` column,
+  this value fills one. Ignored when `manifest` already has a `species`
+  column. Defaults to `NULL` (no column added).
 
 - allow_duplicates:
 
-  Logical. If `FALSE` (default), repeated
-  `(subject_id, assay, sample_id)` combinations raise an error. If
-  `TRUE`, duplicates are kept.
+  Logical. If `FALSE` (default), a repeated `sample_id` raises an error.
+  If `TRUE`, duplicates are kept.
 
 ## Value
 
 A list with three elements:
 
 - `subject_tbl`: Tibble with one row per `subject_id` containing the
-  subject-level metadata columns.
+  subject-level metadata columns, all character.
 
 - `sample_map`: Canonical long-format tibble with columns `subject_id`,
   `assay`, `sample_id`, `role`.
@@ -56,11 +62,25 @@ A list with three elements:
 
 ## Details
 
-Empty strings in `subject_id`, `assay`, `sample_id`, and `role` are
-treated as missing. Every sample row must carry a non-missing
-`subject_id`, `assay`, and `sample_id`. Per-assay wide views (e.g.
-tumor/normal pairs) are not part of the core contract; derive them on
-demand from `sample_map`.
+Every subject-level column is coerced to character, so a numeric,
+logical, or factor column never reaches
+[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+in a form that would fail there. Empty strings in `subject_id`, `assay`,
+`sample_id`, `role`, and every subject-level column are treated as
+missing. Every sample row must carry a non-missing `subject_id`,
+`assay`, and `sample_id`.
+
+`species`, when present (in the manifest or filled from the `species`
+argument), is lower-cased so that `"Rat"` and `"rat"` are the same
+subject-level value. Any species value is allowed; the manifest layer
+does not restrict it to a fixed list of organisms.
+
+`sample_id` must be unique across the whole manifest, not only within a
+subject or assay, unless `allow_duplicates = TRUE`.
+
+Per-assay wide views (e.g. tumor/normal pairs) are not part of the core
+contract; derive them on demand from `sample_map` with
+[`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md).
 
 ## See also
 
