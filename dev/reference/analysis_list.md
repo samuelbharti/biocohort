@@ -70,7 +70,7 @@ cohort <- cohort_new(
 
 spec1 <- analysis_spec_new(
   name = "somatic_vars",
-  assay = "wes_somatic",
+  assay = "wes",
   level = "pair",
   format = "tsv",
   reader = "read_tsv",
@@ -79,7 +79,7 @@ spec1 <- analysis_spec_new(
 
 spec2 <- analysis_spec_new(
   name = "gene_expr",
-  assay = "snrna",
+  assay = "scrna",
   level = "subject",
   format = "rds",
   reader = "readRDS",
@@ -90,8 +90,8 @@ cohort <- analysis_register(cohort, spec1)
 cohort <- analysis_register(cohort, spec2)
 analysis_list(cohort)
 #> # A tibble: 2 × 6
-#>   name         assay       level   format reader   root_key
-#>   <chr>        <chr>       <chr>   <chr>  <chr>    <chr>   
-#> 1 somatic_vars wes_somatic pair    tsv    read_tsv NA      
-#> 2 gene_expr    snrna       subject rds    readRDS  NA      
+#>   name         assay level   format reader   root_key
+#>   <chr>        <chr> <chr>   <chr>  <chr>    <chr>   
+#> 1 somatic_vars wes   pair    tsv    read_tsv NA      
+#> 2 gene_expr    scrna subject rds    readRDS  NA      
 ```

@@ -11,15 +11,18 @@ AnalysisSpec(
   name = character(0),
   assay = character(0),
   level = character(0),
-  format = character(0),
+  format = NA_character_,
   description = NA_character_,
   path_template = NA_character_,
   root_key = NA_character_,
-  reader = character(0),
+  reader = NA_character_,
   key_cols = character(0),
   feature_type = NA_character_,
   gene_col = NA_character_,
-  id_type = NA_character_
+  id_type = NA_character_,
+  tumor_role = "tumor",
+  normal_role = "normal",
+  pair_sep = "__"
 )
 ```
 
@@ -31,8 +34,8 @@ AnalysisSpec(
 
 - assay:
 
-  Character scalar for assay type (e.g., "wes_somatic", "wes_germline",
-  "snrna"). Required.
+  Character scalar for the assay label, spelled as in the cohort's
+  `sample_map` (e.g., "wes", "wgs", "scrna"). Required.
 
 - level:
 
@@ -53,7 +56,9 @@ AnalysisSpec(
 - format:
 
   Character scalar for file format (e.g., "rds", "tsv", "txt").
-  Required.
+  Optional.
+  [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
+  fills it from the `path_template` extension. NA when unknown.
 
 - description:
 
@@ -78,14 +83,18 @@ AnalysisSpec(
 - reader:
 
   Character scalar for function name to read files matching this spec
-  (e.g., "read_msi_txt", "read.csv"). Must be a valid function name.
-  Required.
+  (e.g., "readr::read_tsv", "read.csv"). Optional.
+  [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
+  fills it from `format`. NA when unknown.
 
 - key_cols:
 
-  Character vector of column names to use as keys when loading the
-  analysis table. Determines how rows are indexed (e.g.,
-  `c("subject_id")` or `c("pair_id")`). Required.
+  Character vector of column names that must be present in the loaded
+  analysis table.
+  [`load_analysis()`](https://www.samuelbharti.com/bioroster/reference/load_analysis.md)
+  checks them after reading. Optional.
+  [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
+  fills it by `level`.
 
 - feature_type:
 
@@ -104,6 +113,22 @@ AnalysisSpec(
 
   Optional gene identifier type for `feature_type = "gene"`: `"symbol"`,
   `"entrez"`, or `"ensembl"`. Optional, defaults to NA.
+
+- tumor_role:
+
+  Character scalar naming the sample role on the tumor (or case) side of
+  a pair. Used for `level = "pair"`. Default `"tumor"`.
+
+- normal_role:
+
+  Character scalar naming the sample role on the normal (or control)
+  side of a pair. Used for `level = "pair"`. Default `"normal"`.
+
+- pair_sep:
+
+  Character scalar placed between the two sample ids when
+  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+  builds `pair_id`. Used for `level = "pair"`. Default `"__"`.
 
 ## Details
 
@@ -124,6 +149,9 @@ Access properties via the `@` operator:
     spec@root_key
     spec@reader
     spec@key_cols
+    spec@tumor_role
+    spec@normal_role
+    spec@pair_sep
 
 ## See also
 

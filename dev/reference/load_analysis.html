@@ -57,7 +57,7 @@ feature table annotated with provenance keys (<code>subject_id</code> and/or <co
 
 <dl><dt id="arg-cohort">cohort<a class="anchor" aria-label="anchor" href="#arg-cohort"></a></dt>
 <dd><p>A <a href="Cohort.html">Cohort</a> providing <code>paths</code> (for <code>{root}</code>), subjects, and the
-sample map (for pair-level enumeration).</p></dd>
+sample map (for subject and pair enumeration).</p></dd>
 
 
 <dt id="arg-spec">spec<a class="anchor" aria-label="anchor" href="#arg-spec"></a></dt>
@@ -78,11 +78,20 @@ and whether it <code>exists</code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Path tokens supported: <code>{root}</code> (from <code>cohort@paths[[root_key]]</code>),
+    <p>Units follow the spec's <code>assay</code>. A subject-level spec enumerates only the
+subjects with at least one sample of that assay. A pair-level spec calls
+<code><a href="sample_pairs.html">sample_pairs()</a></code> with the spec's <code>assay</code>, <code>tumor_role</code>, <code>normal_role</code>, and
+<code>pair_sep</code>. When no subject or pair matches, the function warns and returns
+empty tables.</p>
+<p>Path tokens supported: <code>{root}</code> (from <code>cohort@paths[[root_key]]</code>),
 <code>{subject_id}</code>, and for pair-level specs <code>{tumor_sample_id}</code>,
 <code>{normal_sample_id}</code>, <code>{pair_id}</code> (derived via <code><a href="sample_pairs.html">sample_pairs()</a></code>). Missing
 files are skipped (with a warning) and recorded in <code>files</code>, so loading is
 never silently partial.</p>
+<p>The reader comes from the <code>reader</code> argument, else from the spec. The
+function errors when neither names one. After each file is read, the spec's
+<code>key_cols</code> must be present in the table (the provenance keys count), or the
+function errors and names the missing columns.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -107,22 +116,32 @@ never silently partial.</p>
 <span class="r-in"><span>  subject_tbl <span class="op">=</span> <span class="va">parsed</span><span class="op">$</span><span class="va">subject_tbl</span>, sample_map <span class="op">=</span> <span class="va">parsed</span><span class="op">$</span><span class="va">sample_map</span>,</span></span>
 <span class="r-in"><span>  paths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rna_root <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># format, reader, and key_cols come from the template and the level.</span></span></span>
 <span class="r-in"><span><span class="va">spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="analysis_spec_new.html">analysis_spec_new</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  name <span class="op">=</span> <span class="st">"expr"</span>, assay <span class="op">=</span> <span class="st">"rna"</span>, level <span class="op">=</span> <span class="st">"subject"</span>, format <span class="op">=</span> <span class="st">"csv"</span>,</span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">"expr"</span>, assay <span class="op">=</span> <span class="st">"rna"</span>, level <span class="op">=</span> <span class="st">"subject"</span>,</span></span>
 <span class="r-in"><span>  path_template <span class="op">=</span> <span class="st">"{root}/{subject_id}.csv"</span>, root_key <span class="op">=</span> <span class="st">"rna_root"</span>,</span></span>
-<span class="r-in"><span>  reader <span class="op">=</span> <span class="st">"read.csv"</span>, key_cols <span class="op">=</span> <span class="st">"subject_id"</span>, feature_type <span class="op">=</span> <span class="st">"gene"</span></span></span>
+<span class="r-in"><span>  feature_type <span class="op">=</span> <span class="st">"gene"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">loaded</span> <span class="op">&lt;-</span> <span class="fu">load_analysis</span><span class="op">(</span><span class="va">cohort</span>, <span class="va">spec</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">1</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">2</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Delimiter:</span> ","</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">chr</span> (1): gene</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">dbl</span> (1): value</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.</span>
 <span class="r-in"><span><span class="va">loaded</span><span class="op">$</span><span class="va">data</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   gene  value subject_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> TP53      1 S1        </span>
 <span class="r-in"><span><span class="va">loaded</span><span class="op">$</span><span class="va">files</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id path                                    exists</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> S1         /tmp/RtmpKqVeLJ/file184e42dd9737/S1.csv TRUE  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> S1         /tmp/RtmpklsonJ/file1816374b61de/S1.csv TRUE  </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -55,7 +55,8 @@ every sample carrying <code>normal_role</code>.</p>
 <span>  <span class="va">sample_map</span>,</span>
 <span>  assays <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tumor_role <span class="op">=</span> <span class="st">"tumor"</span>,</span>
-<span>  normal_role <span class="op">=</span> <span class="st">"normal"</span></span>
+<span>  normal_role <span class="op">=</span> <span class="st">"normal"</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">"__"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -83,6 +84,11 @@ with columns <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>
 <dd><p>Character scalar naming the role treated as the normal (or
 "control") side of a pair. Default <code>"normal"</code>.</p></dd>
 
+
+<dt id="arg-sep">sep<a class="anchor" aria-label="anchor" href="#arg-sep"></a></dt>
+<dd><p>Character scalar placed between the two sample ids in <code>pair_id</code>.
+Default <code>"__"</code>. Use the separator your pipeline puts in its file names.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -90,7 +96,7 @@ with columns <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>
 <li><p><code>assay</code>: assay the pair was derived within.</p></li>
 <li><p><code>tumor_sample_id</code>: sample id of the <code>tumor_role</code> member.</p></li>
 <li><p><code>normal_sample_id</code>: sample id of the <code>normal_role</code> member.</p></li>
-<li><p><code>pair_id</code>: composite id, <code>paste0(tumor_sample_id, "__", normal_sample_id)</code>.</p></li>
+<li><p><code>pair_id</code>: composite id, <code>paste0(tumor_sample_id, sep, normal_sample_id)</code>.</p></li>
 </ul><p>Subjects lacking either role within an assay contribute no rows. When a
 subject has multiple tumor and/or normal samples in an assay, all
 tumor x normal combinations are enumerated.</p>
@@ -125,6 +131,13 @@ tumor x normal combinations are enumerated.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id assay tumor_sample_id normal_sample_id pair_id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> S1         wes   T1              N1               T1__N1 </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Match a pipeline that names files tumor_vs_normal</span></span></span>
+<span class="r-in"><span><span class="fu">sample_pairs</span><span class="op">(</span><span class="va">parsed</span><span class="op">$</span><span class="va">sample_map</span>, sep <span class="op">=</span> <span class="st">"_vs_"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id assay tumor_sample_id normal_sample_id pair_id </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> S1         wes   T1              N1               T1_vs_N1</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

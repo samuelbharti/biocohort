@@ -2,7 +2,8 @@
 
 Constructs an AnalysisSpec object that defines how to locate, read, and
 interpret a specific analysis output. Validates all required fields and
-level constraints.
+fills `format`, `reader`, and `key_cols` with defaults when they are not
+given.
 
 ## Usage
 
@@ -11,15 +12,18 @@ analysis_spec_new(
   name,
   assay,
   level,
-  format,
+  format = NA_character_,
   description = NA_character_,
   path_template = NA_character_,
   root_key = NA_character_,
-  reader,
-  key_cols,
+  reader = NA_character_,
+  key_cols = NULL,
   feature_type = NA_character_,
   gene_col = NA_character_,
-  id_type = NA_character_
+  id_type = NA_character_,
+  tumor_role = "tumor",
+  normal_role = "normal",
+  pair_sep = "__"
 )
 ```
 
@@ -32,8 +36,9 @@ analysis_spec_new(
 
 - assay:
 
-  Character scalar for assay type (e.g., "wes_somatic", "wes_germline",
-  "snrna"). Required.
+  Character scalar for the assay label, spelled as in the cohort's
+  `sample_map` (e.g., "wes", "wgs", "scrna"). Required. Subject and pair
+  units are enumerated from the samples with this assay.
 
 - level:
 
@@ -46,7 +51,8 @@ analysis_spec_new(
 - format:
 
   Character scalar for file format (e.g., "rds", "tsv", "txt").
-  Required.
+  Optional. Defaults to the extension of `path_template`, or NA when
+  there is no template.
 
 - description:
 
@@ -68,13 +74,19 @@ analysis_spec_new(
 
 - reader:
 
-  Character scalar for reader function name (e.g., "read_rds",
-  "read.csv"). Required.
+  Character scalar for reader function name (e.g., "readr::read_tsv",
+  "read.csv"). Optional. Defaults by `format`: "csv" to
+  "readr::read_csv", "tsv" and "txt" to "readr::read_tsv", "rds" to
+  "readRDS". NA for any other format.
+  [`load_analysis()`](https://www.samuelbharti.com/bioroster/reference/load_analysis.md)
+  errors when neither the spec nor its `reader` argument names a reader.
 
 - key_cols:
 
-  Character vector of column names for indexing loaded tables. Examples:
-  `c("subject_id")`, `c("pair_id")`. Required.
+  Character vector of column names that must be present in the loaded
+  table. Optional. Defaults by `level`: `"subject_id"` for subject,
+  `c("subject_id", "pair_id")` for pair, and none for cohort. Subject
+  and pair specs need at least one key column.
 
 - feature_type:
 
@@ -96,6 +108,27 @@ analysis_spec_new(
   `"symbol"`, `"entrez"`, `"ensembl"`. Defaults to NA (treated as
   `"symbol"`).
 
+- tumor_role:
+
+  Character scalar naming the sample role on the tumor (or case) side of
+  a pair. Passed to
+  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+  for `level = "pair"`. Default `"tumor"`.
+
+- normal_role:
+
+  Character scalar naming the sample role on the normal (or control)
+  side of a pair. Passed to
+  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+  for `level = "pair"`. Default `"normal"`.
+
+- pair_sep:
+
+  Character scalar placed between the two sample ids in `pair_id`.
+  Passed to
+  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+  for `level = "pair"`. Default `"__"`.
+
 ## Value
 
 An AnalysisSpec object with validated fields.
@@ -104,15 +137,19 @@ An AnalysisSpec object with validated fields.
 
 This constructor validates that:
 
-- `name`, `assay`, `format`, `reader` are non-empty strings
+- `name` and `assay` are non-empty strings
 
 - `level` is one of: "subject", "pair", "cohort"
 
-- `key_cols` is a non-empty character vector
+- `format` and `reader`, if given, are non-empty strings
+
+- `key_cols` is a character vector, non-empty for subject and pair specs
 
 - `feature_type`, if given, is one of "interval" or "gene"
 
 - `id_type`, if given, is one of "symbol", "entrez", "ensembl"
+
+- `tumor_role`, `normal_role`, and `pair_sep` are non-empty strings
 
 ## See also
 
@@ -124,29 +161,45 @@ for registering in a Cohort
 ## Examples
 
 ``` r
-# Define a somatic variant spec
+# A pair-level somatic variant spec. format, reader, and key_cols come
+# from the template extension and the level.
 spec_sv <- analysis_spec_new(
   name = "somatic_vars",
-  assay = "wes_somatic",
+  assay = "wes",
   level = "pair",
-  format = "tsv",
   description = "Somatic variants in tumor-normal pairs",
   path_template = "{root}/somatic/{pair_id}.variants.tsv",
-  root_key = "wes_root",
-  reader = "read_tsv",
-  key_cols = c("pair_id")
+  root_key = "wes_root"
 )
+spec_sv@format
+#> [1] "tsv"
+spec_sv@reader
+#> [1] "readr::read_tsv"
+spec_sv@key_cols
+#> [1] "subject_id" "pair_id"   
 
-# Define a subject-level gene expression spec
+# A subject-level gene expression spec with an explicit reader.
 spec_expr <- analysis_spec_new(
   name = "gene_expression",
-  assay = "snrna",
+  assay = "scrna",
   level = "subject",
   format = "rds",
   description = "Gene expression by subject",
   path_template = "{root}/{subject_id}/expr.rds",
-  root_key = "snrna_root",
+  root_key = "scrna_root",
   reader = "readRDS",
-  key_cols = c("subject_id")
+  key_cols = c("subject_id", "gene")
+)
+
+# A pair spec for a sample map that labels roles case and control.
+spec_cc <- analysis_spec_new(
+  name = "case_control",
+  assay = "wgs",
+  level = "pair",
+  path_template = "{root}/{pair_id}.csv",
+  root_key = "wgs_root",
+  tumor_role = "case",
+  normal_role = "control",
+  pair_sep = "_vs_"
 )
 ```

@@ -21,9 +21,18 @@ analysis_files(cohort)
 
 ## Value
 
-A named list of tibbles (one per loaded analysis), or `NULL` if the
-cohort has not been loaded.
+A named list of tibbles, one per loaded analysis. Each has the unit
+keys, `path`, and `exists`. When the cohort has not been loaded, an
+empty tibble with columns `path` and `exists`.
 
 ## See also
 
 [`load_analyses()`](https://www.samuelbharti.com/bioroster/reference/load_analyses.md)
+
+## Examples
+
+``` r
+analysis_files(example_cohort)
+#> # A tibble: 0 × 2
+#> # ℹ 2 variables: path <chr>, exists <lgl>
+```
