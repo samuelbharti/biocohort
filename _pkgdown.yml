@@ -61,6 +61,10 @@ reference:
   desc: Read parts of a cohort
   contents:
   - subject
+  - subjects
+  - samples
+  - completeness
+  - cohort_filter
 - title: IO Functions
   desc: Read and write data
   contents: read_manifest_csv
