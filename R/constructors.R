@@ -195,58 +195,43 @@ subject_new <- function(
 
 #' Create a Cohort object
 #'
-#' Constructs a Cohort object by combining validated subject data with optional
-#' study metadata, file paths, and analysis results. Cohorts serve as the primary
-#' container for cross-species genomics data, ensuring schema validation and data
-#' integrity across rat, mouse, and human studies.
+#' Builds a Cohort from a subject table and a sample map, with an optional
+#' Study, file paths, and analysis tables. The two tables are usually the
+#' output of [validate_manifest()].
 #'
-#' @param subject_tbl A tibble containing subject-level metadata. Required columns:
-#'   `subject_id` (character) and `species` (rat/mouse/human). Optional columns:
-#'   `sex`, `strain`, `genotype`, `cohort`, `timepoint`, `notes`. Typically
-#'   obtained from [validate_manifest()].
-#' @param sample_map A canonical long-format tibble mapping subjects to samples,
-#'   one row per sample. Columns: `subject_id`, `assay`, `sample_id`, `role`.
-#'   Must have at least a `subject_id` column to link to `subject_tbl`.
-#'   Typically obtained from [validate_manifest()].
-#' @param study A Study object providing project-level metadata and context,
-#'   or NULL if not applicable. Defaults to NULL.
-#' @param paths Named list of file paths to data files or results directories.
-#'   Optional and defaults to empty list.
-#' @param analyses Named list containing analysis results or intermediate data
-#'   objects for later retrieval. Optional and defaults to empty list.
+#' @param subject_tbl A data frame with one row per subject. Required columns:
+#'   `subject_id` and `species`, both character. Other columns are kept as
+#'   given.
+#' @param sample_map A long-format data frame with one row per sample.
+#'   Required columns: `subject_id`, `assay`, `sample_id`, `role`, all
+#'   character.
+#' @param study A Study object, or NULL. Defaults to NULL.
+#' @param paths Named list of file paths to data files or result folders.
+#'   Defaults to an empty list.
+#' @param analyses Named list of analysis tables or other data objects.
+#'   Defaults to an empty list.
 #'
-#' @return A Cohort object with validated subject data and optional metadata.
-#'   Raises informative errors if validation fails.
+#' @return A Cohort object. An error when the tables fail
+#'   [validate_cohort()].
 #'
 #' @details
-#' Cohort objects are S7 classes for managing cross-species study data.
-#' Construction automatically runs [validate_cohort()] to ensure:
-#' - Required columns are present
-#' - Species values are valid (rat/mouse/human)
-#' - No duplicate subject IDs
-#' - Sample map can be linked to subjects
+#' The steps are:
+#' 1. Check that `subject_tbl` and `sample_map` are data frames.
+#' 2. Convert both to tibbles.
+#' 3. Build the Cohort.
+#' 4. Run [validate_cohort()].
 #'
-#' **Automatic Subject Object Creation:**
-#' Subject objects are automatically created from each row in `subject_tbl`.
-#' These are stored in the `subjects` property as a named list, accessible by
-#' subject_id. This eliminates the need to manually create Subject objects.
-#'
-#' Use the `@` operator to access cohort components:
-#' - `cohort@study` - Study metadata
-#' - `cohort@subjects` - Named list of Subject objects
-#' - `cohort@subjects[[\"RAT001\"]]` - Access individual Subject
-#' - `cohort@subject_tbl` - Subject table (for bulk operations)
-#' - `cohort@sample_map` - Sample mapping
+#' The function does not build Subject objects. Use [subject()] to read one
+#' subject from the cohort when an object is needed.
 #'
 #' @examples
-#' # Create a study
 #' study <- study_new(
 #'   study_id = "STUDY001",
 #'   title = "Cross-species study",
 #'   assays = c("WES", "snRNA-seq")
 #' )
 #'
-#' # Create manifest data (long format: one row per sample)
+#' # A long-format manifest: one row per sample
 #' manifest <- data.frame(
 #'   subject_id = c("RAT001", "RAT001", "MOUSE1", "MOUSE1"),
 #'   species = c("rat", "rat", "mouse", "mouse"),
@@ -256,21 +241,20 @@ subject_new <- function(
 #'   role = c("tumor", "tumor", "tumor", NA)
 #' )
 #'
-#' # Validate and create cohort
-#' manifest_split <- validate_manifest(manifest)
+#' parsed <- validate_manifest(manifest)
 #' cohort <- cohort_new(
 #'   study = study,
-#'   subject_tbl = manifest_split$subject_tbl,
-#'   sample_map = manifest_split$sample_map
+#'   subject_tbl = parsed$subject_tbl,
+#'   sample_map = parsed$sample_map
 #' )
 #' print(cohort)
 #'
-#' # Access individual Subject objects (automatically created)
-#' rat_subject <- cohort@subjects[["RAT001"]]
-#' print(rat_subject)
+#' # Read one subject as a Subject object
+#' subject(cohort, "RAT001")
 #'
 #' @seealso [validate_manifest()] for preparing input tables,
-#'   [validate_cohort()] for detailed validation,
+#'   [validate_cohort()] for the checks,
+#'   [subject()] for reading one subject,
 #'   [Study] for study metadata
 #' @export
 cohort_new <- function(
@@ -280,44 +264,32 @@ cohort_new <- function(
   paths = list(),
   analyses = list()
 ) {
+  if (!is.data.frame(subject_tbl)) {
+    cli::cli_abort(
+      c(
+        "`subject_tbl` must be a data.frame or tibble.",
+        "i" = "Received an object of class {.cls {class(subject_tbl)}}."
+      )
+    )
+  }
+  if (!is.data.frame(sample_map)) {
+    cli::cli_abort(
+      c(
+        "`sample_map` must be a data.frame or tibble.",
+        "i" = "Received an object of class {.cls {class(sample_map)}}."
+      )
+    )
+  }
   checkmate::assert_list(paths)
   checkmate::assert_list(analyses)
   if (!is.null(study) && !S7::S7_inherits(study, Study)) {
     cli::cli_abort("`study` must be a Study object or NULL.")
   }
 
-  # Automatically create Subject objects from subject_tbl
-  subjects <- list()
-  if (nrow(subject_tbl) > 0) {
-    for (i in seq_len(nrow(subject_tbl))) {
-      row <- subject_tbl[i, ]
-      subject_obj <- subject_new(
-        subject_id = row$subject_id,
-        species = row$species,
-        sex = if ("sex" %in% names(row)) row$sex else NA_character_,
-        strain = if ("strain" %in% names(row)) row$strain else NA_character_,
-        genotype = if ("genotype" %in% names(row)) {
-          row$genotype
-        } else {
-          NA_character_
-        },
-        cohort = if ("cohort" %in% names(row)) row$cohort else NA_character_,
-        timepoint = if ("timepoint" %in% names(row)) {
-          row$timepoint
-        } else {
-          NA_character_
-        },
-        notes = if ("notes" %in% names(row)) row$notes else NA_character_
-      )
-      subjects[[row$subject_id]] <- subject_obj
-    }
-  }
-
   cohort <- Cohort(
     study = study,
-    subjects = subjects,
-    subject_tbl = subject_tbl,
-    sample_map = sample_map,
+    subject_tbl = tibble::as_tibble(subject_tbl),
+    sample_map = tibble::as_tibble(sample_map),
     paths = paths,
     analyses = analyses
   )

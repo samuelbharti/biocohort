@@ -6,7 +6,6 @@
 \usage{
 Cohort(
   study = NULL,
-  subjects = list(),
   subject_tbl = NULL,
   sample_map = NULL,
   paths = list(),
@@ -16,57 +15,46 @@ Cohort(
 )
 }
 \arguments{
-\item{study}{A Study object providing project-level context and metadata,
-or NULL if not applicable. Optional.}
+\item{study}{A Study object with project-level context, or NULL.}
 
-\item{subjects}{Named list of Subject objects, automatically created from
-subject_tbl rows during cohort construction. Names are subject IDs.
-Access individual subjects via: \code{cohort@subjects[["RAT001"]]}.}
+\item{subject_tbl}{A tibble with one row per subject. Required columns:
+\code{subject_id} and \code{species}, both character. Common optional columns:
+\code{sex}, \code{strain}, \code{genotype}, \code{cohort}, \code{timepoint}, \code{notes}. Checked by
+\code{\link[=validate_cohort]{validate_cohort()}}.}
 
-\item{subject_tbl}{A tibble (data frame) containing subject-level metadata.
-Required columns: \code{subject_id} (character), \code{species} (rat/mouse/human).
-Optional columns: \code{sex}, \code{strain}, \code{genotype}, \code{cohort}, \code{timepoint},
-\code{notes}. Validated by \code{\link[=validate_cohort]{validate_cohort()}}.}
+\item{sample_map}{A long-format tibble with one row per sample. Required
+columns: \code{subject_id}, \code{assay}, \code{sample_id}, \code{role}, all character. A
+new assay is a new row, never a new column. Checked by
+\code{\link[=validate_cohort]{validate_cohort()}}.}
 
-\item{sample_map}{A canonical long-format tibble mapping subjects to samples,
-one row per sample. Columns: \code{subject_id}, \code{assay}, \code{sample_id}, \code{role}.
-New assays are represented as new rows, never new columns.
-Validated by \code{\link[=validate_cohort]{validate_cohort()}}.}
+\item{paths}{Named list of file paths to data files or result folders.
+Defaults to an empty list.}
 
-\item{paths}{Named list of file paths to data files or results directories.
-Optional, defaults to empty list.}
+\item{analyses}{Named list of analysis tables or other data objects.
+Defaults to an empty list.}
 
-\item{analyses}{Named list containing analysis results, intermediate tables,
-or other data objects for later retrieval. Optional, defaults to empty list.}
+\item{registry}{Named list of AnalysisSpec objects. Names match
+\code{spec@name}. Defaults to an empty list.}
 
-\item{registry}{Named list of AnalysisSpec objects defining registered
-analyses. Names correspond to spec@name. Optional, defaults to empty list.}
-
-\item{cache}{Named list for optional memoization of loaded analysis data.
-Optional, defaults to empty list.}
+\item{cache}{Named list used to memoize loaded analysis data. Defaults to
+an empty list.}
 }
 \description{
-An immutable S7 class for managing cross-species cohort data. Cohorts combine
-validated subject-level metadata with sample-to-assay mappings and optional
-study context, file paths, and analysis results. This is the primary data
-container for WES and snRNA-seq analyses across rat, mouse, and human studies.
+An S7 class that keeps the subjects and samples of a study in one object.
+A Cohort holds a subject table, a long-format sample map, an optional
+Study, file paths, analysis tables, and a registry of analysis specs.
 }
 \details{
-Use \code{\link[=cohort_new]{cohort_new()}} to construct Cohort objects with comprehensive validation.
-Validation ensures:
-\itemize{
-\item Required columns in subject_tbl and sample_map
-\item Valid species values (rat/mouse/human)
-\item Referential integrity between subject_tbl and sample_map
-\item No duplicate subject IDs
-}
+Use \code{\link[=cohort_new]{cohort_new()}} to build a Cohort. It checks the input types, converts
+both tables to tibbles, and runs \code{\link[=validate_cohort]{validate_cohort()}}.
 
-Access properties via the \code{@} operator:
+Subjects live only in \code{subject_tbl}. Use \code{\link[=subject]{subject()}} to read one row as a
+\link{Subject} object.
+
+Access properties with the \code{@} operator:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{cohort@study         # Study object or NULL
-cohort@subjects      # Named list of Subject objects
-cohort@subjects[["RAT001"]]  # Individual Subject object
-cohort@subject_tbl   # Subject metadata table (for bulk operations)
+cohort@subject_tbl   # Subject metadata table
 cohort@sample_map    # Sample mapping table
 cohort@paths         # File paths
 cohort@analyses      # Stored analysis results
@@ -76,6 +64,7 @@ cohort@cache         # Memoization cache
 }
 \seealso{
 \code{\link[=cohort_new]{cohort_new()}} for object construction,
+\code{\link[=subject]{subject()}} for reading one subject,
 \code{\link[=validate_cohort]{validate_cohort()}} for validation details,
 \code{\link[=validate_manifest]{validate_manifest()}} for manifest preparation,
 \code{\link[=read_manifest_csv]{read_manifest_csv()}} for loading manifest from file,

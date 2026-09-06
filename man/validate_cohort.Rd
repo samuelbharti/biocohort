@@ -7,36 +7,32 @@
 validate_cohort(x)
 }
 \arguments{
-\item{x}{An S7 object expected to be a Cohort class instance.}
+\item{x}{A \link{Cohort} object.}
 }
 \value{
-Invisibly returns TRUE if validation succeeds. Throws informative
-errors if validation fails.
+\code{TRUE}, invisibly, when the cohort is valid. Otherwise an error
+that lists every problem found.
 }
 \description{
-Ensures a Cohort object satisfies all structural and integrity requirements
-for cross-species genomics analysis. Validates the subject table, sample map,
-and referential integrity between them. Intended as an internal validation
-step called automatically by \code{\link[=cohort_new]{cohort_new()}}.
+Checks the subject table, the sample map, and the link between them.
+\code{\link[=cohort_new]{cohort_new()}} calls this function after it builds the object. Call it
+directly to check a cohort that was built or changed by other means.
 }
 \details{
-VALIDATION CHECKS:
+The checks are:
 \itemize{
-\item \code{x} is actually a Cohort object
-\item Both \code{subject_tbl} and \code{sample_map} are data frames
-\item \code{subject_tbl} includes required columns: subject_id, species
-\item \code{sample_map} includes subject_id column
-\item subject_id and species are character vectors, non-empty
-\item No duplicate subject_id values in subject_tbl
-\item All species values are valid (rat/mouse/human)
-\item Referential integrity: sample_map$subject_id values exist in subject_tbl
+\item \code{x} is a Cohort object.
+\item \code{subject_tbl} and \code{sample_map} are data frames.
+\item \code{subject_tbl} has the columns \code{subject_id} and \code{species}, both
+character, with no missing value. An empty string counts as missing.
+\item \code{subject_tbl$subject_id} has no duplicate.
+\item \code{subject_tbl$species} holds supported values.
+\item \code{sample_map} has the columns \code{subject_id}, \code{assay}, \code{sample_id}, and
+\code{role}, all character. The first three have no missing value.
+\item Every \code{sample_map$subject_id} exists in \code{subject_tbl}.
 }
-
-Validation is performed automatically by \code{\link[=cohort_new]{cohort_new()}}, but can be called
-directly for debugging or custom Cohort construction.
 }
 \examples{
-# Create valid cohort components
 subjects <- data.frame(
   subject_id = "RAT001",
   species = "rat",
@@ -53,7 +49,7 @@ cohort <- cohort_new(
   sample_map = samples
 )
 
-# Validation succeeds (called automatically above)
+# cohort_new() already ran the checks. Run them again by hand.
 validate_cohort(cohort)
 
 }

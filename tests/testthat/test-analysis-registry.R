@@ -96,13 +96,7 @@ test_that("analysis_register requires Cohort object", {
 })
 
 test_that("analysis_register requires AnalysisSpec object", {
-  cohort <- cohort_new(
-    subject_tbl = tibble::tibble(
-      subject_id = "S1",
-      species = "rat"
-    ),
-    sample_map = tibble::tibble(subject_id = "S1")
-  )
+  cohort <- make_cohort()
 
   expect_error(
     analysis_register(cohort, "not_a_spec"),
@@ -111,13 +105,7 @@ test_that("analysis_register requires AnalysisSpec object", {
 })
 
 test_that("analysis_register adds spec to registry", {
-  cohort <- cohort_new(
-    subject_tbl = tibble::tibble(
-      subject_id = "S1",
-      species = "rat"
-    ),
-    sample_map = tibble::tibble(subject_id = "S1")
-  )
+  cohort <- make_cohort()
 
   spec <- analysis_spec_new(
     name = "spec1",
@@ -137,13 +125,7 @@ test_that("analysis_register adds spec to registry", {
 })
 
 test_that("analysis_register replaces existing spec", {
-  cohort <- cohort_new(
-    subject_tbl = tibble::tibble(
-      subject_id = "S1",
-      species = "rat"
-    ),
-    sample_map = tibble::tibble(subject_id = "S1")
-  )
+  cohort <- make_cohort()
 
   spec1 <- analysis_spec_new(
     name = "spec1",
@@ -172,13 +154,7 @@ test_that("analysis_register replaces existing spec", {
 })
 
 test_that("analysis_register supports multiple specs", {
-  cohort <- cohort_new(
-    subject_tbl = tibble::tibble(
-      subject_id = "S1",
-      species = "rat"
-    ),
-    sample_map = tibble::tibble(subject_id = "S1")
-  )
+  cohort <- make_cohort()
 
   spec1 <- analysis_spec_new(
     name = "spec1",
@@ -208,13 +184,7 @@ test_that("analysis_register supports multiple specs", {
 })
 
 test_that("analysis_list returns empty tibble for empty registry", {
-  cohort <- cohort_new(
-    subject_tbl = tibble::tibble(
-      subject_id = "S1",
-      species = "rat"
-    ),
-    sample_map = tibble::tibble(subject_id = "S1")
-  )
+  cohort <- make_cohort()
 
   result <- analysis_list(cohort)
 
@@ -234,13 +204,7 @@ test_that("analysis_list requires Cohort object", {
 })
 
 test_that("analysis_list returns correct structure", {
-  cohort <- cohort_new(
-    subject_tbl = tibble::tibble(
-      subject_id = "S1",
-      species = "rat"
-    ),
-    sample_map = tibble::tibble(subject_id = "S1")
-  )
+  cohort <- make_cohort()
 
   spec <- analysis_spec_new(
     name = "somatic_vars",
@@ -265,13 +229,7 @@ test_that("analysis_list returns correct structure", {
 })
 
 test_that("analysis_list handles multiple specs", {
-  cohort <- cohort_new(
-    subject_tbl = tibble::tibble(
-      subject_id = "S1",
-      species = "rat"
-    ),
-    sample_map = tibble::tibble(subject_id = "S1")
-  )
+  cohort <- make_cohort()
 
   spec1 <- analysis_spec_new(
     name = "spec1",
@@ -306,13 +264,7 @@ test_that("analysis_list handles multiple specs", {
 })
 
 test_that("analysis_spec returns correct spec from registry", {
-  cohort <- cohort_new(
-    subject_tbl = tibble::tibble(
-      subject_id = "S1",
-      species = "rat"
-    ),
-    sample_map = tibble::tibble(subject_id = "S1")
-  )
+  cohort <- make_cohort()
 
   spec <- analysis_spec_new(
     name = "somatic_vars",
@@ -348,13 +300,7 @@ test_that("analysis_spec requires Cohort object", {
 })
 
 test_that("analysis_spec errors on missing spec name", {
-  cohort <- cohort_new(
-    subject_tbl = tibble::tibble(
-      subject_id = "S1",
-      species = "rat"
-    ),
-    sample_map = tibble::tibble(subject_id = "S1")
-  )
+  cohort <- make_cohort()
 
   expect_error(
     analysis_spec(cohort, "nonexistent"),
@@ -363,13 +309,7 @@ test_that("analysis_spec errors on missing spec name", {
 })
 
 test_that("analysis_spec shows available specs in error message", {
-  cohort <- cohort_new(
-    subject_tbl = tibble::tibble(
-      subject_id = "S1",
-      species = "rat"
-    ),
-    sample_map = tibble::tibble(subject_id = "S1")
-  )
+  cohort <- make_cohort()
 
   spec1 <- analysis_spec_new(
     name = "spec1",
@@ -400,13 +340,7 @@ test_that("analysis_spec shows available specs in error message", {
 })
 
 test_that("analysis_spec shows (none) for empty registry", {
-  cohort <- cohort_new(
-    subject_tbl = tibble::tibble(
-      subject_id = "S1",
-      species = "rat"
-    ),
-    sample_map = tibble::tibble(subject_id = "S1")
-  )
+  cohort <- make_cohort()
 
   expect_error(
     analysis_spec(cohort, "anything"),
