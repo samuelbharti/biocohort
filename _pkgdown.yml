@@ -89,6 +89,12 @@ reference:
   desc: Work with the sample map
   contents:
   - sample_pairs
+- title: Pipeline sample sheets
+  desc: Write the sample sheet a pipeline expects, and check its file paths
+  contents:
+  - sample_sheet
+  - sample_sheet_templates
+  - check_paths
 - title: Analysis loading
   desc: Read analysis feature tables from disk (experimental)
   contents:
