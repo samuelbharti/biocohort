@@ -126,3 +126,14 @@ Find the project root, build paths under it, and read a dotenv file
   : Create a folder when it is absent
 - [`read_dotenv()`](https://www.samuelbharti.com/bioroster/reference/read_dotenv.md)
   : Read a dotenv file into the environment
+
+## Corrections
+
+Apply documented overrides to a manifest and keep an audit trail
+
+- [`apply_corrections()`](https://www.samuelbharti.com/bioroster/reference/apply_corrections.md)
+  : Apply documented corrections to a manifest
+- [`corrections_log()`](https://www.samuelbharti.com/bioroster/reference/corrections_log.md)
+  : Return the audit table of a corrected manifest
+- [`read_corrections()`](https://www.samuelbharti.com/bioroster/reference/read_corrections.md)
+  : Read a corrections table from a file

@@ -21,8 +21,10 @@
 <url><loc>https://www.samuelbharti.com/bioroster/reference/analysis_register.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/analysis_spec.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.html</loc></url>
+<url><loc>https://www.samuelbharti.com/bioroster/reference/apply_corrections.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/bioroster-package.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/cohort_new.html</loc></url>
+<url><loc>https://www.samuelbharti.com/bioroster/reference/corrections_log.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/ensure_dir.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/example_cohort.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/index.html</loc></url>
@@ -39,6 +41,7 @@
 <url><loc>https://www.samuelbharti.com/bioroster/reference/orthologize.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/project_path.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/project_root.html</loc></url>
+<url><loc>https://www.samuelbharti.com/bioroster/reference/read_corrections.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/read_dotenv.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/register_liftover_backend.html</loc></url>
