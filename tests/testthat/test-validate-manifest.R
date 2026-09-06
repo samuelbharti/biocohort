@@ -205,3 +205,120 @@ test_that("validate_manifest preserves roles in sample_map", {
     "normal"
   )
 })
+
+test_that("validate_manifest coerces every subject-level column to character", {
+  manifest <- data.frame(
+    subject_id = "S1",
+    species = "rat",
+    timepoint = 3,
+    strain = factor("Lewis"),
+    notes = NA,
+    assay = "wes",
+    sample_id = "T1",
+    stringsAsFactors = FALSE
+  )
+
+  result <- validate_manifest(manifest)
+
+  expect_type(result$subject_tbl$timepoint, "character")
+  expect_type(result$subject_tbl$strain, "character")
+  expect_equal(result$subject_tbl$strain, "Lewis")
+  expect_true(is.na(result$subject_tbl$notes))
+  expect_type(result$subject_tbl$notes, "character")
+})
+
+test_that("validate_manifest accepts any species value", {
+  manifest <- data.frame(
+    subject_id = "S1",
+    species = "zebrafish",
+    assay = "wes",
+    sample_id = "T1",
+    stringsAsFactors = FALSE
+  )
+
+  expect_no_error(validate_manifest(manifest))
+})
+
+test_that("validate_manifest lower-cases species", {
+  manifest <- data.frame(
+    subject_id = c("S1", "S2"),
+    species = c("Rat", "rat"),
+    assay = "wes",
+    sample_id = c("T1", "T2"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- validate_manifest(manifest)
+
+  expect_equal(result$subject_tbl$species, c("rat", "rat"))
+})
+
+test_that("validate_manifest fills a species column when given as an argument", {
+  manifest <- data.frame(
+    subject_id = "S1",
+    assay = "wes",
+    sample_id = "T1",
+    stringsAsFactors = FALSE
+  )
+
+  result <- validate_manifest(manifest, species = "rat")
+
+  expect_equal(result$subject_tbl$species, "rat")
+})
+
+test_that("validate_manifest does not override an existing species column", {
+  manifest <- data.frame(
+    subject_id = "S1",
+    species = "mouse",
+    assay = "wes",
+    sample_id = "T1",
+    stringsAsFactors = FALSE
+  )
+
+  result <- validate_manifest(manifest, species = "rat")
+
+  expect_equal(result$subject_tbl$species, "mouse")
+})
+
+test_that("validate_manifest names the conflicting column in its error", {
+  manifest <- data.frame(
+    subject_id = c("S1", "S1"),
+    species = c("rat", "mouse"),
+    assay = c("wes", "wes"),
+    sample_id = c("T1", "N1"),
+    stringsAsFactors = FALSE
+  )
+
+  err <- expect_error(
+    validate_manifest(manifest),
+    "conflicting subject-level metadata"
+  )
+  expect_match(conditionMessage(err), "S1", fixed = TRUE)
+  expect_match(conditionMessage(err), "species", fixed = TRUE)
+})
+
+test_that("validate_manifest rejects the same sample_id under two subjects", {
+  manifest <- data.frame(
+    subject_id = c("S1", "S2"),
+    assay = c("wes", "wes"),
+    sample_id = c("T1", "T1"),
+    stringsAsFactors = FALSE
+  )
+
+  err <- expect_error(validate_manifest(manifest), "duplicate samples")
+  expect_match(conditionMessage(err), "T1", fixed = TRUE)
+  expect_match(conditionMessage(err), "S1", fixed = TRUE)
+  expect_match(conditionMessage(err), "S2", fixed = TRUE)
+})
+
+test_that("validate_manifest names duplicate sample ids, not only a count", {
+  manifest <- data.frame(
+    subject_id = c("S1", "S1"),
+    assay = c("wes", "wes"),
+    sample_id = c("T1", "T1"),
+    stringsAsFactors = FALSE
+  )
+
+  err <- expect_error(validate_manifest(manifest), "duplicate samples")
+  expect_match(conditionMessage(err), "T1", fixed = TRUE)
+})

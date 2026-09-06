@@ -25,8 +25,8 @@ The checks are:
 \item \code{subject_tbl} and \code{sample_map} are data frames.
 \item \code{subject_tbl} has the columns \code{subject_id} and \code{species}, both
 character, with no missing value. An empty string counts as missing.
+\code{species} is a free-form value; any organism is allowed.
 \item \code{subject_tbl$subject_id} has no duplicate.
-\item \code{subject_tbl$species} holds supported values.
 \item \code{sample_map} has the columns \code{subject_id}, \code{assay}, \code{sample_id}, and
 \code{role}, all character. The first three have no missing value.
 \item Every \code{sample_map$subject_id} exists in \code{subject_tbl}.

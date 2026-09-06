@@ -8,6 +8,22 @@
 .sample_map_cols <- c("subject_id", "assay", "sample_id", "role")
 .sample_map_value_cols <- c("subject_id", "assay", "sample_id")
 
+# Species is a free-form value: any organism is allowed. It is always
+# lower-cased so that "Rat" and "rat" are the same subject-level value.
+.normalize_species <- function(species) {
+  tolower(trimws(species))
+}
+
+# Coerce a manifest column to character, treating an empty string as missing.
+# Handles factor, logical (all-NA columns readr reads as logical), and
+# numeric columns without changing a value that is already a valid string,
+# so an id such as "007" is never turned into a number and back.
+.as_chr_na <- function(x) {
+  x <- as.character(x)
+  x[!is.na(x) & x == ""] <- NA_character_
+  x
+}
+
 # Show at most `n` ids in a message.
 .head_ids <- function(x, n = 5) {
   if (length(x) > n) {
@@ -69,20 +85,6 @@
   sprintf("`subject_tbl$subject_id` has duplicate values: %s.", .head_ids(dups))
 }
 
-.check_species_values <- function(subject_tbl) {
-  species <- subject_tbl$species
-  species <- species[!is.na(species)]
-  bad <- unique(species[!tolower(species) %in% .allowed_species])
-  if (length(bad) == 0) {
-    return(character())
-  }
-  sprintf(
-    "`subject_tbl$species` has unsupported values: %s. Allowed: %s.",
-    .head_ids(bad),
-    toString(.allowed_species)
-  )
-}
-
 .check_map_links <- function(subject_tbl, sample_map) {
   unknown <- setdiff(unique(sample_map$subject_id), subject_tbl$subject_id)
   unknown <- unknown[!is.na(unknown)]
@@ -106,8 +108,7 @@
   }
   c(
     .check_no_missing(subject_tbl, .subject_key_cols, "subject_tbl"),
-    .check_unique_subjects(subject_tbl),
-    .check_species_values(subject_tbl)
+    .check_unique_subjects(subject_tbl)
   )
 }
 

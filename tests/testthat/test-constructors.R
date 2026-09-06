@@ -6,9 +6,22 @@ test_that("study_new creates a Study", {
   expect_equal(study@study_id, "S1")
 })
 
-test_that("subject_new validates species", {
+test_that("subject_new accepts any species value", {
   expect_no_error(subject_new(subject_id = "R1", species = "rat"))
-  expect_error(subject_new(subject_id = "R1", species = "cat"))
+  expect_no_error(subject_new(subject_id = "R1", species = "zebrafish"))
+})
+
+test_that("subject_new lower-cases species", {
+  subject <- subject_new(subject_id = "R1", species = "Rat")
+  expect_equal(subject@species, "rat")
+})
+
+test_that("subject_new still requires a non-empty species string", {
+  expect_error(subject_new(subject_id = "R1", species = ""), "species")
+  expect_error(
+    subject_new(subject_id = "R1", species = NA_character_),
+    "species"
+  )
 })
 
 test_that("cohort_new validates structure", {
