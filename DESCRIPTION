@@ -1,18 +1,25 @@
 Package: bioroster
-Title: Cross-Species Cohort Framework for Genomics Data
-Version: 0.3.0
+Title: Subject and Sample Rosters for Genomics Studies
+Version: 0.1.0.9000
 Authors@R:
-    c(
-      person("Samuel", "Bharti", , "samuelbharti.io@gmail.com", role = c("aut", "cre"))
-    )
-Description: A lightweight R package for managing cross-species study data
-    and analysis artifacts. Provides S7 classes for rat/mouse/human cohorts
-    with manifest validation, ortholog-aware annotation support, and a
-    generic, long-format sample model supporting any omics assay (WGS, WES,
-    ATAC-seq, bulk RNA, single-cell, and more).
+    person("Samuel", "Bharti", , "samuelbharti.io@gmail.com",
+           role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0003-4190-7058"))
+Description: Keeps the subjects, samples, and analysis outputs of a genomics
+    study in one validated object. A long-format sample manifest is read and
+    validated, tumor and normal pairs are derived on demand, analysis outputs
+    are registered and loaded by path template, and features can be
+    translated across species through pluggable liftover and ortholog
+    backends. Species and assays are values in the manifest, not columns, so
+    any organism and any assay fit the same model.
 License: MIT + file LICENSE
 URL: https://www.samuelbharti.com/bioroster/, https://github.com/samuelbharti/bioroster
 BugReports: https://github.com/samuelbharti/bioroster/issues
+Encoding: UTF-8
+Language: en-US
+Roxygen: list(markdown = TRUE)
+Depends:
+    R (>= 4.1)
 Imports:
     S7,
     cli,
@@ -20,8 +27,7 @@ Imports:
     checkmate,
     fs,
     readr,
-    dplyr,
-    magrittr,
+    dplyr (>= 1.1.0),
     tibble
 Suggests:
     testthat (>= 3.0.0),
@@ -36,9 +42,5 @@ Suggests:
 SystemRequirements: CrossMap (optional, for the CrossMap liftover backend)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-Depends:
-    R (>= 3.5)
 LazyData: true
 Config/roxygen2/version: 8.0.0

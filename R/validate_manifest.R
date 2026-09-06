@@ -116,12 +116,12 @@ validate_manifest <- function(manifest, allow_duplicates = FALSE) {
   # Subject-level metadata = every column that is not sample-level.
   subject_meta_cols <- setdiff(names(manifest), .manifest_sample_cols)
 
-  subject_tbl <- manifest %>%
-    dplyr::select(dplyr::all_of(subject_meta_cols)) %>%
+  subject_tbl <- manifest |>
+    dplyr::select(dplyr::all_of(subject_meta_cols)) |>
     dplyr::distinct()
 
-  conflicts <- subject_tbl %>%
-    dplyr::count(.data$subject_id, name = "n") %>%
+  conflicts <- subject_tbl |>
+    dplyr::count(.data$subject_id, name = "n") |>
     dplyr::filter(.data$n > 1)
   if (nrow(conflicts) > 0) {
     cli::cli_abort(
@@ -136,7 +136,7 @@ validate_manifest <- function(manifest, allow_duplicates = FALSE) {
   subject_tbl <- dplyr::relocate(subject_tbl, "subject_id")
 
   # Canonical long-format sample map.
-  sample_map <- manifest %>%
+  sample_map <- manifest |>
     dplyr::transmute(
       subject_id = .data$subject_id,
       assay = .data$assay,
@@ -145,13 +145,13 @@ validate_manifest <- function(manifest, allow_duplicates = FALSE) {
     )
 
   if (!allow_duplicates) {
-    dups <- sample_map %>%
+    dups <- sample_map |>
       dplyr::count(
         .data$subject_id,
         .data$assay,
         .data$sample_id,
         name = "n"
-      ) %>%
+      ) |>
       dplyr::filter(.data$n > 1)
     if (nrow(dups) > 0) {
       cli::cli_abort(
@@ -164,8 +164,8 @@ validate_manifest <- function(manifest, allow_duplicates = FALSE) {
     }
   }
 
-  completeness_tbl <- sample_map %>%
-    dplyr::group_by(.data$subject_id, .data$assay) %>%
+  completeness_tbl <- sample_map |>
+    dplyr::group_by(.data$subject_id, .data$assay) |>
     dplyr::summarise(n_samples = dplyr::n(), .groups = "drop")
 
   list(

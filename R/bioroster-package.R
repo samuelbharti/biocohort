@@ -72,5 +72,4 @@
 #' For standardized naming conventions (columns, objects, functions, files),
 #' see [Naming Conventions](articles/naming-conventions.html).
 #'
-#' @importFrom magrittr %>%
 "_PACKAGE"

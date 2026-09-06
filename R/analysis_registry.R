@@ -63,17 +63,8 @@ analysis_register <- function(cohort, spec) {
   new_registry <- cohort@registry
   new_registry[[spec@name]] <- spec
 
-  # Return new cohort with updated registry (S7 immutable pattern)
-  Cohort(
-    study = cohort@study,
-    subjects = cohort@subjects,
-    subject_tbl = cohort@subject_tbl,
-    sample_map = cohort@sample_map,
-    paths = cohort@paths,
-    analyses = cohort@analyses,
-    registry = new_registry,
-    cache = cohort@cache
-  )
+  # Return a new cohort with the updated registry. The input is unchanged.
+  S7::set_props(cohort, registry = new_registry)
 }
 
 #' List registered analysis specifications

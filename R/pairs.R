@@ -81,16 +81,16 @@ sample_pairs <- function(
     sm <- dplyr::filter(sm, .data$assay %in% .env$assays)
   }
 
-  tumors <- sm %>%
-    dplyr::filter(.data$role == .env$tumor_role) %>%
+  tumors <- sm |>
+    dplyr::filter(.data$role == .env$tumor_role) |>
     dplyr::transmute(
       subject_id = .data$subject_id,
       assay = .data$assay,
       tumor_sample_id = .data$sample_id
     )
 
-  normals <- sm %>%
-    dplyr::filter(.data$role == .env$normal_role) %>%
+  normals <- sm |>
+    dplyr::filter(.data$role == .env$normal_role) |>
     dplyr::transmute(
       subject_id = .data$subject_id,
       assay = .data$assay,

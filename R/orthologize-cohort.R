@@ -100,16 +100,7 @@ NULL
   new_cache <- cohort@cache
   new_cache$translation <- list(from = from, to = to, results = results)
 
-  Cohort(
-    study = cohort@study,
-    subjects = cohort@subjects,
-    subject_tbl = cohort@subject_tbl,
-    sample_map = cohort@sample_map,
-    paths = cohort@paths,
-    analyses = translated,
-    registry = cohort@registry,
-    cache = new_cache
-  )
+  S7::set_props(cohort, analyses = translated, cache = new_cache)
 }
 
 #' Retrieve per-analysis translation results from a cohort
