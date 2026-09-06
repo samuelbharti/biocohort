@@ -1,18 +1,18 @@
-# myceliumr
+# bioroster
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/samuelbharti/myceliumr/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/myceliumr/actions/workflows/r.yml)
+[![R-CMD-check](https://github.com/samuelbharti/bioroster/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/bioroster/actions/workflows/r.yml)
 <!-- badges: end -->
 
 A lightweight R package for managing cross-species cohort data (rat/mouse/human) with manifest validation and standardized storage for WES and snRNA-seq outputs.
 
-**Documentation**: http://www.samuelbharti.com/myceliumr/
+**Documentation**: https://www.samuelbharti.com/bioroster/
 
 ## Installation
 
 ```r
 # From GitHub
-devtools::install_github("samuelbharti/myceliumr")
+devtools::install_github("samuelbharti/bioroster")
 
 # From source
 devtools::install()
@@ -21,7 +21,7 @@ devtools::install()
 ## Quick Start
 
 ```r
-library(myceliumr)
+library(bioroster)
 
 # Create a study
 study <- study_new(
@@ -63,14 +63,14 @@ R2,rat,KO,WES_002,SN_002
 - **Subject** - Individual subject with required species field
 - **Cohort** - Collection of subjects with sample mappings and analysis registry
 
-See [package documentation](http://www.samuelbharti.com/myceliumr/) for details.
+See [package documentation](https://www.samuelbharti.com/bioroster/) for details.
 
 ## Documentation
 
 The package website includes:
-- **[Glossary](http://www.samuelbharti.com/myceliumr/articles/glossary.html)**: Key terms and definitions
-- **[Naming Conventions](http://www.samuelbharti.com/myceliumr/articles/naming-conventions.html)**: Standardized column, object, and file names
-- **[Getting Started](http://www.samuelbharti.com/myceliumr/articles/getting-started.html)**: Workflow and examples
+- **[Glossary](https://www.samuelbharti.com/bioroster/articles/glossary.html)**: Key terms and definitions
+- **[Naming Conventions](https://www.samuelbharti.com/bioroster/articles/naming-conventions.html)**: Standardized column, object, and file names
+- **[Getting Started](https://www.samuelbharti.com/bioroster/articles/getting-started.html)**: Workflow and examples
 
 To build the site locally:
 

@@ -1,11 +1,11 @@
-# Contributing to myceliumr
+# Contributing to bioroster
 
 Thanks for helping. This guide covers what belongs in the package, the
 workflow, and the local tooling.
 
 ## What belongs here
 
-myceliumr keeps study metadata in one validated object and reads outputs that
+bioroster keeps study metadata in one validated object and reads outputs that
 other tools produced. Before you open a pull request, make sure that the
 change fits inside these lines:
 

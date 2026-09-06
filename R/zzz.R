@@ -11,15 +11,15 @@
 }
 
 .onAttach <- function(libname, pkgname) {
-  version <- utils::packageVersion("myceliumr")
+  version <- utils::packageVersion("bioroster")
   packageStartupMessage(
-    cli::col_blue("myceliumr"),
+    cli::col_blue("bioroster"),
     " version ",
     cli::col_green(version),
     "\n",
     "Cross-Species Cohort Framework for Genomics Data\n",
     "Documentation: ",
-    cli::col_cyan("http://www.samuelbharti.com/myceliumr/")
+    cli::col_cyan("https://www.samuelbharti.com/bioroster/")
   )
 }
 

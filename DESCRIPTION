@@ -1,4 +1,4 @@
-Package: myceliumr
+Package: bioroster
 Title: Cross-Species Cohort Framework for Genomics Data
 Version: 0.3.0
 Authors@R:
@@ -11,8 +11,8 @@ Description: A lightweight R package for managing cross-species study data
     generic, long-format sample model supporting any omics assay (WGS, WES,
     ATAC-seq, bulk RNA, single-cell, and more).
 License: MIT + file LICENSE
-URL: http://www.samuelbharti.com/myceliumr/, https://github.com/samuelbharti/myceliumr
-BugReports: https://github.com/samuelbharti/myceliumr/issues
+URL: https://www.samuelbharti.com/bioroster/, https://github.com/samuelbharti/bioroster
+BugReports: https://github.com/samuelbharti/bioroster/issues
 Imports:
     S7,
     cli,

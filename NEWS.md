@@ -1,4 +1,9 @@
-# myceliumr 0.3.0
+# bioroster (development version)
+
+- The package is renamed from myceliumr to bioroster. The repository, the
+  documentation site, and the S7 class prefix change with it.
+
+# bioroster 0.3.0
 
 ## New features
 
@@ -58,7 +63,7 @@
   `n_samples` count, replacing the WES-specific `has_dna_*` / `n_rna_samples`
   columns.
 
-# myceliumr 0.2.0
+# bioroster 0.2.0
 
 ## New Features
 
@@ -74,7 +79,7 @@
 - Improved example_cohort dataset with rn7 genome build
 - Package now displays version and documentation URL on load
 
-# myceliumr 0.1.0
+# bioroster 0.1.0
 
 ## Initial Release
 
