@@ -160,6 +160,57 @@ Data validation functions
 - [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
   : Validate a Cohort object
 
+## Samples
+
+Work with the sample map
+
+- [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
+  : Derive sample pairs from a sample map
+
+## Analysis loading
+
+Read analysis feature tables from disk (experimental)
+
+- [`load_analysis()`](http://www.samuelbharti.com/myceliumr/reference/load_analysis.md)
+  : Load an analysis's feature table from disk
+- [`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md)
+  : Load registered analyses into a cohort from disk
+- [`analysis_files()`](http://www.samuelbharti.com/myceliumr/reference/analysis_files.md)
+  : Retrieve analysis file manifests from a cohort
+
+## Cross-species translation
+
+Translate features across assemblies and species (experimental)
+
+- [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
+  : Translate features (or a whole cohort) across species or assemblies
+- [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)
+  : Liftover a set of genomic intervals across assemblies or species
+- [`liftover_vcf()`](http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.md)
+  : Liftover a VCF of variants with CrossMap (allele-aware)
+- [`liftover_rtracklayer()`](http://www.samuelbharti.com/myceliumr/reference/liftover_rtracklayer.md)
+  : Liftover backend backed by rtracklayer
+- [`liftover_crossmap()`](http://www.samuelbharti.com/myceliumr/reference/liftover_crossmap.md)
+  : Liftover backend backed by CrossMap
+- [`register_liftover_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_liftover_backend.md)
+  : Register a liftover backend
+- [`liftover_backends()`](http://www.samuelbharti.com/myceliumr/reference/liftover_backends.md)
+  : List registered liftover backends
+- [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)
+  : Map gene-level features to orthologs in another species
+- [`ortholog_babelgene()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_babelgene.md)
+  : Ortholog backend backed by babelgene
+- [`register_ortholog_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_ortholog_backend.md)
+  : Register a gene-ortholog backend
+- [`ortholog_backends()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.md)
+  : List registered ortholog backends
+- [`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md)
+  : Retrieve per-analysis translation results from a cohort
+- [`TranslationResult()`](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
+  : Result of a cross-species or cross-assembly translation
+- [`translation_stats()`](http://www.samuelbharti.com/myceliumr/reference/translation_stats.md)
+  : Summary statistics for a translation
+
 # Articles
 
 ### Reference

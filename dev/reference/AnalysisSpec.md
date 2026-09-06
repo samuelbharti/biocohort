@@ -16,7 +16,10 @@ AnalysisSpec(
   path_template = NA_character_,
   root_key = NA_character_,
   reader = character(0),
-  key_cols = character(0)
+  key_cols = character(0),
+  feature_type = NA_character_,
+  gene_col = NA_character_,
+  id_type = NA_character_
 )
 ```
 
@@ -33,8 +36,19 @@ AnalysisSpec(
 
 - level:
 
-  Character scalar for data organization level. Must be one of:
-  "subject", "pair", or "cohort". Required.
+  Character scalar for the granularity at which the analysis produces
+  results. Must be one of:
+
+  - `"subject"`: one result per subject.
+
+  - `"pair"`: one result per tumor/normal (case/control) pair, as
+    derived by
+    [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
+    from the cohort's `sample_map`.
+
+  - `"cohort"`: a single result for the whole cohort.
+
+  Required.
 
 - format:
 
@@ -49,8 +63,11 @@ AnalysisSpec(
 - path_template:
 
   Character scalar for templated path to analysis output. Supports
-  substitution tokens: `{root}`, `{subject_id}`, `{tumor_id}`,
-  `{normal_id}`, `{pair_id}`. Optional, defaults to NA.
+  substitution tokens: `{root}` (from `root_key`), `{subject_id}`, and
+  the pair tokens `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}`
+  (the latter three supplied by
+  [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
+  for `level = "pair"`). Optional, defaults to NA.
 
 - root_key:
 
@@ -69,6 +86,24 @@ AnalysisSpec(
   Character vector of column names to use as keys when loading the
   analysis table. Determines how rows are indexed (e.g.,
   `c("subject_id")` or `c("pair_id")`). Required.
+
+- feature_type:
+
+  Optional character scalar declaring how this analysis's features
+  translate across species in
+  [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md):
+  `"interval"` (liftover) or `"gene"` (ortholog mapping). Optional,
+  defaults to NA.
+
+- gene_col:
+
+  Optional character scalar naming the gene-identifier column for
+  `feature_type = "gene"`. Optional, defaults to NA.
+
+- id_type:
+
+  Optional gene identifier type for `feature_type = "gene"`: `"symbol"`,
+  `"entrez"`, or `"ensembl"`. Optional, defaults to NA.
 
 ## Details
 

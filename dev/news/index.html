@@ -35,6 +35,27 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="myceliumr-030">myceliumr 0.3.0<a class="anchor" aria-label="anchor" href="#myceliumr-030"></a></h2>
 <div class="section level3">
+<h3 id="new-features-0-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h3>
+<ul><li>
+<strong>Cross-species translation (experimental)</strong>: first-class coordinate translation across assemblies and species.
+<ul><li>
+<code><a href="../reference/orthologize.html">orthologize()</a></code> — modality-dispatching front door routing coordinate features to liftover and gene features to ortholog mapping. Given a <code>Cohort</code>, it translates every registered analysis according to its <code>AnalysisSpec</code> <code>feature_type</code> and returns a new, target-species cohort (subjects and sample map unchanged); per-analysis results, including unmapped features, are retrievable with <code><a href="../reference/translation_report.html">translation_report()</a></code>.</li>
+<li>
+<code>AnalysisSpec</code> gains optional <code>feature_type</code> (<code>"interval"</code>/<code>"gene"</code>), <code>gene_col</code>, and <code>id_type</code> fields that drive cohort-level auto-dispatch.</li>
+<li>
+<code><a href="../reference/load_analysis.html">load_analysis()</a></code> / <code><a href="../reference/load_analyses.html">load_analyses()</a></code> — read analysis feature tables from disk by resolving each <code>AnalysisSpec</code>’s <code>path_template</code> (<code>{root}</code>, <code>{subject_id}</code>, <code>{pair_id}</code>, …) per <code>level</code>, via the spec’s <code>reader</code>. Missing files are reported, not silently skipped; manifests are retrievable with <code><a href="../reference/analysis_files.html">analysis_files()</a></code>. This takes a cohort from <em>paths</em> to <em>loaded feature tables</em>, ready for <code><a href="../reference/orthologize.html">orthologize()</a></code>.</li>
+<li>
+<code><a href="../reference/ortholog_genes.html">ortholog_genes()</a></code> — gene-level cross-species mapping returning a <code>TranslationResult</code>; pluggable backends via <code><a href="../reference/register_ortholog_backend.html">register_ortholog_backend()</a></code> / <code><a href="../reference/ortholog_backends.html">ortholog_backends()</a></code>, with an offline <code>babelgene</code> default (<code><a href="../reference/ortholog_babelgene.html">ortholog_babelgene()</a></code>). Model-to-model pairs (e.g. rat-to-mouse) are pivoted through human.</li>
+<li>
+<code><a href="../reference/liftover_intervals.html">liftover_intervals()</a></code> — translate intervals (variants, peaks, regions) via a chain file, returning a <code>TranslationResult</code> that retains both mapped and <strong>unmapped</strong> features so loss is never silent.</li>
+<li>Pluggable backends via <code><a href="../reference/register_liftover_backend.html">register_liftover_backend()</a></code> / <code><a href="../reference/liftover_backends.html">liftover_backends()</a></code>: an R-native <code>rtracklayer</code> default, plus a <code>crossmap</code> adapter and the allele-aware <code><a href="../reference/liftover_vcf.html">liftover_vcf()</a></code> wrapper for the external CrossMap tool.</li>
+<li>
+<code>TranslationResult</code> S7 class and <code><a href="../reference/translation_stats.html">translation_stats()</a></code> for mapped/unmapped/ multi-mapped accounting.</li>
+</ul></li>
+<li>
+<strong><code><a href="../reference/sample_pairs.html">sample_pairs()</a></code></strong>: derive tumor/normal (case/control) sample pairs from a long-format <code>sample_map</code>. Pairing is assay-agnostic and computed on demand rather than stored, replacing the old WES-specific <code>pair_id</code> column. Returns <code>subject_id</code>, <code>assay</code>, <code>tumor_sample_id</code>, <code>normal_sample_id</code>, <code>pair_id</code>, with configurable role labels via <code>tumor_role</code>/<code>normal_role</code>.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="breaking-changes-0-3-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-3-0"></a></h3>
 <ul><li>
 <strong>Generic, species- and assay-agnostic manifest layer</strong> (<a href="https://github.com/samuelbharti/myceliumr/issues/7" class="external-link">#7</a>). The manifest model is no longer hardcoded to rat / WES / snRNA-seq. The canonical representation is a tidy, long-format <code>sample_map</code> with columns <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>, <code>role</code>, where <code>assay</code> is a free-form value (<code>wgs</code>, <code>wes</code>, <code>atac</code>, <code>bulk_rna</code>, <code>scrna</code>, …). New assays are new rows, never new columns or per-assay tables.</li>
@@ -89,7 +110,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

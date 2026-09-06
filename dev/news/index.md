@@ -2,6 +2,64 @@
 
 ## myceliumr 0.3.0
 
+### New features
+
+- **Cross-species translation (experimental)**: first-class coordinate
+  translation across assemblies and species.
+  - [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
+    — modality-dispatching front door routing coordinate features to
+    liftover and gene features to ortholog mapping. Given a `Cohort`, it
+    translates every registered analysis according to its `AnalysisSpec`
+    `feature_type` and returns a new, target-species cohort (subjects
+    and sample map unchanged); per-analysis results, including unmapped
+    features, are retrievable with
+    [`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md).
+  - `AnalysisSpec` gains optional `feature_type`
+    (`"interval"`/`"gene"`), `gene_col`, and `id_type` fields that drive
+    cohort-level auto-dispatch.
+  - [`load_analysis()`](http://www.samuelbharti.com/myceliumr/reference/load_analysis.md)
+    /
+    [`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md)
+    — read analysis feature tables from disk by resolving each
+    `AnalysisSpec`’s `path_template` (`{root}`, `{subject_id}`,
+    `{pair_id}`, …) per `level`, via the spec’s `reader`. Missing files
+    are reported, not silently skipped; manifests are retrievable with
+    [`analysis_files()`](http://www.samuelbharti.com/myceliumr/reference/analysis_files.md).
+    This takes a cohort from *paths* to *loaded feature tables*, ready
+    for
+    [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md).
+  - [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)
+    — gene-level cross-species mapping returning a `TranslationResult`;
+    pluggable backends via
+    [`register_ortholog_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_ortholog_backend.md)
+    /
+    [`ortholog_backends()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.md),
+    with an offline `babelgene` default
+    ([`ortholog_babelgene()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_babelgene.md)).
+    Model-to-model pairs (e.g. rat-to-mouse) are pivoted through human.
+  - [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)
+    — translate intervals (variants, peaks, regions) via a chain file,
+    returning a `TranslationResult` that retains both mapped and
+    **unmapped** features so loss is never silent.
+  - Pluggable backends via
+    [`register_liftover_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_liftover_backend.md)
+    /
+    [`liftover_backends()`](http://www.samuelbharti.com/myceliumr/reference/liftover_backends.md):
+    an R-native `rtracklayer` default, plus a `crossmap` adapter and the
+    allele-aware
+    [`liftover_vcf()`](http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.md)
+    wrapper for the external CrossMap tool.
+  - `TranslationResult` S7 class and
+    [`translation_stats()`](http://www.samuelbharti.com/myceliumr/reference/translation_stats.md)
+    for mapped/unmapped/ multi-mapped accounting.
+- **[`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)**:
+  derive tumor/normal (case/control) sample pairs from a long-format
+  `sample_map`. Pairing is assay-agnostic and computed on demand rather
+  than stored, replacing the old WES-specific `pair_id` column. Returns
+  `subject_id`, `assay`, `tumor_sample_id`, `normal_sample_id`,
+  `pair_id`, with configurable role labels via
+  `tumor_role`/`normal_role`.
+
 ### Breaking changes
 
 - **Generic, species- and assay-agnostic manifest layer**

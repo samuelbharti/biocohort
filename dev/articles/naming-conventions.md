@@ -63,6 +63,12 @@ ID can aid readability:
 - **Single-cell/RNA**: `{assay}_{subject}_{rep}` (e.g., “scrna_101_1”,
   “bulk_rna_101_2”)
 
+Tumor/normal **pairs** are not stored in `sample_map`; derive them on
+demand with
+[`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md),
+which yields a `pair_id` of `{tumor_sample_id}__{normal_sample_id}`
+(e.g., “wes_T101\_\_wes_N101”).
+
 ## Object Names
 
 ### R Objects and Variables
@@ -115,7 +121,7 @@ result <- cohort@analyses[["my_analysis_name"]]
 - **IO functions**: `read_{format}()` or `write_{format}()` (e.g.,
   [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md))
 - **Helper functions**: lowercase with underscores (e.g.,
-  `extract_pair_ids()`)
+  [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md))
 - **S7 methods**: Dispatch on class; function name describes operation
   (e.g., [`print()`](https://rdrr.io/r/base/print.html) method for
   Cohort)

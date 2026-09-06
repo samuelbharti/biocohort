@@ -22,6 +22,7 @@ documentation and code.
 | **Tumor Sample** | A sample collected from tumor tissue or neoplastic cells, recorded as a `sample_map` row with `role = "tumor"`. |
 | **Normal Sample** | A sample collected from non-neoplastic tissue or control cells, recorded as a `sample_map` row with `role = "normal"`. A baseline for somatic mutation calling. |
 | **Sample ID** (`sample_id`) | A unique identifier for an individual sample, independent of the subject ID. Allows samples from the same subject to be distinguished. |
+| **Pair** (`pair_id`) | A tumor/normal (case/control) pairing of two samples of the same assay for one subject, derived on demand from `sample_map` via [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md). The `pair_id` is `paste0(tumor_sample_id, "__", normal_sample_id)`. Pairing is assay-agnostic and is not stored in `sample_map` itself. |
 
 ## Data Tables
 

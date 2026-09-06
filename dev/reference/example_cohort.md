@@ -70,19 +70,8 @@ data(example_cohort)
 
 # View the study metadata
 example_cohort@study
-#> <myceliumr::Study>
-#>  @ study_id     : chr "STUDY001"
-#>  @ title        : chr "Cross-species genomics comparison"
-#>  @ description  : chr "Example study comparing rat and mouse genomes"
-#>  @ hypotheses   : chr [1:2] "Orthologous genes show conserved expression patterns" ...
-#>  @ aims         : chr [1:2] "Map rat genes to mouse orthologs" ...
-#>  @ assays       : chr [1:2] "WES" "snRNA-seq"
-#>  @ genome_builds:List of 3
-#>  .. $ rat  : chr "rn7"
-#>  .. $ mouse: chr "mm10"
-#>  .. $ human: chr "hg38"
-#>  @ created_at   : POSIXct[1:1], format: "2026-06-30 08:25:15"
-#>  @ tags         : chr(0) 
+#> Study <STUDY001>: Cross-species genomics comparison 
+#>   Example study comparing rat and mouse genomes
 
 # Access individual Subject objects (automatically created)
 rat1 <- example_cohort@subjects[["RAT001"]]

@@ -54,7 +54,10 @@ output files with templated paths and standardized readers.</p>
 <span>  path_template <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
 <span>  root_key <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
 <span>  reader <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
-<span>  key_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span>  key_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  feature_type <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  gene_col <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  id_type <span class="op">=</span> <span class="cn">NA_character_</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -72,8 +75,12 @@ output files with templated paths and standardized readers.</p>
 
 
 <dt id="arg-level">level<a class="anchor" aria-label="anchor" href="#arg-level"></a></dt>
-<dd><p>Character scalar for data organization level. Must be one of:
-"subject", "pair", or "cohort". Required.</p></dd>
+<dd><p>Character scalar for the granularity at which the analysis
+produces results. Must be one of:</p><ul><li><p><code>"subject"</code>: one result per subject.</p></li>
+<li><p><code>"pair"</code>: one result per tumor/normal (case/control) pair, as derived by
+<code><a href="sample_pairs.html">sample_pairs()</a></code> from the cohort's <code>sample_map</code>.</p></li>
+<li><p><code>"cohort"</code>: a single result for the whole cohort.</p></li>
+</ul><p>Required.</p></dd>
 
 
 <dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
@@ -88,8 +95,10 @@ analysis. Optional, defaults to NA.</p></dd>
 
 <dt id="arg-path-template">path_template<a class="anchor" aria-label="anchor" href="#arg-path-template"></a></dt>
 <dd><p>Character scalar for templated path to analysis output.
-Supports substitution tokens: <code>{root}</code>, <code>{subject_id}</code>, <code>{tumor_id}</code>,
-<code>{normal_id}</code>, <code>{pair_id}</code>. Optional, defaults to NA.</p></dd>
+Supports substitution tokens: <code>{root}</code> (from <code>root_key</code>), <code>{subject_id}</code>,
+and the pair tokens <code>{tumor_sample_id}</code>, <code>{normal_sample_id}</code>, <code>{pair_id}</code>
+(the latter three supplied by <code><a href="sample_pairs.html">sample_pairs()</a></code> for <code>level = "pair"</code>).
+Optional, defaults to NA.</p></dd>
 
 
 <dt id="arg-root-key">root_key<a class="anchor" aria-label="anchor" href="#arg-root-key"></a></dt>
@@ -108,6 +117,22 @@ name. Required.</p></dd>
 <dd><p>Character vector of column names to use as keys when
 loading the analysis table. Determines how rows are indexed
 (e.g., <code>c("subject_id")</code> or <code>c("pair_id")</code>). Required.</p></dd>
+
+
+<dt id="arg-feature-type">feature_type<a class="anchor" aria-label="anchor" href="#arg-feature-type"></a></dt>
+<dd><p>Optional character scalar declaring how this analysis's
+features translate across species in <code><a href="orthologize.html">orthologize()</a></code>: <code>"interval"</code>
+(liftover) or <code>"gene"</code> (ortholog mapping). Optional, defaults to NA.</p></dd>
+
+
+<dt id="arg-gene-col">gene_col<a class="anchor" aria-label="anchor" href="#arg-gene-col"></a></dt>
+<dd><p>Optional character scalar naming the gene-identifier column
+for <code>feature_type = "gene"</code>. Optional, defaults to NA.</p></dd>
+
+
+<dt id="arg-id-type">id_type<a class="anchor" aria-label="anchor" href="#arg-id-type"></a></dt>
+<dd><p>Optional gene identifier type for <code>feature_type = "gene"</code>:
+<code>"symbol"</code>, <code>"entrez"</code>, or <code>"ensembl"</code>. Optional, defaults to NA.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -141,7 +166,7 @@ validation. AnalysisSpec objects are typically registered in a Cohort via
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

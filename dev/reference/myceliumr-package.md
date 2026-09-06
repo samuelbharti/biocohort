@@ -64,6 +64,11 @@ example:
 - [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
   — Validate and structure manifest data
 
+**Samples:**
+
+- [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
+  — Derive tumor/normal sample pairs from a sample map
+
 **Validation:**
 
 - [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)

@@ -111,19 +111,8 @@ study <- study_new(
   genome_builds = list(rat = "rn7", mouse = "mm10", human = "hg38")
 )
 print(study)
-#> <myceliumr::Study>
-#>  @ study_id     : chr "STUDY001"
-#>  @ title        : chr "Cross-species genomics comparison"
-#>  @ description  : chr "Comparing rat and mouse genomes"
-#>  @ hypotheses   : chr [1:2] "Orthologous genes show conserved expression patterns" ...
-#>  @ aims         : chr [1:2] "Map regulatory regions across species" ...
-#>  @ assays       : chr [1:2] "WES" "snRNA-seq"
-#>  @ genome_builds:List of 3
-#>  .. $ rat  : chr "rn7"
-#>  .. $ mouse: chr "mm10"
-#>  .. $ human: chr "hg38"
-#>  @ created_at   : POSIXct[1:1], format: "2026-06-30 08:28:32"
-#>  @ tags         : chr(0) 
+#> Study <STUDY001>: Cross-species genomics comparison 
+#>   Comparing rat and mouse genomes
 
 # Example with README file as description
 # study <- study_new(

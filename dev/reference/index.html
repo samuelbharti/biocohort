@@ -197,6 +197,159 @@
 
         </dt>
         <dd>Validate a Cohort object</dd>
+      </dl></div><div class="section level2">
+      <h2 id="samples">Samples<a class="anchor" aria-label="anchor" href="#samples"></a></h2>
+
+      <div class="section-desc"><p>Work with the sample map</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="sample_pairs.html">sample_pairs()</a></code>
+
+        </dt>
+        <dd>Derive sample pairs from a sample map</dd>
+      </dl></div><div class="section level2">
+      <h2 id="analysis-loading">Analysis loading<a class="anchor" aria-label="anchor" href="#analysis-loading"></a></h2>
+
+      <div class="section-desc"><p>Read analysis feature tables from disk (experimental)</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="load_analysis.html">load_analysis()</a></code>
+
+        </dt>
+        <dd>Load an analysis's feature table from disk</dd>
+
+        <dt>
+
+          <code><a href="load_analyses.html">load_analyses()</a></code>
+
+        </dt>
+        <dd>Load registered analyses into a cohort from disk</dd>
+
+        <dt>
+
+          <code><a href="analysis_files.html">analysis_files()</a></code>
+
+        </dt>
+        <dd>Retrieve analysis file manifests from a cohort</dd>
+      </dl></div><div class="section level2">
+      <h2 id="cross-species-translation">Cross-species translation<a class="anchor" aria-label="anchor" href="#cross-species-translation"></a></h2>
+
+      <div class="section-desc"><p>Translate features across assemblies and species (experimental)</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="orthologize.html">orthologize()</a></code>
+
+        </dt>
+        <dd>Translate features (or a whole cohort) across species or assemblies</dd>
+
+        <dt>
+
+          <code><a href="liftover_intervals.html">liftover_intervals()</a></code>
+
+        </dt>
+        <dd>Liftover a set of genomic intervals across assemblies or species</dd>
+
+        <dt>
+
+          <code><a href="liftover_vcf.html">liftover_vcf()</a></code>
+
+        </dt>
+        <dd>Liftover a VCF of variants with CrossMap (allele-aware)</dd>
+
+        <dt>
+
+          <code><a href="liftover_rtracklayer.html">liftover_rtracklayer()</a></code>
+
+        </dt>
+        <dd>Liftover backend backed by rtracklayer</dd>
+
+        <dt>
+
+          <code><a href="liftover_crossmap.html">liftover_crossmap()</a></code>
+
+        </dt>
+        <dd>Liftover backend backed by CrossMap</dd>
+
+        <dt>
+
+          <code><a href="register_liftover_backend.html">register_liftover_backend()</a></code>
+
+        </dt>
+        <dd>Register a liftover backend</dd>
+
+        <dt>
+
+          <code><a href="liftover_backends.html">liftover_backends()</a></code>
+
+        </dt>
+        <dd>List registered liftover backends</dd>
+
+        <dt>
+
+          <code><a href="ortholog_genes.html">ortholog_genes()</a></code>
+
+        </dt>
+        <dd>Map gene-level features to orthologs in another species</dd>
+
+        <dt>
+
+          <code><a href="ortholog_babelgene.html">ortholog_babelgene()</a></code>
+
+        </dt>
+        <dd>Ortholog backend backed by babelgene</dd>
+
+        <dt>
+
+          <code><a href="register_ortholog_backend.html">register_ortholog_backend()</a></code>
+
+        </dt>
+        <dd>Register a gene-ortholog backend</dd>
+
+        <dt>
+
+          <code><a href="ortholog_backends.html">ortholog_backends()</a></code>
+
+        </dt>
+        <dd>List registered ortholog backends</dd>
+
+        <dt>
+
+          <code><a href="translation_report.html">translation_report()</a></code>
+
+        </dt>
+        <dd>Retrieve per-analysis translation results from a cohort</dd>
+
+        <dt>
+
+          <code><a href="TranslationResult.html">TranslationResult()</a></code>
+
+        </dt>
+        <dd>Result of a cross-species or cross-assembly translation</dd>
+
+        <dt>
+
+          <code><a href="translation_stats.html">translation_stats()</a></code>
+
+        </dt>
+        <dd>Summary statistics for a translation</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
@@ -207,7 +360,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>
