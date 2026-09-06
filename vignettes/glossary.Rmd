@@ -75,8 +75,8 @@ This glossary defines key terms and concepts used throughout bioroster documenta
 | Term | Definition |
 |------|-----------|
 | **S7 Class** | A formal object-oriented programming model in R (via the S7 package) providing immutable properties, type validation, and method dispatch. All bioroster core objects (Study, Subject, Cohort) are S7 classes. |
-| **Property** | A named field in an S7 class, accessed via the `@` operator (e.g., `cohort@subjects`, `study@title`). Properties are typed and immutable once created. |
-| **Subject Object** | An S7 instance of the Subject class encapsulating a single subject's metadata. Usually managed within a Cohort's `subjects` named list rather than directly. |
+| **Property** | A named field in an S7 class, accessed via the `@` operator (e.g., `cohort@subject_tbl`, `study@title`). Properties are typed and immutable once created. |
+| **Subject Object** | An S7 instance of the Subject class encapsulating a single subject's metadata. Built on demand from a Cohort with `subject(cohort, id)`, or directly with `subject_new()`. A Cohort stores subjects as rows of `subject_tbl`, not as objects. |
 | **Cohort Object** | An S7 instance of the Cohort class serving as the primary data container: holds subjects, sample mappings, optional study context, file paths, analyses, and a registry of analysis specifications. |
 
 ## File and Path References

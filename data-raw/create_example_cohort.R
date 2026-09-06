@@ -1,7 +1,6 @@
-# Create example cohort dataset
-# Run from the package root after devtools::load_all().
-library(tibble)
-library(dplyr)
+# Create the example cohort dataset.
+# Run from the package root after pkgload::load_all("."):
+#   source("data-raw/create_example_cohort.R")
 
 # Create a study
 study <- study_new(
@@ -20,9 +19,7 @@ study <- study_new(
   genome_builds = list(rat = "rn7", mouse = "mm10", human = "hg38")
 )
 
-# Create a sample manifest (long format: one row per sample). Each subject
-# carries WES (tumor/normal) and snRNA-seq samples to demonstrate the
-# assay-agnostic sample model.
+# Subject-level metadata, one row per subject.
 subjects <- tibble::tibble(
   subject_id = c("RAT001", "RAT002", "MOUSE001", "MOUSE002"),
   species = c("rat", "rat", "mouse", "mouse"),
@@ -33,6 +30,8 @@ subjects <- tibble::tibble(
   timepoint = c("Day0", "Day0", "Day0", "Day0")
 )
 
+# Samples in long format, one row per sample. Each subject carries WES
+# tumor and normal samples and one snRNA-seq sample.
 samples <- tibble::tribble(
   ~subject_id , ~assay  , ~sample_id   , ~role    ,
   "RAT001"    , "wes"   , "WES_R001_T" , "tumor"  ,
@@ -51,10 +50,9 @@ samples <- tibble::tribble(
 
 manifest_df <- dplyr::left_join(samples, subjects, by = "subject_id")
 
-# Validate and split manifest into subject_tbl and sample_map
+# Validate and split the manifest into subject_tbl and sample_map.
 manifest_split <- validate_manifest(manifest_df)
 
-# Create cohort from validated manifest components
 example_cohort <- cohort_new(
   study = study,
   subject_tbl = manifest_split$subject_tbl,
