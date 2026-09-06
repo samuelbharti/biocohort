@@ -43,7 +43,9 @@ samples and are grouped into Cohort objects for collective analysis.
 }
 \details{
 Use \code{\link[=subject_new]{subject_new()}} to construct Subject objects with species validation.
-Individual subjects are typically managed through Cohort objects.
+Construction also validates that \code{subject_id} and \code{species} are present, so
+building a \code{Subject} any other way still enforces the two required fields.
+Individual subjects are typically read from a Cohort with \code{\link[=subject]{subject()}}.
 
 Access properties via the \code{@} operator:
 
