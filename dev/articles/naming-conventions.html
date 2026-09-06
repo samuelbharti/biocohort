@@ -290,8 +290,8 @@ ID can aid readability:</p>
 <code>cohort</code>, <code>nf1_cohort</code>,
 <code>study_cohort</code>).</li>
 <li>
-<strong>Subject objects</strong>: Rarely used directly; accessed via
-<code>cohort@subjects[[subject_id]]</code>.</li>
+<strong>Subject objects</strong>: Rarely used directly; built on
+demand with <code>subject(cohort, subject_id)</code>.</li>
 <li>
 <strong>AnalysisSpec objects</strong>: Use spec name as primary
 identifier (stored in registry with name as key).</li>
@@ -318,8 +318,8 @@ suffix or use descriptive names like <code>subject_data</code>,
 <span>  study <span class="op">=</span> <span class="va">study</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Access subject</span></span>
-<span><span class="va">subject</span> <span class="op">&lt;-</span> <span class="va">cohort</span><span class="op">@</span><span class="va">subjects</span><span class="op">[[</span><span class="st">"RAT_101"</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co"># Read one subject as a Subject object</span></span>
+<span><span class="va">rat_101</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cohort-subject.html">subject</a></span><span class="op">(</span><span class="va">cohort</span>, <span class="st">"RAT_101"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Access analysis</span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="va">cohort</span><span class="op">@</span><span class="va">analyses</span><span class="op">[[</span><span class="st">"my_analysis_name"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
@@ -438,7 +438,7 @@ describes operation (e.g., <code><a href="https://rdrr.io/r/base/print.html" cla
 singular depending on context</li>
 <li>
 <strong>Named lists</strong>: Keys should be identifiers or logical
-names (e.g., <code>cohort@subjects[["RAT_101"]]</code>)</li>
+names (e.g., <code>cohort@analyses[["my_analysis"]]</code>)</li>
 </ul>
 </div>
 </div>

@@ -344,14 +344,17 @@ All bioroster core objects (Study, Subject, Cohort) are S7 classes.</td>
 <tr class="even">
 <td><strong>Property</strong></td>
 <td>A named field in an S7 class, accessed via the <code>@</code>
-operator (e.g., <code>cohort@subjects</code>, <code>study@title</code>).
-Properties are typed and immutable once created.</td>
+operator (e.g., <code>cohort@subject_tbl</code>,
+<code>study@title</code>). Properties are typed and immutable once
+created.</td>
 </tr>
 <tr class="odd">
 <td><strong>Subject Object</strong></td>
 <td>An S7 instance of the Subject class encapsulating a single subject’s
-metadata. Usually managed within a Cohort’s <code>subjects</code> named
-list rather than directly.</td>
+metadata. Built on demand from a Cohort with
+<code>subject(cohort, id)</code>, or directly with
+<code><a href="../reference/subject_new.html">subject_new()</a></code>. A Cohort stores subjects as rows of
+<code>subject_tbl</code>, not as objects.</td>
 </tr>
 <tr class="even">
 <td><strong>Cohort Object</strong></td>

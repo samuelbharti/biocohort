@@ -1,9 +1,8 @@
 # Example Cohort Dataset
 
-A sample Cohort object containing cross-species study data with rat and
-mouse subjects. Provided for demonstration, testing, and learning the
-bioroster data model. Includes a complete Study object with subject
-metadata.
+A small Cohort with two rat and two mouse subjects. Use it to explore
+the data model, to try the API, or as a template for a cohort built from
+real data.
 
 ## Usage
 
@@ -18,9 +17,6 @@ A Cohort object (S7 class) with the following structure:
 - study: A Study object with metadata for a cross-species genomics
   project
 
-- subjects (named list): 4 Subject objects automatically created,
-  accessible by subject_id
-
 - subject_tbl (tibble): 4 subjects (2 rat, 2 mouse) with species, sex,
   strain, genotype, cohort, timepoint
 
@@ -33,30 +29,24 @@ A Cohort object (S7 class) with the following structure:
 
 ## Details
 
-The example_cohort demonstrates the complete bioroster data structure
-including:
+The cohort shows:
 
-- Cross-species data (rat and mouse)
+- Two species in one subject table
 
-- Automatic Subject object creation from manifest data
+- Two assays per subject in one long-format sample map
 
-- Subject-to-sample mappings with multiple assays
+- A Study object for project context
 
-- Integration with a Study object for project context
-
-- Proper data types and structure for downstream analysis
-
-Subject objects are automatically created when building the cohort,
-eliminating the need to manually instantiate individual Subject objects.
-Access them via the subjects property using subject IDs as names.
-
-Use this cohort to explore the API, test workflows, or as a template for
-creating your own cohorts from real data.
+Subjects are stored as rows of `subject_tbl`. Use
+[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+to read one of them as a Subject object.
 
 ## See also
 
 [`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
 for creating Cohort objects,
+[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+for reading one subject,
 [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
 for preparing manifest data,
 [`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md)
@@ -73,18 +63,18 @@ example_cohort@study
 #> Study <STUDY001>: Cross-species genomics comparison 
 #>   Example study comparing rat and mouse genomes
 
-# Access individual Subject objects (automatically created)
-rat1 <- example_cohort@subjects[["RAT001"]]
+# Read one subject as a Subject object
+rat1 <- subject(example_cohort, "RAT001")
 rat1@species
 #> [1] "rat"
 rat1@sex
 #> [1] "M"
 
-# List all subject IDs
-names(example_cohort@subjects)
+# List all subject ids
+example_cohort@subject_tbl$subject_id
 #> [1] "RAT001"   "RAT002"   "MOUSE001" "MOUSE002"
 
-# View all subjects with metadata (tibble for bulk operations)
+# View all subjects with metadata
 example_cohort@subject_tbl
 #> # A tibble: 4 × 7
 #>   subject_id species sex   strain  genotype cohort    timepoint
@@ -94,7 +84,7 @@ example_cohort@subject_tbl
 #> 3 MOUSE001   mouse   M     C57BL/6 WT       Control   Day0     
 #> 4 MOUSE002   mouse   F     C57BL/6 KO       Treatment Day0     
 
-# View sample mapping
+# View the sample map
 example_cohort@sample_map
 #> # A tibble: 12 × 4
 #>    subject_id assay sample_id  role  
@@ -112,8 +102,8 @@ example_cohort@sample_map
 #> 11 MOUSE002   wes   WES_M002_N normal
 #> 12 MOUSE002   scrna SNRNA_M002 tumor 
 
-# Get summary statistics
-table(example_cohort@subject_tbl$species)  # Count by species
+# Count subjects by species
+table(example_cohort@subject_tbl$species)
 #> 
 #> mouse   rat 
 #>     2     2 

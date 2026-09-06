@@ -1,17 +1,15 @@
 # S7 Cohort class
 
-An immutable S7 class for managing cross-species cohort data. Cohorts
-combine validated subject-level metadata with sample-to-assay mappings
-and optional study context, file paths, and analysis results. This is
-the primary data container for WES and snRNA-seq analyses across rat,
-mouse, and human studies.
+An S7 class that keeps the subjects and samples of a study in one
+object. A Cohort holds a subject table, a long-format sample map, an
+optional Study, file paths, analysis tables, and a registry of analysis
+specs.
 
 ## Usage
 
 ``` r
 Cohort(
   study = NULL,
-  subjects = list(),
   subject_tbl = NULL,
   sample_map = NULL,
   paths = list(),
@@ -25,71 +23,60 @@ Cohort(
 
 - study:
 
-  A Study object providing project-level context and metadata, or NULL
-  if not applicable. Optional.
-
-- subjects:
-
-  Named list of Subject objects, automatically created from subject_tbl
-  rows during cohort construction. Names are subject IDs. Access
-  individual subjects via: `cohort@subjects[["RAT001"]]`.
+  A Study object with project-level context, or NULL.
 
 - subject_tbl:
 
-  A tibble (data frame) containing subject-level metadata. Required
-  columns: `subject_id` (character), `species` (rat/mouse/human).
-  Optional columns: `sex`, `strain`, `genotype`, `cohort`, `timepoint`,
-  `notes`. Validated by
+  A tibble with one row per subject. Required columns: `subject_id` and
+  `species`, both character. Common optional columns: `sex`, `strain`,
+  `genotype`, `cohort`, `timepoint`, `notes`. Checked by
   [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
 
 - sample_map:
 
-  A canonical long-format tibble mapping subjects to samples, one row
-  per sample. Columns: `subject_id`, `assay`, `sample_id`, `role`. New
-  assays are represented as new rows, never new columns. Validated by
+  A long-format tibble with one row per sample. Required columns:
+  `subject_id`, `assay`, `sample_id`, `role`, all character. A new assay
+  is a new row, never a new column. Checked by
   [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
 
 - paths:
 
-  Named list of file paths to data files or results directories.
-  Optional, defaults to empty list.
+  Named list of file paths to data files or result folders. Defaults to
+  an empty list.
 
 - analyses:
 
-  Named list containing analysis results, intermediate tables, or other
-  data objects for later retrieval. Optional, defaults to empty list.
+  Named list of analysis tables or other data objects. Defaults to an
+  empty list.
 
 - registry:
 
-  Named list of AnalysisSpec objects defining registered analyses. Names
-  correspond to spec@name. Optional, defaults to empty list.
+  Named list of AnalysisSpec objects. Names match `spec@name`. Defaults
+  to an empty list.
 
 - cache:
 
-  Named list for optional memoization of loaded analysis data. Optional,
-  defaults to empty list.
+  Named list used to memoize loaded analysis data. Defaults to an empty
+  list.
 
 ## Details
 
 Use
 [`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
-to construct Cohort objects with comprehensive validation. Validation
-ensures:
+to build a Cohort. It checks the input types, converts both tables to
+tibbles, and runs
+[`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
 
-- Required columns in subject_tbl and sample_map
+Subjects live only in `subject_tbl`. Use
+[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+to read one row as a
+[Subject](https://www.samuelbharti.com/bioroster/reference/Subject.md)
+object.
 
-- Valid species values (rat/mouse/human)
-
-- Referential integrity between subject_tbl and sample_map
-
-- No duplicate subject IDs
-
-Access properties via the `@` operator:
+Access properties with the `@` operator:
 
     cohort@study         # Study object or NULL
-    cohort@subjects      # Named list of Subject objects
-    cohort@subjects[["RAT001"]]  # Individual Subject object
-    cohort@subject_tbl   # Subject metadata table (for bulk operations)
+    cohort@subject_tbl   # Subject metadata table
     cohort@sample_map    # Sample mapping table
     cohort@paths         # File paths
     cohort@analyses      # Stored analysis results
@@ -100,6 +87,8 @@ Access properties via the `@` operator:
 
 [`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
 for object construction,
+[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+for reading one subject,
 [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md)
 for validation details,
 [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)

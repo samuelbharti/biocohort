@@ -77,8 +77,8 @@ which yields a `pair_id` of `{tumor_sample_id}__{normal_sample_id}`
   `nf1_study`) or explicitly named `study` in examples.
 - **Cohort objects**: snake_case (e.g., `cohort`, `nf1_cohort`,
   `study_cohort`).
-- **Subject objects**: Rarely used directly; accessed via
-  `cohort@subjects[[subject_id]]`.
+- **Subject objects**: Rarely used directly; built on demand with
+  `subject(cohort, subject_id)`.
 - **AnalysisSpec objects**: Use spec name as primary identifier (stored
   in registry with name as key).
 - **Data tables**: snake_case with `_tbl` suffix or use descriptive
@@ -101,8 +101,8 @@ cohort <- cohort_new(
   study = study
 )
 
-# Access subject
-subject <- cohort@subjects[["RAT_101"]]
+# Read one subject as a Subject object
+rat_101 <- subject(cohort, "RAT_101")
 
 # Access analysis
 result <- cohort@analyses[["my_analysis_name"]]
@@ -169,7 +169,7 @@ result <- cohort@analyses[["my_analysis_name"]]
 - **Output vectors/lists**: Descriptive plural or singular depending on
   context
 - **Named lists**: Keys should be identifiers or logical names (e.g.,
-  `cohort@subjects[["RAT_101"]]`)
+  `cohort@analyses[["my_analysis"]]`)
 
 ## Documentation and Markdown
 

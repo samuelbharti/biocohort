@@ -1,10 +1,9 @@
 # Validate a Cohort object
 
-Ensures a Cohort object satisfies all structural and integrity
-requirements for cross-species genomics analysis. Validates the subject
-table, sample map, and referential integrity between them. Intended as
-an internal validation step called automatically by
-[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md).
+Checks the subject table, the sample map, and the link between them.
+[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+calls this function after it builds the object. Call it directly to
+check a cohort that was built or changed by other means.
 
 ## Usage
 
@@ -16,37 +15,33 @@ validate_cohort(x)
 
 - x:
 
-  An S7 object expected to be a Cohort class instance.
+  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  object.
 
 ## Value
 
-Invisibly returns TRUE if validation succeeds. Throws informative errors
-if validation fails.
+`TRUE`, invisibly, when the cohort is valid. Otherwise an error that
+lists every problem found.
 
 ## Details
 
-VALIDATION CHECKS:
+The checks are:
 
-- `x` is actually a Cohort object
+- `x` is a Cohort object.
 
-- Both `subject_tbl` and `sample_map` are data frames
+- `subject_tbl` and `sample_map` are data frames.
 
-- `subject_tbl` includes required columns: subject_id, species
+- `subject_tbl` has the columns `subject_id` and `species`, both
+  character, with no missing value. An empty string counts as missing.
 
-- `sample_map` includes subject_id column
+- `subject_tbl$subject_id` has no duplicate.
 
-- subject_id and species are character vectors, non-empty
+- `subject_tbl$species` holds supported values.
 
-- No duplicate subject_id values in subject_tbl
+- `sample_map` has the columns `subject_id`, `assay`, `sample_id`, and
+  `role`, all character. The first three have no missing value.
 
-- All species values are valid (rat/mouse/human)
-
-- Referential integrity: sample_map\$subject_id values exist in
-  subject_tbl
-
-Validation is performed automatically by
-[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md),
-but can be called directly for debugging or custom Cohort construction.
+- Every `sample_map$subject_id` exists in `subject_tbl`.
 
 ## See also
 
@@ -58,7 +53,6 @@ for manifest validation
 ## Examples
 
 ``` r
-# Create valid cohort components
 subjects <- data.frame(
   subject_id = "RAT001",
   species = "rat",
@@ -75,6 +69,6 @@ cohort <- cohort_new(
   sample_map = samples
 )
 
-# Validation succeeds (called automatically above)
+# cohort_new() already ran the checks. Run them again by hand.
 validate_cohort(cohort)
 ```

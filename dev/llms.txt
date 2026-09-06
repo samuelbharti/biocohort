@@ -133,6 +133,13 @@ Create and validate objects
 - [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
   : Create an AnalysisSpec object
 
+## Accessors
+
+Read parts of a cohort
+
+- [`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+  : Build one Subject from a cohort
+
 ## IO Functions
 
 Read and write data
