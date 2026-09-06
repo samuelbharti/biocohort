@@ -263,16 +263,7 @@ load_analyses <- function(cohort, analyses = NULL, readers = NULL) {
   new_cache <- cohort@cache
   new_cache$loaded <- manifests
 
-  Cohort(
-    study = cohort@study,
-    subjects = cohort@subjects,
-    subject_tbl = cohort@subject_tbl,
-    sample_map = cohort@sample_map,
-    paths = cohort@paths,
-    analyses = new_analyses,
-    registry = cohort@registry,
-    cache = new_cache
-  )
+  S7::set_props(cohort, analyses = new_analyses, cache = new_cache)
 }
 
 #' Retrieve analysis file manifests from a cohort
