@@ -18,13 +18,13 @@ Brief description of the bug.
 ## Example Code
 ```r
 # Minimal reproducible example
-library(myceliumr)
+library(bioroster)
 
 # Code that triggers the bug
 ```
 
 ## Environment
-- myceliumr version:
+- bioroster version:
 - R version:
 - OS:
 

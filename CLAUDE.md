@@ -4,7 +4,7 @@ Conventions for anyone, human or agent, who works in this repo. This is a
 short digest. The working plan lives in `docs/local/plans/` and is not
 committed.
 
-## What myceliumr is
+## What bioroster is
 
 An R package that keeps the subjects, samples, and analysis outputs of a study
 in one validated object. It reads a long-format sample manifest, validates it,

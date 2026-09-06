@@ -22,11 +22,11 @@ example_cohort
 }
 \description{
 A sample Cohort object containing cross-species study data with rat and mouse
-subjects. Provided for demonstration, testing, and learning the myceliumr
+subjects. Provided for demonstration, testing, and learning the bioroster
 data model. Includes a complete Study object with subject metadata.
 }
 \details{
-The example_cohort demonstrates the complete myceliumr data structure including:
+The example_cohort demonstrates the complete bioroster data structure including:
 \itemize{
 \item Cross-species data (rat and mouse)
 \item Automatic Subject object creation from manifest data

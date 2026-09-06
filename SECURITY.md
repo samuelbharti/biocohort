@@ -8,7 +8,7 @@ security problem.
 
 ## What the package handles
 
-myceliumr reads sample manifests, file paths, and analysis outputs. It sends
+bioroster reads sample manifests, file paths, and analysis outputs. It sends
 nothing over the network by itself. The optional online backends call other
 packages that carry their own credential rules.
 

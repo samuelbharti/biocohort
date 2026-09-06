@@ -1,4 +1,4 @@
-url: http://www.samuelbharti.com/myceliumr/
+url: https://www.samuelbharti.com/bioroster/
 
 # pkgdown defaults to docs/, but docs/local/ holds the working plans, so the
 # generated site gets its own directory instead of sharing one.
@@ -9,7 +9,7 @@ template:
   bootswatch: flatly
   light-switch: true
 home:
-  title: myceliumr
+  title: bioroster
   description: Study manifests, sample sheets, and analysis registries for genomics projects
 navbar:
   structure:
@@ -30,7 +30,7 @@ navbar:
       href: reference/index.html
     github:
       icon: fab fa-github fa-lg
-      href: https://github.com/samuelbharti/myceliumr
+      href: https://github.com/samuelbharti/bioroster
       aria-label: GitHub
 articles:
 - title: Reference
@@ -41,7 +41,7 @@ reference:
 - title: Package
   desc: Package overview and entry point
   contents:
-  - myceliumr-package
+  - bioroster-package
 - title: Core Classes
   desc: S7 classes for study data structures
   contents:

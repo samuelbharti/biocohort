@@ -2,7 +2,7 @@
 applyTo: '**'
 ---
 
-# myceliumr Development Guidelines
+# bioroster Development Guidelines
 
 ## Code Architecture
 - Use S7 classes (not S3/S4)
@@ -26,4 +26,4 @@ applyTo: '**'
 ## Deployment
 - After package passes checks, push to GitHub
 - Website builds automatically via GitHub Actions
-- Site deploys to http://www.samuelbharti.com/myceliumr/
+- Site deploys to https://www.samuelbharti.com/bioroster/

@@ -1,4 +1,4 @@
 library(testthat)
-library(myceliumr)
+library(bioroster)
 
-test_check("myceliumr")
+test_check("bioroster")

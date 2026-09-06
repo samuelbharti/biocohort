@@ -1,10 +1,10 @@
-#' myceliumr: Cross-Species Cohort Framework
+#' bioroster: Cross-Species Cohort Framework
 #'
 #' A lightweight R package for managing cross-species cohort data (rat/mouse/human)
 #' with manifest validation and standardized storage for multi-omics outputs.
 #'
 #' @description
-#' myceliumr provides S7 classes and tools for organizing genomic study metadata
+#' bioroster provides S7 classes and tools for organizing genomic study metadata
 #' across species (rat, mouse, human) with support for any omics assay
 #' (WGS, WES, ATAC-seq, bulk RNA, single-cell, ...) via a generic, long-format
 #' sample model.
