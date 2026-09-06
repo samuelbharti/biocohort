@@ -53,6 +53,18 @@
   "qc_reason"
 )
 
+# The sample-level columns that are expected to hold a file path, as opposed
+# to an id, a number, or a status. check_paths() checks these by default.
+.known_path_cols <- c(
+  "fastq_1",
+  "fastq_2",
+  "bam",
+  "cram",
+  "vcf",
+  "matrix_dir",
+  "h5"
+)
+
 # Show at most `n` ids in a message.
 .head_ids <- function(x, n = 5) {
   if (length(x) > n) {
