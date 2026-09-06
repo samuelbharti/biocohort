@@ -61,8 +61,11 @@ Subject(
 
 Use
 [`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md)
-to construct Subject objects with species validation. Individual
-subjects are typically managed through Cohort objects.
+to construct Subject objects with species validation. Construction also
+validates that `subject_id` and `species` are present, so building a
+`Subject` any other way still enforces the two required fields.
+Individual subjects are typically read from a Cohort with
+[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md).
 
 Access properties via the `@` operator:
 

@@ -47,8 +47,9 @@ Study, file paths, analysis tables, and a registry of analysis specs.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Cohort</span><span class="op">(</span></span>
 <span>  study <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  subject_tbl <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  sample_map <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  subject_tbl <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>subject_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  sample_map <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>subject_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, assay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, sample_id <span class="op">=</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, role <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  paths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  analyses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  registry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -65,17 +66,19 @@ Study, file paths, analysis tables, and a registry of analysis specs.</p>
 
 
 <dt id="arg-subject-tbl">subject_tbl<a class="anchor" aria-label="anchor" href="#arg-subject-tbl"></a></dt>
-<dd><p>A tibble with one row per subject. Required columns:
+<dd><p>A data frame with one row per subject. Required columns:
 <code>subject_id</code> and <code>species</code>, both character. Common optional columns:
 <code>sex</code>, <code>strain</code>, <code>genotype</code>, <code>cohort</code>, <code>timepoint</code>, <code>notes</code>. Checked by
-<code><a href="validate_cohort.html">validate_cohort()</a></code>.</p></dd>
+<code><a href="validate_cohort.html">validate_cohort()</a></code>. Defaults to an empty table with the two required
+columns.</p></dd>
 
 
 <dt id="arg-sample-map">sample_map<a class="anchor" aria-label="anchor" href="#arg-sample-map"></a></dt>
-<dd><p>A long-format tibble with one row per sample. Required
-columns: <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>, <code>role</code>, all character. A
-new assay is a new row, never a new column. Checked by
-<code><a href="validate_cohort.html">validate_cohort()</a></code>.</p></dd>
+<dd><p>A long-format data frame with one row per sample.
+Required columns: <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>, <code>role</code>, all
+character. A new assay is a new row, never a new column. Checked by
+<code><a href="validate_cohort.html">validate_cohort()</a></code>. Defaults to an empty table with the four required
+columns.</p></dd>
 
 
 <dt id="arg-paths">paths<a class="anchor" aria-label="anchor" href="#arg-paths"></a></dt>
@@ -101,7 +104,9 @@ an empty list.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Use <code><a href="cohort_new.html">cohort_new()</a></code> to build a Cohort. It checks the input types, converts
-both tables to tibbles, and runs <code><a href="validate_cohort.html">validate_cohort()</a></code>.</p>
+both tables to tibbles, and runs <code><a href="validate_cohort.html">validate_cohort()</a></code>. Construction itself
+also checks <code>subject_tbl</code> and <code>sample_map</code> with the same rules, so building
+a <code>Cohort</code> any other way still enforces the required columns.</p>
 <p>Subjects live only in <code>subject_tbl</code>. Use <code><a href="cohort-subject.html">subject()</a></code> to read one row as a
 <a href="Subject.html">Subject</a> object.</p>
 <p>Access properties with the <code>@</code> operator:</p>

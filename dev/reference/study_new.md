@@ -12,6 +12,7 @@ study_new(
   study_id,
   title,
   description = NA_character_,
+  description_file = NULL,
   hypotheses = character(),
   aims = character(),
   assays = character(),
@@ -35,9 +36,14 @@ study_new(
 
 - description:
 
-  Character scalar with optional longer description of the study purpose
-  and design. Can be a file path (ending with .md, .txt, or .rtf) which
-  will be read into the description field. Defaults to NA.
+  Character scalar with an optional longer description of the study
+  purpose and design. Always read as plain text. Defaults to NA. Use
+  `description_file` to read the text from a file instead.
+
+- description_file:
+
+  Optional path to a text file whose content becomes `description`. When
+  given, `description` is ignored. Defaults to NULL.
 
 - hypotheses:
 
@@ -81,10 +87,10 @@ metadata. They provide context for cohorts and support cross-species
 genomics analysis. The study_id and title are required; all other fields
 are optional.
 
-The description parameter accepts either plain text or a file path. If a
-file path ending with .md, .txt, or .rtf is provided, the file contents
-will be read and stored in the description field. This allows storing
-detailed README content within the study metadata.
+`description` is always plain text, never a path. To store the content
+of a README or protocol file, pass its path as `description_file`; the
+file is read and its content becomes `description`. An error names the
+path when the file does not exist.
 
 ## See also
 
@@ -114,10 +120,14 @@ print(study)
 #> Study <STUDY001>: Cross-species genomics comparison 
 #>   Comparing rat and mouse genomes
 
-# Example with README file as description
-# study <- study_new(
-#   study_id = "STUDY002",
-#   title = "My Study",
-#   description = "path/to/README.md"
-# )
+# Example with a file as the description
+readme <- tempfile(fileext = ".md")
+writeLines("# My Study\n\nBackground and design.", readme)
+study2 <- study_new(
+  study_id = "STUDY002",
+  title = "My Study",
+  description_file = readme
+)
+study2@description
+#> [1] "# My Study\n\nBackground and design."
 ```

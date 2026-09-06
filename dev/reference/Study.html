@@ -53,7 +53,7 @@ for cohorts and analyses involving rat, mouse, and human subjects.</p>
 <span>  aims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
 <span>  assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
 <span>  genome_builds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  created_at <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  created_at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  tags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -72,8 +72,7 @@ for cohorts and analyses involving rat, mouse, and human subjects.</p>
 
 <dt id="arg-description">description<a class="anchor" aria-label="anchor" href="#arg-description"></a></dt>
 <dd><p>Character scalar for longer description of study purpose,
-design, or protocols. Can be a file path (ending with .md, .txt, or .rtf)
-to read README content. Optional.</p></dd>
+design, or protocols. Optional.</p></dd>
 
 
 <dt id="arg-hypotheses">hypotheses<a class="anchor" aria-label="anchor" href="#arg-hypotheses"></a></dt>
@@ -98,7 +97,8 @@ rn7 for rat; mm9, mm10, mm39 for mouse; hg19, hg38 for human. Optional.</p></dd>
 
 
 <dt id="arg-created-at">created_at<a class="anchor" aria-label="anchor" href="#arg-created-at"></a></dt>
-<dd><p>POSIXct timestamp for creation. Defaults to current time.</p></dd>
+<dd><p>POSIXct timestamp for creation. Defaults to the time the
+object is built.</p></dd>
 
 
 <dt id="arg-tags">tags<a class="anchor" aria-label="anchor" href="#arg-tags"></a></dt>
@@ -107,7 +107,9 @@ rn7 for rat; mm9, mm10, mm39 for mouse; hg19, hg38 for human. Optional.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Use <code><a href="study_new.html">study_new()</a></code> to construct Study objects with immediate validation.</p>
+    <p>Use <code><a href="study_new.html">study_new()</a></code> to construct Study objects with immediate validation.
+Construction also validates <code>study_id</code> and <code>title</code> directly, so building a
+<code>Study</code> any other way still enforces the two required fields.</p>
 <p>Access properties via the <code>@</code> operator:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">study</span><span class="op">@</span><span class="va">study_id</span></span>
 <span><span class="va">study</span><span class="op">@</span><span class="va">title</span></span>

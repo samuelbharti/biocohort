@@ -100,7 +100,9 @@ Optional.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Use <code><a href="subject_new.html">subject_new()</a></code> to construct Subject objects with species validation.
-Individual subjects are typically managed through Cohort objects.</p>
+Construction also validates that <code>subject_id</code> and <code>species</code> are present, so
+building a <code>Subject</code> any other way still enforces the two required fields.
+Individual subjects are typically read from a Cohort with <code><a href="cohort-subject.html">subject()</a></code>.</p>
 <p>Access properties via the <code>@</code> operator:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">subject</span><span class="op">@</span><span class="va">subject_id</span></span>
 <span><span class="va">subject</span><span class="op">@</span><span class="va">species</span></span>

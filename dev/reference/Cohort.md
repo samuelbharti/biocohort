@@ -10,8 +10,9 @@ specs.
 ``` r
 Cohort(
   study = NULL,
-  subject_tbl = NULL,
-  sample_map = NULL,
+  subject_tbl = tibble::tibble(subject_id = character(), species = character()),
+  sample_map = tibble::tibble(subject_id = character(), assay = character(), sample_id =
+    character(), role = character()),
   paths = list(),
   analyses = list(),
   registry = list(),
@@ -27,17 +28,19 @@ Cohort(
 
 - subject_tbl:
 
-  A tibble with one row per subject. Required columns: `subject_id` and
-  `species`, both character. Common optional columns: `sex`, `strain`,
-  `genotype`, `cohort`, `timepoint`, `notes`. Checked by
+  A data frame with one row per subject. Required columns: `subject_id`
+  and `species`, both character. Common optional columns: `sex`,
+  `strain`, `genotype`, `cohort`, `timepoint`, `notes`. Checked by
   [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
+  Defaults to an empty table with the two required columns.
 
 - sample_map:
 
-  A long-format tibble with one row per sample. Required columns:
+  A long-format data frame with one row per sample. Required columns:
   `subject_id`, `assay`, `sample_id`, `role`, all character. A new assay
   is a new row, never a new column. Checked by
   [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
+  Defaults to an empty table with the four required columns.
 
 - paths:
 
@@ -66,6 +69,9 @@ Use
 to build a Cohort. It checks the input types, converts both tables to
 tibbles, and runs
 [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
+Construction itself also checks `subject_tbl` and `sample_map` with the
+same rules, so building a `Cohort` any other way still enforces the
+required columns.
 
 Subjects live only in `subject_tbl`. Use
 [`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)

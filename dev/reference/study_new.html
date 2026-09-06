@@ -52,6 +52,7 @@ for cross-species genomics analysis.</p>
 <span>  <span class="va">study_id</span>,</span>
 <span>  <span class="va">title</span>,</span>
 <span>  description <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  description_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  hypotheses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  aims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -76,9 +77,14 @@ character long.</p></dd>
 
 
 <dt id="arg-description">description<a class="anchor" aria-label="anchor" href="#arg-description"></a></dt>
-<dd><p>Character scalar with optional longer description of the
-study purpose and design. Can be a file path (ending with .md, .txt, or .rtf)
-which will be read into the description field. Defaults to NA.</p></dd>
+<dd><p>Character scalar with an optional longer description of
+the study purpose and design. Always read as plain text. Defaults to NA.
+Use <code>description_file</code> to read the text from a file instead.</p></dd>
+
+
+<dt id="arg-description-file">description_file<a class="anchor" aria-label="anchor" href="#arg-description-file"></a></dt>
+<dd><p>Optional path to a text file whose content becomes
+<code>description</code>. When given, <code>description</code> is ignored. Defaults to NULL.</p></dd>
 
 
 <dt id="arg-hypotheses">hypotheses<a class="anchor" aria-label="anchor" href="#arg-hypotheses"></a></dt>
@@ -120,10 +126,10 @@ and defaults to empty vector.</p></dd>
     <p>Study objects are S7 classes that immutably store research project metadata.
 They provide context for cohorts and support cross-species genomics analysis.
 The study_id and title are required; all other fields are optional.</p>
-<p>The description parameter accepts either plain text or a file path. If a file
-path ending with .md, .txt, or .rtf is provided, the file contents will be
-read and stored in the description field. This allows storing detailed README
-content within the study metadata.</p>
+<p><code>description</code> is always plain text, never a path. To store the content of a
+README or protocol file, pass its path as <code>description_file</code>; the file is
+read and its content becomes <code>description</code>. An error names the path when
+the file does not exist.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -152,12 +158,16 @@ content within the study metadata.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Study &lt;STUDY001&gt;: Cross-species genomics comparison </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Comparing rat and mouse genomes</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Example with README file as description</span></span></span>
-<span class="r-in"><span><span class="co"># study &lt;- study_new(</span></span></span>
-<span class="r-in"><span><span class="co">#   study_id = "STUDY002",</span></span></span>
-<span class="r-in"><span><span class="co">#   title = "My Study",</span></span></span>
-<span class="r-in"><span><span class="co">#   description = "path/to/README.md"</span></span></span>
-<span class="r-in"><span><span class="co"># )</span></span></span>
+<span class="r-in"><span><span class="co"># Example with a file as the description</span></span></span>
+<span class="r-in"><span><span class="va">readme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".md"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="st">"# My Study\n\nBackground and design."</span>, <span class="va">readme</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">study2</span> <span class="op">&lt;-</span> <span class="fu">study_new</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  study_id <span class="op">=</span> <span class="st">"STUDY002"</span>,</span></span>
+<span class="r-in"><span>  title <span class="op">=</span> <span class="st">"My Study"</span>,</span></span>
+<span class="r-in"><span>  description_file <span class="op">=</span> <span class="va">readme</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">study2</span><span class="op">@</span><span class="va">description</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# My Study\n\nBackground and design."</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
