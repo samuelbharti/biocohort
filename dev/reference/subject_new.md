@@ -93,15 +93,7 @@ rat_subject <- subject_new(
   cohort = "Control"
 )
 print(rat_subject)
-#> <bioroster::Subject>
-#>  @ subject_id: chr "RAT001"
-#>  @ species   : chr "rat"
-#>  @ sex       : chr "M"
-#>  @ strain    : chr "Lewis"
-#>  @ genotype  : chr "WT"
-#>  @ cohort    : chr "Control"
-#>  @ timepoint : chr NA
-#>  @ notes     : chr NA
+#> Subject <RAT001>: rat 
 
 # Create a mouse subject
 mouse_subject <- subject_new(
@@ -112,13 +104,5 @@ mouse_subject <- subject_new(
   genotype = "KO"
 )
 print(mouse_subject)
-#> <bioroster::Subject>
-#>  @ subject_id: chr "MOUSE001"
-#>  @ species   : chr "mouse"
-#>  @ sex       : chr "F"
-#>  @ strain    : chr "C57BL/6"
-#>  @ genotype  : chr "KO"
-#>  @ cohort    : chr NA
-#>  @ timepoint : chr NA
-#>  @ notes     : chr NA
+#> Subject <MOUSE001>: mouse 
 ```

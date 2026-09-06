@@ -102,17 +102,12 @@ cohort <- cohort_new(
   sample_map = parsed$sample_map
 )
 print(cohort)
-#> Cohort: 2 subjects, 4 sample rows 
+#> 
+#> ── Cohort: Cross-species study 
+#> • 2 subjects (1 mouse, 1 rat)
+#> • 4 samples (2 wes, 1 atac, 1 scrna)
 
 # Read one subject as a Subject object
 subject(cohort, "RAT001")
-#> <bioroster::Subject>
-#>  @ subject_id: chr "RAT001"
-#>  @ species   : chr "rat"
-#>  @ sex       : chr "M"
-#>  @ strain    : chr NA
-#>  @ genotype  : chr NA
-#>  @ cohort    : chr NA
-#>  @ timepoint : chr NA
-#>  @ notes     : chr NA
+#> Subject <RAT001>: rat 
 ```

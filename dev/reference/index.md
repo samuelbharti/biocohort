@@ -42,6 +42,14 @@ Read parts of a cohort
 
 - [`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
   : Build one Subject from a cohort
+- [`subjects()`](https://www.samuelbharti.com/bioroster/reference/subjects.md)
+  : Read the subject table of a cohort
+- [`samples()`](https://www.samuelbharti.com/bioroster/reference/samples.md)
+  : Read the sample map of a cohort
+- [`completeness()`](https://www.samuelbharti.com/bioroster/reference/completeness.md)
+  : Per-assay sample counts for a cohort
+- [`cohort_filter()`](https://www.samuelbharti.com/bioroster/reference/cohort_filter.md)
+  : Keep a subset of a cohort's subjects or assays
 
 ## IO Functions
 
