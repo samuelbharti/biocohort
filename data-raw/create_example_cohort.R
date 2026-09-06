@@ -1,5 +1,5 @@
 # Create example cohort dataset
-library(myceliumr)
+# Run from the package root after devtools::load_all().
 library(tibble)
 library(dplyr)
 
