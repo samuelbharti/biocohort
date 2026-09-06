@@ -105,3 +105,9 @@ reference:
   - project_path
   - ensure_dir
   - read_dotenv
+- title: Corrections
+  desc: Apply documented overrides to a manifest and keep an audit trail
+  contents:
+  - apply_corrections
+  - corrections_log
+  - read_corrections
