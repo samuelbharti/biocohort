@@ -67,7 +67,13 @@ reference:
   - cohort_filter
 - title: IO Functions
   desc: Read and write data
-  contents: read_manifest_csv
+  contents:
+  - read_manifest
+  - read_manifest_csv
+  - manifest_from_wide
+  - write_manifest
+  - cohort_save
+  - cohort_read
 - title: Analysis Registry
   desc: Register and list analyses
   contents:
