@@ -21,7 +21,9 @@ A Cohort object (S7 class) with the following structure:
   strain, genotype, cohort, timepoint
 
 - sample_map (tibble): Long-format map (subject_id, assay, sample_id,
-  role) covering WES tumor/normal and snRNA-seq samples
+  role, fastq_1, fastq_2) covering WES tumor/normal and snRNA-seq
+  samples. fastq_1/fastq_2 show that an extra sample-level column
+  survives validate_manifest() alongside the four canonical ones.
 
 - paths (list): Empty, ready for file paths
 
@@ -86,21 +88,21 @@ example_cohort@subject_tbl
 
 # View the sample map
 example_cohort@sample_map
-#> # A tibble: 12 × 4
-#>    subject_id assay sample_id  role  
-#>    <chr>      <chr> <chr>      <chr> 
-#>  1 RAT001     wes   WES_R001_T tumor 
-#>  2 RAT001     wes   WES_R001_N normal
-#>  3 RAT001     scrna SNRNA_R001 tumor 
-#>  4 RAT002     wes   WES_R002_T tumor 
-#>  5 RAT002     wes   WES_R002_N normal
-#>  6 RAT002     scrna SNRNA_R002 tumor 
-#>  7 MOUSE001   wes   WES_M001_T tumor 
-#>  8 MOUSE001   wes   WES_M001_N normal
-#>  9 MOUSE001   scrna SNRNA_M001 tumor 
-#> 10 MOUSE002   wes   WES_M002_T tumor 
-#> 11 MOUSE002   wes   WES_M002_N normal
-#> 12 MOUSE002   scrna SNRNA_M002 tumor 
+#> # A tibble: 12 × 6
+#>    subject_id assay sample_id  role   fastq_1                fastq_2            
+#>    <chr>      <chr> <chr>      <chr>  <chr>                  <chr>              
+#>  1 RAT001     wes   WES_R001_T tumor  wes_r001_t_R1.fastq.gz wes_r001_t_R2.fast…
+#>  2 RAT001     wes   WES_R001_N normal wes_r001_n_R1.fastq.gz wes_r001_n_R2.fast…
+#>  3 RAT001     scrna SNRNA_R001 tumor  snrna_r001_R1.fastq.gz snrna_r001_R2.fast…
+#>  4 RAT002     wes   WES_R002_T tumor  wes_r002_t_R1.fastq.gz wes_r002_t_R2.fast…
+#>  5 RAT002     wes   WES_R002_N normal wes_r002_n_R1.fastq.gz wes_r002_n_R2.fast…
+#>  6 RAT002     scrna SNRNA_R002 tumor  snrna_r002_R1.fastq.gz snrna_r002_R2.fast…
+#>  7 MOUSE001   wes   WES_M001_T tumor  wes_m001_t_R1.fastq.gz wes_m001_t_R2.fast…
+#>  8 MOUSE001   wes   WES_M001_N normal wes_m001_n_R1.fastq.gz wes_m001_n_R2.fast…
+#>  9 MOUSE001   scrna SNRNA_M001 tumor  snrna_m001_R1.fastq.gz snrna_m001_R2.fast…
+#> 10 MOUSE002   wes   WES_M002_T tumor  wes_m002_t_R1.fastq.gz wes_m002_t_R2.fast…
+#> 11 MOUSE002   wes   WES_M002_N normal wes_m002_n_R1.fastq.gz wes_m002_n_R2.fast…
+#> 12 MOUSE002   scrna SNRNA_M002 tumor  snrna_m002_R1.fastq.gz snrna_m002_R2.fast…
 
 # Count subjects by species
 table(example_cohort@subject_tbl$species)

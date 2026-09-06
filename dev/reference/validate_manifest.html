@@ -51,7 +51,12 @@ values, never as bespoke columns or per-assay tables.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_manifest</span><span class="op">(</span><span class="va">manifest</span>, species <span class="op">=</span> <span class="cn">NULL</span>, allow_duplicates <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_manifest</span><span class="op">(</span></span>
+<span>  <span class="va">manifest</span>,</span>
+<span>  sample_cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  species <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  allow_duplicates <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -64,11 +69,19 @@ sample. Required columns:</p><ul><li><p><code>subject_id</code> (character; coer
 <li><p><code>assay</code> (character; coerced): assay type, e.g. <code>"wgs"</code>, <code>"wes"</code>,
 <code>"atac"</code>, <code>"bulk_rna"</code>, <code>"scrna"</code>.</p></li>
 <li><p><code>sample_id</code> (character; coerced): unique sample identifier.</p></li>
-</ul><p>Optional sample-level column:</p><ul><li><p><code>role</code> (character): role of the sample within its assay, e.g. <code>"tumor"</code>,
+</ul><p>Optional sample-level columns:</p><ul><li><p><code>role</code> (character): role of the sample within its assay, e.g. <code>"tumor"</code>,
 <code>"normal"</code>. Defaults to <code>NA</code> when absent.</p></li>
+<li><p>A column named in <code>sample_cols</code>, or recognized by name (see Details).</p></li>
 </ul><p>Any remaining columns (e.g. <code>species</code>, <code>sex</code>, <code>strain</code>, <code>genotype</code>,
 <code>cohort</code>, <code>timepoint</code>, <code>notes</code>) are treated as <strong>subject-level metadata</strong>,
 coerced to character, and must be constant within a <code>subject_id</code>.</p></dd>
+
+
+<dt id="arg-sample-cols">sample_cols<a class="anchor" aria-label="anchor" href="#arg-sample-cols"></a></dt>
+<dd><p>Optional character vector naming additional columns to
+keep at the sample level (in <code>sample_map</code>) rather than treat as
+subject-level metadata. Use it for a column that varies per sample but
+is not one of the columns <code>validate_manifest()</code> already recognizes.</p></dd>
 
 
 <dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
@@ -87,18 +100,24 @@ column, this value fills one. Ignored when <code>manifest</code> already has a
     <p>A list with three elements:</p><ul><li><p><code>subject_tbl</code>: Tibble with one row per <code>subject_id</code> containing the
 subject-level metadata columns, all character.</p></li>
 <li><p><code>sample_map</code>: Canonical long-format tibble with columns <code>subject_id</code>,
-<code>assay</code>, <code>sample_id</code>, <code>role</code>.</p></li>
+<code>assay</code>, <code>sample_id</code>, <code>role</code>, and any recognized or declared extra
+sample-level columns, all character.</p></li>
 <li><p><code>completeness_tbl</code>: Tibble with one row per <code>subject_id</code> x <code>assay</code>
 summarising the number of samples (<code>n_samples</code>).</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Every subject-level column is coerced to character, so a numeric,
-logical, or factor column never reaches <code><a href="cohort_new.html">cohort_new()</a></code> in a form that
-would fail there. Empty strings in <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>,
-<code>role</code>, and every subject-level column are treated as missing. Every
-sample row must carry a non-missing <code>subject_id</code>, <code>assay</code>, and
-<code>sample_id</code>.</p>
+    <p>Every column is coerced to character, so a numeric, logical, or factor
+column never reaches <code><a href="cohort_new.html">cohort_new()</a></code> in a form that would fail there.
+Empty strings are treated as missing. Every sample row must carry a
+non-missing <code>subject_id</code>, <code>assay</code>, and <code>sample_id</code>.</p>
+<p>Beyond the four canonical columns, these names are always kept at the
+sample level when present: <code>specimen_id</code>, <code>library_id</code>, <code>vendor_id</code>,
+<code>replicate</code>, <code>lane</code>, <code>run</code>, <code>flowcell</code>, <code>strandedness</code>, <code>fastq_1</code>,
+<code>fastq_2</code>, <code>bam</code>, <code>cram</code>, <code>vcf</code>, <code>matrix_dir</code>, <code>h5</code>, <code>qc_status</code>, and
+<code>qc_reason</code>. Add any other column that varies per sample with
+<code>sample_cols</code>; a column that varies within a subject but is not
+recognized or declared raises the conflicting-metadata error below.</p>
 <p><code>species</code>, when present (in the manifest or filled from the <code>species</code>
 argument), is lower-cased so that <code>"Rat"</code> and <code>"rat"</code> are the same
 subject-level value. Any species value is allowed; the manifest layer
@@ -122,6 +141,7 @@ contract; derive them on demand from <code>sample_map</code> with <code><a href=
 <span class="r-in"><span>  assay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wes"</span>, <span class="st">"wes"</span>, <span class="st">"atac"</span>, <span class="st">"wgs"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  sample_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WES_T1"</span>, <span class="st">"WES_N1"</span>, <span class="st">"ATAC_1"</span>, <span class="st">"WGS_T1"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  role <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tumor"</span>, <span class="st">"normal"</span>, <span class="cn">NA</span>, <span class="st">"tumor"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  fastq_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"t1_R1.fq.gz"</span>, <span class="st">"n1_R1.fq.gz"</span>, <span class="st">"a1_R1.fq.gz"</span>, <span class="st">"g1_R1.fq.gz"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -134,13 +154,13 @@ contract; derive them on demand from <code>sample_map</code> with <code><a href=
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> MOUSE1     mouse  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> HUM01      human  </span>
 <span class="r-in"><span><span class="va">parsed</span><span class="op">$</span><span class="va">sample_map</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id assay sample_id role  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> RAT001     wes   WES_T1    tumor </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> RAT001     wes   WES_N1    normal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> MOUSE1     atac  ATAC_1    <span style="color: #BB0000;">NA</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> HUM01      wgs   WGS_T1    tumor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id assay sample_id role   fastq_1    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> RAT001     wes   WES_T1    tumor  t1_R1.fq.gz</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> RAT001     wes   WES_N1    normal n1_R1.fq.gz</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> MOUSE1     atac  ATAC_1    <span style="color: #BB0000;">NA</span>     a1_R1.fq.gz</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> HUM01      wgs   WGS_T1    tumor  g1_R1.fq.gz</span>
 <span class="r-in"><span><span class="va">parsed</span><span class="op">$</span><span class="va">completeness_tbl</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id assay n_samples</span>

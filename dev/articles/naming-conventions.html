@@ -169,6 +169,14 @@ tables.</p>
 </tr>
 </tbody>
 </table>
+<p>Other sample-level columns (e.g. <code>fastq_1</code>,
+<code>fastq_2</code>, <code>bam</code>, <code>lane</code>,
+<code>replicate</code>, <code>qc_status</code>) stay in
+<code>sample_map</code> when their name is one
+<code><a href="../reference/validate_manifest.html">validate_manifest()</a></code> recognizes, or when passed in its
+<code>sample_cols</code> argument. A column that varies within a subject
+but is not recognized or declared trips the subject-level conflict check
+instead.</p>
 </div>
 <div class="section level3">
 <h3 id="completeness-summary-columns-completeness_tbl">Completeness Summary Columns (<code>completeness_tbl</code>)<a class="anchor" aria-label="anchor" href="#completeness-summary-columns-completeness_tbl"></a>

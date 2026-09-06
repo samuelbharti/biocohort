@@ -54,7 +54,9 @@ data.</p>
 <li><p>subject_tbl (tibble): 4 subjects (2 rat, 2 mouse) with species, sex,
 strain, genotype, cohort, timepoint</p></li>
 <li><p>sample_map (tibble): Long-format map (subject_id, assay, sample_id,
-role) covering WES tumor/normal and snRNA-seq samples</p></li>
+role, fastq_1, fastq_2) covering WES tumor/normal and snRNA-seq
+samples. fastq_1/fastq_2 show that an extra sample-level column
+survives validate_manifest() alongside the four canonical ones.</p></li>
 <li><p>paths (list): Empty, ready for file paths</p></li>
 <li><p>analyses (list): Empty, ready for analysis results</p></li>
 </ul></div>
@@ -107,21 +109,21 @@ of them as a Subject object.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># View the sample map</span></span></span>
 <span class="r-in"><span><span class="va">example_cohort</span><span class="op">@</span><span class="va">sample_map</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    subject_id assay sample_id  role  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> RAT001     wes   WES_R001_T tumor </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> RAT001     wes   WES_R001_N normal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> RAT001     scrna SNRNA_R001 tumor </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> RAT002     wes   WES_R002_T tumor </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> RAT002     wes   WES_R002_N normal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> RAT002     scrna SNRNA_R002 tumor </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> MOUSE001   wes   WES_M001_T tumor </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> MOUSE001   wes   WES_M001_N normal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> MOUSE001   scrna SNRNA_M001 tumor </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> MOUSE002   wes   WES_M002_T tumor </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> MOUSE002   wes   WES_M002_N normal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> MOUSE002   scrna SNRNA_M002 tumor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    subject_id assay sample_id  role   fastq_1                fastq_2            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> RAT001     wes   WES_R001_T tumor  wes_r001_t_R1.fastq.gz wes_r001_t_R2.fast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> RAT001     wes   WES_R001_N normal wes_r001_n_R1.fastq.gz wes_r001_n_R2.fast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> RAT001     scrna SNRNA_R001 tumor  snrna_r001_R1.fastq.gz snrna_r001_R2.fast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> RAT002     wes   WES_R002_T tumor  wes_r002_t_R1.fastq.gz wes_r002_t_R2.fast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> RAT002     wes   WES_R002_N normal wes_r002_n_R1.fastq.gz wes_r002_n_R2.fast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> RAT002     scrna SNRNA_R002 tumor  snrna_r002_R1.fastq.gz snrna_r002_R2.fast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> MOUSE001   wes   WES_M001_T tumor  wes_m001_t_R1.fastq.gz wes_m001_t_R2.fast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> MOUSE001   wes   WES_M001_N normal wes_m001_n_R1.fastq.gz wes_m001_n_R2.fast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> MOUSE001   scrna SNRNA_M001 tumor  snrna_m001_R1.fastq.gz snrna_m001_R2.fast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> MOUSE002   wes   WES_M002_T tumor  wes_m002_t_R1.fastq.gz wes_m002_t_R2.fast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> MOUSE002   wes   WES_M002_N normal wes_m002_n_R1.fastq.gz wes_m002_n_R2.fast…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> MOUSE002   scrna SNRNA_M002 tumor  snrna_m002_R1.fastq.gz snrna_m002_R2.fast…</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Count subjects by species</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">example_cohort</span><span class="op">@</span><span class="va">subject_tbl</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span></span>
