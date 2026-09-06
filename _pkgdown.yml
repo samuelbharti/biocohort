@@ -57,6 +57,10 @@ reference:
   - subject_new
   - cohort_new
   - analysis_spec_new
+- title: Accessors
+  desc: Read parts of a cohort
+  contents:
+  - subject
 - title: IO Functions
   desc: Read and write data
   contents: read_manifest_csv

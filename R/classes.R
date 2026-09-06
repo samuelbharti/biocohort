@@ -114,47 +114,39 @@ Subject <- S7::new_class(
 
 #' S7 Cohort class
 #'
-#' An immutable S7 class for managing cross-species cohort data. Cohorts combine
-#' validated subject-level metadata with sample-to-assay mappings and optional
-#' study context, file paths, and analysis results. This is the primary data
-#' container for WES and snRNA-seq analyses across rat, mouse, and human studies.
+#' An S7 class that keeps the subjects and samples of a study in one object.
+#' A Cohort holds a subject table, a long-format sample map, an optional
+#' Study, file paths, analysis tables, and a registry of analysis specs.
 #'
-#' @param study A Study object providing project-level context and metadata,
-#'   or NULL if not applicable. Optional.
-#' @param subjects Named list of Subject objects, automatically created from
-#'   subject_tbl rows during cohort construction. Names are subject IDs.
-#'   Access individual subjects via: `cohort@subjects[["RAT001"]]`.
-#' @param subject_tbl A tibble (data frame) containing subject-level metadata.
-#'   Required columns: `subject_id` (character), `species` (rat/mouse/human).
-#'   Optional columns: `sex`, `strain`, `genotype`, `cohort`, `timepoint`,
-#'   `notes`. Validated by [validate_cohort()].
-#' @param sample_map A canonical long-format tibble mapping subjects to samples,
-#'   one row per sample. Columns: `subject_id`, `assay`, `sample_id`, `role`.
-#'   New assays are represented as new rows, never new columns.
-#'   Validated by [validate_cohort()].
-#' @param paths Named list of file paths to data files or results directories.
-#'   Optional, defaults to empty list.
-#' @param analyses Named list containing analysis results, intermediate tables,
-#'   or other data objects for later retrieval. Optional, defaults to empty list.
-#' @param registry Named list of AnalysisSpec objects defining registered
-#'   analyses. Names correspond to spec@name. Optional, defaults to empty list.
-#' @param cache Named list for optional memoization of loaded analysis data.
-#'   Optional, defaults to empty list.
+#' @param study A Study object with project-level context, or NULL.
+#' @param subject_tbl A tibble with one row per subject. Required columns:
+#'   `subject_id` and `species`, both character. Common optional columns:
+#'   `sex`, `strain`, `genotype`, `cohort`, `timepoint`, `notes`. Checked by
+#'   [validate_cohort()].
+#' @param sample_map A long-format tibble with one row per sample. Required
+#'   columns: `subject_id`, `assay`, `sample_id`, `role`, all character. A
+#'   new assay is a new row, never a new column. Checked by
+#'   [validate_cohort()].
+#' @param paths Named list of file paths to data files or result folders.
+#'   Defaults to an empty list.
+#' @param analyses Named list of analysis tables or other data objects.
+#'   Defaults to an empty list.
+#' @param registry Named list of AnalysisSpec objects. Names match
+#'   `spec@name`. Defaults to an empty list.
+#' @param cache Named list used to memoize loaded analysis data. Defaults to
+#'   an empty list.
 #'
 #' @details
-#' Use [cohort_new()] to construct Cohort objects with comprehensive validation.
-#' Validation ensures:
-#' - Required columns in subject_tbl and sample_map
-#' - Valid species values (rat/mouse/human)
-#' - Referential integrity between subject_tbl and sample_map
-#' - No duplicate subject IDs
+#' Use [cohort_new()] to build a Cohort. It checks the input types, converts
+#' both tables to tibbles, and runs [validate_cohort()].
 #'
-#' Access properties via the `@` operator:
+#' Subjects live only in `subject_tbl`. Use [subject()] to read one row as a
+#' [Subject] object.
+#'
+#' Access properties with the `@` operator:
 #' ```r
 #' cohort@study         # Study object or NULL
-#' cohort@subjects      # Named list of Subject objects
-#' cohort@subjects[["RAT001"]]  # Individual Subject object
-#' cohort@subject_tbl   # Subject metadata table (for bulk operations)
+#' cohort@subject_tbl   # Subject metadata table
 #' cohort@sample_map    # Sample mapping table
 #' cohort@paths         # File paths
 #' cohort@analyses      # Stored analysis results
@@ -163,6 +155,7 @@ Subject <- S7::new_class(
 #' ```
 #'
 #' @seealso [cohort_new()] for object construction,
+#'   [subject()] for reading one subject,
 #'   [validate_cohort()] for validation details,
 #'   [validate_manifest()] for manifest preparation,
 #'   [read_manifest_csv()] for loading manifest from file,
@@ -173,7 +166,6 @@ Cohort <- S7::new_class(
   "Cohort",
   properties = list(
     study = S7::new_property(S7::class_any, default = NULL),
-    subjects = S7::new_property(S7::class_list, default = list()),
     subject_tbl = S7::new_property(S7::class_any, default = NULL),
     sample_map = S7::new_property(S7::class_any, default = NULL),
     paths = S7::new_property(S7::class_list, default = list()),

@@ -13,68 +13,51 @@ cohort_new(
 )
 }
 \arguments{
-\item{subject_tbl}{A tibble containing subject-level metadata. Required columns:
-\code{subject_id} (character) and \code{species} (rat/mouse/human). Optional columns:
-\code{sex}, \code{strain}, \code{genotype}, \code{cohort}, \code{timepoint}, \code{notes}. Typically
-obtained from \code{\link[=validate_manifest]{validate_manifest()}}.}
+\item{subject_tbl}{A data frame with one row per subject. Required columns:
+\code{subject_id} and \code{species}, both character. Other columns are kept as
+given.}
 
-\item{sample_map}{A canonical long-format tibble mapping subjects to samples,
-one row per sample. Columns: \code{subject_id}, \code{assay}, \code{sample_id}, \code{role}.
-Must have at least a \code{subject_id} column to link to \code{subject_tbl}.
-Typically obtained from \code{\link[=validate_manifest]{validate_manifest()}}.}
+\item{sample_map}{A long-format data frame with one row per sample.
+Required columns: \code{subject_id}, \code{assay}, \code{sample_id}, \code{role}, all
+character.}
 
-\item{study}{A Study object providing project-level metadata and context,
-or NULL if not applicable. Defaults to NULL.}
+\item{study}{A Study object, or NULL. Defaults to NULL.}
 
-\item{paths}{Named list of file paths to data files or results directories.
-Optional and defaults to empty list.}
+\item{paths}{Named list of file paths to data files or result folders.
+Defaults to an empty list.}
 
-\item{analyses}{Named list containing analysis results or intermediate data
-objects for later retrieval. Optional and defaults to empty list.}
+\item{analyses}{Named list of analysis tables or other data objects.
+Defaults to an empty list.}
 }
 \value{
-A Cohort object with validated subject data and optional metadata.
-Raises informative errors if validation fails.
+A Cohort object. An error when the tables fail
+\code{\link[=validate_cohort]{validate_cohort()}}.
 }
 \description{
-Constructs a Cohort object by combining validated subject data with optional
-study metadata, file paths, and analysis results. Cohorts serve as the primary
-container for cross-species genomics data, ensuring schema validation and data
-integrity across rat, mouse, and human studies.
+Builds a Cohort from a subject table and a sample map, with an optional
+Study, file paths, and analysis tables. The two tables are usually the
+output of \code{\link[=validate_manifest]{validate_manifest()}}.
 }
 \details{
-Cohort objects are S7 classes for managing cross-species study data.
-Construction automatically runs \code{\link[=validate_cohort]{validate_cohort()}} to ensure:
-\itemize{
-\item Required columns are present
-\item Species values are valid (rat/mouse/human)
-\item No duplicate subject IDs
-\item Sample map can be linked to subjects
+The steps are:
+\enumerate{
+\item Check that \code{subject_tbl} and \code{sample_map} are data frames.
+\item Convert both to tibbles.
+\item Build the Cohort.
+\item Run \code{\link[=validate_cohort]{validate_cohort()}}.
 }
 
-\strong{Automatic Subject Object Creation:}
-Subject objects are automatically created from each row in \code{subject_tbl}.
-These are stored in the \code{subjects} property as a named list, accessible by
-subject_id. This eliminates the need to manually create Subject objects.
-
-Use the \code{@} operator to access cohort components:
-\itemize{
-\item \code{cohort@study} - Study metadata
-\item \code{cohort@subjects} - Named list of Subject objects
-\item \verb{cohort@subjects[[\\"RAT001\\"]]} - Access individual Subject
-\item \code{cohort@subject_tbl} - Subject table (for bulk operations)
-\item \code{cohort@sample_map} - Sample mapping
-}
+The function does not build Subject objects. Use \code{\link[=subject]{subject()}} to read one
+subject from the cohort when an object is needed.
 }
 \examples{
-# Create a study
 study <- study_new(
   study_id = "STUDY001",
   title = "Cross-species study",
   assays = c("WES", "snRNA-seq")
 )
 
-# Create manifest data (long format: one row per sample)
+# A long-format manifest: one row per sample
 manifest <- data.frame(
   subject_id = c("RAT001", "RAT001", "MOUSE1", "MOUSE1"),
   species = c("rat", "rat", "mouse", "mouse"),
@@ -84,22 +67,21 @@ manifest <- data.frame(
   role = c("tumor", "tumor", "tumor", NA)
 )
 
-# Validate and create cohort
-manifest_split <- validate_manifest(manifest)
+parsed <- validate_manifest(manifest)
 cohort <- cohort_new(
   study = study,
-  subject_tbl = manifest_split$subject_tbl,
-  sample_map = manifest_split$sample_map
+  subject_tbl = parsed$subject_tbl,
+  sample_map = parsed$sample_map
 )
 print(cohort)
 
-# Access individual Subject objects (automatically created)
-rat_subject <- cohort@subjects[["RAT001"]]
-print(rat_subject)
+# Read one subject as a Subject object
+subject(cohort, "RAT001")
 
 }
 \seealso{
 \code{\link[=validate_manifest]{validate_manifest()}} for preparing input tables,
-\code{\link[=validate_cohort]{validate_cohort()}} for detailed validation,
+\code{\link[=validate_cohort]{validate_cohort()}} for the checks,
+\code{\link[=subject]{subject()}} for reading one subject,
 \link{Study} for study metadata
 }
