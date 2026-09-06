@@ -3,6 +3,10 @@ name: R-CMD-check
 # Every pull request runs this, into dev as well as main. Pushes do not: a
 # branch is checked when it is proposed, and the same commits do not need
 # checking twice. See CONTRIBUTING.md.
+#
+# The repository is private, so Actions minutes are metered (macOS counts ten
+# times, Windows twice). A pull request into dev runs one Ubuntu check. The
+# full platform matrix runs for a pull request into main and on manual runs.
 on:
   pull_request:
     branches: [main, dev]
@@ -18,12 +22,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config:
-          - { os: ubuntu-latest, r: "devel", http-user-agent: "release" }
-          - { os: ubuntu-latest, r: "release" }
-          - { os: ubuntu-latest, r: "oldrel-1" }
-          - { os: windows-latest, r: "release" }
-          - { os: macos-latest, r: "release" }
+        config: >-
+          ${{ fromJSON((github.base_ref == 'main' || github.event_name == 'workflow_dispatch')
+            && '[{"os":"ubuntu-latest","r":"devel","http-user-agent":"release"},{"os":"ubuntu-latest","r":"release"},{"os":"ubuntu-latest","r":"oldrel-1"},{"os":"windows-latest","r":"release"},{"os":"macos-latest","r":"release"}]'
+            || '[{"os":"ubuntu-latest","r":"release"}]') }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
