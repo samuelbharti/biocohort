@@ -8,22 +8,25 @@ AnalysisSpec(
   name = character(0),
   assay = character(0),
   level = character(0),
-  format = character(0),
+  format = NA_character_,
   description = NA_character_,
   path_template = NA_character_,
   root_key = NA_character_,
-  reader = character(0),
+  reader = NA_character_,
   key_cols = character(0),
   feature_type = NA_character_,
   gene_col = NA_character_,
-  id_type = NA_character_
+  id_type = NA_character_,
+  tumor_role = "tumor",
+  normal_role = "normal",
+  pair_sep = "__"
 )
 }
 \arguments{
 \item{name}{Character scalar for unique analysis name (key in registry).}
 
-\item{assay}{Character scalar for assay type (e.g., "wes_somatic",
-"wes_germline", "snrna"). Required.}
+\item{assay}{Character scalar for the assay label, spelled as in the
+cohort's \code{sample_map} (e.g., "wes", "wgs", "scrna"). Required.}
 
 \item{level}{Character scalar for the granularity at which the analysis
 produces results. Must be one of:
@@ -37,7 +40,8 @@ produces results. Must be one of:
 Required.}
 
 \item{format}{Character scalar for file format (e.g., "rds", "tsv", "txt").
-Required.}
+Optional. \code{\link[=analysis_spec_new]{analysis_spec_new()}} fills it from the \code{path_template}
+extension. NA when unknown.}
 
 \item{description}{Character scalar for human-readable description of the
 analysis. Optional, defaults to NA.}
@@ -53,12 +57,12 @@ the \code{{root}} template value (e.g., "msi_root", "sig_root", "wes_root").
 Optional, defaults to NA.}
 
 \item{reader}{Character scalar for function name to read files matching
-this spec (e.g., "read_msi_txt", "read.csv"). Must be a valid function
-name. Required.}
+this spec (e.g., "readr::read_tsv", "read.csv"). Optional.
+\code{\link[=analysis_spec_new]{analysis_spec_new()}} fills it from \code{format}. NA when unknown.}
 
-\item{key_cols}{Character vector of column names to use as keys when
-loading the analysis table. Determines how rows are indexed
-(e.g., \code{c("subject_id")} or \code{c("pair_id")}). Required.}
+\item{key_cols}{Character vector of column names that must be present in
+the loaded analysis table. \code{\link[=load_analysis]{load_analysis()}} checks them after reading.
+Optional. \code{\link[=analysis_spec_new]{analysis_spec_new()}} fills it by \code{level}.}
 
 \item{feature_type}{Optional character scalar declaring how this analysis's
 features translate across species in \code{\link[=orthologize]{orthologize()}}: \code{"interval"}
@@ -69,6 +73,16 @@ for \code{feature_type = "gene"}. Optional, defaults to NA.}
 
 \item{id_type}{Optional gene identifier type for \code{feature_type = "gene"}:
 \code{"symbol"}, \code{"entrez"}, or \code{"ensembl"}. Optional, defaults to NA.}
+
+\item{tumor_role}{Character scalar naming the sample role on the tumor (or
+case) side of a pair. Used for \code{level = "pair"}. Default \code{"tumor"}.}
+
+\item{normal_role}{Character scalar naming the sample role on the normal (or
+control) side of a pair. Used for \code{level = "pair"}. Default \code{"normal"}.}
+
+\item{pair_sep}{Character scalar placed between the two sample ids when
+\code{\link[=sample_pairs]{sample_pairs()}} builds \code{pair_id}. Used for \code{level = "pair"}. Default
+\code{"__"}.}
 }
 \description{
 An immutable S7 class for defining analysis specifications in a Cohort.
@@ -91,6 +105,9 @@ spec@path_template
 spec@root_key
 spec@reader
 spec@key_cols
+spec@tumor_role
+spec@normal_role
+spec@pair_sep
 }\if{html}{\out{</div>}}
 }
 \seealso{

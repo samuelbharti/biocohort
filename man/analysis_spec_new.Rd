@@ -8,23 +8,27 @@ analysis_spec_new(
   name,
   assay,
   level,
-  format,
+  format = NA_character_,
   description = NA_character_,
   path_template = NA_character_,
   root_key = NA_character_,
-  reader,
-  key_cols,
+  reader = NA_character_,
+  key_cols = NULL,
   feature_type = NA_character_,
   gene_col = NA_character_,
-  id_type = NA_character_
+  id_type = NA_character_,
+  tumor_role = "tumor",
+  normal_role = "normal",
+  pair_sep = "__"
 )
 }
 \arguments{
 \item{name}{Character scalar for unique analysis name. Must be at least
 1 character long. Serves as key in the cohort registry.}
 
-\item{assay}{Character scalar for assay type (e.g., "wes_somatic",
-"wes_germline", "snrna"). Required.}
+\item{assay}{Character scalar for the assay label, spelled as in the
+cohort's \code{sample_map} (e.g., "wes", "wgs", "scrna"). Required. Subject
+and pair units are enumerated from the samples with this assay.}
 
 \item{level}{Character scalar for the granularity at which the analysis
 produces results. Must be one of \code{"subject"} (one result per subject),
@@ -32,7 +36,8 @@ produces results. Must be one of \code{"subject"} (one result per subject),
 \code{"cohort"} (a single result for the whole cohort). Required.}
 
 \item{format}{Character scalar for file format (e.g., "rds", "tsv", "txt").
-Required.}
+Optional. Defaults to the extension of \code{path_template}, or NA when there
+is no template.}
 
 \item{description}{Character scalar for human-readable description.
 Optional, defaults to NA.}
@@ -45,12 +50,16 @@ tokens: \code{{root}} (from \code{root_key}), \code{{subject_id}}, and the pair 
 \item{root_key}{Character scalar for key in cohort@paths to use as \code{{root}}.
 Optional, defaults to NA.}
 
-\item{reader}{Character scalar for reader function name (e.g., "read_rds",
-"read.csv"). Required.}
+\item{reader}{Character scalar for reader function name (e.g.,
+"readr::read_tsv", "read.csv"). Optional. Defaults by \code{format}: "csv" to
+"readr::read_csv", "tsv" and "txt" to "readr::read_tsv", "rds" to
+"readRDS". NA for any other format. \code{\link[=load_analysis]{load_analysis()}} errors when neither
+the spec nor its \code{reader} argument names a reader.}
 
-\item{key_cols}{Character vector of column names for indexing loaded tables.
-Examples: \code{c("subject_id")}, \code{c("pair_id")}.
-Required.}
+\item{key_cols}{Character vector of column names that must be present in
+the loaded table. Optional. Defaults by \code{level}: \code{"subject_id"} for
+subject, \code{c("subject_id", "pair_id")} for pair, and none for cohort.
+Subject and pair specs need at least one key column.}
 
 \item{feature_type}{Optional character scalar declaring how this analysis's
 features are translated across species by \code{\link[=orthologize]{orthologize()}}. One of
@@ -64,6 +73,18 @@ used when \code{feature_type = "gene"}. Defaults to NA (treated as \code{"gene"}
 \item{id_type}{Optional gene identifier type for \code{feature_type = "gene"}: one
 of \code{"symbol"}, \code{"entrez"}, \code{"ensembl"}. Defaults to NA (treated as
 \code{"symbol"}).}
+
+\item{tumor_role}{Character scalar naming the sample role on the tumor (or
+case) side of a pair. Passed to \code{\link[=sample_pairs]{sample_pairs()}} for \code{level = "pair"}.
+Default \code{"tumor"}.}
+
+\item{normal_role}{Character scalar naming the sample role on the normal (or
+control) side of a pair. Passed to \code{\link[=sample_pairs]{sample_pairs()}} for \code{level = "pair"}.
+Default \code{"normal"}.}
+
+\item{pair_sep}{Character scalar placed between the two sample ids in
+\code{pair_id}. Passed to \code{\link[=sample_pairs]{sample_pairs()}} for \code{level = "pair"}. Default
+\code{"__"}.}
 }
 \value{
 An AnalysisSpec object with validated fields.
@@ -71,43 +92,59 @@ An AnalysisSpec object with validated fields.
 \description{
 Constructs an AnalysisSpec object that defines how to locate, read, and
 interpret a specific analysis output. Validates all required fields and
-level constraints.
+fills \code{format}, \code{reader}, and \code{key_cols} with defaults when they are not
+given.
 }
 \details{
 This constructor validates that:
 \itemize{
-\item \code{name}, \code{assay}, \code{format}, \code{reader} are non-empty strings
+\item \code{name} and \code{assay} are non-empty strings
 \item \code{level} is one of: "subject", "pair", "cohort"
-\item \code{key_cols} is a non-empty character vector
+\item \code{format} and \code{reader}, if given, are non-empty strings
+\item \code{key_cols} is a character vector, non-empty for subject and pair specs
 \item \code{feature_type}, if given, is one of "interval" or "gene"
 \item \code{id_type}, if given, is one of "symbol", "entrez", "ensembl"
+\item \code{tumor_role}, \code{normal_role}, and \code{pair_sep} are non-empty strings
 }
 }
 \examples{
-# Define a somatic variant spec
+# A pair-level somatic variant spec. format, reader, and key_cols come
+# from the template extension and the level.
 spec_sv <- analysis_spec_new(
   name = "somatic_vars",
-  assay = "wes_somatic",
+  assay = "wes",
   level = "pair",
-  format = "tsv",
   description = "Somatic variants in tumor-normal pairs",
   path_template = "{root}/somatic/{pair_id}.variants.tsv",
-  root_key = "wes_root",
-  reader = "read_tsv",
-  key_cols = c("pair_id")
+  root_key = "wes_root"
 )
+spec_sv@format
+spec_sv@reader
+spec_sv@key_cols
 
-# Define a subject-level gene expression spec
+# A subject-level gene expression spec with an explicit reader.
 spec_expr <- analysis_spec_new(
   name = "gene_expression",
-  assay = "snrna",
+  assay = "scrna",
   level = "subject",
   format = "rds",
   description = "Gene expression by subject",
   path_template = "{root}/{subject_id}/expr.rds",
-  root_key = "snrna_root",
+  root_key = "scrna_root",
   reader = "readRDS",
-  key_cols = c("subject_id")
+  key_cols = c("subject_id", "gene")
+)
+
+# A pair spec for a sample map that labels roles case and control.
+spec_cc <- analysis_spec_new(
+  name = "case_control",
+  assay = "wgs",
+  level = "pair",
+  path_template = "{root}/{pair_id}.csv",
+  root_key = "wgs_root",
+  tumor_role = "case",
+  normal_role = "control",
+  pair_sep = "_vs_"
 )
 
 }
