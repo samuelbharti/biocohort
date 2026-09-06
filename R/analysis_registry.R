@@ -37,7 +37,7 @@
 #' # Create and register an analysis spec
 #' spec <- analysis_spec_new(
 #'   name = "somatic_vars",
-#'   assay = "wes_somatic",
+#'   assay = "wes",
 #'   level = "pair",
 #'   format = "tsv",
 #'   reader = "read_tsv",
@@ -110,7 +110,7 @@ analysis_register <- function(cohort, spec) {
 #'
 #' spec1 <- analysis_spec_new(
 #'   name = "somatic_vars",
-#'   assay = "wes_somatic",
+#'   assay = "wes",
 #'   level = "pair",
 #'   format = "tsv",
 #'   reader = "read_tsv",
@@ -119,7 +119,7 @@ analysis_register <- function(cohort, spec) {
 #'
 #' spec2 <- analysis_spec_new(
 #'   name = "gene_expr",
-#'   assay = "snrna",
+#'   assay = "scrna",
 #'   level = "subject",
 #'   format = "rds",
 #'   reader = "readRDS",
@@ -197,7 +197,7 @@ analysis_list <- function(cohort) {
 #'
 #' spec <- analysis_spec_new(
 #'   name = "somatic_vars",
-#'   assay = "wes_somatic",
+#'   assay = "wes",
 #'   level = "pair",
 #'   format = "tsv",
 #'   reader = "read_tsv",
