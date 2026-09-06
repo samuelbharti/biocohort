@@ -66,6 +66,17 @@ test_that("sample_pairs supports custom role labels", {
   expect_equal(pairs$pair_id, "C1__B1")
 })
 
+test_that("sample_pairs joins ids with a custom separator", {
+  pairs <- sample_pairs(make_map(), sep = "_vs_")
+  expect_equal(pairs$pair_id, "T1_vs_N1")
+  expect_equal(pairs$tumor_sample_id, "T1")
+  expect_equal(pairs$normal_sample_id, "N1")
+})
+
+test_that("sample_pairs rejects an empty separator", {
+  expect_error(sample_pairs(make_map(), sep = ""), "sep")
+})
+
 test_that("sample_pairs returns empty result with correct columns", {
   map <- tibble::tibble(
     subject_id = "S1",

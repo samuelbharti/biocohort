@@ -18,13 +18,15 @@ NULL
 #'   "case") side of a pair. Default `"tumor"`.
 #' @param normal_role Character scalar naming the role treated as the normal (or
 #'   "control") side of a pair. Default `"normal"`.
+#' @param sep Character scalar placed between the two sample ids in `pair_id`.
+#'   Default `"__"`. Use the separator your pipeline puts in its file names.
 #'
 #' @return A tibble with one row per derived pair and columns:
 #'   - `subject_id`: subject the pair belongs to.
 #'   - `assay`: assay the pair was derived within.
 #'   - `tumor_sample_id`: sample id of the `tumor_role` member.
 #'   - `normal_sample_id`: sample id of the `normal_role` member.
-#'   - `pair_id`: composite id, `paste0(tumor_sample_id, "__", normal_sample_id)`.
+#'   - `pair_id`: composite id, `paste0(tumor_sample_id, sep, normal_sample_id)`.
 #'
 #' Subjects lacking either role within an assay contribute no rows. When a
 #' subject has multiple tumor and/or normal samples in an assay, all
@@ -47,13 +49,17 @@ NULL
 #' # Restrict to specific assays
 #' sample_pairs(parsed$sample_map, assays = "wes")
 #'
+#' # Match a pipeline that names files tumor_vs_normal
+#' sample_pairs(parsed$sample_map, sep = "_vs_")
+#'
 #' @seealso [validate_manifest()] for producing a `sample_map`
 #' @export
 sample_pairs <- function(
   sample_map,
   assays = NULL,
   tumor_role = "tumor",
-  normal_role = "normal"
+  normal_role = "normal",
+  sep = "__"
 ) {
   if (!is.data.frame(sample_map)) {
     cli::cli_abort("`sample_map` must be a data.frame or tibble.")
@@ -72,6 +78,7 @@ sample_pairs <- function(
 
   checkmate::assert_string(tumor_role, min.chars = 1)
   checkmate::assert_string(normal_role, min.chars = 1)
+  checkmate::assert_string(sep, min.chars = 1)
   if (!is.null(assays)) {
     checkmate::assert_character(assays, min.len = 1, any.missing = FALSE)
   }
@@ -106,6 +113,6 @@ sample_pairs <- function(
 
   dplyr::mutate(
     pairs,
-    pair_id = paste0(.data$tumor_sample_id, "__", .data$normal_sample_id)
+    pair_id = paste0(.data$tumor_sample_id, .env$sep, .data$normal_sample_id)
   )
 }

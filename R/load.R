@@ -31,6 +31,22 @@ NULL
   fn
 }
 
+# Pick the reader for a load: the override, else the spec's reader. Error when
+# neither names one.
+.spec_reader <- function(spec, reader = NULL) {
+  reader <- reader %||% spec@reader
+  if (is.character(reader) && is.na(reader)) {
+    cli::cli_abort(
+      c(
+        "No reader for analysis {.val {spec@name}}.",
+        "i" = "Set {.field reader} on the spec or pass {.arg reader}.",
+        "i" = "Formats csv, tsv, txt, and rds get a default reader."
+      )
+    )
+  }
+  .resolve_reader(reader)
+}
+
 # Substitute {token} placeholders in a path template; error on anything left.
 .render_path <- function(template, tokens, analysis = NA_character_) {
   for (k in names(tokens)) {
@@ -41,7 +57,7 @@ NULL
       fixed = TRUE
     )
   }
-  leftover <- regmatches(template, gregexpr("\\{[^}]+\\}", template))[[1]]
+  leftover <- regmatches(template, gregexpr("[{][^}]+[}]", template))[[1]]
   if (length(leftover) > 0) {
     cli::cli_abort(
       c(
@@ -54,43 +70,103 @@ NULL
   template
 }
 
+# Subject ids with at least one sample of `assay`, in subject_tbl order.
+.subjects_with_assay <- function(cohort, assay) {
+  sample_map <- cohort@sample_map
+  if (!"assay" %in% names(sample_map)) {
+    cli::cli_abort(
+      c(
+        "`sample_map` has no {.field assay} column.",
+        "i" = "Build the cohort from {.fn validate_manifest} output."
+      )
+    )
+  }
+  with_assay <- sample_map$subject_id[sample_map$assay == assay]
+  ids <- as.character(cohort@subject_tbl$subject_id)
+  ids[ids %in% with_assay]
+}
+
+.subject_units <- function(cohort, spec, base_tokens) {
+  ids <- .subjects_with_assay(cohort, spec@assay)
+  if (length(ids) == 0) {
+    cli::cli_warn(
+      c(
+        "No subject has a sample for assay {.val {spec@assay}}.",
+        "i" = "Analysis {.val {spec@name}} has no units to load."
+      )
+    )
+    return(list())
+  }
+  lapply(ids, function(id) {
+    list(
+      keys = list(subject_id = id),
+      tokens = c(base_tokens, list(subject_id = id))
+    )
+  })
+}
+
+.pair_units <- function(cohort, spec, base_tokens) {
+  pairs <- sample_pairs(
+    cohort@sample_map,
+    assays = spec@assay,
+    tumor_role = spec@tumor_role,
+    normal_role = spec@normal_role,
+    sep = spec@pair_sep
+  )
+  if (nrow(pairs) == 0) {
+    cli::cli_warn(
+      c(
+        "No {.val {spec@tumor_role}}/{.val {spec@normal_role}} pair for assay {.val {spec@assay}}.",
+        "i" = "Analysis {.val {spec@name}} has no units to load."
+      )
+    )
+    return(list())
+  }
+  lapply(seq_len(nrow(pairs)), function(i) {
+    p <- pairs[i, ]
+    list(
+      keys = list(subject_id = p$subject_id, pair_id = p$pair_id),
+      tokens = c(
+        base_tokens,
+        list(
+          subject_id = p$subject_id,
+          tumor_sample_id = p$tumor_sample_id,
+          normal_sample_id = p$normal_sample_id,
+          pair_id = p$pair_id
+        )
+      )
+    )
+  })
+}
+
 # Enumerate the per-file "units" for a spec, given its level. Each unit carries
 # `keys` (provenance columns added to loaded rows) and `tokens` (for the path).
+# Subject and pair units come only from samples of the spec's assay.
 .analysis_units <- function(cohort, spec) {
   root <- if (!is.na(spec@root_key)) cohort@paths[[spec@root_key]] else NULL
   base_tokens <- if (!is.null(root)) list(root = root) else list()
 
-  if (spec@level == "cohort") {
-    list(list(keys = list(), tokens = base_tokens))
-  } else if (spec@level == "subject") {
-    ids <- as.character(cohort@subject_tbl$subject_id)
-    lapply(ids, function(id) {
-      list(
-        keys = list(subject_id = id),
-        tokens = c(base_tokens, list(subject_id = id))
+  switch(
+    spec@level,
+    cohort = list(list(keys = list(), tokens = base_tokens)),
+    subject = .subject_units(cohort, spec, base_tokens),
+    pair = .pair_units(cohort, spec, base_tokens)
+  )
+}
+
+# Error when a loaded table lacks one of the spec's key columns.
+.check_key_cols <- function(data, spec, path) {
+  missing <- setdiff(spec@key_cols, names(data))
+  if (length(missing) > 0) {
+    cli::cli_abort(
+      c(
+        "File {.path {path}} lacks key column{?s} {.field {missing}}.",
+        "i" = "Analysis {.val {spec@name}} expects {.field {spec@key_cols}}.",
+        "i" = "Set {.field key_cols} on the spec to columns the files have."
       )
-    })
-  } else {
-    pairs <- sample_pairs(cohort@sample_map)
-    if (nrow(pairs) == 0) {
-      return(list())
-    }
-    lapply(seq_len(nrow(pairs)), function(i) {
-      p <- pairs[i, ]
-      list(
-        keys = list(subject_id = p$subject_id, pair_id = p$pair_id),
-        tokens = c(
-          base_tokens,
-          list(
-            subject_id = p$subject_id,
-            tumor_sample_id = p$tumor_sample_id,
-            normal_sample_id = p$normal_sample_id,
-            pair_id = p$pair_id
-          )
-        )
-      )
-    })
+    )
   }
+  invisible(data)
 }
 
 #' Load an analysis's feature table from disk
@@ -101,7 +177,7 @@ NULL
 #' feature table annotated with provenance keys (`subject_id` and/or `pair_id`).
 #'
 #' @param cohort A [Cohort] providing `paths` (for `{root}`), subjects, and the
-#'   sample map (for pair-level enumeration).
+#'   sample map (for subject and pair enumeration).
 #' @param spec An [AnalysisSpec] or the name of one registered in `cohort`.
 #' @param reader Optional reader override: a function, or a `"fun"`/`"pkg::fun"`
 #'   name. Defaults to the spec's `reader`.
@@ -113,11 +189,22 @@ NULL
 #'     and whether it `exists`.
 #'
 #' @details
+#' Units follow the spec's `assay`. A subject-level spec enumerates only the
+#' subjects with at least one sample of that assay. A pair-level spec calls
+#' [sample_pairs()] with the spec's `assay`, `tumor_role`, `normal_role`, and
+#' `pair_sep`. When no subject or pair matches, the function warns and returns
+#' empty tables.
+#'
 #' Path tokens supported: `{root}` (from `cohort@paths[[root_key]]`),
 #' `{subject_id}`, and for pair-level specs `{tumor_sample_id}`,
 #' `{normal_sample_id}`, `{pair_id}` (derived via [sample_pairs()]). Missing
 #' files are skipped (with a warning) and recorded in `files`, so loading is
 #' never silently partial.
+#'
+#' The reader comes from the `reader` argument, else from the spec. The
+#' function errors when neither names one. After each file is read, the spec's
+#' `key_cols` must be present in the table (the provenance keys count), or the
+#' function errors and names the missing columns.
 #'
 #' @examples
 #' # Write a per-subject CSV, then load it.
@@ -136,10 +223,12 @@ NULL
 #'   subject_tbl = parsed$subject_tbl, sample_map = parsed$sample_map,
 #'   paths = list(rna_root = dir)
 #' )
+#'
+#' # format, reader, and key_cols come from the template and the level.
 #' spec <- analysis_spec_new(
-#'   name = "expr", assay = "rna", level = "subject", format = "csv",
+#'   name = "expr", assay = "rna", level = "subject",
 #'   path_template = "{root}/{subject_id}.csv", root_key = "rna_root",
-#'   reader = "read.csv", key_cols = "subject_id", feature_type = "gene"
+#'   feature_type = "gene"
 #' )
 #' loaded <- load_analysis(cohort, spec)
 #' loaded$data
@@ -163,7 +252,7 @@ load_analysis <- function(cohort, spec, reader = NULL) {
     cli::cli_abort("Analysis {.val {spec@name}} has no {.field path_template}.")
   }
 
-  read_fn <- .resolve_reader(reader %||% spec@reader)
+  read_fn <- .spec_reader(spec, reader)
   units <- .analysis_units(cohort, spec)
 
   file_rows <- list()
@@ -179,6 +268,7 @@ load_analysis <- function(cohort, spec, reader = NULL) {
       for (k in names(u$keys)) {
         d[[k]] <- u$keys[[k]]
       }
+      .check_key_cols(d, spec, path)
       data_list[[length(data_list) + 1]] <- d
     }
   }
@@ -186,7 +276,7 @@ load_analysis <- function(cohort, spec, reader = NULL) {
   files <- if (length(file_rows) > 0) {
     dplyr::bind_rows(file_rows)
   } else {
-    tibble::tibble(path = character(), exists = logical())
+    .empty_files()
   }
   data <- if (length(data_list) > 0) {
     dplyr::bind_rows(data_list)
@@ -202,6 +292,11 @@ load_analysis <- function(cohort, spec, reader = NULL) {
   }
 
   list(data = data, files = files)
+}
+
+# The shape of a file manifest with no rows.
+.empty_files <- function() {
+  tibble::tibble(path = character(), exists = logical())
 }
 
 #' Load registered analyses into a cohort from disk
@@ -273,8 +368,12 @@ load_analyses <- function(cohort, analyses = NULL, readers = NULL) {
 #'
 #' @param cohort A [Cohort] produced by [load_analyses()].
 #'
-#' @return A named list of tibbles (one per loaded analysis), or `NULL` if the
-#'   cohort has not been loaded.
+#' @return A named list of tibbles, one per loaded analysis. Each has the unit
+#'   keys, `path`, and `exists`. When the cohort has not been loaded, an empty
+#'   tibble with columns `path` and `exists`.
+#'
+#' @examples
+#' analysis_files(example_cohort)
 #'
 #' @seealso [load_analyses()]
 #' @export
@@ -282,5 +381,5 @@ analysis_files <- function(cohort) {
   if (!S7::S7_inherits(cohort, Cohort)) {
     cli::cli_abort("`cohort` must be a Cohort object.")
   }
-  cohort@cache$loaded
+  cohort@cache$loaded %||% .empty_files()
 }

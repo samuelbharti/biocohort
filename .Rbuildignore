@@ -21,3 +21,4 @@
 ^VERSIONING\.md$
 ^cran-comments\.md$
 ^tools$
+^\.git$

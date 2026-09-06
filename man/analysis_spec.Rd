@@ -41,7 +41,7 @@ cohort <- cohort_new(
 
 spec <- analysis_spec_new(
   name = "somatic_vars",
-  assay = "wes_somatic",
+  assay = "wes",
   level = "pair",
   format = "tsv",
   reader = "read_tsv",

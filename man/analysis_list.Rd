@@ -52,7 +52,7 @@ cohort <- cohort_new(
 
 spec1 <- analysis_spec_new(
   name = "somatic_vars",
-  assay = "wes_somatic",
+  assay = "wes",
   level = "pair",
   format = "tsv",
   reader = "read_tsv",
@@ -61,7 +61,7 @@ spec1 <- analysis_spec_new(
 
 spec2 <- analysis_spec_new(
   name = "gene_expr",
-  assay = "snrna",
+  assay = "scrna",
   level = "subject",
   format = "rds",
   reader = "readRDS",
