@@ -70,7 +70,7 @@ Study(
 ## Details
 
 Use
-[`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md)
+[`study_new()`](https://www.samuelbharti.com/bioroster/reference/study_new.md)
 to construct Study objects with immediate validation.
 
 Access properties via the `@` operator:
@@ -87,7 +87,7 @@ Access properties via the `@` operator:
 
 ## See also
 
-[`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md)
+[`study_new()`](https://www.samuelbharti.com/bioroster/reference/study_new.md)
 for object construction,
-[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md) for
+[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md) for
 combining studies with subject data

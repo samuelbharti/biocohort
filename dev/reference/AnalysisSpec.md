@@ -43,7 +43,7 @@ AnalysisSpec(
 
   - `"pair"`: one result per tumor/normal (case/control) pair, as
     derived by
-    [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
+    [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
     from the cohort's `sample_map`.
 
   - `"cohort"`: a single result for the whole cohort.
@@ -66,7 +66,7 @@ AnalysisSpec(
   substitution tokens: `{root}` (from `root_key`), `{subject_id}`, and
   the pair tokens `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}`
   (the latter three supplied by
-  [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
+  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
   for `level = "pair"`). Optional, defaults to NA.
 
 - root_key:
@@ -91,7 +91,7 @@ AnalysisSpec(
 
   Optional character scalar declaring how this analysis's features
   translate across species in
-  [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md):
+  [`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md):
   `"interval"` (liftover) or `"gene"` (ortholog mapping). Optional,
   defaults to NA.
 
@@ -108,10 +108,10 @@ AnalysisSpec(
 ## Details
 
 Use
-[`analysis_spec_new()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec_new.md)
+[`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
 to construct AnalysisSpec objects with immediate validation.
 AnalysisSpec objects are typically registered in a Cohort via
-[`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md).
+[`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md).
 
 Access properties via the `@` operator:
 
@@ -127,7 +127,7 @@ Access properties via the `@` operator:
 
 ## See also
 
-[`analysis_spec_new()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec_new.md)
+[`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
 for object construction,
-[`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md)
+[`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md)
 for registering specs in a Cohort

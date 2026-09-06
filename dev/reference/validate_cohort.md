@@ -4,7 +4,7 @@ Ensures a Cohort object satisfies all structural and integrity
 requirements for cross-species genomics analysis. Validates the subject
 table, sample map, and referential integrity between them. Intended as
 an internal validation step called automatically by
-[`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md).
+[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md).
 
 ## Usage
 
@@ -45,14 +45,14 @@ VALIDATION CHECKS:
   subject_tbl
 
 Validation is performed automatically by
-[`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md),
+[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md),
 but can be called directly for debugging or custom Cohort construction.
 
 ## See also
 
-[`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
 for Cohort construction,
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
 for manifest validation
 
 ## Examples

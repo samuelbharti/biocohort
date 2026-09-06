@@ -88,7 +88,7 @@ detailed README content within the study metadata.
 
 ## See also
 
-[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md) for
+[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md) for
 combining studies with subject data
 
 ## Examples

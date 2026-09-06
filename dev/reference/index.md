@@ -4,112 +4,112 @@
 
 Package overview and entry point
 
-- [`myceliumr`](http://www.samuelbharti.com/myceliumr/reference/myceliumr-package.md)
-  [`myceliumr-package`](http://www.samuelbharti.com/myceliumr/reference/myceliumr-package.md)
-  : myceliumr: Cross-Species Cohort Framework
+- [`bioroster`](https://www.samuelbharti.com/bioroster/reference/bioroster-package.md)
+  [`bioroster-package`](https://www.samuelbharti.com/bioroster/reference/bioroster-package.md)
+  : bioroster: Cross-Species Cohort Framework
 
 ## Core Classes
 
 S7 classes for study data structures
 
-- [`Study()`](http://www.samuelbharti.com/myceliumr/reference/Study.md)
+- [`Study()`](https://www.samuelbharti.com/bioroster/reference/Study.md)
   : S7 Study class
-- [`Subject()`](http://www.samuelbharti.com/myceliumr/reference/Subject.md)
+- [`Subject()`](https://www.samuelbharti.com/bioroster/reference/Subject.md)
   : S7 Subject class
-- [`Cohort()`](http://www.samuelbharti.com/myceliumr/reference/Cohort.md)
+- [`Cohort()`](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
   : S7 Cohort class
-- [`AnalysisSpec()`](http://www.samuelbharti.com/myceliumr/reference/AnalysisSpec.md)
+- [`AnalysisSpec()`](https://www.samuelbharti.com/bioroster/reference/AnalysisSpec.md)
   : S7 AnalysisSpec class
-- [`example_cohort`](http://www.samuelbharti.com/myceliumr/reference/example_cohort.md)
+- [`example_cohort`](https://www.samuelbharti.com/bioroster/reference/example_cohort.md)
   : Example Cohort Dataset
 
 ## Constructors
 
 Create and validate objects
 
-- [`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md)
+- [`study_new()`](https://www.samuelbharti.com/bioroster/reference/study_new.md)
   : Create a Study object
-- [`subject_new()`](http://www.samuelbharti.com/myceliumr/reference/subject_new.md)
+- [`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md)
   : Create a Subject object
-- [`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md)
+- [`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
   : Create a Cohort object
-- [`analysis_spec_new()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec_new.md)
+- [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
   : Create an AnalysisSpec object
 
 ## IO Functions
 
 Read and write data
 
-- [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md)
+- [`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md)
   : Read and validate a long-format manifest CSV file
 
 ## Analysis Registry
 
 Register and list analyses
 
-- [`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md)
+- [`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md)
   : Register an analysis specification in a cohort
-- [`analysis_list()`](http://www.samuelbharti.com/myceliumr/reference/analysis_list.md)
+- [`analysis_list()`](https://www.samuelbharti.com/bioroster/reference/analysis_list.md)
   : List registered analysis specifications
-- [`analysis_spec()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec.md)
+- [`analysis_spec()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec.md)
   : Retrieve an analysis specification from registry
 
 ## Validation
 
 Data validation functions
 
-- [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+- [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
   : Validate and structure a long-format sample manifest
-- [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
+- [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md)
   : Validate a Cohort object
 
 ## Samples
 
 Work with the sample map
 
-- [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
+- [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
   : Derive sample pairs from a sample map
 
 ## Analysis loading
 
 Read analysis feature tables from disk (experimental)
 
-- [`load_analysis()`](http://www.samuelbharti.com/myceliumr/reference/load_analysis.md)
+- [`load_analysis()`](https://www.samuelbharti.com/bioroster/reference/load_analysis.md)
   : Load an analysis's feature table from disk
-- [`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md)
+- [`load_analyses()`](https://www.samuelbharti.com/bioroster/reference/load_analyses.md)
   : Load registered analyses into a cohort from disk
-- [`analysis_files()`](http://www.samuelbharti.com/myceliumr/reference/analysis_files.md)
+- [`analysis_files()`](https://www.samuelbharti.com/bioroster/reference/analysis_files.md)
   : Retrieve analysis file manifests from a cohort
 
 ## Cross-species translation
 
 Translate features across assemblies and species (experimental)
 
-- [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
+- [`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md)
   : Translate features (or a whole cohort) across species or assemblies
-- [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)
+- [`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md)
   : Liftover a set of genomic intervals across assemblies or species
-- [`liftover_vcf()`](http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.md)
+- [`liftover_vcf()`](https://www.samuelbharti.com/bioroster/reference/liftover_vcf.md)
   : Liftover a VCF of variants with CrossMap (allele-aware)
-- [`liftover_rtracklayer()`](http://www.samuelbharti.com/myceliumr/reference/liftover_rtracklayer.md)
+- [`liftover_rtracklayer()`](https://www.samuelbharti.com/bioroster/reference/liftover_rtracklayer.md)
   : Liftover backend backed by rtracklayer
-- [`liftover_crossmap()`](http://www.samuelbharti.com/myceliumr/reference/liftover_crossmap.md)
+- [`liftover_crossmap()`](https://www.samuelbharti.com/bioroster/reference/liftover_crossmap.md)
   : Liftover backend backed by CrossMap
-- [`register_liftover_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_liftover_backend.md)
+- [`register_liftover_backend()`](https://www.samuelbharti.com/bioroster/reference/register_liftover_backend.md)
   : Register a liftover backend
-- [`liftover_backends()`](http://www.samuelbharti.com/myceliumr/reference/liftover_backends.md)
+- [`liftover_backends()`](https://www.samuelbharti.com/bioroster/reference/liftover_backends.md)
   : List registered liftover backends
-- [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)
+- [`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md)
   : Map gene-level features to orthologs in another species
-- [`ortholog_babelgene()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_babelgene.md)
+- [`ortholog_babelgene()`](https://www.samuelbharti.com/bioroster/reference/ortholog_babelgene.md)
   : Ortholog backend backed by babelgene
-- [`register_ortholog_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_ortholog_backend.md)
+- [`register_ortholog_backend()`](https://www.samuelbharti.com/bioroster/reference/register_ortholog_backend.md)
   : Register a gene-ortholog backend
-- [`ortholog_backends()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.md)
+- [`ortholog_backends()`](https://www.samuelbharti.com/bioroster/reference/ortholog_backends.md)
   : List registered ortholog backends
-- [`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md)
+- [`translation_report()`](https://www.samuelbharti.com/bioroster/reference/translation_report.md)
   : Retrieve per-analysis translation results from a cohort
-- [`TranslationResult()`](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
+- [`TranslationResult()`](https://www.samuelbharti.com/bioroster/reference/TranslationResult.md)
   : Result of a cross-species or cross-assembly translation
-- [`translation_stats()`](http://www.samuelbharti.com/myceliumr/reference/translation_stats.md)
+- [`translation_stats()`](https://www.samuelbharti.com/bioroster/reference/translation_stats.md)
   : Summary statistics for a translation

@@ -1,6 +1,6 @@
-# myceliumr: Cross-Species Cohort Framework
+# bioroster: Cross-Species Cohort Framework
 
-myceliumr provides S7 classes and tools for organizing genomic study
+bioroster provides S7 classes and tools for organizing genomic study
 metadata across species (rat, mouse, human) with support for any omics
 assay (WGS, WES, ATAC-seq, bulk RNA, single-cell, ...) via a generic,
 long-format sample model.
@@ -47,39 +47,39 @@ example:
 
 **Constructors:**
 
-- [`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md):
+- [`study_new()`](https://www.samuelbharti.com/bioroster/reference/study_new.md):
   Create a Study object
 
-- [`subject_new()`](http://www.samuelbharti.com/myceliumr/reference/subject_new.md):
+- [`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md):
   Create a Subject object
 
-- [`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md):
+- [`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md):
   Create a Cohort object
 
 **IO:**
 
-- [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md):
+- [`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md):
   Read and validate manifest CSV
 
-- [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md):
+- [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md):
   Validate and structure manifest data
 
 **Samples:**
 
-- [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md):
+- [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md):
   Derive tumor/normal sample pairs from a sample map
 
 **Validation:**
 
-- [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md):
+- [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md):
   Validate a Cohort object
 
 **Registry:**
 
-- [`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md):
+- [`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md):
   Register an analysis in the cohort registry
 
-- [`analysis_spec_new()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec_new.md):
+- [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md):
   Create an AnalysisSpec
 
 ## Data Tables
@@ -100,21 +100,21 @@ Cohorts use standardized tables:
 ## Documentation
 
 For terminology and definitions, see the
-[Glossary](http://www.samuelbharti.com/myceliumr/reference/articles/glossary.md).
+[Glossary](https://www.samuelbharti.com/bioroster/reference/articles/glossary.md).
 
 For standardized naming conventions (columns, objects, functions,
 files), see [Naming
-Conventions](http://www.samuelbharti.com/myceliumr/reference/articles/naming-conventions.md).
+Conventions](https://www.samuelbharti.com/bioroster/reference/articles/naming-conventions.md).
 
 ## See also
 
 Useful links:
 
-- <http://www.samuelbharti.com/myceliumr/>
+- <https://www.samuelbharti.com/bioroster/>
 
-- <https://github.com/samuelbharti/myceliumr>
+- <https://github.com/samuelbharti/bioroster>
 
-- Report bugs at <https://github.com/samuelbharti/myceliumr/issues>
+- Report bugs at <https://github.com/samuelbharti/bioroster/issues>
 
 ## Author
 

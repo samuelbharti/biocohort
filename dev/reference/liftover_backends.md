@@ -14,8 +14,8 @@ A character vector of registered backend names.
 
 ## See also
 
-[`register_liftover_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_liftover_backend.md),
-[`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)
+[`register_liftover_backend()`](https://www.samuelbharti.com/bioroster/reference/register_liftover_backend.md),
+[`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md)
 
 ## Examples
 

@@ -4,9 +4,9 @@ High-level entry point for cross-species translation. `orthologize()` is
 the modality dispatcher that makes translation a single, first-class
 operation: coordinate features (variants, peaks, intervals) route to
 liftover, and gene-level features route to ortholog mapping. Given a
-[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md), it
+[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md), it
 translates every registered analysis according to its
-[AnalysisSpec](http://www.samuelbharti.com/myceliumr/reference/AnalysisSpec.md)
+[AnalysisSpec](https://www.samuelbharti.com/bioroster/reference/AnalysisSpec.md)
 and returns a new, target-species cohort.
 
 ## Usage
@@ -24,7 +24,7 @@ orthologize(x, to, from = NA_character_, ...)
   - a data.frame/tibble of features, or
 
   - a
-    [Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md)
+    [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
     object.
 
 - to:
@@ -41,9 +41,9 @@ orthologize(x, to, from = NA_character_, ...)
   Strategy-specific arguments. For a **feature table**:
 
   - `strategy`: `"liftover"` (coordinate features; see
-    [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md))
+    [`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md))
     or `"ortholog"` (gene features; see
-    [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)).
+    [`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md)).
 
   - `chain`: chain-file path for `"liftover"`.
 
@@ -67,14 +67,14 @@ orthologize(x, to, from = NA_character_, ...)
 ## Value
 
 A
-[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
+[TranslationResult](https://www.samuelbharti.com/bioroster/reference/TranslationResult.md)
 (feature table input) or a new
-[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md)
+[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
 whose analyses are expressed in `to` (Cohort input). For a cohort,
 per-analysis
-[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)s
+[TranslationResult](https://www.samuelbharti.com/bioroster/reference/TranslationResult.md)s
 (including unmapped features) are retrievable with
-[`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md).
+[`translation_report()`](https://www.samuelbharti.com/bioroster/reference/translation_report.md).
 
 ## Details
 
@@ -84,16 +84,16 @@ Cohort-level translation keeps subjects and the sample map unchanged
 (the same biological subjects, viewed in another species'
 coordinate/gene space) and re-expresses each analysis's feature table.
 Analyses without a registered
-[AnalysisSpec](http://www.samuelbharti.com/myceliumr/reference/AnalysisSpec.md)
+[AnalysisSpec](https://www.samuelbharti.com/bioroster/reference/AnalysisSpec.md)
 or without a `feature_type` are skipped with a warning rather than
 guessed at.
 
 ## See also
 
-[`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md),
-[`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md),
-[`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md),
-[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
+[`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md),
+[`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md),
+[`translation_report()`](https://www.samuelbharti.com/bioroster/reference/translation_report.md),
+[TranslationResult](https://www.samuelbharti.com/bioroster/reference/TranslationResult.md)
 
 ## Examples
 

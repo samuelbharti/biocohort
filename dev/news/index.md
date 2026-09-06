@@ -1,58 +1,63 @@
 # Changelog
 
-## myceliumr 0.3.0
+## bioroster (development version)
+
+- The package is renamed from myceliumr to bioroster. The repository,
+  the documentation site, and the S7 class prefix change with it.
+
+## bioroster 0.3.0
 
 ### New features
 
 - **Cross-species translation (experimental)**: first-class coordinate
   translation across assemblies and species.
-  - [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md):
+  - [`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md):
     modality-dispatching front door routing coordinate features to
     liftover and gene features to ortholog mapping. Given a `Cohort`, it
     translates every registered analysis according to its `AnalysisSpec`
     `feature_type` and returns a new, target-species cohort (subjects
     and sample map unchanged); per-analysis results, including unmapped
     features, are retrievable with
-    [`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md).
+    [`translation_report()`](https://www.samuelbharti.com/bioroster/reference/translation_report.md).
   - `AnalysisSpec` gains optional `feature_type`
     (`"interval"`/`"gene"`), `gene_col`, and `id_type` fields that drive
     cohort-level auto-dispatch.
-  - [`load_analysis()`](http://www.samuelbharti.com/myceliumr/reference/load_analysis.md)
+  - [`load_analysis()`](https://www.samuelbharti.com/bioroster/reference/load_analysis.md)
     /
-    [`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md):
+    [`load_analyses()`](https://www.samuelbharti.com/bioroster/reference/load_analyses.md):
     read analysis feature tables from disk by resolving each
     `AnalysisSpec`’s `path_template` (`{root}`, `{subject_id}`,
     `{pair_id}`, …) per `level`, via the spec’s `reader`. Missing files
     are reported, not silently skipped; manifests are retrievable with
-    [`analysis_files()`](http://www.samuelbharti.com/myceliumr/reference/analysis_files.md).
+    [`analysis_files()`](https://www.samuelbharti.com/bioroster/reference/analysis_files.md).
     This takes a cohort from *paths* to *loaded feature tables*, ready
     for
-    [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md).
-  - [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md):
+    [`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md).
+  - [`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md):
     gene-level cross-species mapping returning a `TranslationResult`;
     pluggable backends via
-    [`register_ortholog_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_ortholog_backend.md)
+    [`register_ortholog_backend()`](https://www.samuelbharti.com/bioroster/reference/register_ortholog_backend.md)
     /
-    [`ortholog_backends()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.md),
+    [`ortholog_backends()`](https://www.samuelbharti.com/bioroster/reference/ortholog_backends.md),
     with an offline `babelgene` default
-    ([`ortholog_babelgene()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_babelgene.md)).
+    ([`ortholog_babelgene()`](https://www.samuelbharti.com/bioroster/reference/ortholog_babelgene.md)).
     Model-to-model pairs (e.g. rat-to-mouse) are pivoted through human.
-  - [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md):
+  - [`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md):
     translate intervals (variants, peaks, regions) via a chain file,
     returning a `TranslationResult` that retains both mapped and
     **unmapped** features so loss is never silent.
   - Pluggable backends via
-    [`register_liftover_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_liftover_backend.md)
+    [`register_liftover_backend()`](https://www.samuelbharti.com/bioroster/reference/register_liftover_backend.md)
     /
-    [`liftover_backends()`](http://www.samuelbharti.com/myceliumr/reference/liftover_backends.md):
+    [`liftover_backends()`](https://www.samuelbharti.com/bioroster/reference/liftover_backends.md):
     an R-native `rtracklayer` default, plus a `crossmap` adapter and the
     allele-aware
-    [`liftover_vcf()`](http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.md)
+    [`liftover_vcf()`](https://www.samuelbharti.com/bioroster/reference/liftover_vcf.md)
     wrapper for the external CrossMap tool.
   - `TranslationResult` S7 class and
-    [`translation_stats()`](http://www.samuelbharti.com/myceliumr/reference/translation_stats.md)
+    [`translation_stats()`](https://www.samuelbharti.com/bioroster/reference/translation_stats.md)
     for mapped/unmapped/ multi-mapped accounting.
-- **[`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)**:
+- **[`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)**:
   derive tumor/normal (case/control) sample pairs from a long-format
   `sample_map`. Pairing is assay-agnostic and computed on demand rather
   than stored, replacing the old WES-specific `pair_id` column. Returns
@@ -63,13 +68,13 @@
 ### Breaking changes
 
 - **Generic, species- and assay-agnostic manifest layer**
-  ([\#7](https://github.com/samuelbharti/myceliumr/issues/7)). The
+  ([\#7](https://github.com/samuelbharti/bioroster/issues/7)). The
   manifest model is no longer hardcoded to rat / WES / snRNA-seq. The
   canonical representation is a tidy, long-format `sample_map` with
   columns `subject_id`, `assay`, `sample_id`, `role`, where `assay` is a
   free-form value (`wgs`, `wes`, `atac`, `bulk_rna`, `scrna`, …). New
   assays are new rows, never new columns or per-assay tables.
-- [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+- [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
   now takes a single long-format `manifest` (required columns
   `subject_id`, `assay`, `sample_id`; optional `role` plus subject-level
   metadata) and returns `subject_tbl`, `sample_map`, and
@@ -77,16 +82,16 @@
   `rat_id`/`wes_tumor_id`/`wes_normal_id`/`sn_id` inputs and the
   `dna_tbl`/`rna_tbl` outputs have been removed. The `strict` and
   `allow_rna_duplicates` arguments are replaced by `allow_duplicates`.
-- [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md)
+- [`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md)
   now reads a long-format CSV and delegates to
-  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md),
+  [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md),
   restoring a single source of truth for manifest parsing. It returns
   the same three tables and no longer emits `wes_pair_tbl`.
 - `completeness_tbl` is now one row per `subject_id` x `assay` with an
   `n_samples` count, replacing the WES-specific `has_dna_*` /
   `n_rna_samples` columns.
 
-## myceliumr 0.2.0
+## bioroster 0.2.0
 
 ### New Features
 
@@ -109,17 +114,17 @@
 - Improved example_cohort dataset with rn7 genome build
 - Package now displays version and documentation URL on load
 
-## myceliumr 0.1.0
+## bioroster 0.1.0
 
 ### Initial Release
 
 - S7 classes for Study, Subject, and Cohort with validation
 - Manifest reading and validation
-  ([`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md),
-  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md))
+  ([`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md),
+  [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md))
 - Constructors:
-  [`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md),
-  [`subject_new()`](http://www.samuelbharti.com/myceliumr/reference/subject_new.md),
-  [`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md)
+  [`study_new()`](https://www.samuelbharti.com/bioroster/reference/study_new.md),
+  [`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md),
+  [`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
 - Cross-species support for rat, mouse, and human
 - Comprehensive test coverage with testthat

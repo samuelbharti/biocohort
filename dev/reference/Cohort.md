@@ -40,14 +40,14 @@ Cohort(
   columns: `subject_id` (character), `species` (rat/mouse/human).
   Optional columns: `sex`, `strain`, `genotype`, `cohort`, `timepoint`,
   `notes`. Validated by
-  [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md).
+  [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
 
 - sample_map:
 
   A canonical long-format tibble mapping subjects to samples, one row
   per sample. Columns: `subject_id`, `assay`, `sample_id`, `role`. New
   assays are represented as new rows, never new columns. Validated by
-  [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md).
+  [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
 
 - paths:
 
@@ -72,7 +72,7 @@ Cohort(
 ## Details
 
 Use
-[`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
 to construct Cohort objects with comprehensive validation. Validation
 ensures:
 
@@ -98,13 +98,13 @@ Access properties via the `@` operator:
 
 ## See also
 
-[`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
 for object construction,
-[`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
+[`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md)
 for validation details,
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
 for manifest preparation,
-[`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md)
+[`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md)
 for loading manifest from file,
-[`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md)
+[`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md)
 for registering analyses

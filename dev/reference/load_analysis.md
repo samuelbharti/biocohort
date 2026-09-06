@@ -1,7 +1,7 @@
 # Load an analysis's feature table from disk
 
 Resolves an
-[AnalysisSpec](http://www.samuelbharti.com/myceliumr/reference/AnalysisSpec.md)'s
+[AnalysisSpec](https://www.samuelbharti.com/bioroster/reference/AnalysisSpec.md)'s
 `path_template` for each unit implied by its `level` (one file per
 subject, per pair, or one for the whole cohort), reads the existing
 files with the spec's `reader`, and row-binds them into a single feature
@@ -17,14 +17,14 @@ load_analysis(cohort, spec, reader = NULL)
 
 - cohort:
 
-  A [Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
   providing `paths` (for `{root}`), subjects, and the sample map (for
   pair-level enumeration).
 
 - spec:
 
   An
-  [AnalysisSpec](http://www.samuelbharti.com/myceliumr/reference/AnalysisSpec.md)
+  [AnalysisSpec](https://www.samuelbharti.com/bioroster/reference/AnalysisSpec.md)
   or the name of one registered in `cohort`.
 
 - reader:
@@ -47,14 +47,14 @@ A list with:
 Path tokens supported: `{root}` (from `cohort@paths[[root_key]]`),
 `{subject_id}`, and for pair-level specs `{tumor_sample_id}`,
 `{normal_sample_id}`, `{pair_id}` (derived via
-[`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)).
+[`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)).
 Missing files are skipped (with a warning) and recorded in `files`, so
 loading is never silently partial.
 
 ## See also
 
-[`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md),
-[`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
+[`load_analyses()`](https://www.samuelbharti.com/bioroster/reference/load_analyses.md),
+[`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md)
 
 ## Examples
 
@@ -88,7 +88,7 @@ loaded$data
 #> 1 TP53      1 S1        
 loaded$files
 #> # A tibble: 1 × 3
-#>   subject_id path                                    exists
-#>   <chr>      <chr>                                   <lgl> 
-#> 1 S1         /tmp/Rtmpx0Iw3e/file28fb3e973c21/S1.csv TRUE  
+#>   subject_id path                                   exists
+#>   <chr>      <chr>                                  <lgl> 
+#> 1 S1         /tmp/RtmpccohNx/file1856997a330/S1.csv TRUE  
 ```

@@ -2,6 +2,6 @@
 
 ### Reference
 
-- [Glossary](http://www.samuelbharti.com/myceliumr/articles/glossary.md):
+- [Glossary](https://www.samuelbharti.com/bioroster/articles/glossary.md):
 - [Naming
-  conventions](http://www.samuelbharti.com/myceliumr/articles/naming-conventions.md):
+  conventions](https://www.samuelbharti.com/bioroster/articles/naming-conventions.md):

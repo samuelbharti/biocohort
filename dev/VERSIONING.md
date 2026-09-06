@@ -1,8 +1,8 @@
-# myceliumr Versioning Guide
+# bioroster Versioning Guide
 
 ## Semantic Versioning
 
-myceliumr follows semantic versioning: **MAJOR.MINOR.PATCH**
+bioroster follows semantic versioning: **MAJOR.MINOR.PATCH**
 
 - **MAJOR** (1.0.0): Breaking changes or major rewrites
 - **MINOR** (0.2.0): New features, significant functionality additions
@@ -87,10 +87,10 @@ The package displays its version when loaded:
 
 ``` r
 
-library(myceliumr)
-# myceliumr version 0.1.1
+library(bioroster)
+# bioroster version 0.1.1
 # Cross-Species Cohort Framework for Genomics Data
-# Documentation: http://www.samuelbharti.com/myceliumr/
+# Documentation: https://www.samuelbharti.com/bioroster/
 ```
 
 This is handled by the `.onAttach()` function in `R/zzz.R`.
@@ -101,11 +101,11 @@ Within R:
 
 ``` r
 
-packageVersion("myceliumr")
+packageVersion("bioroster")
 ```
 
 From command line:
 
 ``` r
-Rscript -e "packageVersion('myceliumr')"
+Rscript -e "packageVersion('bioroster')"
 ```

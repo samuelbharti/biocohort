@@ -50,7 +50,7 @@ liftover_vcf(
 ## Value
 
 A
-[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
+[TranslationResult](https://www.samuelbharti.com/bioroster/reference/TranslationResult.md)
 whose `mapped` and `unmapped` carry the output and unmapped VCF paths;
 `stats` records the number of unmapped records.
 
@@ -63,5 +63,5 @@ parsing variants into R. Parse the output VCF with your tool of choice
 
 ## See also
 
-[`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md),
-[`liftover_crossmap()`](http://www.samuelbharti.com/myceliumr/reference/liftover_crossmap.md)
+[`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md),
+[`liftover_crossmap()`](https://www.samuelbharti.com/bioroster/reference/liftover_crossmap.md)

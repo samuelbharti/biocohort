@@ -38,15 +38,15 @@ these columns.
 
 The returned tibble includes only the most essential metadata fields for
 discovery and filtering. Use
-[`analysis_spec()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec.md)
+[`analysis_spec()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec.md)
 to retrieve the full AnalysisSpec object including description,
 path_template, and key_cols.
 
 ## See also
 
-[`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md)
+[`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md)
 for registering specs,
-[`analysis_spec()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec.md)
+[`analysis_spec()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec.md)
 for retrieving a full spec object
 
 ## Examples

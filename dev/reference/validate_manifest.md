@@ -64,9 +64,9 @@ demand from `sample_map`.
 
 ## See also
 
-[`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md)
+[`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md)
 for reading a manifest from CSV,
-[`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
 for creating a Cohort from manifest data
 
 ## Examples

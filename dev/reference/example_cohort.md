@@ -2,7 +2,7 @@
 
 A sample Cohort object containing cross-species study data with rat and
 mouse subjects. Provided for demonstration, testing, and learning the
-myceliumr data model. Includes a complete Study object with subject
+bioroster data model. Includes a complete Study object with subject
 metadata.
 
 ## Usage
@@ -33,7 +33,7 @@ A Cohort object (S7 class) with the following structure:
 
 ## Details
 
-The example_cohort demonstrates the complete myceliumr data structure
+The example_cohort demonstrates the complete bioroster data structure
 including:
 
 - Cross-species data (rat and mouse)
@@ -55,11 +55,11 @@ creating your own cohorts from real data.
 
 ## See also
 
-[`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
 for creating Cohort objects,
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
 for preparing manifest data,
-[`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md)
+[`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md)
 for loading manifest from CSV file
 
 ## Examples

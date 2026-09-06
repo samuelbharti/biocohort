@@ -15,7 +15,7 @@ translation_stats(x)
 - x:
 
   A
-  [TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
+  [TranslationResult](https://www.samuelbharti.com/bioroster/reference/TranslationResult.md)
   object.
 
 ## Value
@@ -25,7 +25,7 @@ A one-row tibble with columns `from`, `to`, `backend`, `n_input`,
 
 ## See also
 
-[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
+[TranslationResult](https://www.samuelbharti.com/bioroster/reference/TranslationResult.md)
 
 ## Examples
 

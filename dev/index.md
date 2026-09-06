@@ -1,17 +1,17 @@
-# myceliumr
+# bioroster
 
 A lightweight R package for managing cross-species cohort data
 (rat/mouse/human) with manifest validation and standardized storage for
 WES and snRNA-seq outputs.
 
-**Documentation**: <http://www.samuelbharti.com/myceliumr/>
+**Documentation**: <https://www.samuelbharti.com/bioroster/>
 
 ## Installation
 
 ``` r
 
 # From GitHub
-devtools::install_github("samuelbharti/myceliumr")
+devtools::install_github("samuelbharti/bioroster")
 
 # From source
 devtools::install()
@@ -21,7 +21,7 @@ devtools::install()
 
 ``` r
 
-library(myceliumr)
+library(bioroster)
 
 # Create a study
 study <- study_new(
@@ -63,17 +63,17 @@ R2,rat,KO,WES_002,SN_002
 - **Cohort** - Collection of subjects with sample mappings and analysis
   registry
 
-See [package documentation](http://www.samuelbharti.com/myceliumr/) for
+See [package documentation](https://www.samuelbharti.com/bioroster/) for
 details.
 
 ## Documentation
 
 The package website includes: -
-**[Glossary](http://www.samuelbharti.com/myceliumr/articles/glossary.md)**:
+**[Glossary](https://www.samuelbharti.com/bioroster/articles/glossary.html)**:
 Key terms and definitions - **[Naming
-Conventions](http://www.samuelbharti.com/myceliumr/articles/naming-conventions.md)**:
+Conventions](https://www.samuelbharti.com/bioroster/articles/naming-conventions.html)**:
 Standardized column, object, and file names - **[Getting
-Started](http://www.samuelbharti.com/myceliumr/articles/getting-started.md)**:
+Started](https://www.samuelbharti.com/bioroster/articles/getting-started.html)**:
 Workflow and examples
 
 To build the site locally:
@@ -88,7 +88,7 @@ This generates HTML documentation in the `docs/` directory.
 ## Contributing
 
 See
-[CONTRIBUTING.md](http://www.samuelbharti.com/myceliumr/CONTRIBUTING.md)
+[CONTRIBUTING.md](https://www.samuelbharti.com/bioroster/CONTRIBUTING.md)
 for development workflow.
 
 ## License

@@ -75,7 +75,7 @@ typically grouped into Cohort objects for collective analysis.
 
 ## See also
 
-[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md) for
+[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md) for
 managing groups of subjects
 
 ## Examples
@@ -91,7 +91,7 @@ rat_subject <- subject_new(
   cohort = "Control"
 )
 print(rat_subject)
-#> <myceliumr::Subject>
+#> <bioroster::Subject>
 #>  @ subject_id: chr "RAT001"
 #>  @ species   : chr "rat"
 #>  @ sex       : chr "M"
@@ -110,7 +110,7 @@ mouse_subject <- subject_new(
   genotype = "KO"
 )
 print(mouse_subject)
-#> <myceliumr::Subject>
+#> <bioroster::Subject>
 #>  @ subject_id: chr "MOUSE001"
 #>  @ species   : chr "mouse"
 #>  @ sex       : chr "F"

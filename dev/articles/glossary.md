@@ -1,6 +1,6 @@
 # Glossary
 
-This glossary defines key terms and concepts used throughout myceliumr
+This glossary defines key terms and concepts used throughout bioroster
 documentation and code.
 
 ## Core Entities
@@ -9,7 +9,7 @@ documentation and code.
 |----|----|
 | **Subject** | An individual biological organism (rat, mouse, or human) in a study. Each subject has a unique `subject_id` and associated metadata (species, genotype, cohort, etc.). Represented as a row in `subject_tbl`. |
 | **Species** | The biological species of a subject: one of “rat”, “mouse”, or “human”. Required field in subject metadata. |
-| **Cohort** | A collection of subjects grouped for analysis. A cohort combines subject-level metadata, sample-to-assay mappings, and optional study context. The primary data container in myceliumr. |
+| **Cohort** | A collection of subjects grouped for analysis. A cohort combines subject-level metadata, sample-to-assay mappings, and optional study context. The primary data container in bioroster. |
 | **Study** | Project-level metadata including study ID, title, research hypotheses, aims, assay types, and genome build versions. Optional context for a cohort. |
 
 ## Sample and Assay Concepts
@@ -22,7 +22,7 @@ documentation and code.
 | **Tumor Sample** | A sample collected from tumor tissue or neoplastic cells, recorded as a `sample_map` row with `role = "tumor"`. |
 | **Normal Sample** | A sample collected from non-neoplastic tissue or control cells, recorded as a `sample_map` row with `role = "normal"`. A baseline for somatic mutation calling. |
 | **Sample ID** (`sample_id`) | A unique identifier for an individual sample, independent of the subject ID. Allows samples from the same subject to be distinguished. |
-| **Pair** (`pair_id`) | A tumor/normal (case/control) pairing of two samples of the same assay for one subject, derived on demand from `sample_map` via [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md). The `pair_id` is `paste0(tumor_sample_id, "__", normal_sample_id)`. Pairing is assay-agnostic and is not stored in `sample_map` itself. |
+| **Pair** (`pair_id`) | A tumor/normal (case/control) pairing of two samples of the same assay for one subject, derived on demand from `sample_map` via [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md). The `pair_id` is `paste0(tumor_sample_id, "__", normal_sample_id)`. Pairing is assay-agnostic and is not stored in `sample_map` itself. |
 
 ## Data Tables
 
@@ -44,7 +44,7 @@ documentation and code.
 
 | Term | Definition |
 |----|----|
-| **Manifest** | A CSV (or other tabular) file containing metadata and sample identifiers for all subjects in a study. Validated by [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md) and [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md) to create structured subject and sample tables. |
+| **Manifest** | A CSV (or other tabular) file containing metadata and sample identifiers for all subjects in a study. Validated by [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md) and [`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md) to create structured subject and sample tables. |
 | **Manifest CSV** | A long-format, comma-separated text file with one row per sample. Required columns: `subject_id`, `assay`, `sample_id`. Optional: `role` plus any subject-level metadata (`species`, `sex`, `genotype`, `cohort`, …), which must be constant within a subject. |
 
 ## Genotype and Phenotype
@@ -61,7 +61,7 @@ documentation and code.
 
 | Term | Definition |
 |----|----|
-| **S7 Class** | A formal object-oriented programming model in R (via the S7 package) providing immutable properties, type validation, and method dispatch. All myceliumr core objects (Study, Subject, Cohort) are S7 classes. |
+| **S7 Class** | A formal object-oriented programming model in R (via the S7 package) providing immutable properties, type validation, and method dispatch. All bioroster core objects (Study, Subject, Cohort) are S7 classes. |
 | **Property** | A named field in an S7 class, accessed via the `@` operator (e.g., `cohort@subjects`, `study@title`). Properties are typed and immutable once created. |
 | **Subject Object** | An S7 instance of the Subject class encapsulating a single subject’s metadata. Usually managed within a Cohort’s `subjects` named list rather than directly. |
 | **Cohort Object** | An S7 instance of the Cohort class serving as the primary data container: holds subjects, sample mappings, optional study context, file paths, analyses, and a registry of analysis specifications. |
@@ -77,6 +77,6 @@ documentation and code.
 ## Further Reading
 
 See the [Naming
-Conventions](http://www.samuelbharti.com/myceliumr/articles/naming-conventions.md)
+Conventions](https://www.samuelbharti.com/bioroster/articles/naming-conventions.md)
 article for standardized conventions for column names, object names, and
 file names.

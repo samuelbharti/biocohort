@@ -26,7 +26,7 @@ cohort_new(
   `subject_id` (character) and `species` (rat/mouse/human). Optional
   columns: `sex`, `strain`, `genotype`, `cohort`, `timepoint`, `notes`.
   Typically obtained from
-  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md).
+  [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md).
 
 - sample_map:
 
@@ -34,7 +34,7 @@ cohort_new(
   per sample. Columns: `subject_id`, `assay`, `sample_id`, `role`. Must
   have at least a `subject_id` column to link to `subject_tbl`.
   Typically obtained from
-  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md).
+  [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md).
 
 - study:
 
@@ -60,7 +60,7 @@ Raises informative errors if validation fails.
 
 Cohort objects are S7 classes for managing cross-species study data.
 Construction automatically runs
-[`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
+[`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md)
 to ensure:
 
 - Required columns are present
@@ -90,11 +90,11 @@ Use the `@` operator to access cohort components:
 
 ## See also
 
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
 for preparing input tables,
-[`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
+[`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md)
 for detailed validation,
-[Study](http://www.samuelbharti.com/myceliumr/reference/Study.md) for
+[Study](https://www.samuelbharti.com/bioroster/reference/Study.md) for
 study metadata
 
 ## Examples
@@ -130,7 +130,7 @@ print(cohort)
 # Access individual Subject objects (automatically created)
 rat_subject <- cohort@subjects[["RAT001"]]
 print(rat_subject)
-#> <myceliumr::Subject>
+#> <bioroster::Subject>
 #>  @ subject_id: chr "RAT001"
 #>  @ species   : chr "rat"
 #>  @ sex       : chr "M"

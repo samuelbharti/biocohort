@@ -40,7 +40,7 @@ analysis_spec_new(
   Character scalar for the granularity at which the analysis produces
   results. Must be one of `"subject"` (one result per subject), `"pair"`
   (one result per tumor/normal pair, see
-  [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)),
+  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)),
   or `"cohort"` (a single result for the whole cohort). Required.
 
 - format:
@@ -58,7 +58,7 @@ analysis_spec_new(
   Character scalar for templated file path. Supports tokens: `{root}`
   (from `root_key`), `{subject_id}`, and the pair tokens
   `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}` (from
-  [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)).
+  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)).
   Optional, defaults to NA.
 
 - root_key:
@@ -80,7 +80,7 @@ analysis_spec_new(
 
   Optional character scalar declaring how this analysis's features are
   translated across species by
-  [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md).
+  [`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md).
   One of `"interval"` (coordinate features, translated by liftover) or
   `"gene"` (gene-level features, translated by ortholog mapping).
   Defaults to NA (analysis is skipped by cohort-level translation).
@@ -116,9 +116,9 @@ This constructor validates that:
 
 ## See also
 
-[AnalysisSpec](http://www.samuelbharti.com/myceliumr/reference/AnalysisSpec.md)
+[AnalysisSpec](https://www.samuelbharti.com/bioroster/reference/AnalysisSpec.md)
 for class documentation,
-[`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md)
+[`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md)
 for registering in a Cohort
 
 ## Examples

@@ -2,7 +2,7 @@
 
 Reads a tidy, long-format manifest CSV (one row per sample) and
 delegates to
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
 for validation and structuring. This is the primary entry point for
 loading external manifest data and is the single source of truth for
 manifest parsing rules.
@@ -31,12 +31,12 @@ read_manifest_csv(path, ..., allow_duplicates = FALSE)
   Logical. If `TRUE`, repeated `(subject_id, assay, sample_id)`
   combinations are permitted. If `FALSE` (default), duplicates raise an
   error. Passed through to
-  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md).
+  [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md).
 
 ## Value
 
 The list returned by
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md):
+[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md):
 `subject_tbl`, `sample_map`, and `completeness_tbl`.
 
 ## Details
@@ -57,14 +57,14 @@ Optional sample-level column:
 Any remaining columns (e.g. `species`, `sex`, `strain`, `genotype`,
 `cohort`, `timepoint`, `notes`) are treated as subject-level metadata
 and must be constant within a `subject_id`. See
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
 for the full validation rules.
 
 ## See also
 
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
 for detailed validation rules,
-[`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
 for creating a Cohort from manifest data
 
 ## Examples

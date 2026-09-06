@@ -30,7 +30,7 @@ Subject(
 
   Character scalar for species designation. Must be one of: "rat",
   "mouse", or "human" (validated by
-  [`subject_new()`](http://www.samuelbharti.com/myceliumr/reference/subject_new.md)).
+  [`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md)).
 
 - sex:
 
@@ -60,7 +60,7 @@ Subject(
 ## Details
 
 Use
-[`subject_new()`](http://www.samuelbharti.com/myceliumr/reference/subject_new.md)
+[`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md)
 to construct Subject objects with species validation. Individual
 subjects are typically managed through Cohort objects.
 
@@ -77,7 +77,7 @@ Access properties via the `@` operator:
 
 ## See also
 
-[`subject_new()`](http://www.samuelbharti.com/myceliumr/reference/subject_new.md)
+[`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md)
 for object construction,
-[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md) for
+[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md) for
 managing groups of subjects

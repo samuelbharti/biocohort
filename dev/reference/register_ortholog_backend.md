@@ -1,7 +1,7 @@
 # Register a gene-ortholog backend
 
 Adds a named ortholog backend so it can be selected by name in
-[`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md).
+[`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md).
 A backend performs gene-level cross-species mapping; this pluggable
 design mirrors the liftover backends used for coordinate features.
 
@@ -35,6 +35,6 @@ Invisibly, the backend name.
 
 ## See also
 
-[`ortholog_backends()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.md),
-[`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md),
-[`ortholog_babelgene()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_babelgene.md)
+[`ortholog_backends()`](https://www.samuelbharti.com/bioroster/reference/ortholog_backends.md),
+[`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md),
+[`ortholog_babelgene()`](https://www.samuelbharti.com/bioroster/reference/ortholog_babelgene.md)
