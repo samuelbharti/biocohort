@@ -25,6 +25,7 @@
 #' rat1@sex
 #'
 #' @seealso [Subject], [subject_new()], [cohort_new()]
+#' @rdname cohort-subject
 #' @export
 subject <- function(cohort, id) {
   if (!S7::S7_inherits(cohort, Cohort)) {
