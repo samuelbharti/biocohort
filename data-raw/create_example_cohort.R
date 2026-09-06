@@ -31,21 +31,23 @@ subjects <- tibble::tibble(
 )
 
 # Samples in long format, one row per sample. Each subject carries WES
-# tumor and normal samples and one snRNA-seq sample.
+# tumor and normal samples and one snRNA-seq sample. fastq_1/fastq_2 show
+# that an extra sample-level column survives validate_manifest() alongside
+# the four canonical ones.
 samples <- tibble::tribble(
-  ~subject_id , ~assay  , ~sample_id   , ~role    ,
-  "RAT001"    , "wes"   , "WES_R001_T" , "tumor"  ,
-  "RAT001"    , "wes"   , "WES_R001_N" , "normal" ,
-  "RAT001"    , "scrna" , "SNRNA_R001" , "tumor"  ,
-  "RAT002"    , "wes"   , "WES_R002_T" , "tumor"  ,
-  "RAT002"    , "wes"   , "WES_R002_N" , "normal" ,
-  "RAT002"    , "scrna" , "SNRNA_R002" , "tumor"  ,
-  "MOUSE001"  , "wes"   , "WES_M001_T" , "tumor"  ,
-  "MOUSE001"  , "wes"   , "WES_M001_N" , "normal" ,
-  "MOUSE001"  , "scrna" , "SNRNA_M001" , "tumor"  ,
-  "MOUSE002"  , "wes"   , "WES_M002_T" , "tumor"  ,
-  "MOUSE002"  , "wes"   , "WES_M002_N" , "normal" ,
-  "MOUSE002"  , "scrna" , "SNRNA_M002" , "tumor"
+  ~subject_id , ~assay  , ~sample_id   , ~role    , ~fastq_1                 , ~fastq_2                 ,
+  "RAT001"    , "wes"   , "WES_R001_T" , "tumor"  , "wes_r001_t_R1.fastq.gz" , "wes_r001_t_R2.fastq.gz" ,
+  "RAT001"    , "wes"   , "WES_R001_N" , "normal" , "wes_r001_n_R1.fastq.gz" , "wes_r001_n_R2.fastq.gz" ,
+  "RAT001"    , "scrna" , "SNRNA_R001" , "tumor"  , "snrna_r001_R1.fastq.gz" , "snrna_r001_R2.fastq.gz" ,
+  "RAT002"    , "wes"   , "WES_R002_T" , "tumor"  , "wes_r002_t_R1.fastq.gz" , "wes_r002_t_R2.fastq.gz" ,
+  "RAT002"    , "wes"   , "WES_R002_N" , "normal" , "wes_r002_n_R1.fastq.gz" , "wes_r002_n_R2.fastq.gz" ,
+  "RAT002"    , "scrna" , "SNRNA_R002" , "tumor"  , "snrna_r002_R1.fastq.gz" , "snrna_r002_R2.fastq.gz" ,
+  "MOUSE001"  , "wes"   , "WES_M001_T" , "tumor"  , "wes_m001_t_R1.fastq.gz" , "wes_m001_t_R2.fastq.gz" ,
+  "MOUSE001"  , "wes"   , "WES_M001_N" , "normal" , "wes_m001_n_R1.fastq.gz" , "wes_m001_n_R2.fastq.gz" ,
+  "MOUSE001"  , "scrna" , "SNRNA_M001" , "tumor"  , "snrna_m001_R1.fastq.gz" , "snrna_m001_R2.fastq.gz" ,
+  "MOUSE002"  , "wes"   , "WES_M002_T" , "tumor"  , "wes_m002_t_R1.fastq.gz" , "wes_m002_t_R2.fastq.gz" ,
+  "MOUSE002"  , "wes"   , "WES_M002_N" , "normal" , "wes_m002_n_R1.fastq.gz" , "wes_m002_n_R2.fastq.gz" ,
+  "MOUSE002"  , "scrna" , "SNRNA_M002" , "tumor"  , "snrna_m002_R1.fastq.gz" , "snrna_m002_R2.fastq.gz"
 )
 
 manifest_df <- dplyr::left_join(samples, subjects, by = "subject_id")

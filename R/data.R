@@ -9,7 +9,9 @@
 #'  - subject_tbl (tibble): 4 subjects (2 rat, 2 mouse) with species, sex,
 #'    strain, genotype, cohort, timepoint
 #'  - sample_map (tibble): Long-format map (subject_id, assay, sample_id,
-#'    role) covering WES tumor/normal and snRNA-seq samples
+#'    role, fastq_1, fastq_2) covering WES tumor/normal and snRNA-seq
+#'    samples. fastq_1/fastq_2 show that an extra sample-level column
+#'    survives validate_manifest() alongside the four canonical ones.
 #'  - paths (list): Empty, ready for file paths
 #'  - analyses (list): Empty, ready for analysis results
 #'

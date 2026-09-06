@@ -1,10 +1,6 @@
 #' @importFrom rlang .data
 NULL
 
-# Sample-level columns in a long-format manifest. Every other column is
-# treated as subject-level metadata.
-.manifest_sample_cols <- c("assay", "sample_id", "role")
-
 #' Validate and structure a long-format sample manifest
 #'
 #' Validates a tidy, long-format manifest (one row per sample) and structures it
@@ -20,13 +16,19 @@ NULL
 #'     `"atac"`, `"bulk_rna"`, `"scrna"`.
 #'   - `sample_id` (character; coerced): unique sample identifier.
 #'
-#'   Optional sample-level column:
+#'   Optional sample-level columns:
 #'   - `role` (character): role of the sample within its assay, e.g. `"tumor"`,
 #'     `"normal"`. Defaults to `NA` when absent.
+#'   - A column named in `sample_cols`, or recognized by name (see Details).
 #'
 #'   Any remaining columns (e.g. `species`, `sex`, `strain`, `genotype`,
 #'   `cohort`, `timepoint`, `notes`) are treated as **subject-level metadata**,
 #'   coerced to character, and must be constant within a `subject_id`.
+#'
+#' @param sample_cols Optional character vector naming additional columns to
+#'   keep at the sample level (in `sample_map`) rather than treat as
+#'   subject-level metadata. Use it for a column that varies per sample but
+#'   is not one of the columns [validate_manifest()] already recognizes.
 #'
 #' @param species Optional character scalar. When `manifest` has no `species`
 #'   column, this value fills one. Ignored when `manifest` already has a
@@ -39,17 +41,24 @@ NULL
 #'   - `subject_tbl`: Tibble with one row per `subject_id` containing the
 #'     subject-level metadata columns, all character.
 #'   - `sample_map`: Canonical long-format tibble with columns `subject_id`,
-#'     `assay`, `sample_id`, `role`.
+#'     `assay`, `sample_id`, `role`, and any recognized or declared extra
+#'     sample-level columns, all character.
 #'   - `completeness_tbl`: Tibble with one row per `subject_id` x `assay`
 #'     summarising the number of samples (`n_samples`).
 #'
 #' @details
-#' Every subject-level column is coerced to character, so a numeric,
-#' logical, or factor column never reaches [cohort_new()] in a form that
-#' would fail there. Empty strings in `subject_id`, `assay`, `sample_id`,
-#' `role`, and every subject-level column are treated as missing. Every
-#' sample row must carry a non-missing `subject_id`, `assay`, and
-#' `sample_id`.
+#' Every column is coerced to character, so a numeric, logical, or factor
+#' column never reaches [cohort_new()] in a form that would fail there.
+#' Empty strings are treated as missing. Every sample row must carry a
+#' non-missing `subject_id`, `assay`, and `sample_id`.
+#'
+#' Beyond the four canonical columns, these names are always kept at the
+#' sample level when present: `specimen_id`, `library_id`, `vendor_id`,
+#' `replicate`, `lane`, `run`, `flowcell`, `strandedness`, `fastq_1`,
+#' `fastq_2`, `bam`, `cram`, `vcf`, `matrix_dir`, `h5`, `qc_status`, and
+#' `qc_reason`. Add any other column that varies per sample with
+#' `sample_cols`; a column that varies within a subject but is not
+#' recognized or declared raises the conflicting-metadata error below.
 #'
 #' `species`, when present (in the manifest or filled from the `species`
 #' argument), is lower-cased so that `"Rat"` and `"rat"` are the same
@@ -69,6 +78,7 @@ NULL
 #'   assay = c("wes", "wes", "atac", "wgs"),
 #'   sample_id = c("WES_T1", "WES_N1", "ATAC_1", "WGS_T1"),
 #'   role = c("tumor", "normal", NA, "tumor"),
+#'   fastq_1 = c("t1_R1.fq.gz", "n1_R1.fq.gz", "a1_R1.fq.gz", "g1_R1.fq.gz"),
 #'   stringsAsFactors = FALSE
 #' )
 #'
@@ -82,14 +92,20 @@ NULL
 #' @export
 validate_manifest <- function(
   manifest,
+  sample_cols = NULL,
   species = NULL,
   allow_duplicates = FALSE
 ) {
+  if (!is.null(sample_cols)) {
+    checkmate::assert_character(sample_cols, min.chars = 1, any.missing = FALSE)
+  }
+
   manifest <- .coerce_manifest(manifest, species)
   .check_manifest_keys(manifest)
+  sample_level_cols <- .sample_level_cols(manifest, sample_cols)
 
-  subject_tbl <- .split_subject_tbl(manifest)
-  sample_map <- .build_sample_map(manifest)
+  subject_tbl <- .split_subject_tbl(manifest, sample_level_cols)
+  sample_map <- .build_sample_map(manifest, sample_level_cols)
   .check_sample_duplicates(sample_map, allow_duplicates)
   completeness_tbl <- .manifest_completeness_tbl(sample_map)
 
@@ -101,8 +117,8 @@ validate_manifest <- function(
 }
 
 # Check the input is a data.frame, has the three required key columns, fills
-# `role` and (optionally) `species` when absent, and coerces every
-# subject-level column (including the four canonical ones) to character.
+# `role` and (optionally) `species` when absent, and coerces every column to
+# character. species, once present, is also lower-cased.
 .coerce_manifest <- function(manifest, species) {
   if (!is.data.frame(manifest)) {
     cli::cli_abort("`manifest` must be a data.frame or tibble.")
@@ -129,13 +145,9 @@ validate_manifest <- function(
     manifest$species <- species
   }
 
-  subject_meta_cols <- setdiff(names(manifest), .manifest_sample_cols)
-  for (col in subject_meta_cols) {
+  for (col in names(manifest)) {
     manifest[[col]] <- .as_chr_na(manifest[[col]])
   }
-  manifest$assay <- .as_chr_na(manifest$assay)
-  manifest$sample_id <- .as_chr_na(manifest$sample_id)
-  manifest$role <- .as_chr_na(manifest$role)
 
   if ("species" %in% names(manifest)) {
     manifest$species <- .normalize_species(manifest$species)
@@ -162,10 +174,24 @@ validate_manifest <- function(
   invisible(manifest)
 }
 
-# One row per subject, from every subject-level column. Errors when a
-# subject's rows disagree, naming the subject and the columns that differ.
-.split_subject_tbl <- function(manifest) {
-  subject_meta_cols <- setdiff(names(manifest), .manifest_sample_cols)
+# The manifest columns treated as sample-level: the three fixed key columns
+# (assay, sample_id, role; subject_id is handled separately as it is also
+# the subject_tbl key), plus any recognized or user-declared column that is
+# actually present in the manifest.
+.sample_level_cols <- function(manifest, sample_cols) {
+  present <- names(manifest)
+  unique(c(
+    intersect(.manifest_key_cols, present),
+    intersect(.known_sample_cols, present),
+    intersect(sample_cols, present)
+  ))
+}
+
+# One row per subject, from every subject-level column (everything not
+# classified as sample-level). Errors when a subject's rows disagree, naming
+# the subject and the columns that differ.
+.split_subject_tbl <- function(manifest, sample_level_cols) {
+  subject_meta_cols <- setdiff(names(manifest), sample_level_cols)
   subject_wide <- dplyr::select(manifest, dplyr::all_of(subject_meta_cols))
 
   conflicts <- .check_subject_conflicts(subject_wide)
@@ -174,7 +200,8 @@ validate_manifest <- function(
       c(
         "`manifest` has conflicting subject-level metadata.",
         "i" = "Subject and column{?s} that vary: {toString(conflicts)}.",
-        "i" = "Subject-level columns must be identical across a subject's rows."
+        "i" = "Subject-level columns must be identical across a subject's rows.",
+        "i" = "If a column varies per sample, pass it in `sample_cols`."
       )
     )
   }
@@ -221,15 +248,12 @@ validate_manifest <- function(
   x
 }
 
-# The canonical long-format sample map: subject_id, assay, sample_id, role.
-.build_sample_map <- function(manifest) {
-  dplyr::transmute(
-    manifest,
-    subject_id = .data$subject_id,
-    assay = .data$assay,
-    sample_id = .data$sample_id,
-    role = .data$role
-  )
+# The canonical long-format sample map: subject_id, assay, sample_id, role,
+# then any recognized or declared extra sample-level column, in that order.
+.build_sample_map <- function(manifest, sample_level_cols) {
+  extra_cols <- setdiff(sample_level_cols, .manifest_key_cols)
+  cols <- c("subject_id", "assay", "sample_id", "role", extra_cols)
+  dplyr::select(manifest, dplyr::all_of(cols))
 }
 
 # sample_id must be unique across the whole manifest unless duplicates are

@@ -4,7 +4,12 @@
 \alias{validate_manifest}
 \title{Validate and structure a long-format sample manifest}
 \usage{
-validate_manifest(manifest, species = NULL, allow_duplicates = FALSE)
+validate_manifest(
+  manifest,
+  sample_cols = NULL,
+  species = NULL,
+  allow_duplicates = FALSE
+)
 }
 \arguments{
 \item{manifest}{A data.frame or tibble in \strong{long format}, one row per
@@ -16,15 +21,21 @@ sample. Required columns:
 \item \code{sample_id} (character; coerced): unique sample identifier.
 }
 
-Optional sample-level column:
+Optional sample-level columns:
 \itemize{
 \item \code{role} (character): role of the sample within its assay, e.g. \code{"tumor"},
 \code{"normal"}. Defaults to \code{NA} when absent.
+\item A column named in \code{sample_cols}, or recognized by name (see Details).
 }
 
 Any remaining columns (e.g. \code{species}, \code{sex}, \code{strain}, \code{genotype},
 \code{cohort}, \code{timepoint}, \code{notes}) are treated as \strong{subject-level metadata},
 coerced to character, and must be constant within a \code{subject_id}.}
+
+\item{sample_cols}{Optional character vector naming additional columns to
+keep at the sample level (in \code{sample_map}) rather than treat as
+subject-level metadata. Use it for a column that varies per sample but
+is not one of the columns \code{\link[=validate_manifest]{validate_manifest()}} already recognizes.}
 
 \item{species}{Optional character scalar. When \code{manifest} has no \code{species}
 column, this value fills one. Ignored when \code{manifest} already has a
@@ -39,7 +50,8 @@ A list with three elements:
 \item \code{subject_tbl}: Tibble with one row per \code{subject_id} containing the
 subject-level metadata columns, all character.
 \item \code{sample_map}: Canonical long-format tibble with columns \code{subject_id},
-\code{assay}, \code{sample_id}, \code{role}.
+\code{assay}, \code{sample_id}, \code{role}, and any recognized or declared extra
+sample-level columns, all character.
 \item \code{completeness_tbl}: Tibble with one row per \code{subject_id} x \code{assay}
 summarising the number of samples (\code{n_samples}).
 }
@@ -52,12 +64,18 @@ assay (WGS, WES, ATAC-seq, bulk RNA, single-cell, ...) are represented as
 values, never as bespoke columns or per-assay tables.
 }
 \details{
-Every subject-level column is coerced to character, so a numeric,
-logical, or factor column never reaches \code{\link[=cohort_new]{cohort_new()}} in a form that
-would fail there. Empty strings in \code{subject_id}, \code{assay}, \code{sample_id},
-\code{role}, and every subject-level column are treated as missing. Every
-sample row must carry a non-missing \code{subject_id}, \code{assay}, and
-\code{sample_id}.
+Every column is coerced to character, so a numeric, logical, or factor
+column never reaches \code{\link[=cohort_new]{cohort_new()}} in a form that would fail there.
+Empty strings are treated as missing. Every sample row must carry a
+non-missing \code{subject_id}, \code{assay}, and \code{sample_id}.
+
+Beyond the four canonical columns, these names are always kept at the
+sample level when present: \code{specimen_id}, \code{library_id}, \code{vendor_id},
+\code{replicate}, \code{lane}, \code{run}, \code{flowcell}, \code{strandedness}, \code{fastq_1},
+\code{fastq_2}, \code{bam}, \code{cram}, \code{vcf}, \code{matrix_dir}, \code{h5}, \code{qc_status}, and
+\code{qc_reason}. Add any other column that varies per sample with
+\code{sample_cols}; a column that varies within a subject but is not
+recognized or declared raises the conflicting-metadata error below.
 
 \code{species}, when present (in the manifest or filled from the \code{species}
 argument), is lower-cased so that \code{"Rat"} and \code{"rat"} are the same
@@ -77,6 +95,7 @@ manifest <- data.frame(
   assay = c("wes", "wes", "atac", "wgs"),
   sample_id = c("WES_T1", "WES_N1", "ATAC_1", "WGS_T1"),
   role = c("tumor", "normal", NA, "tumor"),
+  fastq_1 = c("t1_R1.fq.gz", "n1_R1.fq.gz", "a1_R1.fq.gz", "g1_R1.fq.gz"),
   stringsAsFactors = FALSE
 )
 
