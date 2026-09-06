@@ -113,3 +113,16 @@ Translate features across assemblies and species (experimental)
   : Result of a cross-species or cross-assembly translation
 - [`translation_stats()`](https://www.samuelbharti.com/bioroster/reference/translation_stats.md)
   : Summary statistics for a translation
+
+## Project paths
+
+Find the project root, build paths under it, and read a dotenv file
+
+- [`project_root()`](https://www.samuelbharti.com/bioroster/reference/project_root.md)
+  : Find the project root folder
+- [`project_path()`](https://www.samuelbharti.com/bioroster/reference/project_path.md)
+  : Build a path under the project root
+- [`ensure_dir()`](https://www.samuelbharti.com/bioroster/reference/ensure_dir.md)
+  : Create a folder when it is absent
+- [`read_dotenv()`](https://www.samuelbharti.com/bioroster/reference/read_dotenv.md)
+  : Read a dotenv file into the environment
