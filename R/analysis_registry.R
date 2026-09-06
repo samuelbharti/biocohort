@@ -152,15 +152,29 @@ analysis_list <- function(cohort) {
   }
 
   specs <- cohort@registry
-  spec_names <- names(specs)
 
   tibble::tibble(
-    name = spec_names,
-    assay = unname(sapply(specs, function(s) s@assay)),
-    level = unname(sapply(specs, function(s) s@level)),
-    format = unname(sapply(specs, function(s) s@format)),
-    reader = unname(sapply(specs, function(s) s@reader)),
-    root_key = unname(sapply(specs, function(s) s@root_key))
+    name = names(specs),
+    assay = vapply(specs, function(s) s@assay, character(1), USE.NAMES = FALSE),
+    level = vapply(specs, function(s) s@level, character(1), USE.NAMES = FALSE),
+    format = vapply(
+      specs,
+      function(s) s@format,
+      character(1),
+      USE.NAMES = FALSE
+    ),
+    reader = vapply(
+      specs,
+      function(s) s@reader,
+      character(1),
+      USE.NAMES = FALSE
+    ),
+    root_key = vapply(
+      specs,
+      function(s) s@root_key,
+      character(1),
+      USE.NAMES = FALSE
+    )
   )
 }
 
