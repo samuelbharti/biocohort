@@ -6,8 +6,8 @@
 
 - **Cross-species translation (experimental)**: first-class coordinate
   translation across assemblies and species.
-  - [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
-    — modality-dispatching front door routing coordinate features to
+  - [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md):
+    modality-dispatching front door routing coordinate features to
     liftover and gene features to ortholog mapping. Given a `Cohort`, it
     translates every registered analysis according to its `AnalysisSpec`
     `feature_type` and returns a new, target-species cohort (subjects
@@ -19,8 +19,8 @@
     cohort-level auto-dispatch.
   - [`load_analysis()`](http://www.samuelbharti.com/myceliumr/reference/load_analysis.md)
     /
-    [`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md)
-    — read analysis feature tables from disk by resolving each
+    [`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md):
+    read analysis feature tables from disk by resolving each
     `AnalysisSpec`’s `path_template` (`{root}`, `{subject_id}`,
     `{pair_id}`, …) per `level`, via the spec’s `reader`. Missing files
     are reported, not silently skipped; manifests are retrievable with
@@ -28,8 +28,8 @@
     This takes a cohort from *paths* to *loaded feature tables*, ready
     for
     [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md).
-  - [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)
-    — gene-level cross-species mapping returning a `TranslationResult`;
+  - [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md):
+    gene-level cross-species mapping returning a `TranslationResult`;
     pluggable backends via
     [`register_ortholog_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_ortholog_backend.md)
     /
@@ -37,8 +37,8 @@
     with an offline `babelgene` default
     ([`ortholog_babelgene()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_babelgene.md)).
     Model-to-model pairs (e.g. rat-to-mouse) are pivoted through human.
-  - [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)
-    — translate intervals (variants, peaks, regions) via a chain file,
+  - [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md):
+    translate intervals (variants, peaks, regions) via a chain file,
     returning a `TranslationResult` that retains both mapped and
     **unmapped** features so loss is never silent.
   - Pluggable backends via

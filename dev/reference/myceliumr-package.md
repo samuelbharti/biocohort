@@ -47,40 +47,40 @@ example:
 
 **Constructors:**
 
-- [`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md)
-  — Create a Study object
+- [`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md):
+  Create a Study object
 
-- [`subject_new()`](http://www.samuelbharti.com/myceliumr/reference/subject_new.md)
-  — Create a Subject object
+- [`subject_new()`](http://www.samuelbharti.com/myceliumr/reference/subject_new.md):
+  Create a Subject object
 
-- [`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md)
-  — Create a Cohort object
+- [`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md):
+  Create a Cohort object
 
 **IO:**
 
-- [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md)
-  — Read and validate manifest CSV
+- [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md):
+  Read and validate manifest CSV
 
-- [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
-  — Validate and structure manifest data
+- [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md):
+  Validate and structure manifest data
 
 **Samples:**
 
-- [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
-  — Derive tumor/normal sample pairs from a sample map
+- [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md):
+  Derive tumor/normal sample pairs from a sample map
 
 **Validation:**
 
-- [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
-  — Validate a Cohort object
+- [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md):
+  Validate a Cohort object
 
 **Registry:**
 
-- [`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md)
-  — Register an analysis in the cohort registry
+- [`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md):
+  Register an analysis in the cohort registry
 
-- [`analysis_spec_new()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec_new.md)
-  — Create an AnalysisSpec
+- [`analysis_spec_new()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec_new.md):
+  Create an AnalysisSpec
 
 ## Data Tables
 

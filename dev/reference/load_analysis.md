@@ -88,7 +88,7 @@ loaded$data
 #> 1 TP53      1 S1        
 loaded$files
 #> # A tibble: 1 × 3
-#>   subject_id path                                   exists
-#>   <chr>      <chr>                                  <lgl> 
-#> 1 S1         /tmp/Rtmp1QXg3I/file28d385e3b53/S1.csv TRUE  
+#>   subject_id path                                    exists
+#>   <chr>      <chr>                                   <lgl> 
+#> 1 S1         /tmp/Rtmpx0Iw3e/file28fb3e973c21/S1.csv TRUE  
 ```
