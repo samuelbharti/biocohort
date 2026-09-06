@@ -8,7 +8,7 @@ load_analysis(cohort, spec, reader = NULL)
 }
 \arguments{
 \item{cohort}{A \link{Cohort} providing \code{paths} (for \code{{root}}), subjects, and the
-sample map (for pair-level enumeration).}
+sample map (for subject and pair enumeration).}
 
 \item{spec}{An \link{AnalysisSpec} or the name of one registered in \code{cohort}.}
 
@@ -31,11 +31,22 @@ the existing files with the spec's \code{reader}, and row-binds them into a sing
 feature table annotated with provenance keys (\code{subject_id} and/or \code{pair_id}).
 }
 \details{
+Units follow the spec's \code{assay}. A subject-level spec enumerates only the
+subjects with at least one sample of that assay. A pair-level spec calls
+\code{\link[=sample_pairs]{sample_pairs()}} with the spec's \code{assay}, \code{tumor_role}, \code{normal_role}, and
+\code{pair_sep}. When no subject or pair matches, the function warns and returns
+empty tables.
+
 Path tokens supported: \code{{root}} (from \code{cohort@paths[[root_key]]}),
 \code{{subject_id}}, and for pair-level specs \code{{tumor_sample_id}},
 \code{{normal_sample_id}}, \code{{pair_id}} (derived via \code{\link[=sample_pairs]{sample_pairs()}}). Missing
 files are skipped (with a warning) and recorded in \code{files}, so loading is
 never silently partial.
+
+The reader comes from the \code{reader} argument, else from the spec. The
+function errors when neither names one. After each file is read, the spec's
+\code{key_cols} must be present in the table (the provenance keys count), or the
+function errors and names the missing columns.
 }
 \examples{
 # Write a per-subject CSV, then load it.
@@ -54,10 +65,12 @@ cohort <- cohort_new(
   subject_tbl = parsed$subject_tbl, sample_map = parsed$sample_map,
   paths = list(rna_root = dir)
 )
+
+# format, reader, and key_cols come from the template and the level.
 spec <- analysis_spec_new(
-  name = "expr", assay = "rna", level = "subject", format = "csv",
+  name = "expr", assay = "rna", level = "subject",
   path_template = "{root}/{subject_id}.csv", root_key = "rna_root",
-  reader = "read.csv", key_cols = "subject_id", feature_type = "gene"
+  feature_type = "gene"
 )
 loaded <- load_analysis(cohort, spec)
 loaded$data

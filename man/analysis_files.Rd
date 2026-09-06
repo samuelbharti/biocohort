@@ -10,12 +10,17 @@ analysis_files(cohort)
 \item{cohort}{A \link{Cohort} produced by \code{\link[=load_analyses]{load_analyses()}}.}
 }
 \value{
-A named list of tibbles (one per loaded analysis), or \code{NULL} if the
-cohort has not been loaded.
+A named list of tibbles, one per loaded analysis. Each has the unit
+keys, \code{path}, and \code{exists}. When the cohort has not been loaded, an empty
+tibble with columns \code{path} and \code{exists}.
 }
 \description{
 After \code{\link[=load_analyses]{load_analyses()}}, returns the per-analysis file manifests (resolved
 paths and whether each existed) recorded during loading.
+}
+\examples{
+analysis_files(example_cohort)
+
 }
 \seealso{
 \code{\link[=load_analyses]{load_analyses()}}
