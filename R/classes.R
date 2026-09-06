@@ -7,8 +7,7 @@
 #' @param study_id Character scalar for study identifier. Unique within a project.
 #' @param title Character scalar for study name/title.
 #' @param description Character scalar for longer description of study purpose,
-#'   design, or protocols. Can be a file path (ending with .md, .txt, or .rtf)
-#'   to read README content. Optional.
+#'   design, or protocols. Optional.
 #' @param hypotheses Character vector of research hypotheses. Accepts multiple
 #'   hypotheses. Optional.
 #' @param aims Character vector of specific research aims. Accepts multiple aims.
@@ -18,11 +17,14 @@
 #' @param genome_builds Named list mapping species to genome build versions
 #'   (e.g., `list(rat = "rn7", mouse = "mm10", human = "hg38")`). Supports rn6,
 #'   rn7 for rat; mm9, mm10, mm39 for mouse; hg19, hg38 for human. Optional.
-#' @param created_at POSIXct timestamp for creation. Defaults to current time.
+#' @param created_at POSIXct timestamp for creation. Defaults to the time the
+#'   object is built.
 #' @param tags Character vector of arbitrary tags for categorization. Optional.
 #'
 #' @details
 #' Use [study_new()] to construct Study objects with immediate validation.
+#' Construction also validates `study_id` and `title` directly, so building a
+#' `Study` any other way still enforces the two required fields.
 #'
 #' Access properties via the `@` operator:
 #' ```r
@@ -54,10 +56,35 @@ Study <- S7::new_class(
     aims = S7::new_property(S7::class_character, default = character()),
     assays = S7::new_property(S7::class_character, default = character()),
     genome_builds = S7::new_property(S7::class_list, default = list()),
-    created_at = S7::new_property(S7::class_any, default = NULL),
+    created_at = S7::new_property(
+      S7::class_POSIXct,
+      default = quote(Sys.time())
+    ),
     tags = S7::new_property(S7::class_character, default = character())
-  )
+  ),
+  validator = function(self) {
+    problems <- .check_study(self)
+    if (length(problems) == 0) NULL else problems
+  }
 )
+
+# A non-missing, non-empty character scalar, or a message naming what failed.
+.check_scalar_field <- function(value, field) {
+  if (length(value) != 1 || is.na(value)) {
+    return(sprintf("@%s must be a single, non-missing value.", field))
+  }
+  if (!nzchar(value)) {
+    return(sprintf("@%s must not be an empty string.", field))
+  }
+  character()
+}
+
+.check_study <- function(self) {
+  c(
+    .check_scalar_field(self@study_id, "study_id"),
+    .check_scalar_field(self@title, "title")
+  )
+}
 
 #' S7 Subject class
 #'
@@ -80,7 +107,9 @@ Study <- S7::new_class(
 #'
 #' @details
 #' Use [subject_new()] to construct Subject objects with species validation.
-#' Individual subjects are typically managed through Cohort objects.
+#' Construction also validates that `subject_id` and `species` are present, so
+#' building a `Subject` any other way still enforces the two required fields.
+#' Individual subjects are typically read from a Cohort with [subject()].
 #'
 #' Access properties via the `@` operator:
 #' ```r
@@ -109,8 +138,19 @@ Subject <- S7::new_class(
     cohort = S7::new_property(S7::class_character, default = NA_character_),
     timepoint = S7::new_property(S7::class_character, default = NA_character_),
     notes = S7::new_property(S7::class_character, default = NA_character_)
-  )
+  ),
+  validator = function(self) {
+    problems <- .check_subject(self)
+    if (length(problems) == 0) NULL else problems
+  }
 )
+
+.check_subject <- function(self) {
+  c(
+    .check_scalar_field(self@subject_id, "subject_id"),
+    .check_scalar_field(self@species, "species")
+  )
+}
 
 #' S7 Cohort class
 #'
@@ -119,14 +159,16 @@ Subject <- S7::new_class(
 #' Study, file paths, analysis tables, and a registry of analysis specs.
 #'
 #' @param study A Study object with project-level context, or NULL.
-#' @param subject_tbl A tibble with one row per subject. Required columns:
+#' @param subject_tbl A data frame with one row per subject. Required columns:
 #'   `subject_id` and `species`, both character. Common optional columns:
 #'   `sex`, `strain`, `genotype`, `cohort`, `timepoint`, `notes`. Checked by
-#'   [validate_cohort()].
-#' @param sample_map A long-format tibble with one row per sample. Required
-#'   columns: `subject_id`, `assay`, `sample_id`, `role`, all character. A
-#'   new assay is a new row, never a new column. Checked by
-#'   [validate_cohort()].
+#'   [validate_cohort()]. Defaults to an empty table with the two required
+#'   columns.
+#' @param sample_map A long-format data frame with one row per sample.
+#'   Required columns: `subject_id`, `assay`, `sample_id`, `role`, all
+#'   character. A new assay is a new row, never a new column. Checked by
+#'   [validate_cohort()]. Defaults to an empty table with the four required
+#'   columns.
 #' @param paths Named list of file paths to data files or result folders.
 #'   Defaults to an empty list.
 #' @param analyses Named list of analysis tables or other data objects.
@@ -138,7 +180,9 @@ Subject <- S7::new_class(
 #'
 #' @details
 #' Use [cohort_new()] to build a Cohort. It checks the input types, converts
-#' both tables to tibbles, and runs [validate_cohort()].
+#' both tables to tibbles, and runs [validate_cohort()]. Construction itself
+#' also checks `subject_tbl` and `sample_map` with the same rules, so building
+#' a `Cohort` any other way still enforces the required columns.
 #'
 #' Subjects live only in `subject_tbl`. Use [subject()] to read one row as a
 #' [Subject] object.
@@ -165,12 +209,30 @@ Subject <- S7::new_class(
 Cohort <- S7::new_class(
   "Cohort",
   properties = list(
-    study = S7::new_property(S7::class_any, default = NULL),
-    subject_tbl = S7::new_property(S7::class_any, default = NULL),
-    sample_map = S7::new_property(S7::class_any, default = NULL),
+    study = S7::new_property(S7::new_union(NULL, Study), default = NULL),
+    subject_tbl = S7::new_property(
+      S7::class_data.frame,
+      default = quote(tibble::tibble(
+        subject_id = character(),
+        species = character()
+      ))
+    ),
+    sample_map = S7::new_property(
+      S7::class_data.frame,
+      default = quote(tibble::tibble(
+        subject_id = character(),
+        assay = character(),
+        sample_id = character(),
+        role = character()
+      ))
+    ),
     paths = S7::new_property(S7::class_list, default = list()),
     analyses = S7::new_property(S7::class_list, default = list()),
     registry = S7::new_property(S7::class_list, default = list()),
     cache = S7::new_property(S7::class_list, default = list())
-  )
+  ),
+  validator = function(self) {
+    problems <- .check_cohort_tables(self@subject_tbl, self@sample_map)
+    if (length(problems) == 0) NULL else problems
+  }
 )

@@ -101,8 +101,41 @@ AnalysisSpec <- S7::new_class(
     tumor_role = S7::new_property(S7::class_character, default = "tumor"),
     normal_role = S7::new_property(S7::class_character, default = "normal"),
     pair_sep = S7::new_property(S7::class_character, default = "__")
-  )
+  ),
+  validator = function(self) {
+    problems <- .check_analysis_spec(self)
+    if (length(problems) == 0) NULL else problems
+  }
 )
+
+# One message per enum property that is set but not in its allowed values.
+# NA is always allowed for the optional ones; `level` is required.
+.check_enum <- function(value, allowed, field, na_ok = TRUE) {
+  if (na_ok && length(value) == 1 && is.na(value)) {
+    return(character())
+  }
+  if (length(value) != 1 || (!na_ok && is.na(value)) || !(value %in% allowed)) {
+    return(sprintf(
+      "@%s must be one of: %s.",
+      field,
+      toString(sprintf("'%s'", allowed))
+    ))
+  }
+  character()
+}
+
+.check_analysis_spec <- function(self) {
+  c(
+    .check_enum(
+      self@level,
+      c("subject", "pair", "cohort"),
+      "level",
+      na_ok = FALSE
+    ),
+    .check_enum(self@feature_type, c("interval", "gene"), "feature_type"),
+    .check_enum(self@id_type, c("symbol", "entrez", "ensembl"), "id_type")
+  )
+}
 
 # Format from the path template extension, when the caller gave none.
 .default_format <- function(format, path_template) {

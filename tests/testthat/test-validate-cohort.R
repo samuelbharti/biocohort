@@ -15,58 +15,70 @@ test_that("validate_cohort requires a Cohort object", {
   expect_error(validate_cohort(list()), "must be a Cohort object")
 })
 
-test_that("validate_cohort lists every problem in one error", {
-  cohort <- Cohort(
-    subject_tbl = tibble::tibble(subject_id = c("S1", "S1"), species = "rat"),
-    sample_map = tibble::tibble(subject_id = "S1")
-  )
+# Cohort now validates its own tables at construction (the Cohort class has a
+# validator), so a Cohort built directly with bad tables errors immediately.
+# These tests build the bad tables and expect Cohort() itself to error;
+# validate_cohort() is never reached for these cases.
 
-  err <- expect_error(validate_cohort(cohort), "not valid")
+test_that("Cohort() lists every problem in one error at construction", {
+  err <- expect_error(
+    Cohort(
+      subject_tbl = tibble::tibble(subject_id = c("S1", "S1"), species = "rat"),
+      sample_map = tibble::tibble(subject_id = "S1")
+    ),
+    "invalid"
+  )
 
   expect_match(conditionMessage(err), "duplicate values: S1", fixed = TRUE)
   expect_match(conditionMessage(err), "assay, sample_id, role", fixed = TRUE)
 })
 
-test_that("validate_cohort names each missing sample_map column", {
+test_that("Cohort() names each missing sample_map column", {
   tbls <- valid_tables()
 
-  cohort <- Cohort(
-    subject_tbl = tbls$subject_tbl,
-    sample_map = tibble::tibble(subject_id = "S1")
+  expect_error(
+    Cohort(
+      subject_tbl = tbls$subject_tbl,
+      sample_map = tibble::tibble(subject_id = "S1")
+    ),
+    "assay, sample_id, role"
   )
-  expect_error(validate_cohort(cohort), "assay, sample_id, role")
 
-  cohort <- Cohort(
-    subject_tbl = tbls$subject_tbl,
-    sample_map = tbls$sample_map[c("subject_id", "assay", "sample_id")]
+  expect_error(
+    Cohort(
+      subject_tbl = tbls$subject_tbl,
+      sample_map = tbls$sample_map[c("subject_id", "assay", "sample_id")]
+    ),
+    "missing required column: role"
   )
-  expect_error(validate_cohort(cohort), "missing required column: role")
 })
 
-test_that("validate_cohort rejects a legacy wide sample map", {
-  cohort <- Cohort(
-    subject_tbl = tibble::tibble(subject_id = c("R1", "R2"), species = "rat"),
-    sample_map = tibble::tibble(
-      subject_id = c("R1", "R2"),
-      wes_id = c("W1", "W2")
-    )
+test_that("Cohort() rejects a legacy wide sample map", {
+  expect_error(
+    Cohort(
+      subject_tbl = tibble::tibble(subject_id = c("R1", "R2"), species = "rat"),
+      sample_map = tibble::tibble(
+        subject_id = c("R1", "R2"),
+        wes_id = c("W1", "W2")
+      )
+    ),
+    "missing required columns"
   )
-
-  expect_error(validate_cohort(cohort), "missing required columns")
 })
 
-test_that("validate_cohort reports sample_map ids that are not subjects", {
-  cohort <- Cohort(
-    subject_tbl = tibble::tibble(subject_id = c("R1", "R2"), species = "rat"),
-    sample_map = tibble::tibble(
-      subject_id = c("R1", "R3"),
-      assay = "wes",
-      sample_id = c("W1", "W3"),
-      role = "tumor"
-    )
+test_that("Cohort() reports sample_map ids that are not subjects", {
+  expect_error(
+    Cohort(
+      subject_tbl = tibble::tibble(subject_id = c("R1", "R2"), species = "rat"),
+      sample_map = tibble::tibble(
+        subject_id = c("R1", "R3"),
+        assay = "wes",
+        sample_id = c("W1", "W3"),
+        role = "tumor"
+      )
+    ),
+    "not found in `subject_tbl`: R3"
   )
-
-  expect_error(validate_cohort(cohort), "not found in `subject_tbl`: R3")
 })
 
 test_that(".check_cohort_tables returns character() for valid tables", {

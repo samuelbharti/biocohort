@@ -31,7 +31,17 @@ TranslationResult <- S7::new_class(
     to = S7::new_property(S7::class_character, default = NA_character_),
     backend = S7::new_property(S7::class_character, default = NA_character_),
     stats = S7::new_property(S7::class_list, default = list())
-  )
+  ),
+  validator = function(self) {
+    problems <- character()
+    if (!is.null(self@mapped) && !is.data.frame(self@mapped)) {
+      problems <- c(problems, "@mapped must be NULL or a data.frame.")
+    }
+    if (!is.null(self@unmapped) && !is.data.frame(self@unmapped)) {
+      problems <- c(problems, "@unmapped must be NULL or a data.frame.")
+    }
+    if (length(problems) == 0) NULL else problems
+  }
 )
 
 #' Summary statistics for a translation

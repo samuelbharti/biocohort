@@ -12,7 +12,7 @@ Study(
   aims = character(0),
   assays = character(0),
   genome_builds = list(),
-  created_at = NULL,
+  created_at = Sys.time(),
   tags = character(0)
 )
 }
@@ -22,8 +22,7 @@ Study(
 \item{title}{Character scalar for study name/title.}
 
 \item{description}{Character scalar for longer description of study purpose,
-design, or protocols. Can be a file path (ending with .md, .txt, or .rtf)
-to read README content. Optional.}
+design, or protocols. Optional.}
 
 \item{hypotheses}{Character vector of research hypotheses. Accepts multiple
 hypotheses. Optional.}
@@ -38,7 +37,8 @@ Optional.}
 (e.g., \code{list(rat = "rn7", mouse = "mm10", human = "hg38")}). Supports rn6,
 rn7 for rat; mm9, mm10, mm39 for mouse; hg19, hg38 for human. Optional.}
 
-\item{created_at}{POSIXct timestamp for creation. Defaults to current time.}
+\item{created_at}{POSIXct timestamp for creation. Defaults to the time the
+object is built.}
 
 \item{tags}{Character vector of arbitrary tags for categorization. Optional.}
 }
@@ -49,6 +49,8 @@ for cohorts and analyses involving rat, mouse, and human subjects.
 }
 \details{
 Use \code{\link[=study_new]{study_new()}} to construct Study objects with immediate validation.
+Construction also validates \code{study_id} and \code{title} directly, so building a
+\code{Study} any other way still enforces the two required fields.
 
 Access properties via the \code{@} operator:
 

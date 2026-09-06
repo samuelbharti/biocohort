@@ -9,9 +9,11 @@
 #'   Must be at least 1 character long.
 #' @param title Character scalar with the study name/title. Must be at least 1
 #'   character long.
-#' @param description Character scalar with optional longer description of the
-#'   study purpose and design. Can be a file path (ending with .md, .txt, or .rtf)
-#'   which will be read into the description field. Defaults to NA.
+#' @param description Character scalar with an optional longer description of
+#'   the study purpose and design. Always read as plain text. Defaults to NA.
+#'   Use `description_file` to read the text from a file instead.
+#' @param description_file Optional path to a text file whose content becomes
+#'   `description`. When given, `description` is ignored. Defaults to NULL.
 #' @param hypotheses Character vector of research hypotheses. Accepts multiple
 #'   hypotheses. Optional and defaults to empty vector.
 #' @param aims Character vector of specific research aims. Accepts multiple aims.
@@ -32,10 +34,10 @@
 #' They provide context for cohorts and support cross-species genomics analysis.
 #' The study_id and title are required; all other fields are optional.
 #'
-#' The description parameter accepts either plain text or a file path. If a file
-#' path ending with .md, .txt, or .rtf is provided, the file contents will be
-#' read and stored in the description field. This allows storing detailed README
-#' content within the study metadata.
+#' `description` is always plain text, never a path. To store the content of a
+#' README or protocol file, pass its path as `description_file`; the file is
+#' read and its content becomes `description`. An error names the path when
+#' the file does not exist.
 #'
 #' @examples
 #' # Example with multiple hypotheses and aims
@@ -56,12 +58,15 @@
 #' )
 #' print(study)
 #'
-#' # Example with README file as description
-#' # study <- study_new(
-#' #   study_id = "STUDY002",
-#' #   title = "My Study",
-#' #   description = "path/to/README.md"
-#' # )
+#' # Example with a file as the description
+#' readme <- tempfile(fileext = ".md")
+#' writeLines("# My Study\n\nBackground and design.", readme)
+#' study2 <- study_new(
+#'   study_id = "STUDY002",
+#'   title = "My Study",
+#'   description_file = readme
+#' )
+#' study2@description
 #'
 #' @seealso [Cohort] for combining studies with subject data
 #' @export
@@ -69,6 +74,7 @@ study_new <- function(
   study_id,
   title,
   description = NA_character_,
+  description_file = NULL,
   hypotheses = character(),
   aims = character(),
   assays = character(),
@@ -78,25 +84,27 @@ study_new <- function(
 ) {
   checkmate::assert_string(study_id, min.chars = 1)
   checkmate::assert_string(title, min.chars = 1)
+  checkmate::assert_string(description, na.ok = TRUE)
+  checkmate::assert_string(description_file, min.chars = 1, null.ok = TRUE)
   checkmate::assert_character(hypotheses, any.missing = FALSE)
   checkmate::assert_character(aims, any.missing = FALSE)
   checkmate::assert_character(assays, any.missing = FALSE)
   checkmate::assert_list(genome_builds)
+  checkmate::assert_posixct(created_at, len = 1)
 
-  # Handle description: if it's a file path, read the file
-  if (!is.na(description) && nchar(description) > 0) {
-    if (grepl("\\.(md|txt|rtf)$", description, ignore.case = TRUE)) {
-      if (file.exists(description)) {
-        description <- paste(
-          readLines(description, warn = FALSE),
-          collapse = "\n"
+  if (!is.null(description_file)) {
+    if (!fs::file_exists(description_file)) {
+      cli::cli_abort(
+        c(
+          "Description file not found: {.path {description_file}}.",
+          "i" = "Pass an existing file, or use `description` for plain text."
         )
-      } else {
-        cli::cli_warn(
-          "Description file not found: {description}. Using as plain text."
-        )
-      }
+      )
     }
+    description <- paste(
+      readLines(description_file, warn = FALSE),
+      collapse = "\n"
+    )
   }
 
   Study(

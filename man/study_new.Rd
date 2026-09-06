@@ -8,6 +8,7 @@ study_new(
   study_id,
   title,
   description = NA_character_,
+  description_file = NULL,
   hypotheses = character(),
   aims = character(),
   assays = character(),
@@ -23,9 +24,12 @@ Must be at least 1 character long.}
 \item{title}{Character scalar with the study name/title. Must be at least 1
 character long.}
 
-\item{description}{Character scalar with optional longer description of the
-study purpose and design. Can be a file path (ending with .md, .txt, or .rtf)
-which will be read into the description field. Defaults to NA.}
+\item{description}{Character scalar with an optional longer description of
+the study purpose and design. Always read as plain text. Defaults to NA.
+Use \code{description_file} to read the text from a file instead.}
+
+\item{description_file}{Optional path to a text file whose content becomes
+\code{description}. When given, \code{description} is ignored. Defaults to NULL.}
 
 \item{hypotheses}{Character vector of research hypotheses. Accepts multiple
 hypotheses. Optional and defaults to empty vector.}
@@ -59,10 +63,10 @@ Study objects are S7 classes that immutably store research project metadata.
 They provide context for cohorts and support cross-species genomics analysis.
 The study_id and title are required; all other fields are optional.
 
-The description parameter accepts either plain text or a file path. If a file
-path ending with .md, .txt, or .rtf is provided, the file contents will be
-read and stored in the description field. This allows storing detailed README
-content within the study metadata.
+\code{description} is always plain text, never a path. To store the content of a
+README or protocol file, pass its path as \code{description_file}; the file is
+read and its content becomes \code{description}. An error names the path when
+the file does not exist.
 }
 \examples{
 # Example with multiple hypotheses and aims
@@ -83,12 +87,15 @@ study <- study_new(
 )
 print(study)
 
-# Example with README file as description
-# study <- study_new(
-#   study_id = "STUDY002",
-#   title = "My Study",
-#   description = "path/to/README.md"
-# )
+# Example with a file as the description
+readme <- tempfile(fileext = ".md")
+writeLines("# My Study\n\nBackground and design.", readme)
+study2 <- study_new(
+  study_id = "STUDY002",
+  title = "My Study",
+  description_file = readme
+)
+study2@description
 
 }
 \seealso{

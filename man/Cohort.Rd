@@ -6,8 +6,9 @@
 \usage{
 Cohort(
   study = NULL,
-  subject_tbl = NULL,
-  sample_map = NULL,
+  subject_tbl = tibble::tibble(subject_id = character(), species = character()),
+  sample_map = tibble::tibble(subject_id = character(), assay = character(), sample_id =
+    character(), role = character()),
   paths = list(),
   analyses = list(),
   registry = list(),
@@ -17,15 +18,17 @@ Cohort(
 \arguments{
 \item{study}{A Study object with project-level context, or NULL.}
 
-\item{subject_tbl}{A tibble with one row per subject. Required columns:
+\item{subject_tbl}{A data frame with one row per subject. Required columns:
 \code{subject_id} and \code{species}, both character. Common optional columns:
 \code{sex}, \code{strain}, \code{genotype}, \code{cohort}, \code{timepoint}, \code{notes}. Checked by
-\code{\link[=validate_cohort]{validate_cohort()}}.}
+\code{\link[=validate_cohort]{validate_cohort()}}. Defaults to an empty table with the two required
+columns.}
 
-\item{sample_map}{A long-format tibble with one row per sample. Required
-columns: \code{subject_id}, \code{assay}, \code{sample_id}, \code{role}, all character. A
-new assay is a new row, never a new column. Checked by
-\code{\link[=validate_cohort]{validate_cohort()}}.}
+\item{sample_map}{A long-format data frame with one row per sample.
+Required columns: \code{subject_id}, \code{assay}, \code{sample_id}, \code{role}, all
+character. A new assay is a new row, never a new column. Checked by
+\code{\link[=validate_cohort]{validate_cohort()}}. Defaults to an empty table with the four required
+columns.}
 
 \item{paths}{Named list of file paths to data files or result folders.
 Defaults to an empty list.}
@@ -46,7 +49,9 @@ Study, file paths, analysis tables, and a registry of analysis specs.
 }
 \details{
 Use \code{\link[=cohort_new]{cohort_new()}} to build a Cohort. It checks the input types, converts
-both tables to tibbles, and runs \code{\link[=validate_cohort]{validate_cohort()}}.
+both tables to tibbles, and runs \code{\link[=validate_cohort]{validate_cohort()}}. Construction itself
+also checks \code{subject_tbl} and \code{sample_map} with the same rules, so building
+a \code{Cohort} any other way still enforces the required columns.
 
 Subjects live only in \code{subject_tbl}. Use \code{\link[=subject]{subject()}} to read one row as a
 \link{Subject} object.
