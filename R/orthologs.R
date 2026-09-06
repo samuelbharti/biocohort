@@ -120,7 +120,9 @@ ortholog_genes <- function(
   id_type <- match.arg(id_type)
 
   if (!gene_col %in% names(features)) {
-    cli::cli_abort("`features` must contain the gene column {.field {gene_col}}.")
+    cli::cli_abort(
+      "`features` must contain the gene column {.field {gene_col}}."
+    )
   }
 
   features <- tibble::as_tibble(features)
@@ -136,7 +138,9 @@ ortholog_genes <- function(
     )
   }
   if (!".ortholog_id" %in% names(out$mapped)) {
-    cli::cli_abort("Backend `mapped` output must include a `.ortholog_id` column.")
+    cli::cli_abort(
+      "Backend `mapped` output must include a `.ortholog_id` column."
+    )
   }
 
   mapped <- tibble::as_tibble(out$mapped)
@@ -209,7 +213,10 @@ ortholog_babelgene <- function(features, from, to, gene_col, id_type, ...) {
   unmapped_ids <- setdiff(features$.ortholog_id, mapped$.ortholog_id)
   unmapped <- features[features$.ortholog_id %in% unmapped_ids, , drop = FALSE]
 
-  list(mapped = tibble::as_tibble(mapped), unmapped = tibble::as_tibble(unmapped))
+  list(
+    mapped = tibble::as_tibble(mapped),
+    unmapped = tibble::as_tibble(unmapped)
+  )
 }
 
 # Map a set of gene ids from `from` to `to` via babelgene, returning a
@@ -226,8 +233,10 @@ ortholog_babelgene <- function(features, from, to, gene_col, id_type, ...) {
       stringsAsFactors = FALSE
     )
     d <- d[
-      !is.na(d$input_id) & !is.na(d$target_id) &
-        d$input_id != "" & d$target_id != "",
+      !is.na(d$input_id) &
+        !is.na(d$target_id) &
+        d$input_id != "" &
+        d$target_id != "",
       ,
       drop = FALSE
     ]
@@ -238,18 +247,33 @@ ortholog_babelgene <- function(features, from, to, gene_col, id_type, ...) {
     tbl <- babelgene::orthologs(genes = genes, species = to, human = TRUE, ...)
     pull(tbl, hcol, col)
   } else if (tolower(to) == "human") {
-    tbl <- babelgene::orthologs(genes = genes, species = from, human = FALSE, ...)
+    tbl <- babelgene::orthologs(
+      genes = genes,
+      species = from,
+      human = FALSE,
+      ...
+    )
     pull(tbl, col, hcol)
   } else {
-    s1 <- babelgene::orthologs(genes = genes, species = from, human = FALSE, ...)
+    s1 <- babelgene::orthologs(
+      genes = genes,
+      species = from,
+      human = FALSE,
+      ...
+    )
     a <- pull(s1, col, hcol) # model(from) -> human
     s2 <- babelgene::orthologs(
-      genes = unique(a$target_id), species = to, human = TRUE, ...
+      genes = unique(a$target_id),
+      species = to,
+      human = TRUE,
+      ...
     )
     b <- pull(s2, hcol, col) # human -> model(to)
     m <- merge(a, b, by.x = "target_id", by.y = "input_id")
     unique(data.frame(
-      input_id = m$input_id, target_id = m$target_id, stringsAsFactors = FALSE
+      input_id = m$input_id,
+      target_id = m$target_id,
+      stringsAsFactors = FALSE
     ))
   }
 }

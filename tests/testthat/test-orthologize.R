@@ -36,7 +36,11 @@ test_that("orthologize requires a chain for liftover", {
 
 test_that("orthologize ortholog strategy requires `from`", {
   expect_error(
-    orthologize(data.frame(gene = "Trp53"), to = "human", strategy = "ortholog"),
+    orthologize(
+      data.frame(gene = "Trp53"),
+      to = "human",
+      strategy = "ortholog"
+    ),
     "`from` is required"
   )
 })
@@ -49,8 +53,10 @@ test_that("orthologize routes ortholog strategy to ortholog_genes", {
   }
   res <- orthologize(
     data.frame(gene = c("TP53", "MYC")),
-    to = "mouse", from = "human",
-    strategy = "ortholog", backend = ortho_backend
+    to = "mouse",
+    from = "human",
+    strategy = "ortholog",
+    backend = ortho_backend
   )
   expect_true(S7::S7_inherits(res, TranslationResult))
   expect_equal(res@from, "human")

@@ -12,7 +12,11 @@ S7::method(print, Study) <- function(x, ...) {
 
 S7::method(format, Cohort) <- function(x, ...) {
   subject_tbl <- x@subject_tbl
-  n_subjects <- if (is.data.frame(subject_tbl)) nrow(subject_tbl) else NA_integer_
+  n_subjects <- if (is.data.frame(subject_tbl)) {
+    nrow(subject_tbl)
+  } else {
+    NA_integer_
+  }
   sample_tbl <- x@sample_map
   n_samples <- if (is.data.frame(sample_tbl)) nrow(sample_tbl) else NA_integer_
   sprintf("Cohort: %s subjects, %s sample rows", n_subjects, n_samples)

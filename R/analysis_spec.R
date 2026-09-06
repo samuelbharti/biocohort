@@ -70,12 +70,21 @@ AnalysisSpec <- S7::new_class(
     assay = S7::new_property(S7::class_character),
     level = S7::new_property(S7::class_character),
     format = S7::new_property(S7::class_character),
-    description = S7::new_property(S7::class_character, default = NA_character_),
-    path_template = S7::new_property(S7::class_character, default = NA_character_),
+    description = S7::new_property(
+      S7::class_character,
+      default = NA_character_
+    ),
+    path_template = S7::new_property(
+      S7::class_character,
+      default = NA_character_
+    ),
     root_key = S7::new_property(S7::class_character, default = NA_character_),
     reader = S7::new_property(S7::class_character),
     key_cols = S7::new_property(S7::class_character),
-    feature_type = S7::new_property(S7::class_character, default = NA_character_),
+    feature_type = S7::new_property(
+      S7::class_character,
+      default = NA_character_
+    ),
     gene_col = S7::new_property(S7::class_character, default = NA_character_),
     id_type = S7::new_property(S7::class_character, default = NA_character_)
   )

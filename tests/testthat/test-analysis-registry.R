@@ -130,7 +130,7 @@ test_that("analysis_register adds spec to registry", {
 
   new_cohort <- analysis_register(cohort, spec)
 
-  expect_length(cohort@registry, 0)  # Original unchanged
+  expect_length(cohort@registry, 0) # Original unchanged
   expect_length(new_cohort@registry, 1)
   expect_true("spec1" %in% names(new_cohort@registry))
   expect_equal(new_cohort@registry[["spec1"]], spec)

@@ -62,5 +62,8 @@ read_manifest_csv <- function(path, ..., allow_duplicates = FALSE) {
   }
 
   manifest <- readr::read_csv(path, show_col_types = FALSE, ...)
-  validate_manifest(tibble::as_tibble(manifest), allow_duplicates = allow_duplicates)
+  validate_manifest(
+    tibble::as_tibble(manifest),
+    allow_duplicates = allow_duplicates
+  )
 }

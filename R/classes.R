@@ -46,7 +46,10 @@ Study <- S7::new_class(
   properties = list(
     study_id = S7::new_property(S7::class_character),
     title = S7::new_property(S7::class_character),
-    description = S7::new_property(S7::class_character, default = NA_character_),
+    description = S7::new_property(
+      S7::class_character,
+      default = NA_character_
+    ),
     hypotheses = S7::new_property(S7::class_character, default = character()),
     aims = S7::new_property(S7::class_character, default = character()),
     assays = S7::new_property(S7::class_character, default = character()),

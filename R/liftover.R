@@ -157,7 +157,9 @@ liftover_intervals <- function(
     )
   }
   if (!".liftover_id" %in% names(out$mapped)) {
-    cli::cli_abort("Backend `mapped` output must include a `.liftover_id` column.")
+    cli::cli_abort(
+      "Backend `mapped` output must include a `.liftover_id` column."
+    )
   }
 
   mapped <- tibble::as_tibble(out$mapped)
@@ -292,10 +294,18 @@ liftover_crossmap <- function(intervals, chain, crossmap = NULL, ...) {
     stringsAsFactors = FALSE
   )
   utils::write.table(
-    bed, in_bed, sep = "\t", quote = FALSE, row.names = FALSE, col.names = FALSE
+    bed,
+    in_bed,
+    sep = "\t",
+    quote = FALSE,
+    row.names = FALSE,
+    col.names = FALSE
   )
 
-  status <- system2(bin, c("bed", shQuote(chain), shQuote(in_bed), shQuote(out_bed)))
+  status <- system2(
+    bin,
+    c("bed", shQuote(chain), shQuote(in_bed), shQuote(out_bed))
+  )
   if (!identical(status, 0L)) {
     cli::cli_abort("CrossMap exited with status {status}.")
   }
@@ -303,11 +313,18 @@ liftover_crossmap <- function(intervals, chain, crossmap = NULL, ...) {
   read_bed <- function(path) {
     if (!file.exists(path) || file.info(path)$size == 0) {
       return(tibble::tibble(
-        seqnames = character(), start = integer(),
-        end = integer(), .liftover_id = integer()
+        seqnames = character(),
+        start = integer(),
+        end = integer(),
+        .liftover_id = integer()
       ))
     }
-    df <- utils::read.table(path, sep = "\t", header = FALSE, stringsAsFactors = FALSE)
+    df <- utils::read.table(
+      path,
+      sep = "\t",
+      header = FALSE,
+      stringsAsFactors = FALSE
+    )
     tibble::tibble(
       seqnames = as.character(df[[1]]),
       start = as.integer(df[[2]]) + 1L,
@@ -318,7 +335,11 @@ liftover_crossmap <- function(intervals, chain, crossmap = NULL, ...) {
 
   mapped <- read_bed(out_bed)
   unmapped_ids <- setdiff(intervals$.liftover_id, mapped$.liftover_id)
-  unmapped <- intervals[intervals$.liftover_id %in% unmapped_ids, , drop = FALSE]
+  unmapped <- intervals[
+    intervals$.liftover_id %in% unmapped_ids,
+    ,
+    drop = FALSE
+  ]
   list(mapped = mapped, unmapped = tibble::as_tibble(unmapped))
 }
 
@@ -385,7 +406,9 @@ liftover_vcf <- function(
 
   TranslationResult(
     mapped = tibble::tibble(path = out),
-    unmapped = tibble::tibble(path = if (file.exists(unmap)) unmap else NA_character_),
+    unmapped = tibble::tibble(
+      path = if (file.exists(unmap)) unmap else NA_character_
+    ),
     from = from,
     to = to,
     backend = "crossmap-vcf",
@@ -394,7 +417,11 @@ liftover_vcf <- function(
 }
 
 .find_crossmap <- function(crossmap = NULL) {
-  candidates <- if (!is.null(crossmap)) crossmap else c("CrossMap", "CrossMap.py")
+  candidates <- if (!is.null(crossmap)) {
+    crossmap
+  } else {
+    c("CrossMap", "CrossMap.py")
+  }
   for (cand in candidates) {
     found <- unname(Sys.which(cand))
     if (nzchar(found)) {
