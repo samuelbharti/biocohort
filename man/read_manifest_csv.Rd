@@ -13,9 +13,8 @@ Path must exist and the file must be readable.}
 \item{...}{Additional named arguments passed to \code{\link[readr:read_csv]{readr::read_csv()}},
 such as \code{col_types}, \code{skip}, \code{comment}, etc.}
 
-\item{allow_duplicates}{Logical. If \code{TRUE}, repeated
-\verb{(subject_id, assay, sample_id)} combinations are permitted. If \code{FALSE}
-(default), duplicates raise an error. Passed through to
+\item{allow_duplicates}{Logical. If \code{TRUE}, a repeated \code{sample_id} is
+permitted. If \code{FALSE} (default), it raises an error. Passed through to
 \code{\link[=validate_manifest]{validate_manifest()}}.}
 }
 \value{
@@ -24,27 +23,13 @@ The list returned by \code{\link[=validate_manifest]{validate_manifest()}}: \cod
 }
 \description{
 Reads a tidy, long-format manifest CSV (one row per sample) and delegates to
-\code{\link[=validate_manifest]{validate_manifest()}} for validation and structuring. This is the primary
-entry point for loading external manifest data and is the single source of
-truth for manifest parsing rules.
+\code{\link[=validate_manifest]{validate_manifest()}} for validation and structuring.
 }
 \details{
-The CSV must be in long format with one row per sample. Required columns:
-\itemize{
-\item \code{subject_id}: subject the sample belongs to
-\item \code{assay}: assay type, e.g. \code{wgs}, \code{wes}, \code{atac}, \code{bulk_rna}, \code{scrna}
-\item \code{sample_id}: unique sample identifier
-}
-
-Optional sample-level column:
-\itemize{
-\item \code{role}: role within the assay, e.g. \code{tumor}, \code{normal}
-}
-
-Any remaining columns (e.g. \code{species}, \code{sex}, \code{strain}, \code{genotype},
-\code{cohort}, \code{timepoint}, \code{notes}) are treated as subject-level metadata and
-must be constant within a \code{subject_id}. See \code{\link[=validate_manifest]{validate_manifest()}} for the
-full validation rules.
+Superseded by \code{\link[=read_manifest]{read_manifest()}}, which also reads TSV and Excel files.
+This function stays for existing code; new code should call
+\code{\link[=read_manifest]{read_manifest()}} instead. Every column is read as character unless \code{...}
+supplies its own \code{col_types}.
 }
 \examples{
 # Create a temporary long-format CSV manifest
@@ -69,6 +54,7 @@ parsed$completeness_tbl
 
 }
 \seealso{
-\code{\link[=validate_manifest]{validate_manifest()}} for detailed validation rules,
+\code{\link[=read_manifest]{read_manifest()}} for CSV, TSV, and Excel in one function,
+\code{\link[=validate_manifest]{validate_manifest()}} for the validation rules,
 \code{\link[=cohort_new]{cohort_new()}} for creating a Cohort from manifest data
 }

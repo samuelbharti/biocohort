@@ -39,7 +39,8 @@ Suggests:
     IRanges,
     S4Vectors,
     babelgene,
-    withr
+    withr,
+    readxl
 SystemRequirements: CrossMap (optional, for the CrossMap liftover backend)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
