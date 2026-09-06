@@ -1,49 +1,75 @@
 # Contributing to myceliumr
 
-## Development Workflow
+Thanks for helping. This guide covers what belongs in the package, the
+workflow, and the local tooling.
 
-1. Make changes to code
-2. Test: `devtools::test()`
-3. Check: `devtools::check()`
-4. Commit and push (website auto-updates)
+## What belongs here
 
-## Setup
+myceliumr keeps study metadata in one validated object and reads outputs that
+other tools produced. Before you open a pull request, make sure that the
+change fits inside these lines:
 
-```r
-# Clone repository
-# Install dependencies
-devtools::install_deps(dependencies = TRUE)
+- No pipeline execution. The package writes sample sheets for a pipeline and
+  reads what the pipeline produced. It never runs one.
+- No heavy analysis. No clustering, no variant calling, no differential
+  expression.
+- No Shiny in Imports. Helpers that return plain tibbles are welcome. The app
+  layer lives elsewhere.
+- No new column per assay. A new assay is a new row in `sample_map`.
 
-# Load package
-devtools::load_all()
+## Dependencies
+
+`Imports` stays small: `S7`, `cli`, `rlang`, `checkmate`, `fs`, `readr`,
+`dplyr`, and `tibble`. Every study that installs the package inherits this
+list. Heavy or optional packages go in `Suggests` and are reached through
+`requireNamespace()`. Adding a dependency starts with an issue, not a commit.
+
+## Branches and commits
+
+- `dev` is the integration branch. Every pull request targets `dev`, not
+  `main`. `dev` is merged into `main` at a release.
+- Do not commit to `main` or `dev` directly. The `no-commit-to-branch` hook
+  blocks it locally.
+- Name branches with a type prefix: `feat/<slug>`, `fix/<slug>`, or
+  `chore/<slug>`.
+- Use Conventional Commit messages, for example `feat: add sample_sheet()`.
+  Keep commits small and focused. The commit-msg hook checks the format.
+- The pull request title also follows Conventional Commits.
+
+## Where the checks run
+
+Every pull request runs R CMD check, lintr, the prek hooks, a secret scan, and
+a pkgdown build on GitHub, into `dev` as well as `main`. A push to `main`
+publishes the documentation site. A push to `dev` publishes a preview under
+`/dev/`.
+
+CI is a backstop, not the first line of defence. Run the checks locally before
+you push:
+
+```sh
+Rscript -e "devtools::document()"
+Rscript -e "devtools::test()"
+Rscript -e "devtools::check()"
+prek run --all-files
 ```
 
-## Testing
+Install the hooks once:
 
-```r
-devtools::test()
-devtools::check()
+```sh
+prek install --install-hooks
+prek install --hook-type commit-msg
 ```
 
-## Documentation
+## Code style
 
-The pkgdown website auto-builds on push via GitHub Actions.
+- `air` formats the R code. The hook runs it on every commit.
+- Roxygen documents every exported function, with an example that runs.
+- Tests use synthetic data and run offline. Put shared fixtures in
+  `tests/testthat/helper-*.R`.
+- Write plain sentences in comments and docs. No em dashes. No emoji.
 
-To build locally (requires Pandoc):
-```r
-pkgdown::build_site()
-```
+## Releases
 
-## Code Style
-
-- Use explicit function names
-- Keep dependencies minimal
-- Add tests for new functions
-- Document all exported functions with roxygen2
-
-## Pull Requests
-
-- Create a new branch for each feature/fix
-- Write descriptive commit messages
-- Ensure all tests pass
-- Update documentation as needed
+A release is a merge from `dev` into `main` with a version bump in
+`DESCRIPTION`, a dated heading in `NEWS.md`, and a git tag `v<version>`.
+Until the API settles, the version keeps a `.9000` development suffix.

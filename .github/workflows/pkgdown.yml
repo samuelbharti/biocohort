@@ -1,0 +1,67 @@
+name: pkgdown
+
+# Every pull request builds the site to prove that it still builds. A push to
+# main publishes the site. A push to dev publishes a preview under /dev/.
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pkgdown-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  pkgdown:
+    runs-on: ubuntu-latest
+    name: build
+    permissions:
+      contents: write
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::pkgdown, local::.
+          needs: website
+
+      # dest_dir is passed on purpose. build_site_github_pages() defaults it to
+      # docs/, which is where the local working notes live. The site gets its
+      # own directory, as set in _pkgdown.yml.
+      - name: Build site
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = "_site")
+        shell: Rscript {0}
+
+      # clean removes pages of deleted articles from the branch. The dev
+      # preview folder is kept.
+      - name: Deploy site (main)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          branch: gh-pages
+          folder: _site
+          clean: true
+          clean-exclude: |
+            dev
+
+      - name: Deploy preview (dev)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          branch: gh-pages
+          folder: _site
+          target-folder: dev
+          clean: true

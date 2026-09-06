@@ -1,0 +1,57 @@
+# prek / pre-commit hooks for myceliumr.
+# Run them by hand with `prek run --all-files`.
+# Install the git hooks once with:
+#   prek install --install-hooks
+#   prek install --hook-type commit-msg
+default_install_hook_types: [pre-commit, commit-msg]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: \.Rd$
+      - id: end-of-file-fixer
+        exclude: \.Rd$
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: detect-private-key
+      - id: detect-aws-credentials
+        args: [--allow-missing-credentials]
+      - id: no-commit-to-branch
+        args: [--branch, main, --branch, dev]
+
+  # Secret scanning on every commit, so a credential never becomes a commit.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  # R formatting (Posit air). The hook bundles the air binary.
+  - repo: https://github.com/posit-dev/air-pre-commit
+    rev: 0.10.0
+    hooks:
+      - id: air-format
+
+  # Conventional Commit messages.
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+
+  # The documentation rule: no em dashes in code, comments, or docs. A small
+  # script does the search, so no regex escape for the character is needed.
+  - repo: local
+    hooks:
+      - id: no-em-dash
+        name: no em dashes
+        language: python
+        entry: python tools/no_em_dash.py
+        types: [text]
+        exclude: ^(docs/|_site/)

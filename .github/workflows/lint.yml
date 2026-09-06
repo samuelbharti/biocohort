@@ -1,0 +1,26 @@
+name: lint
+
+# Every pull request runs this, into dev as well as main. The same hooks run on
+# every commit through the local prek install, so this is a backstop for anyone
+# who has not installed them.
+on:
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - name: Run prek hooks
+        run: uvx prek run --all-files --show-diff-on-failure --color=always
+        env:
+          # This hook only makes sense on a developer machine, not in CI.
+          SKIP: no-commit-to-branch
