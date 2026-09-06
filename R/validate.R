@@ -22,32 +22,28 @@ validate_species <- function(species) {
 
 #' Validate a Cohort object
 #'
-#' Ensures a Cohort object satisfies all structural and integrity requirements
-#' for cross-species genomics analysis. Validates the subject table, sample map,
-#' and referential integrity between them. Intended as an internal validation
-#' step called automatically by [cohort_new()].
+#' Checks the subject table, the sample map, and the link between them.
+#' [cohort_new()] calls this function after it builds the object. Call it
+#' directly to check a cohort that was built or changed by other means.
 #'
-#' @param x An S7 object expected to be a Cohort class instance.
+#' @param x A [Cohort] object.
 #'
-#' @return Invisibly returns TRUE if validation succeeds. Throws informative
-#'   errors if validation fails.
+#' @return `TRUE`, invisibly, when the cohort is valid. Otherwise an error
+#'   that lists every problem found.
 #'
 #' @details
-#' VALIDATION CHECKS:
-#' - `x` is actually a Cohort object
-#' - Both `subject_tbl` and `sample_map` are data frames
-#' - `subject_tbl` includes required columns: subject_id, species
-#' - `sample_map` includes subject_id column
-#' - subject_id and species are character vectors, non-empty
-#' - No duplicate subject_id values in subject_tbl
-#' - All species values are valid (rat/mouse/human)
-#' - Referential integrity: sample_map$subject_id values exist in subject_tbl
-#'
-#' Validation is performed automatically by [cohort_new()], but can be called
-#' directly for debugging or custom Cohort construction.
+#' The checks are:
+#' - `x` is a Cohort object.
+#' - `subject_tbl` and `sample_map` are data frames.
+#' - `subject_tbl` has the columns `subject_id` and `species`, both
+#'   character, with no missing value. An empty string counts as missing.
+#' - `subject_tbl$subject_id` has no duplicate.
+#' - `subject_tbl$species` holds supported values.
+#' - `sample_map` has the columns `subject_id`, `assay`, `sample_id`, and
+#'   `role`, all character. The first three have no missing value.
+#' - Every `sample_map$subject_id` exists in `subject_tbl`.
 #'
 #' @examples
-#' # Create valid cohort components
 #' subjects <- data.frame(
 #'   subject_id = "RAT001",
 #'   species = "rat",
@@ -64,7 +60,7 @@ validate_species <- function(species) {
 #'   sample_map = samples
 #' )
 #'
-#' # Validation succeeds (called automatically above)
+#' # cohort_new() already ran the checks. Run them again by hand.
 #' validate_cohort(cohort)
 #'
 #' @seealso [cohort_new()] for Cohort construction,
@@ -75,71 +71,9 @@ validate_cohort <- function(x) {
     cli::cli_abort("`x` must be a Cohort object.")
   }
 
-  subject_tbl <- x@subject_tbl
-  sample_map <- x@sample_map
-
-  if (!is.data.frame(subject_tbl)) {
-    cli::cli_abort("`subject_tbl` must be a data.frame.")
-  }
-  if (!is.data.frame(sample_map)) {
-    cli::cli_abort("`sample_map` must be a data.frame.")
-  }
-
-  if (!"subject_id" %in% names(subject_tbl)) {
-    cli::cli_abort("`subject_tbl` must include a `subject_id` column.")
-  }
-  if (!"species" %in% names(subject_tbl)) {
-    cli::cli_abort("`subject_tbl` must include a `species` column.")
-  }
-  if (!"subject_id" %in% names(sample_map)) {
-    cli::cli_abort("`sample_map` must include a `subject_id` column.")
-  }
-
-  if (!is.character(subject_tbl$subject_id)) {
-    cli::cli_abort("`subject_tbl$subject_id` must be character.")
-  }
-  if (!is.character(subject_tbl$species)) {
-    cli::cli_abort("`subject_tbl$species` must be character.")
-  }
-
-  if (any(is.na(subject_tbl$subject_id) | subject_tbl$subject_id == "")) {
-    cli::cli_abort("`subject_tbl$subject_id` contains missing values.")
-  }
-  if (any(is.na(subject_tbl$species) | subject_tbl$species == "")) {
-    cli::cli_abort("`subject_tbl$species` contains missing values.")
-  }
-
-  dup_ids <- unique(subject_tbl$subject_id[duplicated(subject_tbl$subject_id)])
-  if (length(dup_ids) > 0) {
-    cli::cli_abort(
-      c(
-        "`subject_tbl$subject_id` has duplicate values.",
-        "i" = "Duplicates: {toString(dup_ids)}."
-      )
-    )
-  }
-
-  bad_species <- unique(subject_tbl$species[
-    !tolower(subject_tbl$species) %in% .allowed_species
-  ])
-  if (length(bad_species) > 0) {
-    cli::cli_abort(
-      c(
-        "`subject_tbl$species` includes unsupported values.",
-        "i" = "Unsupported: {toString(bad_species)}. Allowed: {toString(.allowed_species)}."
-      )
-    )
-  }
-
-  map_ids <- unique(sample_map$subject_id)
-  missing_ids <- setdiff(map_ids, subject_tbl$subject_id)
-  if (length(missing_ids) > 0) {
-    cli::cli_abort(
-      c(
-        "`sample_map$subject_id` includes IDs not found in `subject_tbl`.",
-        "i" = "Missing: {toString(missing_ids)}."
-      )
-    )
+  problems <- .check_cohort_tables(x@subject_tbl, x@sample_map)
+  if (length(problems) > 0) {
+    .abort_cohort_problems(problems)
   }
 
   invisible(TRUE)
