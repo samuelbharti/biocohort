@@ -24,9 +24,9 @@ library(myceliumr)
 ```
 
 ## Environment
-- myceliumr version: 
-- R version: 
-- OS: 
+- myceliumr version:
+- R version:
+- OS:
 
 ## Error Message
 ```

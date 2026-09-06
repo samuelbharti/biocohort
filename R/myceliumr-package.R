@@ -32,23 +32,23 @@
 #' @section Key Functions:
 #'
 #' **Constructors:**
-#' - [study_new()] — Create a Study object
-#' - [subject_new()] — Create a Subject object
-#' - [cohort_new()] — Create a Cohort object
+#' - [study_new()]: Create a Study object
+#' - [subject_new()]: Create a Subject object
+#' - [cohort_new()]: Create a Cohort object
 #'
 #' **IO:**
-#' - [read_manifest_csv()] — Read and validate manifest CSV
-#' - [validate_manifest()] — Validate and structure manifest data
+#' - [read_manifest_csv()]: Read and validate manifest CSV
+#' - [validate_manifest()]: Validate and structure manifest data
 #'
 #' **Samples:**
-#' - [sample_pairs()] — Derive tumor/normal sample pairs from a sample map
+#' - [sample_pairs()]: Derive tumor/normal sample pairs from a sample map
 #'
 #' **Validation:**
-#' - [validate_cohort()] — Validate a Cohort object
+#' - [validate_cohort()]: Validate a Cohort object
 #'
 #' **Registry:**
-#' - [analysis_register()] — Register an analysis in the cohort registry
-#' - [analysis_spec_new()] — Create an AnalysisSpec
+#' - [analysis_register()]: Register an analysis in the cohort registry
+#' - [analysis_spec_new()]: Create an AnalysisSpec
 #'
 #' @section Data Tables:
 #'

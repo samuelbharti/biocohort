@@ -179,7 +179,7 @@ When creating new functions or tables, ensure:
 - [ ] Assay column values are lowercase, free-form labels (e.g., "wes", "atac", "scrna")
 - [ ] Sample ID columns end with `_id` or `_sample_id`
 - [ ] Logical columns begin with `has_`, `is_`, or are boolean tests
-- [ ] Counts begin with `n_` 
+- [ ] Counts begin with `n_`
 - [ ] Data tables end with `_tbl` or `_table`
 - [ ] Documentation and examples are provided via roxygen
 
