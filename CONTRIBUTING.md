@@ -3,6 +3,12 @@
 Thanks for helping. This guide covers what belongs in the package, the
 workflow, and the local tooling.
 
+## Repository layout
+
+The R package lives in `pkg-r/`, not at the repository root. Tooling and
+community files sit at the root and apply to the whole repository. Pass that
+path to every package command, for example `devtools::test("pkg-r")`.
+
 ## What belongs here
 
 bioroster keeps study metadata in one validated object and reads outputs that
@@ -47,9 +53,9 @@ CI is a backstop, not the first line of defence. Run the checks locally before
 you push:
 
 ```sh
-Rscript -e "devtools::document()"
-Rscript -e "devtools::test()"
-Rscript -e "devtools::check()"
+Rscript -e "devtools::document('pkg-r')"
+Rscript -e "devtools::test('pkg-r')"
+Rscript -e "rcmdcheck::rcmdcheck('pkg-r', args = '--no-manual')"
 prek run --all-files
 ```
 

@@ -20,10 +20,11 @@ test_that("no Shiny dependency in any form", {
   expect_false(any(grepl("shiny", fields, ignore.case = TRUE), na.rm = TRUE))
 })
 
-# CITATION.cff is what GitHub renders in the cite box. It is in .Rbuildignore,
-# so it is read from the source tree and the test is skipped elsewhere.
+# CITATION.cff is what GitHub renders in the cite box. It lives at the
+# repository root, one level up from the package in pkg-r/, so it is read
+# from the source tree and the test is skipped elsewhere.
 test_that("DESCRIPTION and CITATION.cff agree on the version", {
-  root <- file.path(testthat::test_path(), "..", "..")
+  root <- file.path(testthat::test_path(), "..", "..", "..")
   citation <- file.path(root, "CITATION.cff")
   skip_if_not(file.exists(citation), "not a source tree")
 

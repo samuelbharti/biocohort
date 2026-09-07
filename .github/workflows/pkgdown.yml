@@ -37,6 +37,7 @@ jobs:
         with:
           extra-packages: any::pkgdown, local::.
           needs: website
+          working-directory: pkg-r
 
       # dest_dir is passed on purpose. build_site_github_pages() defaults it to
       # docs/, which is where the local working notes live. The site gets its
@@ -44,6 +45,7 @@ jobs:
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = "_site")
         shell: Rscript {0}
+        working-directory: pkg-r
 
       # clean removes pages of deleted articles from the branch. The dev
       # preview folder is kept.
@@ -52,7 +54,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
-          folder: _site
+          folder: pkg-r/_site
           clean: true
           clean-exclude: |
             dev
@@ -62,6 +64,6 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
-          folder: _site
+          folder: pkg-r/_site
           target-folder: dev
           clean: true
