@@ -214,6 +214,15 @@ Read analysis feature tables from disk (experimental)
 - [`analysis_files()`](https://www.samuelbharti.com/bioroster/reference/analysis_files.md)
   : Retrieve analysis file manifests from a cohort
 
+## Bridges
+
+Carry cohort metadata into other analysis objects
+
+- [`as_coldata()`](https://www.samuelbharti.com/bioroster/reference/as_coldata.md)
+  : Build sample metadata for a count matrix
+- [`join_metadata()`](https://www.samuelbharti.com/bioroster/reference/join_metadata.md)
+  : Add cohort metadata to an analysis object
+
 ## Cross-species translation
 
 Translate features across assemblies and species (experimental)
