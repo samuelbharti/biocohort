@@ -6,13 +6,22 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>biocohort • biocohort</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
 <script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<link href="deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
+<link href="deps/Bricolage_Grotesque-0.4.10/font.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="biocohort">
-<meta name="description" content="Study manifests, sample sheets, and analysis registries for genomics projects">
-<meta property="og:description" content="Study manifests, sample sheets, and analysis registries for genomics projects">
+<meta name="description" content="Study manifests, sample sheets, and analysis registries for any omics project">
+<meta property="og:description" content="Study manifests, sample sheets, and analysis registries for any omics project">
+<meta property="og:image" content="https://www.samuelbharti.com/biocohort/logo.svg">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -47,12 +56,15 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="biocohort">biocohort<a class="anchor" aria-label="anchor" href="#biocohort"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.svg" class="logo" alt=""><h1 id="biocohort-">biocohort <a class="anchor" aria-label="anchor" href="#biocohort-"></a>
+</h1>
+</div>
 <!-- badges: start -->
 
-<p>biocohort keeps the subjects, samples, and analysis outputs of a genomics study in one validated object. Species and assays are values in the data, not columns or classes, so the same functions work for any organism and any assay.</p>
+<p>biocohort keeps the subjects, samples, and analysis outputs of a study in one validated object. Species and assays are values in the data, not columns or classes, so the same functions work for any organism and any omics assay.</p>
 <p><strong>Documentation</strong>: <a href="https://www.samuelbharti.com/biocohort/" class="uri">https://www.samuelbharti.com/biocohort/</a></p>
+<p>See the <a href="https://github.com/samuelbharti/biocohort#readme" class="external-link">repository root README</a> for why this package exists.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -106,6 +118,8 @@ R2,rat,KO,wes,N2,normal</code></pre>
 <strong>Write files for other tools.</strong> <code><a href="reference/sample_sheet.html">sample_sheet()</a></code> writes the sample list a pipeline expects. <code><a href="reference/as_coldata.html">as_coldata()</a></code> and <code><a href="reference/join_metadata.html">join_metadata()</a></code> carry cohort metadata into a <code>SummarizedExperiment</code>, a Seurat object, or a data frame.</li>
 <li>
 <strong>Track analysis outputs.</strong> <code><a href="reference/analysis_spec_new.html">analysis_spec_new()</a></code> and <code><a href="reference/load_analysis.html">load_analysis()</a></code> resolve a path template per subject or pair, read the files, and record which ones were found.</li>
+<li>
+<strong>Keep a record of manual fixes.</strong> <code><a href="reference/apply_corrections.html">apply_corrections()</a></code> applies a table of documented overrides to a manifest and keeps an audit trail, instead of a value changing quietly inside a script.</li>
 <li>
 <strong>Translate across species.</strong> <code><a href="reference/translate.html">translate()</a></code> moves a feature table across genome builds or species, through a liftover or an ortholog backend.</li>
 <li>

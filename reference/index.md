@@ -6,7 +6,7 @@ Package overview and entry point
 
 - [`biocohort`](https://www.samuelbharti.com/biocohort/reference/biocohort-package.md)
   [`biocohort-package`](https://www.samuelbharti.com/biocohort/reference/biocohort-package.md)
-  : biocohort: Subject and Sample Rosters for Genomics Studies
+  : biocohort: Subject and Sample Rosters for Omics Studies
 
 ## Core Classes
 
