@@ -2,19 +2,19 @@
 applyTo: '**'
 ---
 
-# biocohort Development Guidelines
+# biocohort development guidelines
 
-## Repository Layout
+## Repository layout
 - The R package lives in `pkg-r/`, not at the repository root. Pass that
   path to every package command, for example `devtools::test("pkg-r")`.
 
-## Code Architecture
+## Code architecture
 - Use S7 classes (not S3/S4)
 - Keep dependencies minimal
 - Focus on data model + validation + IO + accessors
 - Do not implement pipelines
 
-## Code Quality
+## Code quality
 - Test code with `devtools::test("pkg-r")` before committing
 - Run `rcmdcheck::rcmdcheck("pkg-r", args = "--no-manual")` to validate the package
 - Resolve all errors and warnings

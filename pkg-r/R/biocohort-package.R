@@ -48,7 +48,7 @@
 #'
 #' - [translate()] moves a feature table across genome builds or species.
 #'   Coordinate features go through a liftover backend
-#'   ([liftover_intervals()]); gene features go through an ortholog backend
+#'   ([liftover_intervals()]). Gene features go through an ortholog backend
 #'   ([ortholog_genes()]). Both kinds of backend are pluggable through
 #'   [register_liftover_backend()] and [register_ortholog_backend()].
 #'
@@ -76,7 +76,7 @@
 #' The [Get started](articles/biocohort.html) article walks through a
 #' manifest, a cohort, and a sample sheet end to end. The
 #' [Glossary](articles/glossary.html) defines the terms used across the
-#' package, and [Naming Conventions](articles/naming-conventions.html)
+#' package, and [Naming conventions](articles/naming-conventions.html)
 #' lists the standard names for columns, objects, and files.
 #'
 "_PACKAGE"

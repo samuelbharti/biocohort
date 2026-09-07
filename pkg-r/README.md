@@ -1,8 +1,4 @@
-# biocohort (R package)
-
-This directory holds the R package. See the repository root
-[README.md](../README.md) for what biocohort is for and how the repository is
-laid out.
+# biocohort
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml)
@@ -18,10 +14,8 @@ assay.
 ## Installation
 
 ```r
-# From GitHub, from a checkout of the repository root
-devtools::install("pkg-r")
-
-# From GitHub, from anywhere
+pak::pak("samuelbharti/biocohort/pkg-r")
+# or
 remotes::install_github("samuelbharti/biocohort", subdir = "pkg-r")
 ```
 
@@ -95,7 +89,7 @@ The package website includes:
 
 - **[Get started](https://www.samuelbharti.com/biocohort/articles/biocohort.html)**: a manifest, a cohort, and a sample sheet, end to end.
 - **[Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.html)**: key terms and definitions.
-- **[Naming Conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.html)**: standard column, object, and file names.
+- **[Naming conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.html)**: standard column, object, and file names.
 
 To build the site locally, run from the repository root:
 

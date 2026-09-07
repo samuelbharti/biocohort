@@ -139,7 +139,7 @@ easier to keep in one YAML file. See `?read_study_yaml` for the file format.
 ## Translating features across species
 
 `translate()` moves a feature table from one species or genome build to
-another. Coordinate features go through a liftover backend; gene features go
+another. Coordinate features go through a liftover backend. Gene features go
 through an ortholog backend. See `?translate` and `?liftover_intervals` for
 the full set of options, including how to register a custom backend.
 
@@ -147,5 +147,5 @@ the full set of options, including how to register a custom backend.
 
 - The [Glossary](glossary.html) article defines the terms used across the
   package.
-- The [Naming Conventions](naming-conventions.html) article lists the
+- The [Naming conventions](naming-conventions.html) article lists the
   standard names for columns, objects, and files.
