@@ -1,9 +1,8 @@
 # Translate features (or a whole cohort) across species or assemblies
 
-High-level entry point for cross-species translation. `translate()` is
-the modality dispatcher that makes translation a single, first-class
-operation: coordinate features (variants, peaks, intervals) route to
-liftover, and gene-level features route to ortholog mapping. Given a
+The one entry point for cross-species translation. Coordinate features
+(variants, peaks, intervals) route to liftover, and gene-level features
+route to ortholog mapping. Given a
 [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md), it
 translates every registered analysis according to its
 [AnalysisSpec](https://www.samuelbharti.com/bioroster/reference/AnalysisSpec.md)
@@ -64,8 +63,8 @@ translate(x, to, from = NULL, ...)
     pass a named list instead, one chain per source species (e.g.
     `list(rat = "rn7ToHg38.chain", mouse = "mm39ToHg38.chain")`).
 
-  - `liftover_backend`, `ortholog_backend`: backends for the two
-    modalities.
+  - `liftover_backend`, `ortholog_backend`: backends for the two feature
+    kinds.
 
   - `analyses`: optional character vector restricting which analyses to
     translate (defaults to all that have a registered spec with a

@@ -30,6 +30,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/bioroster.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -75,15 +76,16 @@ bioroster documentation and code.</p>
 <tbody>
 <tr class="odd">
 <td><strong>Subject</strong></td>
-<td>An individual biological organism (rat, mouse, or human) in a study.
-Each subject has a unique <code>subject_id</code> and associated
-metadata (species, genotype, cohort, etc.). Represented as a row in
+<td>An individual biological organism in a study. Each subject has a
+unique <code>subject_id</code> and associated metadata (species,
+genotype, cohort, etc.). Represented as a row in
 <code>subject_tbl</code>.</td>
 </tr>
 <tr class="even">
 <td><strong>Species</strong></td>
-<td>The biological species of a subject: one of “rat”, “mouse”, or
-“human”. Required field in subject metadata.</td>
+<td>The biological species of a subject, for example “rat”, “mouse”, or
+“human”. Species are free-form values, not a fixed list, and are stored
+lower case. Required field in subject metadata.</td>
 </tr>
 <tr class="odd">
 <td><strong>Cohort</strong></td>

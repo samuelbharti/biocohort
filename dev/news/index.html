@@ -16,6 +16,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/bioroster.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -41,35 +42,73 @@
 </ul></div>
 <div class="section level3">
 <h3 id="data-model-0-1-0-9000">Data model<a class="anchor" aria-label="anchor" href="#data-model-0-1-0-9000"></a></h3>
-<ul><li>S7 classes <code>Study</code>, <code>Subject</code>, <code>Cohort</code>, and <code>AnalysisSpec</code>, built with <code><a href="../reference/study_new.html">study_new()</a></code>, <code><a href="../reference/subject_new.html">subject_new()</a></code>, <code><a href="../reference/cohort_new.html">cohort_new()</a></code>, and <code><a href="../reference/analysis_spec_new.html">analysis_spec_new()</a></code>.</li>
+<ul><li>S7 classes <code>Study</code>, <code>Subject</code>, <code>Cohort</code>, and <code>AnalysisSpec</code>, built with <code><a href="../reference/study_new.html">study_new()</a></code>, <code><a href="../reference/subject_new.html">subject_new()</a></code>, <code><a href="../reference/cohort_new.html">cohort_new()</a></code>, and <code><a href="../reference/analysis_spec_new.html">analysis_spec_new()</a></code>. Each class validates on construction, including the raw <code><a href="../reference/Study.html">Study()</a></code>, <code><a href="../reference/Subject.html">Subject()</a></code>, and <code><a href="../reference/Cohort.html">Cohort()</a></code> constructors.</li>
 <li>
-<code><a href="../reference/validate_manifest.html">validate_manifest()</a></code> takes one long-format manifest (one row per sample, required columns <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>, optional <code>role</code> plus subject-level columns) and returns <code>subject_tbl</code>, <code>sample_map</code>, and <code>completeness_tbl</code>. Species and assays are values, never columns.</li>
+<code><a href="../reference/validate_manifest.html">validate_manifest()</a></code> takes one long-format manifest (one row per sample, required columns <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>, optional <code>role</code> plus subject-level columns) and returns <code>subject_tbl</code>, <code>sample_map</code>, and <code>completeness_tbl</code>. Species and assays are free-form values, never a fixed list and never columns. Every column is coerced to character, so a factor or a numeric column never breaks a downstream join.</li>
+<li>
+<code>validate_manifest(sample_cols = )</code> keeps named extra columns (<code>fastq_1</code>, <code>fastq_2</code>, <code>lane</code>, <code>qc_status</code>, and more) at the sample level instead of raising a false conflict.</li>
 <li>
 <code><a href="../reference/read_manifest_csv.html">read_manifest_csv()</a></code> reads a manifest from CSV and delegates to <code><a href="../reference/validate_manifest.html">validate_manifest()</a></code>.</li>
 <li>
-<code><a href="../reference/validate_cohort.html">validate_cohort()</a></code> checks a <code>Cohort</code> for required columns, valid species, unique subject ids, and referential integrity.</li>
+<code><a href="../reference/validate_cohort.html">validate_cohort()</a></code> checks a <code>Cohort</code> for the four required <code>sample_map</code> columns, non-missing species, unique subject ids, and referential integrity.</li>
 <li>
-<code><a href="../reference/sample_pairs.html">sample_pairs()</a></code> derives tumor and normal pairs from a <code>sample_map</code> on demand, with configurable role labels.</li>
+<code><a href="../reference/sample_pairs.html">sample_pairs()</a></code> derives tumor and normal pairs from a <code>sample_map</code> on demand, with configurable role labels and a <code>sep</code> argument for the pair id.</li>
 <li>
 <code>example_cohort</code> ships as a small demonstration dataset.</li>
 </ul></div>
 <div class="section level3">
+<h3 id="accessors-and-cohort-tools-0-1-0-9000">Accessors and cohort tools<a class="anchor" aria-label="anchor" href="#accessors-and-cohort-tools-0-1-0-9000"></a></h3>
+<ul><li>
+<code><a href="../reference/subjects.html">subjects()</a></code>, <code><a href="../reference/samples.html">samples()</a></code>, and <code><a href="../reference/completeness.html">completeness()</a></code> return plain tibbles read from a cohort. <code>completeness(wide = TRUE)</code> gives one row per subject and one column per assay.</li>
+<li>
+<code><a href="../reference/cohort-subject.html">subject()</a></code> reads one subject from <code>subject_tbl</code> as a <code>Subject</code> object.</li>
+<li>
+<code><a href="../reference/cohort_filter.html">cohort_filter()</a></code> keeps a subset of subjects or assays and returns a cohort that is still valid.</li>
+<li>
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> for <code>Cohort</code>, <code>Subject</code>, and <code>AnalysisSpec</code> shows subject and sample counts, extra sample columns, and registered analyses.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="reading-and-writing-files-0-1-0-9000">Reading and writing files<a class="anchor" aria-label="anchor" href="#reading-and-writing-files-0-1-0-9000"></a></h3>
+<ul><li>
+<code><a href="../reference/read_manifest.html">read_manifest()</a></code> reads a manifest from CSV, TSV, or Excel, always as text, and validates it in one call.</li>
+<li>
+<code><a href="../reference/manifest_from_wide.html">manifest_from_wide()</a></code> reshapes a wide, one-row-per-subject table with one id column per assay into the long form <code><a href="../reference/validate_manifest.html">validate_manifest()</a></code> expects.</li>
+<li>
+<code><a href="../reference/write_manifest.html">write_manifest()</a></code> writes a cohort’s tables back out as one manifest. <code><a href="../reference/cohort_save.html">cohort_save()</a></code> and <code><a href="../reference/cohort_read.html">cohort_read()</a></code> keep a whole cohort as an RDS file.</li>
+<li>
+<code><a href="../reference/read_study_yaml.html">read_study_yaml()</a></code> builds a cohort from one YAML file that names the study, the manifest, the file paths, and the registered analyses. <code><a href="../reference/write_study_yaml.html">write_study_yaml()</a></code> writes one back. Every path is resolved relative to the YAML file’s own directory.</li>
+<li>
+<code><a href="../reference/apply_corrections.html">apply_corrections()</a></code> applies a table of documented overrides (<code>level</code>, <code>id</code>, <code>column</code>, <code>value</code>, <code>reason</code>) to a manifest before it is validated, and keeps an audit trail. <code><a href="../reference/read_corrections.html">read_corrections()</a></code> reads that table from a file.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="pipeline-integration-0-1-0-9000">Pipeline integration<a class="anchor" aria-label="anchor" href="#pipeline-integration-0-1-0-9000"></a></h3>
+<ul><li>
+<code><a href="../reference/sample_sheet.html">sample_sheet()</a></code> writes the sample list a pipeline expects, with built-in templates for <code>nf-core/rnaseq</code>, <code>nf-core/rnavar</code>, <code>nf-core/atacseq</code>, and <code>nf-core/sarek</code>. <code><a href="../reference/sample_sheet_templates.html">sample_sheet_templates()</a></code> lists the built-in names.</li>
+<li>
+<code><a href="../reference/check_paths.html">check_paths()</a></code> tests that the file paths named in <code>cohort@paths</code> and in known sample-level path columns exist, without ever raising an error.</li>
+<li>
+<code><a href="../reference/as_coldata.html">as_coldata()</a></code> returns a <code>Cohort</code>’s per-sample metadata as row-named data, ready for a <code>SummarizedExperiment</code>’s <code>colData</code>. <code><a href="../reference/join_metadata.html">join_metadata()</a></code> carries that metadata into a <code>SummarizedExperiment</code>, a Seurat object, or a plain data frame.</li>
+<li>
+<code><a href="../reference/project_root.html">project_root()</a></code>, <code><a href="../reference/project_path.html">project_path()</a></code>, <code><a href="../reference/ensure_dir.html">ensure_dir()</a></code>, and <code><a href="../reference/read_dotenv.html">read_dotenv()</a></code> find a project’s root folder, build paths under it, and read a <code>.env</code> file.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="analysis-registry-and-loading-0-1-0-9000">Analysis registry and loading<a class="anchor" aria-label="anchor" href="#analysis-registry-and-loading-0-1-0-9000"></a></h3>
 <ul><li>
-<code><a href="../reference/analysis_register.html">analysis_register()</a></code>, <code><a href="../reference/analysis_list.html">analysis_list()</a></code>, and <code><a href="../reference/analysis_spec.html">analysis_spec()</a></code> manage <code>AnalysisSpec</code> entries in a cohort.</li>
+<code><a href="../reference/analysis_register.html">analysis_register()</a></code>, <code><a href="../reference/analysis_list.html">analysis_list()</a></code>, and <code><a href="../reference/analysis_spec.html">analysis_spec()</a></code> manage <code>AnalysisSpec</code> entries in a cohort. <code>format</code>, <code>reader</code>, and <code>key_cols</code> default from the spec’s <code>path_template</code> and <code>level</code> when not given.</li>
 <li>
-<code><a href="../reference/load_analysis.html">load_analysis()</a></code> and <code><a href="../reference/load_analyses.html">load_analyses()</a></code> resolve a spec’s <code>path_template</code> per subject, per pair, or per cohort, read the files with the spec’s reader, and record which files were found. <code><a href="../reference/analysis_files.html">analysis_files()</a></code> returns that record.</li>
+<code><a href="../reference/load_analysis.html">load_analysis()</a></code> and <code><a href="../reference/load_analyses.html">load_analyses()</a></code> resolve a spec’s <code>path_template</code> per subject, per pair, or per cohort, read the files with the spec’s reader, and record which files were found. Subject and pair units are enumerated only for the spec’s own assay. <code><a href="../reference/analysis_files.html">analysis_files()</a></code> returns that record.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="cross-species-translation-experimental-0-1-0-9000">Cross-species translation (experimental)<a class="anchor" aria-label="anchor" href="#cross-species-translation-experimental-0-1-0-9000"></a></h3>
 <ul><li>
-<code><a href="../reference/orthologize.html">orthologize()</a></code> dispatches coordinate features to liftover and gene features to ortholog mapping, for a feature table or for a whole cohort. <code><a href="../reference/translation_report.html">translation_report()</a></code> returns the per-analysis results.</li>
+<code><a href="../reference/translate.html">translate()</a></code> moves a feature table across genome builds or species. Coordinate features go through a liftover backend; gene features go through an ortholog backend. <code><a href="../reference/orthologize.html">orthologize()</a></code> still works as an alias and warns once per session. <code><a href="../reference/translation_report.html">translation_report()</a></code> returns the per-analysis results.</li>
+<li>For a whole cohort, the source species is inferred from <code>subject_tbl</code> when every subject shares one species. A cohort with more than one species is split by species, translated, and recombined, as long as the analysis table carries a <code>subject_id</code> column.</li>
 <li>
 <code><a href="../reference/liftover_intervals.html">liftover_intervals()</a></code> with an <code>rtracklayer</code> backend and a <code>crossmap</code> backend, plus <code><a href="../reference/liftover_vcf.html">liftover_vcf()</a></code> for allele-aware variant liftover through CrossMap. Backends are registered with <code><a href="../reference/register_liftover_backend.html">register_liftover_backend()</a></code>.</li>
 <li>
-<code><a href="../reference/ortholog_genes.html">ortholog_genes()</a></code> with an offline <code>babelgene</code> backend, registered with <code><a href="../reference/register_ortholog_backend.html">register_ortholog_backend()</a></code>. Model-to-model pairs pivot through human.</li>
+<code><a href="../reference/ortholog_genes.html">ortholog_genes()</a></code> with an offline <code>babelgene</code> backend, registered with <code><a href="../reference/register_ortholog_backend.html">register_ortholog_backend()</a></code>. Model-to-model pairs pivot through human. The backend accepts a <code>cache</code> file so repeated lookups skip babelgene.</li>
 <li>
-<code>TranslationResult</code> keeps mapped and unmapped features. <code><a href="../reference/translation_stats.html">translation_stats()</a></code> summarizes them.</li>
+<code>TranslationResult</code> keeps mapped and unmapped features under one <code>.feature_id</code> key, for both coordinate and gene features. <code><a href="../reference/translation_stats.html">translation_stats()</a></code> summarizes them.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="internal-0-1-0-9000">Internal<a class="anchor" aria-label="anchor" href="#internal-0-1-0-9000"></a></h3>

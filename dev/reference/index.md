@@ -6,7 +6,7 @@ Package overview and entry point
 
 - [`bioroster`](https://www.samuelbharti.com/bioroster/reference/bioroster-package.md)
   [`bioroster-package`](https://www.samuelbharti.com/bioroster/reference/bioroster-package.md)
-  : bioroster: Cross-Species Cohort Framework
+  : bioroster: Subject and Sample Rosters for Genomics Studies
 
 ## Core Classes
 

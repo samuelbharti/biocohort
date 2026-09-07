@@ -64,8 +64,8 @@ orthologize(x, to, from = NULL, ...)
     pass a named list instead, one chain per source species (e.g.
     `list(rat = "rn7ToHg38.chain", mouse = "mm39ToHg38.chain")`).
 
-  - `liftover_backend`, `ortholog_backend`: backends for the two
-    modalities.
+  - `liftover_backend`, `ortholog_backend`: backends for the two feature
+    kinds.
 
   - `analyses`: optional character vector restricting which analyses to
     translate (defaults to all that have a registered spec with a

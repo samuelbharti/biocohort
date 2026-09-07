@@ -7,8 +7,8 @@ documentation and code.
 
 | Term | Definition |
 |----|----|
-| **Subject** | An individual biological organism (rat, mouse, or human) in a study. Each subject has a unique `subject_id` and associated metadata (species, genotype, cohort, etc.). Represented as a row in `subject_tbl`. |
-| **Species** | The biological species of a subject: one of “rat”, “mouse”, or “human”. Required field in subject metadata. |
+| **Subject** | An individual biological organism in a study. Each subject has a unique `subject_id` and associated metadata (species, genotype, cohort, etc.). Represented as a row in `subject_tbl`. |
+| **Species** | The biological species of a subject, for example “rat”, “mouse”, or “human”. Species are free-form values, not a fixed list, and are stored lower case. Required field in subject metadata. |
 | **Cohort** | A collection of subjects grouped for analysis. A cohort combines subject-level metadata, sample-to-assay mappings, and optional study context. The primary data container in bioroster. |
 | **Study** | Project-level metadata including study ID, title, research hypotheses, aims, assay types, and genome build versions. Optional context for a cohort. |
 

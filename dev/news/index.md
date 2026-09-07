@@ -20,21 +20,103 @@ the name myceliumr and were never tagged.
   [`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md),
   and
   [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md).
+  Each class validates on construction, including the raw
+  [`Study()`](https://www.samuelbharti.com/bioroster/reference/Study.md),
+  [`Subject()`](https://www.samuelbharti.com/bioroster/reference/Subject.md),
+  and
+  [`Cohort()`](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  constructors.
 - [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
   takes one long-format manifest (one row per sample, required columns
   `subject_id`, `assay`, `sample_id`, optional `role` plus subject-level
   columns) and returns `subject_tbl`, `sample_map`, and
-  `completeness_tbl`. Species and assays are values, never columns.
+  `completeness_tbl`. Species and assays are free-form values, never a
+  fixed list and never columns. Every column is coerced to character, so
+  a factor or a numeric column never breaks a downstream join.
+- `validate_manifest(sample_cols = )` keeps named extra columns
+  (`fastq_1`, `fastq_2`, `lane`, `qc_status`, and more) at the sample
+  level instead of raising a false conflict.
 - [`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md)
   reads a manifest from CSV and delegates to
   [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md).
 - [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md)
-  checks a `Cohort` for required columns, valid species, unique subject
-  ids, and referential integrity.
+  checks a `Cohort` for the four required `sample_map` columns,
+  non-missing species, unique subject ids, and referential integrity.
 - [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
   derives tumor and normal pairs from a `sample_map` on demand, with
-  configurable role labels.
+  configurable role labels and a `sep` argument for the pair id.
 - `example_cohort` ships as a small demonstration dataset.
+
+### Accessors and cohort tools
+
+- [`subjects()`](https://www.samuelbharti.com/bioroster/reference/subjects.md),
+  [`samples()`](https://www.samuelbharti.com/bioroster/reference/samples.md),
+  and
+  [`completeness()`](https://www.samuelbharti.com/bioroster/reference/completeness.md)
+  return plain tibbles read from a cohort. `completeness(wide = TRUE)`
+  gives one row per subject and one column per assay.
+- [`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+  reads one subject from `subject_tbl` as a `Subject` object.
+- [`cohort_filter()`](https://www.samuelbharti.com/bioroster/reference/cohort_filter.md)
+  keeps a subset of subjects or assays and returns a cohort that is
+  still valid.
+- [`print()`](https://rdrr.io/r/base/print.html) for `Cohort`,
+  `Subject`, and `AnalysisSpec` shows subject and sample counts, extra
+  sample columns, and registered analyses.
+
+### Reading and writing files
+
+- [`read_manifest()`](https://www.samuelbharti.com/bioroster/reference/read_manifest.md)
+  reads a manifest from CSV, TSV, or Excel, always as text, and
+  validates it in one call.
+- [`manifest_from_wide()`](https://www.samuelbharti.com/bioroster/reference/manifest_from_wide.md)
+  reshapes a wide, one-row-per-subject table with one id column per
+  assay into the long form
+  [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+  expects.
+- [`write_manifest()`](https://www.samuelbharti.com/bioroster/reference/write_manifest.md)
+  writes a cohort’s tables back out as one manifest.
+  [`cohort_save()`](https://www.samuelbharti.com/bioroster/reference/cohort_save.md)
+  and
+  [`cohort_read()`](https://www.samuelbharti.com/bioroster/reference/cohort_read.md)
+  keep a whole cohort as an RDS file.
+- [`read_study_yaml()`](https://www.samuelbharti.com/bioroster/reference/read_study_yaml.md)
+  builds a cohort from one YAML file that names the study, the manifest,
+  the file paths, and the registered analyses.
+  [`write_study_yaml()`](https://www.samuelbharti.com/bioroster/reference/write_study_yaml.md)
+  writes one back. Every path is resolved relative to the YAML file’s
+  own directory.
+- [`apply_corrections()`](https://www.samuelbharti.com/bioroster/reference/apply_corrections.md)
+  applies a table of documented overrides (`level`, `id`, `column`,
+  `value`, `reason`) to a manifest before it is validated, and keeps an
+  audit trail.
+  [`read_corrections()`](https://www.samuelbharti.com/bioroster/reference/read_corrections.md)
+  reads that table from a file.
+
+### Pipeline integration
+
+- [`sample_sheet()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet.md)
+  writes the sample list a pipeline expects, with built-in templates for
+  `nf-core/rnaseq`, `nf-core/rnavar`, `nf-core/atacseq`, and
+  `nf-core/sarek`.
+  [`sample_sheet_templates()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet_templates.md)
+  lists the built-in names.
+- [`check_paths()`](https://www.samuelbharti.com/bioroster/reference/check_paths.md)
+  tests that the file paths named in `cohort@paths` and in known
+  sample-level path columns exist, without ever raising an error.
+- [`as_coldata()`](https://www.samuelbharti.com/bioroster/reference/as_coldata.md)
+  returns a `Cohort`’s per-sample metadata as row-named data, ready for
+  a `SummarizedExperiment`’s `colData`.
+  [`join_metadata()`](https://www.samuelbharti.com/bioroster/reference/join_metadata.md)
+  carries that metadata into a `SummarizedExperiment`, a Seurat object,
+  or a plain data frame.
+- [`project_root()`](https://www.samuelbharti.com/bioroster/reference/project_root.md),
+  [`project_path()`](https://www.samuelbharti.com/bioroster/reference/project_path.md),
+  [`ensure_dir()`](https://www.samuelbharti.com/bioroster/reference/ensure_dir.md),
+  and
+  [`read_dotenv()`](https://www.samuelbharti.com/bioroster/reference/read_dotenv.md)
+  find a project’s root folder, build paths under it, and read a `.env`
+  file.
 
 ### Analysis registry and loading
 
@@ -42,23 +124,33 @@ the name myceliumr and were never tagged.
   [`analysis_list()`](https://www.samuelbharti.com/bioroster/reference/analysis_list.md),
   and
   [`analysis_spec()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec.md)
-  manage `AnalysisSpec` entries in a cohort.
+  manage `AnalysisSpec` entries in a cohort. `format`, `reader`, and
+  `key_cols` default from the spec’s `path_template` and `level` when
+  not given.
 - [`load_analysis()`](https://www.samuelbharti.com/bioroster/reference/load_analysis.md)
   and
   [`load_analyses()`](https://www.samuelbharti.com/bioroster/reference/load_analyses.md)
   resolve a spec’s `path_template` per subject, per pair, or per cohort,
   read the files with the spec’s reader, and record which files were
-  found.
+  found. Subject and pair units are enumerated only for the spec’s own
+  assay.
   [`analysis_files()`](https://www.samuelbharti.com/bioroster/reference/analysis_files.md)
   returns that record.
 
 ### Cross-species translation (experimental)
 
-- [`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md)
-  dispatches coordinate features to liftover and gene features to
-  ortholog mapping, for a feature table or for a whole cohort.
+- [`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md)
+  moves a feature table across genome builds or species. Coordinate
+  features go through a liftover backend; gene features go through an
+  ortholog backend.
+  [`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md)
+  still works as an alias and warns once per session.
   [`translation_report()`](https://www.samuelbharti.com/bioroster/reference/translation_report.md)
   returns the per-analysis results.
+- For a whole cohort, the source species is inferred from `subject_tbl`
+  when every subject shares one species. A cohort with more than one
+  species is split by species, translated, and recombined, as long as
+  the analysis table carries a `subject_id` column.
 - [`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md)
   with an `rtracklayer` backend and a `crossmap` backend, plus
   [`liftover_vcf()`](https://www.samuelbharti.com/bioroster/reference/liftover_vcf.md)
@@ -68,8 +160,10 @@ the name myceliumr and were never tagged.
 - [`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md)
   with an offline `babelgene` backend, registered with
   [`register_ortholog_backend()`](https://www.samuelbharti.com/bioroster/reference/register_ortholog_backend.md).
-  Model-to-model pairs pivot through human.
-- `TranslationResult` keeps mapped and unmapped features.
+  Model-to-model pairs pivot through human. The backend accepts a
+  `cache` file so repeated lookups skip babelgene.
+- `TranslationResult` keeps mapped and unmapped features under one
+  `.feature_id` key, for both coordinate and gene features.
   [`translation_stats()`](https://www.samuelbharti.com/bioroster/reference/translation_stats.md)
   summarizes them.
 

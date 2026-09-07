@@ -1,110 +1,132 @@
-# bioroster: Cross-Species Cohort Framework
+# bioroster: Subject and Sample Rosters for Genomics Studies
 
-bioroster provides S7 classes and tools for organizing genomic study
-metadata across species (rat, mouse, human) with support for any omics
-assay (WGS, WES, ATAC-seq, bulk RNA, single-cell, ...) via a generic,
-long-format sample model.
+bioroster keeps the subjects, samples, and analysis outputs of a
+genomics study in one validated object, called a `Cohort`. Species and
+assays are values in the data, not columns or classes, so the same
+functions work for a rat exome study, a mouse single-cell study, or any
+other organism and assay.
 
-## Details
+## From a manifest to a cohort
 
-A lightweight R package for managing cross-species cohort data
-(rat/mouse/human) with manifest validation and standardized storage for
-multi-omics outputs.
+- [`read_manifest()`](https://www.samuelbharti.com/bioroster/reference/read_manifest.md)
+  reads a manifest from CSV, TSV, or Excel and returns `subject_tbl` and
+  `sample_map`.
+  [`manifest_from_wide()`](https://www.samuelbharti.com/bioroster/reference/manifest_from_wide.md)
+  reshapes a wide, one-row-per-subject table into the long form first.
 
-## Core Concepts
+- [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+  does the actual checking: it coerces every column to character, fills
+  in `role` and `species` where they are missing, and splits
+  subject-level columns from sample-level ones.
 
-The package organizes study data using these main components:
+- [`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+  builds a `Cohort` from validated tables.
+  [`study_new()`](https://www.samuelbharti.com/bioroster/reference/study_new.md)
+  attaches optional project metadata (title, aims, genome builds).
 
-- **Study**: Project-level metadata (hypotheses, aims, assay types,
-  genome builds)
+## Reading a cohort
 
-- **Subject**: Individual entity with species, genotype, phenotype
-  metadata
+- [`subjects()`](https://www.samuelbharti.com/bioroster/reference/subjects.md),
+  [`samples()`](https://www.samuelbharti.com/bioroster/reference/samples.md),
+  and
+  [`completeness()`](https://www.samuelbharti.com/bioroster/reference/completeness.md)
+  return plain tibbles.
 
-- **Cohort**: Collection of subjects with sample-to-assay mappings and
-  analysis registry
+- [`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+  reads one subject as a `Subject` object.
 
-- **AnalysisSpec**: Specification for a registered analysis with
-  provenance metadata
+- [`cohort_filter()`](https://www.samuelbharti.com/bioroster/reference/cohort_filter.md)
+  keeps a subset of subjects or assays and returns a cohort that is
+  still valid.
 
-## Assays
+- [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+  derives tumor and normal pairs from `sample_map` on demand, with
+  configurable role labels.
 
-Assays are free-form values, not a fixed enumeration. Any omics assay is
-supported by using a consistent label in the `assay` column, for
-example:
+## Writing files for other tools
 
-- `wgs`: Whole genome sequencing
+- [`sample_sheet()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet.md)
+  writes the sample list a pipeline expects, with built-in templates for
+  a few common nf-core pipelines.
 
-- `wes`: Whole exome sequencing
+- [`check_paths()`](https://www.samuelbharti.com/bioroster/reference/check_paths.md)
+  tests that the file paths named in a cohort exist.
 
-- `atac`: ATAC-seq
+- [`as_coldata()`](https://www.samuelbharti.com/bioroster/reference/as_coldata.md)
+  and
+  [`join_metadata()`](https://www.samuelbharti.com/bioroster/reference/join_metadata.md)
+  carry cohort metadata into a `SummarizedExperiment`, a Seurat object,
+  or a plain data frame.
 
-- `bulk_rna`: Bulk RNA-sequencing
+- [`write_manifest()`](https://www.samuelbharti.com/bioroster/reference/write_manifest.md),
+  [`cohort_save()`](https://www.samuelbharti.com/bioroster/reference/cohort_save.md),
+  and
+  [`cohort_read()`](https://www.samuelbharti.com/bioroster/reference/cohort_read.md)
+  keep a cohort as a file in a project instead of a script that rebuilds
+  it each time.
 
-- `scrna`: Single-cell / single-nucleus RNA-sequencing
+## Analysis outputs
 
-## Key Functions
+- [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
+  and
+  [`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md)
+  describe where an analysis writes its output and how to read it back.
 
-**Constructors:**
+- [`load_analysis()`](https://www.samuelbharti.com/bioroster/reference/load_analysis.md)
+  and
+  [`load_analyses()`](https://www.samuelbharti.com/bioroster/reference/load_analyses.md)
+  resolve the path for every subject or pair, read the files, and record
+  which ones were found.
 
-- [`study_new()`](https://www.samuelbharti.com/bioroster/reference/study_new.md):
-  Create a Study object
+## Cross-species translation
 
-- [`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md):
-  Create a Subject object
+- [`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md)
+  moves a feature table across genome builds or species. Coordinate
+  features go through a liftover backend
+  ([`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md));
+  gene features go through an ortholog backend
+  ([`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md)).
+  Both kinds of backend are pluggable through
+  [`register_liftover_backend()`](https://www.samuelbharti.com/bioroster/reference/register_liftover_backend.md)
+  and
+  [`register_ortholog_backend()`](https://www.samuelbharti.com/bioroster/reference/register_ortholog_backend.md).
 
-- [`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md):
-  Create a Cohort object
+## Configuration
 
-**IO:**
+- [`read_study_yaml()`](https://www.samuelbharti.com/bioroster/reference/read_study_yaml.md)
+  builds a cohort from one YAML file that names the study, the manifest,
+  the file paths, and the registered analyses.
+  [`write_study_yaml()`](https://www.samuelbharti.com/bioroster/reference/write_study_yaml.md)
+  writes one back.
 
-- [`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md):
-  Read and validate manifest CSV
+- [`apply_corrections()`](https://www.samuelbharti.com/bioroster/reference/apply_corrections.md)
+  and
+  [`read_corrections()`](https://www.samuelbharti.com/bioroster/reference/read_corrections.md)
+  apply documented overrides to a manifest and keep an audit trail.
 
-- [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md):
-  Validate and structure manifest data
+## Data tables
 
-**Samples:**
+- `subject_tbl`: one row per subject. Always has `subject_id` and
+  `species`, plus any other subject-level metadata (`sex`, `genotype`,
+  `strain`, ...).
 
-- [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md):
-  Derive tumor/normal sample pairs from a sample map
+- `sample_map`: one row per sample, in long format. Always has
+  `subject_id`, `assay`, `sample_id`, and `role`. A new assay is a new
+  row, never a new column.
 
-**Validation:**
+- `completeness_tbl`: one row per `subject_id` and `assay` pair, with
+  the sample count.
 
-- [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md):
-  Validate a Cohort object
+## Further reading
 
-**Registry:**
-
-- [`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md):
-  Register an analysis in the cohort registry
-
-- [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md):
-  Create an AnalysisSpec
-
-## Data Tables
-
-Cohorts use standardized tables:
-
-- **subject_tbl**: One row per subject; columns: `subject_id`,
-  `species`, and any subject-level metadata (`sex`, `strain`,
-  `genotype`, `cohort`, `timepoint`, `notes`, ...)
-
-- **sample_map**: Canonical long-format table, one row per sample;
-  columns: `subject_id`, `assay`, `sample_id`, `role`. New assays are
-  new rows, never new columns or tables.
-
-- **completeness_tbl**: One row per `subject_id` x `assay`; columns:
-  `subject_id`, `assay`, `n_samples`
-
-## Documentation
-
-For terminology and definitions, see the
-[Glossary](https://www.samuelbharti.com/bioroster/reference/articles/glossary.md).
-
-For standardized naming conventions (columns, objects, functions,
-files), see [Naming
-Conventions](https://www.samuelbharti.com/bioroster/reference/articles/naming-conventions.md).
+The [Get
+started](https://www.samuelbharti.com/bioroster/reference/articles/bioroster.md)
+article walks through a manifest, a cohort, and a sample sheet end to
+end. The
+[Glossary](https://www.samuelbharti.com/bioroster/reference/articles/glossary.md)
+defines the terms used across the package, and [Naming
+Conventions](https://www.samuelbharti.com/bioroster/reference/articles/naming-conventions.md)
+lists the standard names for columns, objects, and files.
 
 ## See also
 

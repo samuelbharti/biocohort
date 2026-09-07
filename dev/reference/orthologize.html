@@ -20,6 +20,7 @@ New code should call translate() directly."></head><body>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/bioroster.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -83,7 +84,8 @@ or <code>"ortholog"</code> (gene features; see <code><a href="ortholog_genes.htm
 analysis. A cohort translated from more than one source species can
 pass a named list instead, one chain per source species (e.g.
 <code>list(rat = "rn7ToHg38.chain", mouse = "mm39ToHg38.chain")</code>).</p></li>
-<li><p><code>liftover_backend</code>, <code>ortholog_backend</code>: backends for the two modalities.</p></li>
+<li><p><code>liftover_backend</code>, <code>ortholog_backend</code>: backends for the two feature
+kinds.</p></li>
 <li><p><code>analyses</code>: optional character vector restricting which analyses to
 translate (defaults to all that have a registered spec with a
 <code>feature_type</code>).</p></li>
