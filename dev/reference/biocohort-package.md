@@ -1,10 +1,10 @@
-# biocohort: Subject and Sample Rosters for Genomics Studies
+# biocohort: Subject and Sample Rosters for Omics Studies
 
-biocohort keeps the subjects, samples, and analysis outputs of a
-genomics study in one validated object, called a `Cohort`. Species and
-assays are values in the data, not columns or classes, so the same
-functions work for a rat exome study, a mouse single-cell study, or any
-other organism and assay.
+biocohort keeps the subjects, samples, and analysis outputs of a study
+in one validated object, called a `Cohort`. Species and assays are
+values in the data, not columns or classes, so the same functions work
+for a rat exome study, a mouse single-cell study, a proteomics study, or
+any other organism and assay.
 
 ## From a manifest to a cohort
 
