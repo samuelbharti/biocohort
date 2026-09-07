@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-This document describes standardized naming conventions used in bioroster for data columns, R objects, functions, and file names.
+This document describes standardized naming conventions used in biocohort for data columns, R objects, functions, and file names.
 
 ## Column Names
 
@@ -73,7 +73,7 @@ label per assay and reuse it consistently. Common examples:
 
 ## Sample ID Formats
 
-While bioroster does not enforce specific sample ID formats, adopt a consistent project-wide convention. Encoding the assay and role in the ID can aid readability:
+While biocohort does not enforce specific sample ID formats, adopt a consistent project-wide convention. Encoding the assay and role in the ID can aid readability:
 
 - **Tumor**: `{assay}_T{subject}` (e.g., "wes_T101", "wgs_T001")
 - **Normal**: `{assay}_N{subject}` (e.g., "wes_N101", "wgs_N001")

@@ -87,18 +87,18 @@ test_that("ensure_dir errors when a file is in the way", {
 
 test_that("read_dotenv sets values and respects quotes and comments", {
   withr::local_envvar(c(
-    BIOROSTER_TEST_A = NA,
-    BIOROSTER_TEST_B = NA,
-    BIOROSTER_TEST_C = NA,
-    BIOROSTER_TEST_URL = NA
+    BIOCOHORT_TEST_A = NA,
+    BIOCOHORT_TEST_B = NA,
+    BIOCOHORT_TEST_C = NA,
+    BIOCOHORT_TEST_URL = NA
   ))
   path <- write_dotenv(c(
     "# comment line",
     "",
-    "BIOROSTER_TEST_A = 1",
-    "BIOROSTER_TEST_B='two words'",
-    'BIOROSTER_TEST_C="three"',
-    "BIOROSTER_TEST_URL=https://example.org/?a=b",
+    "BIOCOHORT_TEST_A = 1",
+    "BIOCOHORT_TEST_B='two words'",
+    'BIOCOHORT_TEST_C="three"',
+    "BIOCOHORT_TEST_URL=https://example.org/?a=b",
     "   # indented comment"
   ))
 
@@ -108,51 +108,51 @@ test_that("read_dotenv sets values and respects quotes and comments", {
   expect_equal(
     vars,
     c(
-      BIOROSTER_TEST_A = "1",
-      BIOROSTER_TEST_B = "two words",
-      BIOROSTER_TEST_C = "three",
-      BIOROSTER_TEST_URL = "https://example.org/?a=b"
+      BIOCOHORT_TEST_A = "1",
+      BIOCOHORT_TEST_B = "two words",
+      BIOCOHORT_TEST_C = "three",
+      BIOCOHORT_TEST_URL = "https://example.org/?a=b"
     )
   )
-  expect_equal(Sys.getenv("BIOROSTER_TEST_A"), "1")
-  expect_equal(Sys.getenv("BIOROSTER_TEST_B"), "two words")
-  expect_equal(Sys.getenv("BIOROSTER_TEST_C"), "three")
-  expect_equal(Sys.getenv("BIOROSTER_TEST_URL"), "https://example.org/?a=b")
+  expect_equal(Sys.getenv("BIOCOHORT_TEST_A"), "1")
+  expect_equal(Sys.getenv("BIOCOHORT_TEST_B"), "two words")
+  expect_equal(Sys.getenv("BIOCOHORT_TEST_C"), "three")
+  expect_equal(Sys.getenv("BIOCOHORT_TEST_URL"), "https://example.org/?a=b")
 })
 
 test_that("read_dotenv keeps an existing variable unless overwrite = TRUE", {
-  withr::local_envvar(c(BIOROSTER_TEST_A = "keep"))
-  path <- write_dotenv("BIOROSTER_TEST_A=new")
+  withr::local_envvar(c(BIOCOHORT_TEST_A = "keep"))
+  path <- write_dotenv("BIOCOHORT_TEST_A=new")
 
   vars <- read_dotenv(path)
-  expect_equal(vars[["BIOROSTER_TEST_A"]], "new")
-  expect_equal(Sys.getenv("BIOROSTER_TEST_A"), "keep")
+  expect_equal(vars[["BIOCOHORT_TEST_A"]], "new")
+  expect_equal(Sys.getenv("BIOCOHORT_TEST_A"), "keep")
 
   read_dotenv(path, overwrite = TRUE)
-  expect_equal(Sys.getenv("BIOROSTER_TEST_A"), "new")
+  expect_equal(Sys.getenv("BIOCOHORT_TEST_A"), "new")
 })
 
 test_that("read_dotenv lets a later line replace an earlier key", {
-  withr::local_envvar(c(BIOROSTER_TEST_A = NA))
-  path <- write_dotenv(c("BIOROSTER_TEST_A=first", "BIOROSTER_TEST_A=second"))
+  withr::local_envvar(c(BIOCOHORT_TEST_A = NA))
+  path <- write_dotenv(c("BIOCOHORT_TEST_A=first", "BIOCOHORT_TEST_A=second"))
 
   vars <- read_dotenv(path)
 
-  expect_equal(vars, c(BIOROSTER_TEST_A = "second"))
-  expect_equal(Sys.getenv("BIOROSTER_TEST_A"), "second")
+  expect_equal(vars, c(BIOCOHORT_TEST_A = "second"))
+  expect_equal(Sys.getenv("BIOCOHORT_TEST_A"), "second")
 })
 
 test_that("read_dotenv finds .env at the project root by default", {
-  withr::local_envvar(c(BIOROSTER_TEST_ROOT = NA))
+  withr::local_envvar(c(BIOCOHORT_TEST_ROOT = NA))
   root <- withr::local_tempdir()
   fs::file_create(fs::path(root, "DESCRIPTION"))
-  writeLines("BIOROSTER_TEST_ROOT=found", fs::path(root, ".env"))
+  writeLines("BIOCOHORT_TEST_ROOT=found", fs::path(root, ".env"))
   nested <- fs::dir_create(fs::path(root, "scripts"))
   withr::local_dir(nested)
 
   read_dotenv()
 
-  expect_equal(Sys.getenv("BIOROSTER_TEST_ROOT"), "found")
+  expect_equal(Sys.getenv("BIOCOHORT_TEST_ROOT"), "found")
 })
 
 test_that("read_dotenv errors on a missing file", {
@@ -160,9 +160,9 @@ test_that("read_dotenv errors on a missing file", {
 })
 
 test_that("read_dotenv errors on a malformed line and sets nothing", {
-  withr::local_envvar(c(BIOROSTER_TEST_A = NA))
-  path <- write_dotenv(c("BIOROSTER_TEST_A=1", "no equals sign here"))
+  withr::local_envvar(c(BIOCOHORT_TEST_A = NA))
+  path <- write_dotenv(c("BIOCOHORT_TEST_A=1", "no equals sign here"))
 
   expect_error(read_dotenv(path), "Line 2")
-  expect_equal(Sys.getenv("BIOROSTER_TEST_A", unset = NA), NA_character_)
+  expect_equal(Sys.getenv("BIOCOHORT_TEST_A", unset = NA), NA_character_)
 })

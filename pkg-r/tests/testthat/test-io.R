@@ -347,7 +347,7 @@ test_that("cohort_read errors on a cohort file with an invalid cohort", {
   path <- tempfile(fileext = ".rds")
   on.exit(unlink(path), add = TRUE)
   bad_cohort <- make_cohort(n = 1)
-  wrapper <- list(format = 1L, bioroster_version = "0.0.0", cohort = bad_cohort)
+  wrapper <- list(format = 1L, biocohort_version = "0.0.0", cohort = bad_cohort)
   # Corrupt it after the fact, bypassing the S7 validator, to simulate a file
   # that was hand-edited or produced by another tool.
   wrapper$cohort <- unclass(bad_cohort)

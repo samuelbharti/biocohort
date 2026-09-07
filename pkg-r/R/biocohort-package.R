@@ -1,7 +1,7 @@
-#' bioroster: Subject and Sample Rosters for Genomics Studies
+#' biocohort: Subject and Sample Rosters for Genomics Studies
 #'
 #' @description
-#' bioroster keeps the subjects, samples, and analysis outputs of a genomics
+#' biocohort keeps the subjects, samples, and analysis outputs of a genomics
 #' study in one validated object, called a `Cohort`. Species and assays are
 #' values in the data, not columns or classes, so the same functions work for
 #' a rat exome study, a mouse single-cell study, or any other organism and
@@ -73,7 +73,7 @@
 #'
 #' @section Further reading:
 #'
-#' The [Get started](articles/bioroster.html) article walks through a
+#' The [Get started](articles/biocohort.html) article walks through a
 #' manifest, a cohort, and a sample sheet end to end. The
 #' [Glossary](articles/glossary.html) defines the terms used across the
 #' package, and [Naming Conventions](articles/naming-conventions.html)

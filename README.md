@@ -1,10 +1,10 @@
-# bioroster
+# biocohort
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/samuelbharti/bioroster/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/bioroster/actions/workflows/r.yml)
+[![R-CMD-check](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml)
 <!-- badges: end -->
 
-bioroster keeps the subjects, samples, and analysis outputs of a genomics
+biocohort keeps the subjects, samples, and analysis outputs of a genomics
 study in one validated object. Species and assays are values in the data,
 not columns or classes, so the same functions work for any organism and any
 assay.
@@ -12,7 +12,7 @@ assay.
 > **Status:** 0.1.0.9000, not released. The API can still change before a
 > first tagged version.
 
-**Documentation**: <https://www.samuelbharti.com/bioroster/>
+**Documentation**: <https://www.samuelbharti.com/biocohort/>
 
 ## Repository layout
 
@@ -28,9 +28,9 @@ in `pkg-r/` rather than at the repository root, and an install that leaves
 this out fails without saying why:
 
 ```r
-pak::pak("samuelbharti/bioroster/pkg-r")
+pak::pak("samuelbharti/biocohort/pkg-r")
 # or
-remotes::install_github("samuelbharti/bioroster", subdir = "pkg-r")
+remotes::install_github("samuelbharti/biocohort", subdir = "pkg-r")
 ```
 
 ## What it does
@@ -62,9 +62,9 @@ See [pkg-r/README.md](pkg-r/README.md) for a runnable quick start.
 
 The package website includes:
 
-- **[Get started](https://www.samuelbharti.com/bioroster/articles/bioroster.html)**: a manifest, a cohort, and a sample sheet, end to end.
-- **[Glossary](https://www.samuelbharti.com/bioroster/articles/glossary.html)**: key terms and definitions.
-- **[Naming Conventions](https://www.samuelbharti.com/bioroster/articles/naming-conventions.html)**: standard column, object, and file names.
+- **[Get started](https://www.samuelbharti.com/biocohort/articles/biocohort.html)**: a manifest, a cohort, and a sample sheet, end to end.
+- **[Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.html)**: key terms and definitions.
+- **[Naming Conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.html)**: standard column, object, and file names.
 
 To build the site locally:
 

@@ -1,5 +1,5 @@
-Package: bioroster
-Title: Subject and Sample Rosters for Genomics Studies
+Package: biocohort
+Title: Cohort Objects for Subjects and Samples in Genomics Studies
 Version: 0.1.0.9000
 Authors@R:
     person("Samuel", "Bharti", , "samuelbharti.io@gmail.com",
@@ -13,8 +13,8 @@ Description: Keeps the subjects, samples, and analysis outputs of a genomics
     backends. Species and assays are values in the manifest, not columns, so
     any organism and any assay fit the same model.
 License: MIT + file LICENSE
-URL: https://www.samuelbharti.com/bioroster/, https://github.com/samuelbharti/bioroster
-BugReports: https://github.com/samuelbharti/bioroster/issues
+URL: https://www.samuelbharti.com/biocohort/, https://github.com/samuelbharti/biocohort
+BugReports: https://github.com/samuelbharti/biocohort/issues
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)

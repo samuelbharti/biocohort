@@ -2,7 +2,7 @@
 applyTo: '**'
 ---
 
-# bioroster Development Guidelines
+# biocohort Development Guidelines
 
 ## Repository Layout
 - The R package lives in `pkg-r/`, not at the repository root. Pass that
@@ -11,7 +11,7 @@ applyTo: '**'
 ## Code Architecture
 - Use S7 classes (not S3/S4)
 - Keep dependencies minimal
-- Focus on data model + validation + IO + Shiny-friendly accessors
+- Focus on data model + validation + IO + accessors
 - Do not implement pipelines
 
 ## Code Quality
@@ -30,4 +30,4 @@ applyTo: '**'
 ## Deployment
 - After package passes checks, push to GitHub
 - Website builds automatically via GitHub Actions
-- Site deploys to https://www.samuelbharti.com/bioroster/
+- Site deploys to https://www.samuelbharti.com/biocohort/

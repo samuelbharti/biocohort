@@ -141,15 +141,15 @@ ensure_dir <- function(path) {
 #' writeLines(
 #'   c(
 #'     "# analysis settings",
-#'     "BIOROSTER_EXAMPLE_THREADS = 4",
-#'     "BIOROSTER_EXAMPLE_LABEL = 'batch one'"
+#'     "BIOCOHORT_EXAMPLE_THREADS = 4",
+#'     "BIOCOHORT_EXAMPLE_LABEL = 'batch one'"
 #'   ),
 #'   env_file
 #' )
 #'
 #' vars <- read_dotenv(env_file)
 #' names(vars)
-#' Sys.getenv("BIOROSTER_EXAMPLE_LABEL")
+#' Sys.getenv("BIOCOHORT_EXAMPLE_LABEL")
 #'
 #' Sys.unsetenv(names(vars))
 #' unlink(env_file)
