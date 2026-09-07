@@ -4,99 +4,107 @@
 \name{bioroster-package}
 \alias{bioroster}
 \alias{bioroster-package}
-\title{bioroster: Cross-Species Cohort Framework}
+\title{bioroster: Subject and Sample Rosters for Genomics Studies}
 \description{
-bioroster provides S7 classes and tools for organizing genomic study metadata
-across species (rat, mouse, human) with support for any omics assay
-(WGS, WES, ATAC-seq, bulk RNA, single-cell, ...) via a generic, long-format
-sample model.
+bioroster keeps the subjects, samples, and analysis outputs of a genomics
+study in one validated object, called a \code{Cohort}. Species and assays are
+values in the data, not columns or classes, so the same functions work for
+a rat exome study, a mouse single-cell study, or any other organism and
+assay.
 }
-\details{
-A lightweight R package for managing cross-species cohort data (rat/mouse/human)
-with manifest validation and standardized storage for multi-omics outputs.
-}
-\section{Core Concepts}{
+\section{From a manifest to a cohort}{
 
-
-The package organizes study data using these main components:
 \itemize{
-\item \strong{Study}: Project-level metadata (hypotheses, aims, assay types, genome builds)
-\item \strong{Subject}: Individual entity with species, genotype, phenotype metadata
-\item \strong{Cohort}: Collection of subjects with sample-to-assay mappings and analysis registry
-\item \strong{AnalysisSpec}: Specification for a registered analysis with provenance metadata
+\item \code{\link[=read_manifest]{read_manifest()}} reads a manifest from CSV, TSV, or Excel and returns
+\code{subject_tbl} and \code{sample_map}. \code{\link[=manifest_from_wide]{manifest_from_wide()}} reshapes a wide,
+one-row-per-subject table into the long form first.
+\item \code{\link[=validate_manifest]{validate_manifest()}} does the actual checking: it coerces every column
+to character, fills in \code{role} and \code{species} where they are missing, and
+splits subject-level columns from sample-level ones.
+\item \code{\link[=cohort_new]{cohort_new()}} builds a \code{Cohort} from validated tables. \code{\link[=study_new]{study_new()}}
+attaches optional project metadata (title, aims, genome builds).
 }
 }
 
-\section{Assays}{
+\section{Reading a cohort}{
 
-
-Assays are free-form values, not a fixed enumeration. Any omics assay is
-supported by using a consistent label in the \code{assay} column, for example:
 \itemize{
-\item \code{wgs}: Whole genome sequencing
-\item \code{wes}: Whole exome sequencing
-\item \code{atac}: ATAC-seq
-\item \code{bulk_rna}: Bulk RNA-sequencing
-\item \code{scrna}: Single-cell / single-nucleus RNA-sequencing
+\item \code{\link[=subjects]{subjects()}}, \code{\link[=samples]{samples()}}, and \code{\link[=completeness]{completeness()}} return plain tibbles.
+\item \code{\link[=subject]{subject()}} reads one subject as a \code{Subject} object.
+\item \code{\link[=cohort_filter]{cohort_filter()}} keeps a subset of subjects or assays and returns a
+cohort that is still valid.
+\item \code{\link[=sample_pairs]{sample_pairs()}} derives tumor and normal pairs from \code{sample_map} on
+demand, with configurable role labels.
 }
 }
 
-\section{Key Functions}{
+\section{Writing files for other tools}{
 
-
-\strong{Constructors:}
 \itemize{
-\item \code{\link[=study_new]{study_new()}}: Create a Study object
-\item \code{\link[=subject_new]{subject_new()}}: Create a Subject object
-\item \code{\link[=cohort_new]{cohort_new()}}: Create a Cohort object
+\item \code{\link[=sample_sheet]{sample_sheet()}} writes the sample list a pipeline expects, with
+built-in templates for a few common nf-core pipelines.
+\item \code{\link[=check_paths]{check_paths()}} tests that the file paths named in a cohort exist.
+\item \code{\link[=as_coldata]{as_coldata()}} and \code{\link[=join_metadata]{join_metadata()}} carry cohort metadata into a
+\code{SummarizedExperiment}, a Seurat object, or a plain data frame.
+\item \code{\link[=write_manifest]{write_manifest()}}, \code{\link[=cohort_save]{cohort_save()}}, and \code{\link[=cohort_read]{cohort_read()}} keep a cohort
+as a file in a project instead of a script that rebuilds it each time.
+}
 }
 
-\strong{IO:}
+\section{Analysis outputs}{
+
 \itemize{
-\item \code{\link[=read_manifest_csv]{read_manifest_csv()}}: Read and validate manifest CSV
-\item \code{\link[=validate_manifest]{validate_manifest()}}: Validate and structure manifest data
+\item \code{\link[=analysis_spec_new]{analysis_spec_new()}} and \code{\link[=analysis_register]{analysis_register()}} describe where an
+analysis writes its output and how to read it back.
+\item \code{\link[=load_analysis]{load_analysis()}} and \code{\link[=load_analyses]{load_analyses()}} resolve the path for every
+subject or pair, read the files, and record which ones were found.
+}
 }
 
-\strong{Samples:}
+\section{Cross-species translation}{
+
 \itemize{
-\item \code{\link[=sample_pairs]{sample_pairs()}}: Derive tumor/normal sample pairs from a sample map
+\item \code{\link[=translate]{translate()}} moves a feature table across genome builds or species.
+Coordinate features go through a liftover backend
+(\code{\link[=liftover_intervals]{liftover_intervals()}}); gene features go through an ortholog backend
+(\code{\link[=ortholog_genes]{ortholog_genes()}}). Both kinds of backend are pluggable through
+\code{\link[=register_liftover_backend]{register_liftover_backend()}} and \code{\link[=register_ortholog_backend]{register_ortholog_backend()}}.
+}
 }
 
-\strong{Validation:}
+\section{Configuration}{
+
 \itemize{
-\item \code{\link[=validate_cohort]{validate_cohort()}}: Validate a Cohort object
+\item \code{\link[=read_study_yaml]{read_study_yaml()}} builds a cohort from one YAML file that names the
+study, the manifest, the file paths, and the registered analyses.
+\code{\link[=write_study_yaml]{write_study_yaml()}} writes one back.
+\item \code{\link[=apply_corrections]{apply_corrections()}} and \code{\link[=read_corrections]{read_corrections()}} apply documented
+overrides to a manifest and keep an audit trail.
+}
 }
 
-\strong{Registry:}
+\section{Data tables}{
+
 \itemize{
-\item \code{\link[=analysis_register]{analysis_register()}}: Register an analysis in the cohort registry
-\item \code{\link[=analysis_spec_new]{analysis_spec_new()}}: Create an AnalysisSpec
+\item \code{subject_tbl}: one row per subject. Always has \code{subject_id} and
+\code{species}, plus any other subject-level metadata (\code{sex}, \code{genotype},
+\code{strain}, ...).
+\item \code{sample_map}: one row per sample, in long format. Always has
+\code{subject_id}, \code{assay}, \code{sample_id}, and \code{role}. A new assay is a new
+row, never a new column.
+\item \code{completeness_tbl}: one row per \code{subject_id} and \code{assay} pair, with the
+sample count.
 }
 }
 
-\section{Data Tables}{
+\section{Further reading}{
 
 
-Cohorts use standardized tables:
-\itemize{
-\item \strong{subject_tbl}: One row per subject; columns: \code{subject_id}, \code{species},
-and any subject-level metadata (\code{sex}, \code{strain}, \code{genotype}, \code{cohort},
-\code{timepoint}, \code{notes}, ...)
-\item \strong{sample_map}: Canonical long-format table, one row per sample; columns:
-\code{subject_id}, \code{assay}, \code{sample_id}, \code{role}. New assays are new rows, never
-new columns or tables.
-\item \strong{completeness_tbl}: One row per \code{subject_id} x \code{assay}; columns:
-\code{subject_id}, \code{assay}, \code{n_samples}
-}
-}
-
-\section{Documentation}{
-
-
-For terminology and definitions, see the \href{articles/glossary.html}{Glossary}.
-
-For standardized naming conventions (columns, objects, functions, files),
-see \href{articles/naming-conventions.html}{Naming Conventions}.
+The \href{articles/bioroster.html}{Get started} article walks through a
+manifest, a cohort, and a sample sheet end to end. The
+\href{articles/glossary.html}{Glossary} defines the terms used across the
+package, and \href{articles/naming-conventions.html}{Naming Conventions}
+lists the standard names for columns, objects, and files.
 }
 
 \seealso{

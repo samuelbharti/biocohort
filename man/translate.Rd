@@ -39,7 +39,8 @@ For a \strong{Cohort}:
 analysis. A cohort translated from more than one source species can
 pass a named list instead, one chain per source species (e.g.
 \code{list(rat = "rn7ToHg38.chain", mouse = "mm39ToHg38.chain")}).
-\item \code{liftover_backend}, \code{ortholog_backend}: backends for the two modalities.
+\item \code{liftover_backend}, \code{ortholog_backend}: backends for the two feature
+kinds.
 \item \code{analyses}: optional character vector restricting which analyses to
 translate (defaults to all that have a registered spec with a
 \code{feature_type}).
@@ -52,11 +53,10 @@ analyses are expressed in \code{to} (Cohort input). For a cohort, per-analysis
 \code{\link[=translation_report]{translation_report()}}.
 }
 \description{
-High-level entry point for cross-species translation. \code{translate()} is the
-modality dispatcher that makes translation a single, first-class operation:
-coordinate features (variants, peaks, intervals) route to liftover, and
-gene-level features route to ortholog mapping. Given a \link{Cohort}, it translates
-every registered analysis according to its \link{AnalysisSpec} and returns a new,
+The one entry point for cross-species translation. Coordinate features
+(variants, peaks, intervals) route to liftover, and gene-level features
+route to ortholog mapping. Given a \link{Cohort}, it translates every
+registered analysis according to its \link{AnalysisSpec} and returns a new,
 target-species cohort.
 }
 \details{
