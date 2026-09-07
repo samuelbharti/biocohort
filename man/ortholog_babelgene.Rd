@@ -4,10 +4,10 @@
 \alias{ortholog_babelgene}
 \title{Ortholog backend backed by babelgene}
 \usage{
-ortholog_babelgene(features, from, to, gene_col, id_type, ...)
+ortholog_babelgene(features, from, to, gene_col, id_type, cache = NULL, ...)
 }
 \arguments{
-\item{features}{A tibble of features with a gene column and a \code{.ortholog_id}
+\item{features}{A tibble of features with a gene column and a \code{.feature_id}
 key (supplied by \code{\link[=ortholog_genes]{ortholog_genes()}}).}
 
 \item{from, to}{Source and target species (e.g. \code{"human"}, \code{"mouse"},
@@ -17,6 +17,11 @@ rat-to-mouse) are routed through human.}
 \item{gene_col}{Name of the gene-identifier column.}
 
 \item{id_type}{One of \code{"symbol"}, \code{"entrez"}, \code{"ensembl"}.}
+
+\item{cache}{Optional path to a TSV file caching prior lookups. When
+given, a gene already in the file is read from there instead of
+queried again, and a newly queried gene is appended for next time. The
+cache is shared across \code{from}/\code{to}/\code{id_type} combinations in one file.}
 
 \item{...}{Passed to \code{\link[babelgene:orthologs]{babelgene::orthologs()}} (e.g. \code{min_support}, \code{top}).}
 }

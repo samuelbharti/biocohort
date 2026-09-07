@@ -1,6 +1,6 @@
 #' Translate features (or a whole cohort) across species or assemblies
 #'
-#' High-level entry point for cross-species translation. `orthologize()` is the
+#' High-level entry point for cross-species translation. `translate()` is the
 #' modality dispatcher that makes translation a single, first-class operation:
 #' coordinate features (variants, peaks, intervals) route to liftover, and
 #' gene-level features route to ortholog mapping. Given a [Cohort], it translates
@@ -11,8 +11,13 @@
 #'   - a data.frame/tibble of features, or
 #'   - a [Cohort] object.
 #' @param to Character scalar naming the target species/assembly.
-#' @param from Character scalar naming the source species/assembly. Required for
-#'   the `"ortholog"` strategy and for cohort-level translation.
+#' @param from For a feature table, a character scalar naming the source
+#'   species/assembly; required for the `"ortholog"` strategy, optional
+#'   (recorded as provenance) for `"liftover"`. For a Cohort, `NULL`
+#'   (default) infers the source species from `subject_tbl$species`: used
+#'   directly when the cohort has one species, or resolved per analysis
+#'   (and, for an analysis with a `subject_id` column, per subject) when it
+#'   has more than one. Give it explicitly to override inference.
 #' @param ... Strategy-specific arguments. For a **feature table**:
 #'   - `strategy`: `"liftover"` (coordinate features; see [liftover_intervals()])
 #'     or `"ortholog"` (gene features; see [ortholog_genes()]).
@@ -22,7 +27,10 @@
 #'   - plus backend arguments such as `gene_col`/`id_type` for orthologs.
 #'
 #'   For a **Cohort**:
-#'   - `chain`: chain-file path used for any `feature_type = "interval"` analysis.
+#'   - `chain`: chain-file path used for any `feature_type = "interval"`
+#'     analysis. A cohort translated from more than one source species can
+#'     pass a named list instead, one chain per source species (e.g.
+#'     `list(rat = "rn7ToHg38.chain", mouse = "mm39ToHg38.chain")`).
 #'   - `liftover_backend`, `ortholog_backend`: backends for the two modalities.
 #'   - `analyses`: optional character vector restricting which analyses to
 #'     translate (defaults to all that have a registered spec with a
@@ -42,19 +50,24 @@
 #' [AnalysisSpec] or without a `feature_type` are skipped with a warning rather
 #' than guessed at.
 #'
+#' When the source species is inferred per subject, the combined
+#' [TranslationResult] for that analysis carries `from` as a vector (one
+#' entry per source species involved) and adds a `.source_species` column to
+#' `mapped` and `unmapped`, so a row's original species is never lost.
+#'
 #' @examples
 #' # Feature-table input -----------------------------------------------------
 #' ints <- data.frame(seqnames = "chr1", start = 100, end = 200)
 #' backend <- function(intervals, chain, ...) {
 #'   list(
 #'     mapped = tibble::tibble(
-#'       .liftover_id = intervals$.liftover_id,
+#'       .feature_id = intervals$.feature_id,
 #'       seqnames = "chrT", start = 1L, end = 100L, strand = "*"
 #'     ),
 #'     unmapped = intervals[0, , drop = FALSE]
 #'   )
 #' }
-#' orthologize(
+#' translate(
 #'   ints,
 #'   to = "human", from = "rat",
 #'   strategy = "liftover", chain = "none", backend = backend
@@ -63,15 +76,39 @@
 #' @seealso [liftover_intervals()], [ortholog_genes()], [translation_report()],
 #'   [TranslationResult]
 #' @export
-orthologize <- function(x, to, from = NA_character_, ...) {
+translate <- function(x, to, from = NULL, ...) {
   checkmate::assert_string(to, min.chars = 1)
   if (S7::S7_inherits(x, Cohort)) {
-    return(.orthologize_cohort(x, to = to, from = from, ...))
+    return(.translate_cohort(x, to = to, from = from, ...))
   }
-  .orthologize_features(x, to = to, from = from, ...)
+  .translate_features(x, to = to, from = from %||% NA_character_, ...)
 }
 
-.orthologize_features <- function(
+#' Deprecated alias for translate()
+#'
+#' `orthologize()` is the earlier name for [translate()]. It still works and
+#' calls [translate()] with the same arguments, and warns once per session.
+#' New code should call [translate()] directly.
+#'
+#' @inheritParams translate
+#'
+#' @return See [translate()].
+#'
+#' @seealso [translate()]
+#' @export
+orthologize <- function(x, to, from = NULL, ...) {
+  cli::cli_warn(
+    c(
+      "{.fun orthologize} is now called {.fun translate}.",
+      "i" = "orthologize() still works, but new code should call translate()."
+    ),
+    .frequency = "once",
+    .frequency_id = "bioroster_orthologize"
+  )
+  translate(x, to = to, from = from, ...)
+}
+
+.translate_features <- function(
   x,
   to,
   from = NA_character_,

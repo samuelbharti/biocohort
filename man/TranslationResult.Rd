@@ -15,7 +15,7 @@ TranslationResult(
 }
 \arguments{
 \item{mapped}{A tibble of successfully translated features. Includes a
-\code{.liftover_id} column linking each output row back to its input row; one
+\code{.feature_id} column linking each output row back to its input row; one
 input may yield multiple output rows (multi-mapping).}
 
 \item{unmapped}{A tibble of input features that produced no output.}
@@ -30,9 +30,9 @@ input may yield multiple output rows (multi-mapping).}
 \code{n_unmapped}, \code{n_multi}).}
 }
 \description{
-An S7 class holding the outcome of translating coordinate features (or, in
-future, gene-level features) from one species/assembly to another. It keeps
-the successfully translated features, the features that failed to map, and
+An S7 class holding the outcome of translating coordinate features or
+gene-level features from one species or assembly to another. It keeps the
+successfully translated features, the features that failed to map, and
 provenance so that translation is never lossy \emph{silently}.
 }
 \details{

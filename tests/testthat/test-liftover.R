@@ -1,15 +1,15 @@
-# A deterministic in-memory backend: maps odd .liftover_id rows (shifting them
+# A deterministic in-memory backend: maps odd .feature_id rows (shifting them
 # to chrT), drops even rows, and duplicates id 1 to exercise multi-mapping.
 mock_backend <- function(intervals, chain, ...) {
-  keep <- intervals[intervals$.liftover_id %% 2 == 1, , drop = FALSE]
+  keep <- intervals[intervals$.feature_id %% 2 == 1, , drop = FALSE]
   mapped <- tibble::tibble(
-    .liftover_id = c(keep$.liftover_id, 1L),
+    .feature_id = c(keep$.feature_id, 1L),
     seqnames = "chrT",
     start = c(keep$start, keep$start[1]) + 1000L,
     end = c(keep$end, keep$end[1]) + 1000L,
     strand = "*"
   )
-  unmapped <- intervals[intervals$.liftover_id %% 2 == 0, , drop = FALSE]
+  unmapped <- intervals[intervals$.feature_id %% 2 == 0, , drop = FALSE]
   list(mapped = mapped, unmapped = unmapped)
 }
 
@@ -87,7 +87,7 @@ test_that("liftover_intervals rejects a malformed backend", {
   }
   expect_error(
     liftover_intervals(make_intervals(), chain = "none", backend = no_id),
-    "\\.liftover_id"
+    "\\.feature_id"
   )
 })
 

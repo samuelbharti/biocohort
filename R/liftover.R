@@ -15,16 +15,16 @@ NULL
 #' @param name Character scalar naming the backend.
 #' @param fn A function with signature `function(intervals, chain, ...)` that
 #'   returns a list with two tibbles:
-#'   - `mapped`: translated features, including a `.liftover_id` column linking
+#'   - `mapped`: translated features, including a `.feature_id` column linking
 #'     each output row to its input row in `intervals`.
-#'   - `unmapped`: the input rows (carrying `.liftover_id`) that produced no
+#'   - `unmapped`: the input rows (carrying `.feature_id`) that produced no
 #'     output.
 #'
 #' @return Invisibly, the backend name.
 #'
 #' @details
 #' `intervals` passed to a backend is guaranteed to have columns `seqnames`,
-#' `start`, `end`, an optional `strand`, and a `.liftover_id` integer key added
+#' `start`, `end`, an optional `strand`, and a `.feature_id` integer key added
 #' by [liftover_intervals()].
 #'
 #' @seealso [liftover_backends()], [liftover_intervals()],
@@ -104,7 +104,7 @@ liftover_backends <- function() {
 #' backend <- function(intervals, chain, ...) {
 #'   list(
 #'     mapped = tibble::tibble(
-#'       .liftover_id = intervals$.liftover_id[1],
+#'       .feature_id = intervals$.feature_id[1],
 #'       seqnames = "chrT", start = 1L, end = 100L, strand = "*"
 #'     ),
 #'     unmapped = intervals[-1, , drop = FALSE]
@@ -145,7 +145,7 @@ liftover_intervals <- function(
   intervals$seqnames <- as.character(intervals$seqnames)
   intervals$start <- as.integer(intervals$start)
   intervals$end <- as.integer(intervals$end)
-  intervals$.liftover_id <- seq_len(nrow(intervals))
+  intervals$.feature_id <- seq_len(nrow(intervals))
 
   backend_name <- if (is.character(backend)) backend else "custom"
   fn <- .get_liftover_backend(backend)
@@ -156,9 +156,9 @@ liftover_intervals <- function(
       "Liftover backend must return a list with `mapped` and `unmapped`."
     )
   }
-  if (!".liftover_id" %in% names(out$mapped)) {
+  if (!".feature_id" %in% names(out$mapped)) {
     cli::cli_abort(
-      "Backend `mapped` output must include a `.liftover_id` column."
+      "Backend `mapped` output must include a `.feature_id` column."
     )
   }
 
@@ -166,9 +166,9 @@ liftover_intervals <- function(
   unmapped <- tibble::as_tibble(out$unmapped)
 
   n_input <- nrow(intervals)
-  mapped_ids <- unique(mapped$.liftover_id)
+  mapped_ids <- unique(mapped$.feature_id)
   n_mapped <- length(mapped_ids)
-  per_id <- as.integer(table(mapped$.liftover_id))
+  per_id <- as.integer(table(mapped$.feature_id))
   n_multi <- sum(per_id > 1)
 
   stats <- list(
@@ -196,7 +196,7 @@ liftover_intervals <- function(
 #' `GenomicRanges`, `IRanges`, and `S4Vectors`.
 #'
 #' @param intervals A tibble of intervals with `seqnames`, `start`, `end`, an
-#'   optional `strand`, and a `.liftover_id` key (supplied by
+#'   optional `strand`, and a `.feature_id` key (supplied by
 #'   [liftover_intervals()]).
 #' @param chain Path to a UCSC chain file.
 #' @param ... Unused.
@@ -228,7 +228,7 @@ liftover_rtracklayer <- function(intervals, chain, ...) {
     ranges = IRanges::IRanges(start = intervals$start, end = intervals$end),
     strand = strand
   )
-  gr$.liftover_id <- intervals$.liftover_id
+  gr$.feature_id <- intervals$.feature_id
 
   lifted <- rtracklayer::liftOver(gr, ch)
   n_out <- S4Vectors::elementNROWS(lifted)
@@ -236,7 +236,7 @@ liftover_rtracklayer <- function(intervals, chain, ...) {
 
   mapped <- if (length(flat) > 0) {
     tibble::tibble(
-      .liftover_id = flat$.liftover_id,
+      .feature_id = flat$.feature_id,
       seqnames = as.character(GenomicRanges::seqnames(flat)),
       start = GenomicRanges::start(flat),
       end = GenomicRanges::end(flat),
@@ -244,7 +244,7 @@ liftover_rtracklayer <- function(intervals, chain, ...) {
     )
   } else {
     tibble::tibble(
-      .liftover_id = integer(),
+      .feature_id = integer(),
       seqnames = character(),
       start = integer(),
       end = integer(),
@@ -285,12 +285,12 @@ liftover_crossmap <- function(intervals, chain, crossmap = NULL, ...) {
   out_bed <- tempfile(fileext = ".bed")
   on.exit(unlink(c(in_bed, out_bed, paste0(out_bed, ".unmap"))), add = TRUE)
 
-  # BED is 0-based, half-open; the name column carries .liftover_id.
+  # BED is 0-based, half-open; the name column carries .feature_id.
   bed <- data.frame(
     chrom = intervals$seqnames,
     start = intervals$start - 1L,
     end = intervals$end,
-    name = intervals$.liftover_id,
+    name = intervals$.feature_id,
     stringsAsFactors = FALSE
   )
   utils::write.table(
@@ -316,7 +316,7 @@ liftover_crossmap <- function(intervals, chain, crossmap = NULL, ...) {
         seqnames = character(),
         start = integer(),
         end = integer(),
-        .liftover_id = integer()
+        .feature_id = integer()
       ))
     }
     df <- utils::read.table(
@@ -329,14 +329,14 @@ liftover_crossmap <- function(intervals, chain, crossmap = NULL, ...) {
       seqnames = as.character(df[[1]]),
       start = as.integer(df[[2]]) + 1L,
       end = as.integer(df[[3]]),
-      .liftover_id = as.integer(df[[4]])
+      .feature_id = as.integer(df[[4]])
     )
   }
 
   mapped <- read_bed(out_bed)
-  unmapped_ids <- setdiff(intervals$.liftover_id, mapped$.liftover_id)
+  unmapped_ids <- setdiff(intervals$.feature_id, mapped$.feature_id)
   unmapped <- intervals[
-    intervals$.liftover_id %in% unmapped_ids,
+    intervals$.feature_id %in% unmapped_ids,
     ,
     drop = FALSE
   ]

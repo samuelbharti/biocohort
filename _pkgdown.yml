@@ -109,6 +109,7 @@ reference:
 - title: Cross-species translation
   desc: Translate features across assemblies and species (experimental)
   contents:
+  - translate
   - orthologize
   - liftover_intervals
   - liftover_vcf
