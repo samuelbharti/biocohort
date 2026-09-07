@@ -1,55 +1,55 @@
 # Naming conventions
 
-This document describes standardized naming conventions used in
-biocohort for data columns, R objects, functions, and file names.
+This article lists the standard names biocohort uses for columns, R
+objects, functions, and files.
 
-## Column Names
+## Column names
 
-### Subject-Level Metadata (`subject_tbl`)
-
-| Column | Type | Description |
-|----|----|----|
-| `subject_id` | character | Unique subject identifier. Species-agnostic; use the same column for rat, mouse, or human studies. |
-| `species` | character | Species designation: “rat”, “mouse”, or “human”. |
-| `sex` | character | Biological sex: “M” (male), “F” (female), or NA if unknown. |
-| `strain` | character | Strain or breed (e.g., “Fischer 344”, “B6”). |
-| `genotype` | character | Genetic background or modification (e.g., “WT”, “KO”, “HET”). |
-| `cohort` | character | Treatment group or cohort membership (e.g., “Control”, “Treatment_A”). |
-| `timepoint` | character | Study visit, age, or collection date (e.g., “Day_0”, “Week_12”, “8wks”). |
-| `notes` | character | Free-form annotations or additional metadata. |
-
-### Sample Mapping Columns (`sample_map`)
-
-The `sample_map` is the canonical, long-format sample table: one row per
-sample, with any number of assays and roles. New assays are represented
-as new rows, never new columns or per-assay tables.
+### Subject-level metadata (`subject_tbl`)
 
 | Column | Type | Description |
 |----|----|----|
-| `subject_id` | character | Reference to subject in `subject_tbl`. |
-| `assay` | character | Assay type (free-form value), e.g. `"wgs"`, `"wes"`, `"atac"`, `"bulk_rna"`, `"scrna"`. |
-| `sample_id` | character | Unique sample identifier. |
-| `role` | character | Sample role within its assay, e.g. `"tumor"`, `"normal"`, or `NA` when not applicable. |
+| `subject_id` | character | A unique subject ID. Works the same for any species. |
+| `species` | character | The subject’s species, for example “rat” or “mouse”. Free-form, not a fixed list, and stored lower case. |
+| `sex` | character | Biological sex: “M”, “F”, or `NA` if unknown. |
+| `strain` | character | Strain or breed, for example “Fischer 344” or “B6”. |
+| `genotype` | character | Genetic background or modification, for example “WT”, “KO”, “HET”. |
+| `cohort` | character | Treatment group or cohort membership, for example “Control”, “Treatment_A”. |
+| `timepoint` | character | Study visit, age, or collection date, for example “Day_0”, “Week_12”, “8wks”. |
+| `notes` | character | Free-form annotations. |
 
-Other sample-level columns (e.g. `fastq_1`, `fastq_2`, `bam`, `lane`,
-`replicate`, `qc_status`) stay in `sample_map` when their name is one
+### Sample mapping columns (`sample_map`)
+
+`sample_map` is the canonical, long-format sample table: one row per
+sample, covering any number of assays and roles. A new assay is a new
+row, never a new column or a new table.
+
+| Column | Type | Description |
+|----|----|----|
+| `subject_id` | character | Reference to a subject in `subject_tbl`. |
+| `assay` | character | The assay, a free-form value, for example `"wgs"`, `"wes"`, `"atac"`, `"bulk_rna"`, `"scrna"`. |
+| `sample_id` | character | A unique sample ID. |
+| `role` | character | The sample’s role within its assay, for example `"tumor"`, `"normal"`, or `NA` when it does not apply. |
+
+Other sample-level columns, such as `fastq_1`, `fastq_2`, `bam`, `lane`,
+or `replicate`, stay in `sample_map` when
 [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
-recognizes, or when passed in its `sample_cols` argument. A column that
-varies within a subject but is not recognized or declared trips the
-subject-level conflict check instead.
+already knows the name, or when it is passed in the `sample_cols`
+argument. A column that varies within a subject but is not recognized or
+declared trips the subject-level conflict check instead.
 
-### Completeness Summary Columns (`completeness_tbl`)
+### Completeness summary columns (`completeness_tbl`)
 
-| Column | Type | Description |
-|----|----|----|
-| `subject_id` | character | Reference to subject in `subject_tbl`. |
-| `assay` | character | Assay type, matching values in `sample_map`. |
-| `n_samples` | integer | Number of samples available for the subject within the assay. |
+| Column       | Type      | Description                                    |
+|--------------|-----------|------------------------------------------------|
+| `subject_id` | character | Reference to a subject in `subject_tbl`.       |
+| `assay`      | character | The assay, matching values in `sample_map`.    |
+| `n_samples`  | integer   | Sample count for the subject within the assay. |
 
-## Assay Type Values
+## Assay type values
 
-`assay` is a free-form lowercase value, not a fixed enumeration. Pick a
-stable label per assay and reuse it consistently. Common examples:
+`assay` is a free-form, lowercase value, not a fixed list. Pick a stable
+label per assay and reuse it. Common examples:
 
 | Assay | Code | Description |
 |----|----|----|
@@ -57,41 +57,43 @@ stable label per assay and reuse it consistently. Common examples:
 | Whole exome sequencing | `"wes"` | Exome capture and sequencing. |
 | ATAC-seq | `"atac"` | Chromatin accessibility. |
 | Bulk RNA-seq | `"bulk_rna"` | Bulk transcriptomics. |
-| Single-cell / single-nucleus RNA-seq | `"scrna"` | Single-cell/nucleus transcriptomics. |
+| Single-cell / single-nucleus RNA-seq | `"scrna"` | Single-cell or single-nucleus transcriptomics. |
 
-## Sample ID Formats
+## Sample ID formats
 
-While biocohort does not enforce specific sample ID formats, adopt a
-consistent project-wide convention. Encoding the assay and role in the
-ID can aid readability:
+biocohort does not enforce a sample ID format. Pick one convention for a
+project and keep it. Putting the assay and role in the ID makes it
+easier to read:
 
-- **Tumor**: `{assay}_T{subject}` (e.g., “wes_T101”, “wgs_T001”)
-- **Normal**: `{assay}_N{subject}` (e.g., “wes_N101”, “wgs_N001”)
-- **Single-cell/RNA**: `{assay}_{subject}_{rep}` (e.g., “scrna_101_1”,
-  “bulk_rna_101_2”)
+- **Tumor**: `{assay}_T{subject}`, for example `"wes_T101"`,
+  `"wgs_T001"`.
+- **Normal**: `{assay}_N{subject}`, for example `"wes_N101"`,
+  `"wgs_N001"`.
+- **Single-cell or RNA**: `{assay}_{subject}_{rep}`, for example
+  `"scrna_101_1"`, `"bulk_rna_101_2"`.
 
-Tumor/normal **pairs** are not stored in `sample_map`; derive them on
-demand with
+Tumor and normal **pairs** are not stored in `sample_map`. Derive them
+on demand with
 [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md),
-which yields a `pair_id` of `{tumor_sample_id}__{normal_sample_id}`
-(e.g., “wes_T101\_\_wes_N101”).
+which builds a `pair_id` of `{tumor_sample_id}__{normal_sample_id}`, for
+example `"wes_T101__wes_N101"`.
 
-## Object Names
+## Object names
 
-### R Objects and Variables
+### R objects and variables
 
-- **Study objects**: snake_case, descriptive (e.g., `my_study`,
-  `pilot_study`) or explicitly named `study` in examples.
-- **Cohort objects**: snake_case (e.g., `cohort`, `pilot_cohort`,
-  `study_cohort`).
-- **Subject objects**: Rarely used directly; built on demand with
+- **Study objects**: snake_case and descriptive, for example `my_study`,
+  `pilot_study`, or just `study` in examples.
+- **Cohort objects**: snake_case, for example `cohort`, `pilot_cohort`,
+  `study_cohort`.
+- **Subject objects**: rarely used directly. Build one on demand with
   `subject(cohort, subject_id)`.
-- **AnalysisSpec objects**: Use spec name as primary identifier (stored
-  in registry with name as key).
-- **Data tables**: snake_case with `_tbl` suffix or use descriptive
-  names like `subject_data`, `wes_samples`.
+- **AnalysisSpec objects**: identified by the spec’s own `name`, which
+  is also its key in the registry.
+- **Data tables**: snake_case with a `_tbl` suffix, or a descriptive
+  name such as `subject_data` or `wes_samples`.
 
-### Example Object Creation
+### Example object creation
 
 ``` r
 
@@ -111,112 +113,94 @@ cohort <- cohort_new(
 # Read one subject as a Subject object
 rat_101 <- subject(cohort, "RAT_101")
 
-# Access analysis
+# Read a stored analysis result
 result <- cohort@analyses[["my_analysis_name"]]
 ```
 
-## Function Names
+## Function names
 
-- **Constructor functions**: `{noun}_new()` (e.g.,
+- **Constructors**: `{noun}_new()`, for example
   [`study_new()`](https://www.samuelbharti.com/biocohort/reference/study_new.md),
-  [`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md))
-- **Validation functions**: `validate_{noun}()` (e.g.,
+  [`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md).
+- **Validation**: `validate_{noun}()`, for example
   [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md),
-  [`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md))
-- **Accessor/getter functions**: `get_{property}()` or simply reference
-  property directly (e.g., `cohort@subject_tbl`)
-- **IO functions**: `read_{format}()` or `write_{format}()` (e.g.,
-  [`read_manifest_csv()`](https://www.samuelbharti.com/biocohort/reference/read_manifest_csv.md))
-- **Helper functions**: lowercase with underscores (e.g.,
-  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md))
-- **S7 methods**: Dispatch on class; function name describes operation
-  (e.g., [`print()`](https://rdrr.io/r/base/print.html) method for
-  Cohort)
+  [`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md).
+- **Accessors**: a plain noun, for example
+  [`subjects()`](https://www.samuelbharti.com/biocohort/reference/subjects.md),
+  [`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md),
+  or read the property directly with `@`, for example
+  `cohort@subject_tbl`.
+- **IO**: `read_{format}()` or `write_{format}()`, for example
+  [`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md).
+- **Helpers**: lowercase with underscores, for example
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md).
+- **S7 methods**: dispatch on class, named for what they do, for example
+  [`print()`](https://rdrr.io/r/base/print.html) on a `Cohort`.
 
-## File Names
+## File names
 
-### Package Code Files
+### Package code files
 
-- **Class definitions**: `classes.R`
-- **Constructors**: `constructors.R`
-- **Validation**: `validate.R`, `validate_manifest.R`
-- **IO (read/write)**: `io.R`
-- **Methods and utilities**: `{feature}.R` (e.g., `analysis_registry.R`,
-  `print.R`)
+- **Class definitions**: `classes.R`.
+- **Constructors**: `constructors.R`.
+- **Validation**: `validate.R`, `validate_manifest.R`.
+- **IO**: `io.R`.
+- **Methods and utilities**: `{feature}.R`, for example
+  `analysis_registry.R`, `print.R`.
 
-### Data Files
+### Data files
 
-- **Raw data**: Use consistent prefix and descriptor (e.g.,
-  `manifest_study_001.csv`, `cohort_pilot_data.rda`)
+- **Raw data**: a consistent prefix and descriptor, for example
+  `manifest_study_001.csv`, `cohort_pilot_data.rda`.
 - **Intermediate data**: `{description}_{date}.rda` or
-  `{description}_{version}.fst`
+  `{description}_{version}.fst`.
 - **Results**: `{analysis}_{date}_{version}.csv` or
-  `{analysis}_results.rda`
+  `{analysis}_results.rda`.
 
-### Example Manifest File Names
+### Example manifest file names
 
     manifest_pilot_wes_rna_v1.csv
     manifest_pilot_cohort.csv
     cohort_complete_metadata.csv
 
-## Variable and Parameter Naming
+## Variable and parameter naming
 
-### Parameters in Functions
+- **Input data**: a clear name, for example `manifest`, `subject_tbl`,
+  `sample_map`.
+- **Flags**: prefixed with `is_` or `has_`, for example `is_valid`,
+  `has_missing`.
+- **Counts**: prefixed with `n_`, for example `n_subjects`, `n_samples`.
+- **Logical arguments**: `strict`, `verbose`, `allow_*`, for example
+  `allow_duplicates`.
+- **Named lists**: keys are plain identifiers, for example
+  `cohort@analyses[["my_analysis"]]`.
 
-- **Input data**: Describe clearly (e.g., `manifest`, `subject_tbl`,
-  `sample_map`)
-- **Flags**: Prefix with `is_` or `has_` (e.g., `is_valid`,
-  `has_missing`)
-- **Counts**: Prefix with `n_` (e.g., `n_subjects`, `n_samples`)
-- **Logical conditions**: `strict`, `verbose`, `allow_*` (e.g.,
-  `allow_duplicates`)
+## Documentation and markdown
 
-### Vector and List Names
+- **Vignette titles**: sentence case, for example “Glossary”, “Naming
+  conventions”. File names: `{title-in-kebab-case}.Rmd`, for example
+  `glossary.Rmd`, `naming-conventions.Rmd`.
+- **Roxygen**: every exported function gets a title, `@param`,
+  `@return`, and a runnable `@examples` block. Link related functions
+  with `[function_name()]` or `[ClassName]`.
 
-- **Output vectors/lists**: Descriptive plural or singular depending on
-  context
-- **Named lists**: Keys should be identifiers or logical names (e.g.,
-  `cohort@analyses[["my_analysis"]]`)
+## A quick check before adding something new
 
-## Documentation and Markdown
-
-### Vignette Titles
-
-- Use sentence case (e.g., “Glossary”, “Naming conventions”)
-- Markdown files: `{title_snake_case}.Rmd` (e.g., `glossary.Rmd`,
-  `naming-conventions.Rmd`)
-
-### Roxygen Documentation
-
-- Document classes and functions with descriptive titles and sections
-- Use `@param`, `@return`, `@details`, `@examples` consistently
-- Link to related functions with `[function_name()]` or `[ClassName]`
-
-## Consistency Checklist
-
-When creating new functions or tables, ensure:
-
-Uses snake_case for functions and variables
-
-Uses PascalCase for S7 classes (Study, Subject, Cohort)
-
-Assay column values are lowercase, free-form labels (e.g., “wes”,
-“atac”, “scrna”)
-
-Sample ID columns end with `_id` or `_sample_id`
-
-Logical columns begin with `has_`, `is_`, or are boolean tests
-
-Counts begin with `n_`
-
-Data tables end with `_tbl` or `_table`
-
-Documentation and examples are provided via roxygen
+- Functions and variables use snake_case.
+- S7 classes use PascalCase (`Study`, `Subject`, `Cohort`).
+- Assay values are lowercase and free-form, for example `"wes"`,
+  `"atac"`, `"scrna"`.
+- Sample ID columns end in `_id` or `_sample_id`.
+- Logical columns start with `has_` or `is_`, or read as a plain
+  yes-or-no question.
+- Count columns start with `n_`.
+- Data tables end in `_tbl` or `_table`.
+- New exports have roxygen documentation with a working example.
 
 ------------------------------------------------------------------------
 
-## Further Reading
+## Further reading
 
 See the
 [Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.md)
-article for detailed definitions of key terms and concepts.
+article for what these terms mean.
