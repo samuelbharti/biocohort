@@ -24,11 +24,11 @@ register_liftover_backend(name, fn)
   A function with signature `function(intervals, chain, ...)` that
   returns a list with two tibbles:
 
-  - `mapped`: translated features, including a `.liftover_id` column
+  - `mapped`: translated features, including a `.feature_id` column
     linking each output row to its input row in `intervals`.
 
-  - `unmapped`: the input rows (carrying `.liftover_id`) that produced
-    no output.
+  - `unmapped`: the input rows (carrying `.feature_id`) that produced no
+    output.
 
 ## Value
 
@@ -37,7 +37,7 @@ Invisibly, the backend name.
 ## Details
 
 `intervals` passed to a backend is guaranteed to have columns
-`seqnames`, `start`, `end`, an optional `strand`, and a `.liftover_id`
+`seqnames`, `start`, `end`, an optional `strand`, and a `.feature_id`
 integer key added by
 [`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md).
 

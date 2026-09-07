@@ -1,7 +1,7 @@
 # Retrieve per-analysis translation results from a cohort
 
 After
-[`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md)
+[`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md)
 has translated a
 [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md),
 this returns the per-analysis
@@ -20,7 +20,7 @@ translation_report(cohort)
 - cohort:
 
   A Cohort produced by
-  [`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md).
+  [`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md).
 
 ## Value
 
@@ -31,13 +31,13 @@ been translated.
 
 ## See also
 
-[`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md),
+[`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md),
 [TranslationResult](https://www.samuelbharti.com/bioroster/reference/TranslationResult.md)
 
 ## Examples
 
 ``` r
-# See ?orthologize for a cohort-translation example; then:
+# See ?translate for a cohort-translation example; then:
 # report <- translation_report(translated_cohort)
 # report$results[["somatic_vars"]]
 ```

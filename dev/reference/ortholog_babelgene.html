@@ -45,7 +45,7 @@ the default backend for <code><a href="ortholog_genes.html">ortholog_genes()</a>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ortholog_babelgene</span><span class="op">(</span><span class="va">features</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">gene_col</span>, <span class="va">id_type</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ortholog_babelgene</span><span class="op">(</span><span class="va">features</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">gene_col</span>, <span class="va">id_type</span>, cache <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -53,7 +53,7 @@ the default backend for <code><a href="ortholog_genes.html">ortholog_genes()</a>
 
 
 <dl><dt id="arg-features">features<a class="anchor" aria-label="anchor" href="#arg-features"></a></dt>
-<dd><p>A tibble of features with a gene column and a <code>.ortholog_id</code>
+<dd><p>A tibble of features with a gene column and a <code>.feature_id</code>
 key (supplied by <code><a href="ortholog_genes.html">ortholog_genes()</a></code>).</p></dd>
 
 
@@ -69,6 +69,13 @@ rat-to-mouse) are routed through human.</p></dd>
 
 <dt id="arg-id-type">id_type<a class="anchor" aria-label="anchor" href="#arg-id-type"></a></dt>
 <dd><p>One of <code>"symbol"</code>, <code>"entrez"</code>, <code>"ensembl"</code>.</p></dd>
+
+
+<dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>
+<dd><p>Optional path to a TSV file caching prior lookups. When
+given, a gene already in the file is read from there instead of
+queried again, and a newly queried gene is appended for next time. The
+cache is shared across <code>from</code>/<code>to</code>/<code>id_type</code> combinations in one file.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

@@ -130,8 +130,10 @@ Carry cohort metadata into other analysis objects
 
 Translate features across assemblies and species (experimental)
 
-- [`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md)
+- [`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md)
   : Translate features (or a whole cohort) across species or assemblies
+- [`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md)
+  : Deprecated alias for translate()
 - [`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md)
   : Liftover a set of genomic intervals across assemblies or species
 - [`liftover_vcf()`](https://www.samuelbharti.com/bioroster/reference/liftover_vcf.md)

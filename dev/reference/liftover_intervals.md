@@ -82,7 +82,7 @@ ints <- data.frame(
 backend <- function(intervals, chain, ...) {
   list(
     mapped = tibble::tibble(
-      .liftover_id = intervals$.liftover_id[1],
+      .feature_id = intervals$.feature_id[1],
       seqnames = "chrT", start = 1L, end = 100L, strand = "*"
     ),
     unmapped = intervals[-1, , drop = FALSE]

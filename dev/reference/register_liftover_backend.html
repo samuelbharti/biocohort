@@ -64,9 +64,9 @@ to be swapped in.</p>
 
 <dt id="arg-fn">fn<a class="anchor" aria-label="anchor" href="#arg-fn"></a></dt>
 <dd><p>A function with signature <code>function(intervals, chain, ...)</code> that
-returns a list with two tibbles:</p><ul><li><p><code>mapped</code>: translated features, including a <code>.liftover_id</code> column linking
+returns a list with two tibbles:</p><ul><li><p><code>mapped</code>: translated features, including a <code>.feature_id</code> column linking
 each output row to its input row in <code>intervals</code>.</p></li>
-<li><p><code>unmapped</code>: the input rows (carrying <code>.liftover_id</code>) that produced no
+<li><p><code>unmapped</code>: the input rows (carrying <code>.feature_id</code>) that produced no
 output.</p></li>
 </ul></dd>
 
@@ -78,7 +78,7 @@ output.</p></li>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>intervals</code> passed to a backend is guaranteed to have columns <code>seqnames</code>,
-<code>start</code>, <code>end</code>, an optional <code>strand</code>, and a <code>.liftover_id</code> integer key added
+<code>start</code>, <code>end</code>, an optional <code>strand</code>, and a <code>.feature_id</code> integer key added
 by <code><a href="liftover_intervals.html">liftover_intervals()</a></code>.</p>
     </div>
     <div class="section level2">

@@ -18,7 +18,7 @@ liftover_rtracklayer(intervals, chain, ...)
 - intervals:
 
   A tibble of intervals with `seqnames`, `start`, `end`, an optional
-  `strand`, and a `.liftover_id` key (supplied by
+  `strand`, and a `.feature_id` key (supplied by
   [`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md)).
 
 - chain:

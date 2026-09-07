@@ -1,9 +1,9 @@
 # Result of a cross-species or cross-assembly translation
 
-An S7 class holding the outcome of translating coordinate features (or,
-in future, gene-level features) from one species/assembly to another. It
-keeps the successfully translated features, the features that failed to
-map, and provenance so that translation is never lossy *silently*.
+An S7 class holding the outcome of translating coordinate features or
+gene-level features from one species or assembly to another. It keeps
+the successfully translated features, the features that failed to map,
+and provenance so that translation is never lossy *silently*.
 
 ## Usage
 
@@ -22,9 +22,9 @@ TranslationResult(
 
 - mapped:
 
-  A tibble of successfully translated features. Includes a
-  `.liftover_id` column linking each output row back to its input row;
-  one input may yield multiple output rows (multi-mapping).
+  A tibble of successfully translated features. Includes a `.feature_id`
+  column linking each output row back to its input row; one input may
+  yield multiple output rows (multi-mapping).
 
 - unmapped:
 

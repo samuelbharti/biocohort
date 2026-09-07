@@ -8,14 +8,14 @@ is the default backend for
 ## Usage
 
 ``` r
-ortholog_babelgene(features, from, to, gene_col, id_type, ...)
+ortholog_babelgene(features, from, to, gene_col, id_type, cache = NULL, ...)
 ```
 
 ## Arguments
 
 - features:
 
-  A tibble of features with a gene column and a `.ortholog_id` key
+  A tibble of features with a gene column and a `.feature_id` key
   (supplied by
   [`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md)).
 
@@ -32,6 +32,13 @@ ortholog_babelgene(features, from, to, gene_col, id_type, ...)
 - id_type:
 
   One of `"symbol"`, `"entrez"`, `"ensembl"`.
+
+- cache:
+
+  Optional path to a TSV file caching prior lookups. When given, a gene
+  already in the file is read from there instead of queried again, and a
+  newly queried gene is appended for next time. The cache is shared
+  across `from`/`to`/`id_type` combinations in one file.
 
 - ...:
 

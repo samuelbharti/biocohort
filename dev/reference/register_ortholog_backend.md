@@ -24,10 +24,10 @@ register_ortholog_backend(name, fn)
   list with two tibbles:
 
   - `mapped`: input rows that had at least one ortholog, carrying the
-    `.ortholog_id` key and an `ortholog` column with the target-species
+    `.feature_id` key and an `ortholog` column with the target-species
     id.
 
-  - `unmapped`: input rows (carrying `.ortholog_id`) with no ortholog.
+  - `unmapped`: input rows (carrying `.feature_id`) with no ortholog.
 
 ## Value
 

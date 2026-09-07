@@ -60,8 +60,8 @@ pluggable design mirrors the liftover backends used for coordinate features.</p>
 <dd><p>A function with signature
 <code>function(features, from, to, gene_col, id_type, ...)</code> returning a list
 with two tibbles:</p><ul><li><p><code>mapped</code>: input rows that had at least one ortholog, carrying the
-<code>.ortholog_id</code> key and an <code>ortholog</code> column with the target-species id.</p></li>
-<li><p><code>unmapped</code>: input rows (carrying <code>.ortholog_id</code>) with no ortholog.</p></li>
+<code>.feature_id</code> key and an <code>ortholog</code> column with the target-species id.</p></li>
+<li><p><code>unmapped</code>: input rows (carrying <code>.feature_id</code>) with no ortholog.</p></li>
 </ul></dd>
 
 </dl></div>
