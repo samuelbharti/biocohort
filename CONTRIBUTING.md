@@ -1,4 +1,4 @@
-# Contributing to bioroster
+# Contributing to biocohort
 
 Thanks for helping. This guide covers what belongs in the package, the
 workflow, and the local tooling.
@@ -11,7 +11,7 @@ path to every package command, for example `devtools::test("pkg-r")`.
 
 ## What belongs here
 
-bioroster keeps study metadata in one validated object and reads outputs that
+biocohort keeps study metadata in one validated object and reads outputs that
 other tools produced. Before you open a pull request, make sure that the
 change fits inside these lines:
 

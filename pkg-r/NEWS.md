@@ -1,13 +1,8 @@
-# bioroster 0.1.0.9000
+# biocohort 0.1.0.9000
 
-The package is not released. The version restarts at 0.1.0.9000 while the
-API settles. Earlier drafts carried the numbers 0.1.0 to 0.3.0 under the name
-myceliumr and were never tagged.
-
-## Name
-
-- The package is renamed from myceliumr to bioroster. The repository, the
-  documentation site, and the S7 class prefix change with it.
+The package is not released. Earlier drafts carried the numbers 0.1.0 to
+0.3.0 and were never tagged. The version restarts at 0.1.0.9000 while the API
+settles.
 
 ## Data model
 

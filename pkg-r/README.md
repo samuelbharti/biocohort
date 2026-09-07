@@ -1,19 +1,19 @@
-# bioroster (R package)
+# biocohort (R package)
 
 This directory holds the R package. See the repository root
-[README.md](../README.md) for what bioroster is for and how the repository is
+[README.md](../README.md) for what biocohort is for and how the repository is
 laid out.
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/samuelbharti/bioroster/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/bioroster/actions/workflows/r.yml)
+[![R-CMD-check](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml)
 <!-- badges: end -->
 
-bioroster keeps the subjects, samples, and analysis outputs of a genomics
+biocohort keeps the subjects, samples, and analysis outputs of a genomics
 study in one validated object. Species and assays are values in the data,
 not columns or classes, so the same functions work for any organism and any
 assay.
 
-**Documentation**: <https://www.samuelbharti.com/bioroster/>
+**Documentation**: <https://www.samuelbharti.com/biocohort/>
 
 ## Installation
 
@@ -22,7 +22,7 @@ assay.
 devtools::install("pkg-r")
 
 # From GitHub, from anywhere
-remotes::install_github("samuelbharti/bioroster", subdir = "pkg-r")
+remotes::install_github("samuelbharti/biocohort", subdir = "pkg-r")
 ```
 
 ## Quick start
@@ -40,7 +40,7 @@ R2,rat,KO,wes,N2,normal
 ```
 
 ```r
-library(bioroster)
+library(biocohort)
 
 parsed <- read_manifest("manifest.csv")
 cohort <- cohort_new(parsed$subject_tbl, parsed$sample_map)
@@ -93,9 +93,9 @@ long <- manifest_from_wide(wide_table, id_cols)
 
 The package website includes:
 
-- **[Get started](https://www.samuelbharti.com/bioroster/articles/bioroster.html)**: a manifest, a cohort, and a sample sheet, end to end.
-- **[Glossary](https://www.samuelbharti.com/bioroster/articles/glossary.html)**: key terms and definitions.
-- **[Naming Conventions](https://www.samuelbharti.com/bioroster/articles/naming-conventions.html)**: standard column, object, and file names.
+- **[Get started](https://www.samuelbharti.com/biocohort/articles/biocohort.html)**: a manifest, a cohort, and a sample sheet, end to end.
+- **[Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.html)**: key terms and definitions.
+- **[Naming Conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.html)**: standard column, object, and file names.
 
 To build the site locally, run from the repository root:
 

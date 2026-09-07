@@ -332,7 +332,7 @@ test_that("translate(cohort) names the missing species when a chain list lacks a
 # --- orthologize() as a deprecated alias ------------------------------------
 
 test_that("orthologize() warns once per session and behaves like translate()", {
-  rlang:::reset_warning_verbosity("bioroster_orthologize")
+  rlang:::reset_warning_verbosity("biocohort_orthologize")
   coh <- make_cohort()
 
   expect_warning(
@@ -346,7 +346,7 @@ test_that("orthologize() warns once per session and behaves like translate()", {
     ),
     "now called"
   )
-  rlang:::reset_warning_verbosity("bioroster_orthologize")
+  rlang:::reset_warning_verbosity("biocohort_orthologize")
   out <- suppressWarnings(orthologize(
     coh,
     to = "human",

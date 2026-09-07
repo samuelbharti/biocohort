@@ -1,4 +1,4 @@
 library(testthat)
-library(bioroster)
+library(biocohort)
 
-test_check("bioroster")
+test_check("biocohort")

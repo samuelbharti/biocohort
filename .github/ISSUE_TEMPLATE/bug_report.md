@@ -18,13 +18,13 @@ Brief description of the bug.
 ## Example Code
 ```r
 # Minimal reproducible example
-library(bioroster)
+library(biocohort)
 
 # Code that triggers the bug
 ```
 
 ## Environment
-- bioroster version:
+- biocohort version:
 - R version:
 - OS:
 

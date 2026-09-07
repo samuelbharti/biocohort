@@ -103,7 +103,7 @@ orthologize <- function(x, to, from = NULL, ...) {
       "i" = "orthologize() still works, but new code should call translate()."
     ),
     .frequency = "once",
-    .frequency_id = "bioroster_orthologize"
+    .frequency_id = "biocohort_orthologize"
   )
   translate(x, to = to, from = from, ...)
 }

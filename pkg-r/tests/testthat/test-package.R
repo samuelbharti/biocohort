@@ -2,7 +2,7 @@
 # package inherits it, so a new name in Imports fails the suite on purpose and
 # starts the conversation before it reaches a review.
 test_that("Imports stays at S7, cli, rlang, checkmate, fs, readr, dplyr, tibble", {
-  desc <- system.file("DESCRIPTION", package = "bioroster")
+  desc <- system.file("DESCRIPTION", package = "biocohort")
   imports <- read.dcf(desc, "Imports")[[1]]
   declared <- trimws(strsplit(imports, ",")[[1]])
   declared <- sub(" .*$", "", declared)
@@ -14,7 +14,7 @@ test_that("Imports stays at S7, cli, rlang, checkmate, fs, readr, dplyr, tibble"
 })
 
 test_that("no Shiny dependency in any form", {
-  desc <- system.file("DESCRIPTION", package = "bioroster")
+  desc <- system.file("DESCRIPTION", package = "biocohort")
   fields <- read.dcf(desc, c("Depends", "Imports", "Suggests", "LinkingTo"))
 
   expect_false(any(grepl("shiny", fields, ignore.case = TRUE), na.rm = TRUE))
@@ -28,7 +28,7 @@ test_that("DESCRIPTION and CITATION.cff agree on the version", {
   citation <- file.path(root, "CITATION.cff")
   skip_if_not(file.exists(citation), "not a source tree")
 
-  declared <- as.character(utils::packageVersion("bioroster"))
+  declared <- as.character(utils::packageVersion("biocohort"))
   cff <- readLines(citation, warn = FALSE)
   cff_version <- trimws(sub(
     "^version:",

@@ -1,8 +1,8 @@
 ---
-title: "Get started with bioroster"
+title: "Get started with biocohort"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Get started with bioroster}
+  %\VignetteIndexEntry{Get started with biocohort}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(bioroster)
+library(biocohort)
 ```
 
 This article shows the path most studies take: a manifest file becomes a

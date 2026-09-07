@@ -355,7 +355,7 @@ cohort_save <- function(cohort, path) {
 
   wrapper <- list(
     format = 1L,
-    bioroster_version = as.character(utils::packageVersion("bioroster")),
+    biocohort_version = as.character(utils::packageVersion("biocohort")),
     cohort = cohort
   )
   saveRDS(wrapper, path)

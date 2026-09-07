@@ -11,14 +11,14 @@
 }
 
 .onAttach <- function(libname, pkgname) {
-  version <- utils::packageVersion("bioroster")
+  version <- utils::packageVersion("biocohort")
   packageStartupMessage(
-    cli::col_blue("bioroster"),
+    cli::col_blue("biocohort"),
     " version ",
     cli::col_green(version),
     "\n",
-    "Subject and Sample Rosters for Genomics Studies\n",
+    "Cohort Objects for Subjects and Samples in Genomics Studies\n",
     "Documentation: ",
-    cli::col_cyan("https://www.samuelbharti.com/bioroster/")
+    cli::col_cyan("https://www.samuelbharti.com/biocohort/")
   )
 }
