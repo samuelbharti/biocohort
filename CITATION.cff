@@ -1,11 +1,11 @@
 cff-version: 1.2.0
 message: If you use biocohort in your work, please cite it as below.
-title: "biocohort: Cohort Objects for Subjects and Samples in Genomics Studies"
+title: "biocohort: Cohort Objects for Subjects and Samples in Omics Studies"
 abstract: >-
   An R package that keeps the subjects, samples, and analysis outputs of a
-  genomics study in one validated object, with a long-format sample manifest,
-  pipeline sample sheets, an analysis registry, and pluggable cross-species
-  translation backends.
+  study in one validated object, for any organism and any omics assay, with
+  a long-format sample manifest, pipeline sample sheets, an analysis
+  registry, and pluggable cross-species translation backends.
 type: software
 version: 0.1.0.9000
 authors:
@@ -17,7 +17,7 @@ repository-code: https://github.com/samuelbharti/biocohort
 url: https://www.samuelbharti.com/biocohort/
 license: MIT
 keywords:
-  - genomics
+  - omics
   - sample-manifest
   - cohort
   - cross-species
