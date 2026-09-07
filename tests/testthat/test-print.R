@@ -40,12 +40,12 @@ test_that("print(Cohort) shows counts and a species breakdown", {
 })
 
 test_that("print(Cohort) shows the study title when there is one", {
-  study <- study_new("S1", "NF1 rat pilot")
+  study <- study_new("S1", "Example rat pilot")
   cohort <- make_cohort(study = study)
 
   out <- cli::cli_fmt(print(cohort))
 
-  expect_true(any(grepl("NF1 rat pilot", out, fixed = TRUE)))
+  expect_true(any(grepl("Example rat pilot", out, fixed = TRUE)))
 })
 
 test_that("print(Cohort) lists extra sample columns", {
