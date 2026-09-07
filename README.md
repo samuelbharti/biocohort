@@ -1,4 +1,4 @@
-# biocohort
+# biocohort <img src="pkg-r/man/figures/logo.png" align="right" height="139" alt="biocohort hex logo" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml)
