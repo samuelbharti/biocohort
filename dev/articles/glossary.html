@@ -59,10 +59,10 @@
 
     
     
-<p>This glossary defines key terms and concepts used throughout
-biocohort documentation and code.</p>
+<p>This glossary defines the terms used across biocohort’s documentation
+and code.</p>
 <div class="section level2">
-<h2 id="core-entities">Core Entities<a class="anchor" aria-label="anchor" href="#core-entities"></a>
+<h2 id="core-entities">Core entities<a class="anchor" aria-label="anchor" href="#core-entities"></a>
 </h2>
 <table class="table">
 <colgroup>
@@ -76,34 +76,32 @@ biocohort documentation and code.</p>
 <tbody>
 <tr class="odd">
 <td><strong>Subject</strong></td>
-<td>An individual biological organism in a study. Each subject has a
-unique <code>subject_id</code> and associated metadata (species,
-genotype, cohort, etc.). Represented as a row in
-<code>subject_tbl</code>.</td>
+<td>One organism in a study. Each subject has a unique
+<code>subject_id</code> and metadata such as species, genotype, or
+cohort. A row in <code>subject_tbl</code>.</td>
 </tr>
 <tr class="even">
 <td><strong>Species</strong></td>
-<td>The biological species of a subject, for example “rat”, “mouse”, or
-“human”. Species are free-form values, not a fixed list, and are stored
-lower case. Required field in subject metadata.</td>
+<td>The species of a subject, for example “rat”, “mouse”, or “human”.
+Species are free-form values, not a fixed list, and are stored lower
+case. Required in subject metadata.</td>
 </tr>
 <tr class="odd">
 <td><strong>Cohort</strong></td>
-<td>A collection of subjects grouped for analysis. A cohort combines
-subject-level metadata, sample-to-assay mappings, and optional study
-context. The primary data container in biocohort.</td>
+<td>A group of subjects analyzed together. It combines subject-level
+metadata, sample-to-assay mappings, and optional study context. The main
+data container in biocohort.</td>
 </tr>
 <tr class="even">
 <td><strong>Study</strong></td>
-<td>Project-level metadata including study ID, title, research
-hypotheses, aims, assay types, and genome build versions. Optional
-context for a cohort.</td>
+<td>Project-level metadata: study ID, title, hypotheses, aims, assay
+types, and genome build versions. Optional context for a cohort.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section level2">
-<h2 id="sample-and-assay-concepts">Sample and Assay Concepts<a class="anchor" aria-label="anchor" href="#sample-and-assay-concepts"></a>
+<h2 id="sample-and-assay-concepts">Sample and assay concepts<a class="anchor" aria-label="anchor" href="#sample-and-assay-concepts"></a>
 </h2>
 <table class="table">
 <colgroup>
@@ -117,58 +115,57 @@ context for a cohort.</td>
 <tbody>
 <tr class="odd">
 <td><strong>Sample</strong></td>
-<td>A biospecimen (tissue or cells) collected from a subject for assay.
-Samples are identified by unique IDs (e.g., tumor or normal
-samples).</td>
+<td>A biospecimen (tissue or cells) collected from a subject for an
+assay. Samples have a unique ID, for example a tumor or normal
+sample.</td>
 </tr>
 <tr class="even">
 <td><strong>Assay</strong></td>
-<td>A high-throughput molecular technique applied to samples. Assays are
-free-form values, not a fixed list, e.g. <code>wgs</code>,
+<td>A molecular technique applied to a sample. Assays are free-form
+values, not a fixed list, for example <code>wgs</code>,
 <code>wes</code>, <code>atac</code>, <code>bulk_rna</code>,
-<code>scrna</code>. New assays are added simply by using a new label in
-the <code>assay</code> column.</td>
+<code>scrna</code>. A new assay is just a new label in the
+<code>assay</code> column.</td>
 </tr>
 <tr class="odd">
 <td>
 <strong>Role</strong> (<code>role</code>)</td>
-<td>The role a sample plays within its assay, e.g. <code>"tumor"</code>
-or <code>"normal"</code>. Designs without a tumor/normal distinction may
-leave <code>role</code> as <code>NA</code>.</td>
+<td>The part a sample plays within its assay, for example
+<code>"tumor"</code> or <code>"normal"</code>. A design with no
+tumor/normal split can leave <code>role</code> as <code>NA</code>.</td>
 </tr>
 <tr class="even">
-<td><strong>Tumor Sample</strong></td>
-<td>A sample collected from tumor tissue or neoplastic cells, recorded
-as a <code>sample_map</code> row with <code>role = "tumor"</code>.</td>
+<td><strong>Tumor sample</strong></td>
+<td>A sample from tumor tissue or neoplastic cells: a
+<code>sample_map</code> row with <code>role = "tumor"</code>.</td>
 </tr>
 <tr class="odd">
-<td><strong>Normal Sample</strong></td>
-<td>A sample collected from non-neoplastic tissue or control cells,
-recorded as a <code>sample_map</code> row with
-<code>role = "normal"</code>. A baseline for somatic mutation
-calling.</td>
+<td><strong>Normal sample</strong></td>
+<td>A sample from non-neoplastic tissue or a control: a
+<code>sample_map</code> row with <code>role = "normal"</code>. A
+baseline for somatic mutation calling.</td>
 </tr>
 <tr class="even">
 <td>
 <strong>Sample ID</strong> (<code>sample_id</code>)</td>
-<td>A unique identifier for an individual sample, independent of the
-subject ID. Allows samples from the same subject to be
-distinguished.</td>
+<td>A unique ID for one sample, separate from the subject ID. Tells
+apart samples from the same subject.</td>
 </tr>
 <tr class="odd">
 <td>
 <strong>Pair</strong> (<code>pair_id</code>)</td>
-<td>A tumor/normal (case/control) pairing of two samples of the same
-assay for one subject, derived on demand from <code>sample_map</code>
-via <code><a href="../reference/sample_pairs.html">sample_pairs()</a></code>. The <code>pair_id</code> is
-<code>paste0(tumor_sample_id, "__", normal_sample_id)</code>. Pairing is
-assay-agnostic and is not stored in <code>sample_map</code> itself.</td>
+<td>A tumor and normal pairing of two samples of the same assay, for one
+subject. Derived on demand from <code>sample_map</code> with
+<code><a href="../reference/sample_pairs.html">sample_pairs()</a></code>. The <code>pair_id</code> is
+<code>paste0(tumor_sample_id, "__", normal_sample_id)</code>. Pairing
+works for any assay and is not stored in <code>sample_map</code>
+itself.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section level2">
-<h2 id="data-tables">Data Tables<a class="anchor" aria-label="anchor" href="#data-tables"></a>
+<h2 id="data-tables">Data tables<a class="anchor" aria-label="anchor" href="#data-tables"></a>
 </h2>
 <table class="table">
 <colgroup>
@@ -179,12 +176,12 @@ assay-agnostic and is not stored in <code>sample_map</code> itself.</td>
 <thead><tr class="header">
 <th>Table</th>
 <th>Purpose</th>
-<th>Common Columns</th>
+<th>Common columns</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td><strong>subject_tbl</strong></td>
-<td>Subject-level metadata with one row per subject.</td>
+<td>Subject-level metadata, one row per subject.</td>
 <td>
 <code>subject_id</code>, <code>species</code>, <code>sex</code>,
 <code>strain</code>, <code>genotype</code>, <code>cohort</code>,
@@ -193,8 +190,8 @@ assay-agnostic and is not stored in <code>sample_map</code> itself.</td>
 </tr>
 <tr class="even">
 <td><strong>sample_map</strong></td>
-<td>Canonical long-format mapping of subjects to samples, one row per
-sample. New assays are new rows, never new columns.</td>
+<td>The long-format map of subjects to samples, one row per sample. A
+new assay is a new row, never a new column.</td>
 <td>
 <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>,
 <code>role</code>
@@ -202,8 +199,8 @@ sample. New assays are new rows, never new columns.</td>
 </tr>
 <tr class="odd">
 <td><strong>completeness_tbl</strong></td>
-<td>Per-assay sample counts, one row per <code>subject_id</code> x
-<code>assay</code>.</td>
+<td>Sample counts per assay, one row per <code>subject_id</code> and
+<code>assay</code> pair.</td>
 <td>
 <code>subject_id</code>, <code>assay</code>,
 <code>n_samples</code>
@@ -213,7 +210,7 @@ sample. New assays are new rows, never new columns.</td>
 </table>
 </div>
 <div class="section level2">
-<h2 id="registry-and-analysis">Registry and Analysis<a class="anchor" aria-label="anchor" href="#registry-and-analysis"></a>
+<h2 id="registry-and-analysis">Registry and analysis<a class="anchor" aria-label="anchor" href="#registry-and-analysis"></a>
 </h2>
 <table class="table">
 <colgroup>
@@ -226,31 +223,28 @@ sample. New assays are new rows, never new columns.</td>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><strong>Analysis Registry</strong></td>
-<td>A named collection of AnalysisSpec objects defining and documenting
-analyses performed on a cohort. Each spec has a unique name and defines
-input data, method, parameters, and outputs. Stored in
-<code>cohort@registry</code>.</td>
+<td><strong>Analysis registry</strong></td>
+<td>A named set of <code>AnalysisSpec</code> objects that document the
+analyses run on a cohort. Each spec has a unique name and describes its
+input, method, and output. Stored in <code>cohort@registry</code>.</td>
 </tr>
 <tr class="even">
 <td><strong>AnalysisSpec</strong></td>
-<td>A specification object (S7 class) that documents a single analysis:
-its name, description, metadata attributes (input/output types, version,
-etc.), and custom fields for configuration. Used to track
-reproducibility and parameter provenance.</td>
+<td>An S7 object that documents one analysis: its name, description,
+input and output type, version, and any other configuration. Used to
+track how a result was produced.</td>
 </tr>
 <tr class="odd">
-<td><strong>Analysis Artifact</strong></td>
-<td>An output or intermediate result produced by an analysis: a table,
-plot, model, or other data object. Artifacts are stored in
-<code>cohort@analyses</code> under the analysis name and can be
-retrieved later.</td>
+<td><strong>Analysis artifact</strong></td>
+<td>An output of an analysis: a table, a plot, a model, or any other
+object. Stored in <code>cohort@analyses</code> under the analysis name,
+and read back later.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section level2">
-<h2 id="data-organization">Data Organization<a class="anchor" aria-label="anchor" href="#data-organization"></a>
+<h2 id="data-organization">Data organization<a class="anchor" aria-label="anchor" href="#data-organization"></a>
 </h2>
 <table class="table">
 <colgroup>
@@ -264,25 +258,23 @@ retrieved later.</td>
 <tbody>
 <tr class="odd">
 <td><strong>Manifest</strong></td>
-<td>A CSV (or other tabular) file containing metadata and sample
-identifiers for all subjects in a study. Validated by
-<code><a href="../reference/validate_manifest.html">validate_manifest()</a></code> and <code><a href="../reference/read_manifest_csv.html">read_manifest_csv()</a></code> to
-create structured subject and sample tables.</td>
+<td>A CSV, or other tabular file, with the metadata and sample IDs for a
+study. <code><a href="../reference/validate_manifest.html">validate_manifest()</a></code> and <code><a href="../reference/read_manifest.html">read_manifest()</a></code>
+turn it into <code>subject_tbl</code> and <code>sample_map</code>.</td>
 </tr>
 <tr class="even">
 <td><strong>Manifest CSV</strong></td>
-<td>A long-format, comma-separated text file with one row per sample.
-Required columns: <code>subject_id</code>, <code>assay</code>,
-<code>sample_id</code>. Optional: <code>role</code> plus any
-subject-level metadata (<code>species</code>, <code>sex</code>,
-<code>genotype</code>, <code>cohort</code>, …), which must be constant
-within a subject.</td>
+<td>A long-format, comma-separated file, one row per sample. Required
+columns: <code>subject_id</code>, <code>assay</code>,
+<code>sample_id</code>. Optional: <code>role</code>, plus any
+subject-level metadata (species, sex, genotype, cohort), which must stay
+constant within a subject.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section level2">
-<h2 id="genotype-and-phenotype">Genotype and Phenotype<a class="anchor" aria-label="anchor" href="#genotype-and-phenotype"></a>
+<h2 id="genotype-and-phenotype">Genotype and phenotype<a class="anchor" aria-label="anchor" href="#genotype-and-phenotype"></a>
 </h2>
 <table class="table">
 <colgroup>
@@ -296,36 +288,35 @@ within a subject.</td>
 <tbody>
 <tr class="odd">
 <td><strong>Genotype</strong></td>
-<td>The genetic makeup or background of a subject (e.g., “WT” =
-wild-type, “KO” = knockout, “HET” = heterozygous). Optional metadata
-field.</td>
+<td>The genetic background of a subject, for example “WT” (wild-type),
+“KO” (knockout), or “HET” (heterozygous). Optional.</td>
 </tr>
 <tr class="even">
 <td><strong>Sex</strong></td>
-<td>Biological sex of the subject: “M” (male) or “F” (female). Optional
-metadata field.</td>
+<td>The biological sex of a subject: “M” or “F”. Optional.</td>
 </tr>
 <tr class="odd">
 <td><strong>Strain</strong></td>
-<td>The inbred strain or breed designation of the subject (e.g.,
-“Fischer 344”, “B6”). Optional metadata field.</td>
+<td>The inbred strain or breed of a subject, for example “Fischer 344”
+or “B6”. Optional.</td>
 </tr>
 <tr class="even">
-<td><strong>Cohort</strong></td>
-<td>A treatment group, experimental condition, or temporal grouping of
-subjects (e.g., “Control”, “Treatment_A”, “Tumor_Bearing”). Optional
-metadata field distinct from Cohort objects.</td>
+<td>
+<strong>Cohort</strong> (column)</td>
+<td>A treatment group or condition, for example “Control” or
+“Treatment_A”. A subject-level column, distinct from a
+<code>Cohort</code> object.</td>
 </tr>
 <tr class="odd">
 <td><strong>Timepoint</strong></td>
-<td>A study visit, collection date, or experimental phase identifier
-(e.g., “Day 0”, “Week 12”). Optional metadata field.</td>
+<td>A study visit, age, or collection date, for example “Day 0” or “Week
+12”. Optional.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section level2">
-<h2 id="object-structure">Object Structure<a class="anchor" aria-label="anchor" href="#object-structure"></a>
+<h2 id="object-structure">Object structure<a class="anchor" aria-label="anchor" href="#object-structure"></a>
 </h2>
 <table class="table">
 <colgroup>
@@ -338,37 +329,34 @@ metadata field distinct from Cohort objects.</td>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><strong>S7 Class</strong></td>
-<td>A formal object-oriented programming model in R (via the S7 package)
-providing immutable properties, type validation, and method dispatch.
-All biocohort core objects (Study, Subject, Cohort) are S7 classes.</td>
+<td><strong>S7 class</strong></td>
+<td>R’s formal object system (the S7 package). It gives typed, immutable
+properties and method dispatch. <code>Study</code>,
+<code>Subject</code>, and <code>Cohort</code> are all S7 classes.</td>
 </tr>
 <tr class="even">
 <td><strong>Property</strong></td>
-<td>A named field in an S7 class, accessed via the <code>@</code>
-operator (e.g., <code>cohort@subject_tbl</code>,
-<code>study@title</code>). Properties are typed and immutable once
-created.</td>
+<td>A named field on an S7 object, read with <code>@</code>, for example
+<code>cohort@subject_tbl</code> or <code>study@title</code>. Set once,
+at construction.</td>
 </tr>
 <tr class="odd">
-<td><strong>Subject Object</strong></td>
-<td>An S7 instance of the Subject class encapsulating a single subject’s
-metadata. Built on demand from a Cohort with
-<code>subject(cohort, id)</code>, or directly with
-<code><a href="../reference/subject_new.html">subject_new()</a></code>. A Cohort stores subjects as rows of
+<td><strong>Subject object</strong></td>
+<td>One subject’s metadata as an S7 object. Built on demand from a
+cohort with <code>subject(cohort, id)</code>, or directly with
+<code><a href="../reference/subject_new.html">subject_new()</a></code>. A cohort stores subjects as rows of
 <code>subject_tbl</code>, not as objects.</td>
 </tr>
 <tr class="even">
-<td><strong>Cohort Object</strong></td>
-<td>An S7 instance of the Cohort class serving as the primary data
-container: holds subjects, sample mappings, optional study context, file
-paths, analyses, and a registry of analysis specifications.</td>
+<td><strong>Cohort object</strong></td>
+<td>The main data container: subjects, sample mappings, optional study
+context, file paths, analyses, and a registry of analysis specs.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section level2">
-<h2 id="file-and-path-references">File and Path References<a class="anchor" aria-label="anchor" href="#file-and-path-references"></a>
+<h2 id="file-and-path-references">File and path references<a class="anchor" aria-label="anchor" href="#file-and-path-references"></a>
 </h2>
 <table class="table">
 <colgroup>
@@ -381,20 +369,18 @@ paths, analyses, and a registry of analysis specifications.</td>
 </tr></thead>
 <tbody><tr class="odd">
 <td><strong>Paths</strong></td>
-<td>A named list stored in <code>cohort@paths</code> that maps logical
-names (e.g., “wes_vcf_dir”, “rna_matrix_file”) to file system paths or
-URLs. Used to organize and reference analysis input/output
-locations.</td>
+<td>A named list in <code>cohort@paths</code> that maps a name, for
+example <code>"wes_vcf_dir"</code>, to a file path or URL. Used to point
+at analysis inputs and outputs.</td>
 </tr></tbody>
 </table>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="further-reading">Further Reading<a class="anchor" aria-label="anchor" href="#further-reading"></a>
+<h2 id="further-reading">Further reading<a class="anchor" aria-label="anchor" href="#further-reading"></a>
 </h2>
-<p>See the <a href="naming-conventions.html">Naming Conventions</a>
-article for standardized conventions for column names, object names, and
-file names.</p>
+<p>See <a href="naming-conventions.html">Naming conventions</a> for the
+standard names for columns, objects, and files.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

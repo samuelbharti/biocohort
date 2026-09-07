@@ -1,8 +1,4 @@
-# biocohort (R package)
-
-This directory holds the R package. See the repository root
-[README.md](https://www.samuelbharti.com/README.md) for what biocohort
-is for and how the repository is laid out.
+# biocohort
 
 biocohort keeps the subjects, samples, and analysis outputs of a
 genomics study in one validated object. Species and assays are values in
@@ -15,10 +11,8 @@ organism and any assay.
 
 ``` r
 
-# From GitHub, from a checkout of the repository root
-devtools::install("pkg-r")
-
-# From GitHub, from anywhere
+pak::pak("samuelbharti/biocohort/pkg-r")
+# or
 remotes::install_github("samuelbharti/biocohort", subdir = "pkg-r")
 ```
 
@@ -120,7 +114,7 @@ The package website includes:
 - **[Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.html)**:
   key terms and definitions.
 - **[Naming
-  Conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.html)**:
+  conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.html)**:
   standard column, object, and file names.
 
 To build the site locally, run from the repository root:

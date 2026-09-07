@@ -47,9 +47,8 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="biocohort-r-package">biocohort (R package)<a class="anchor" aria-label="anchor" href="#biocohort-r-package"></a>
+<div class="page-header"><h1 id="biocohort">biocohort<a class="anchor" aria-label="anchor" href="#biocohort"></a>
 </h1></div>
-<p>This directory holds the R package. See the repository root <a href="../README.html">README.md</a> for what biocohort is for and how the repository is laid out.</p>
 <!-- badges: start -->
 
 <p>biocohort keeps the subjects, samples, and analysis outputs of a genomics study in one validated object. Species and assays are values in the data, not columns or classes, so the same functions work for any organism and any assay.</p>
@@ -58,10 +57,8 @@
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># From GitHub, from a checkout of the repository root</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"pkg-r"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># From GitHub, from anywhere</span></span>
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"samuelbharti/biocohort/pkg-r"</span><span class="op">)</span></span>
+<span><span class="co"># or</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"samuelbharti/biocohort"</span>, subdir <span class="op">=</span> <span class="st">"pkg-r"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -125,7 +122,7 @@ R2,rat,KO,wes,N2,normal</code></pre>
 <li>
 <strong><a href="https://www.samuelbharti.com/biocohort/articles/glossary.html">Glossary</a></strong>: key terms and definitions.</li>
 <li>
-<strong><a href="https://www.samuelbharti.com/biocohort/articles/naming-conventions.html">Naming Conventions</a></strong>: standard column, object, and file names.</li>
+<strong><a href="https://www.samuelbharti.com/biocohort/articles/naming-conventions.html">Naming conventions</a></strong>: standard column, object, and file names.</li>
 </ul>
 <p>To build the site locally, run from the repository root:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">

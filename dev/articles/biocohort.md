@@ -205,7 +205,7 @@ for the file format.
 
 [`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
 moves a feature table from one species or genome build to another.
-Coordinate features go through a liftover backend; gene features go
+Coordinate features go through a liftover backend. Gene features go
 through an ortholog backend. See
 [`?translate`](https://www.samuelbharti.com/biocohort/reference/translate.md)
 and
@@ -218,5 +218,5 @@ for the full set of options, including how to register a custom backend.
   [Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.md)
   article defines the terms used across the package.
 - The [Naming
-  Conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.md)
+  conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.md)
   article lists the standard names for columns, objects, and files.

@@ -83,8 +83,8 @@ other organism and assay.
 - [`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
   moves a feature table across genome builds or species. Coordinate
   features go through a liftover backend
-  ([`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md));
-  gene features go through an ortholog backend
+  ([`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md)).
+  Gene features go through an ortholog backend
   ([`ortholog_genes()`](https://www.samuelbharti.com/biocohort/reference/ortholog_genes.md)).
   Both kinds of backend are pluggable through
   [`register_liftover_backend()`](https://www.samuelbharti.com/biocohort/reference/register_liftover_backend.md)
@@ -125,7 +125,7 @@ article walks through a manifest, a cohort, and a sample sheet end to
 end. The
 [Glossary](https://www.samuelbharti.com/biocohort/reference/articles/glossary.md)
 defines the terms used across the package, and [Naming
-Conventions](https://www.samuelbharti.com/biocohort/reference/articles/naming-conventions.md)
+conventions](https://www.samuelbharti.com/biocohort/reference/articles/naming-conventions.md)
 lists the standard names for columns, objects, and files.
 
 ## See also

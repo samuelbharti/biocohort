@@ -59,13 +59,13 @@
 
     
     
-<p>This document describes standardized naming conventions used in
-biocohort for data columns, R objects, functions, and file names.</p>
+<p>This article lists the standard names biocohort uses for columns, R
+objects, functions, and files.</p>
 <div class="section level2">
-<h2 id="column-names">Column Names<a class="anchor" aria-label="anchor" href="#column-names"></a>
+<h2 id="column-names">Column names<a class="anchor" aria-label="anchor" href="#column-names"></a>
 </h2>
 <div class="section level3">
-<h3 id="subject-level-metadata-subject_tbl">Subject-Level Metadata (<code>subject_tbl</code>)<a class="anchor" aria-label="anchor" href="#subject-level-metadata-subject_tbl"></a>
+<h3 id="subject-level-metadata-subject_tbl">Subject-level metadata (<code>subject_tbl</code>)<a class="anchor" aria-label="anchor" href="#subject-level-metadata-subject_tbl"></a>
 </h3>
 <table class="table">
 <colgroup>
@@ -82,56 +82,56 @@ biocohort for data columns, R objects, functions, and file names.</p>
 <tr class="odd">
 <td><code>subject_id</code></td>
 <td>character</td>
-<td>Unique subject identifier. Species-agnostic; use the same column for
-rat, mouse, or human studies.</td>
+<td>A unique subject ID. Works the same for any species.</td>
 </tr>
 <tr class="even">
 <td><code>species</code></td>
 <td>character</td>
-<td>Species designation: “rat”, “mouse”, or “human”.</td>
+<td>The subject’s species, for example “rat” or “mouse”. Free-form, not
+a fixed list, and stored lower case.</td>
 </tr>
 <tr class="odd">
 <td><code>sex</code></td>
 <td>character</td>
-<td>Biological sex: “M” (male), “F” (female), or NA if unknown.</td>
+<td>Biological sex: “M”, “F”, or <code>NA</code> if unknown.</td>
 </tr>
 <tr class="even">
 <td><code>strain</code></td>
 <td>character</td>
-<td>Strain or breed (e.g., “Fischer 344”, “B6”).</td>
+<td>Strain or breed, for example “Fischer 344” or “B6”.</td>
 </tr>
 <tr class="odd">
 <td><code>genotype</code></td>
 <td>character</td>
-<td>Genetic background or modification (e.g., “WT”, “KO”, “HET”).</td>
+<td>Genetic background or modification, for example “WT”, “KO”,
+“HET”.</td>
 </tr>
 <tr class="even">
 <td><code>cohort</code></td>
 <td>character</td>
-<td>Treatment group or cohort membership (e.g., “Control”,
-“Treatment_A”).</td>
+<td>Treatment group or cohort membership, for example “Control”,
+“Treatment_A”.</td>
 </tr>
 <tr class="odd">
 <td><code>timepoint</code></td>
 <td>character</td>
-<td>Study visit, age, or collection date (e.g., “Day_0”, “Week_12”,
-“8wks”).</td>
+<td>Study visit, age, or collection date, for example “Day_0”,
+“Week_12”, “8wks”.</td>
 </tr>
 <tr class="even">
 <td><code>notes</code></td>
 <td>character</td>
-<td>Free-form annotations or additional metadata.</td>
+<td>Free-form annotations.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section level3">
-<h3 id="sample-mapping-columns-sample_map">Sample Mapping Columns (<code>sample_map</code>)<a class="anchor" aria-label="anchor" href="#sample-mapping-columns-sample_map"></a>
+<h3 id="sample-mapping-columns-sample_map">Sample mapping columns (<code>sample_map</code>)<a class="anchor" aria-label="anchor" href="#sample-mapping-columns-sample_map"></a>
 </h3>
-<p>The <code>sample_map</code> is the canonical, long-format sample
-table: one row per sample, with any number of assays and roles. New
-assays are represented as new rows, never new columns or per-assay
-tables.</p>
+<p><code>sample_map</code> is the canonical, long-format sample table:
+one row per sample, covering any number of assays and roles. A new assay
+is a new row, never a new column or a new table.</p>
 <table class="table">
 <colgroup>
 <col width="29%">
@@ -147,39 +147,39 @@ tables.</p>
 <tr class="odd">
 <td><code>subject_id</code></td>
 <td>character</td>
-<td>Reference to subject in <code>subject_tbl</code>.</td>
+<td>Reference to a subject in <code>subject_tbl</code>.</td>
 </tr>
 <tr class="even">
 <td><code>assay</code></td>
 <td>character</td>
-<td>Assay type (free-form value), e.g. <code>"wgs"</code>,
+<td>The assay, a free-form value, for example <code>"wgs"</code>,
 <code>"wes"</code>, <code>"atac"</code>, <code>"bulk_rna"</code>,
 <code>"scrna"</code>.</td>
 </tr>
 <tr class="odd">
 <td><code>sample_id</code></td>
 <td>character</td>
-<td>Unique sample identifier.</td>
+<td>A unique sample ID.</td>
 </tr>
 <tr class="even">
 <td><code>role</code></td>
 <td>character</td>
-<td>Sample role within its assay, e.g. <code>"tumor"</code>,
-<code>"normal"</code>, or <code>NA</code> when not applicable.</td>
+<td>The sample’s role within its assay, for example
+<code>"tumor"</code>, <code>"normal"</code>, or <code>NA</code> when it
+does not apply.</td>
 </tr>
 </tbody>
 </table>
-<p>Other sample-level columns (e.g. <code>fastq_1</code>,
-<code>fastq_2</code>, <code>bam</code>, <code>lane</code>,
-<code>replicate</code>, <code>qc_status</code>) stay in
-<code>sample_map</code> when their name is one
-<code><a href="../reference/validate_manifest.html">validate_manifest()</a></code> recognizes, or when passed in its
-<code>sample_cols</code> argument. A column that varies within a subject
-but is not recognized or declared trips the subject-level conflict check
-instead.</p>
+<p>Other sample-level columns, such as <code>fastq_1</code>,
+<code>fastq_2</code>, <code>bam</code>, <code>lane</code>, or
+<code>replicate</code>, stay in <code>sample_map</code> when
+<code><a href="../reference/validate_manifest.html">validate_manifest()</a></code> already knows the name, or when it is
+passed in the <code>sample_cols</code> argument. A column that varies
+within a subject but is not recognized or declared trips the
+subject-level conflict check instead.</p>
 </div>
 <div class="section level3">
-<h3 id="completeness-summary-columns-completeness_tbl">Completeness Summary Columns (<code>completeness_tbl</code>)<a class="anchor" aria-label="anchor" href="#completeness-summary-columns-completeness_tbl"></a>
+<h3 id="completeness-summary-columns-completeness_tbl">Completeness summary columns (<code>completeness_tbl</code>)<a class="anchor" aria-label="anchor" href="#completeness-summary-columns-completeness_tbl"></a>
 </h3>
 <table class="table">
 <colgroup>
@@ -196,28 +196,27 @@ instead.</p>
 <tr class="odd">
 <td><code>subject_id</code></td>
 <td>character</td>
-<td>Reference to subject in <code>subject_tbl</code>.</td>
+<td>Reference to a subject in <code>subject_tbl</code>.</td>
 </tr>
 <tr class="even">
 <td><code>assay</code></td>
 <td>character</td>
-<td>Assay type, matching values in <code>sample_map</code>.</td>
+<td>The assay, matching values in <code>sample_map</code>.</td>
 </tr>
 <tr class="odd">
 <td><code>n_samples</code></td>
 <td>integer</td>
-<td>Number of samples available for the subject within the assay.</td>
+<td>Sample count for the subject within the assay.</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="section level2">
-<h2 id="assay-type-values">Assay Type Values<a class="anchor" aria-label="anchor" href="#assay-type-values"></a>
+<h2 id="assay-type-values">Assay type values<a class="anchor" aria-label="anchor" href="#assay-type-values"></a>
 </h2>
-<p><code>assay</code> is a free-form lowercase value, not a fixed
-enumeration. Pick a stable label per assay and reuse it consistently.
-Common examples:</p>
+<p><code>assay</code> is a free-form, lowercase value, not a fixed list.
+Pick a stable label per assay and reuse it. Common examples:</p>
 <table class="table">
 <colgroup>
 <col width="26%">
@@ -253,64 +252,64 @@ Common examples:</p>
 <tr class="odd">
 <td>Single-cell / single-nucleus RNA-seq</td>
 <td><code>"scrna"</code></td>
-<td>Single-cell/nucleus transcriptomics.</td>
+<td>Single-cell or single-nucleus transcriptomics.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section level2">
-<h2 id="sample-id-formats">Sample ID Formats<a class="anchor" aria-label="anchor" href="#sample-id-formats"></a>
+<h2 id="sample-id-formats">Sample ID formats<a class="anchor" aria-label="anchor" href="#sample-id-formats"></a>
 </h2>
-<p>While biocohort does not enforce specific sample ID formats, adopt a
-consistent project-wide convention. Encoding the assay and role in the
-ID can aid readability:</p>
+<p>biocohort does not enforce a sample ID format. Pick one convention
+for a project and keep it. Putting the assay and role in the ID makes it
+easier to read:</p>
 <ul>
 <li>
-<strong>Tumor</strong>: <code>{assay}_T{subject}</code> (e.g.,
-“wes_T101”, “wgs_T001”)</li>
+<strong>Tumor</strong>: <code>{assay}_T{subject}</code>, for example
+<code>"wes_T101"</code>, <code>"wgs_T001"</code>.</li>
 <li>
-<strong>Normal</strong>: <code>{assay}_N{subject}</code> (e.g.,
-“wes_N101”, “wgs_N001”)</li>
+<strong>Normal</strong>: <code>{assay}_N{subject}</code>, for
+example <code>"wes_N101"</code>, <code>"wgs_N001"</code>.</li>
 <li>
-<strong>Single-cell/RNA</strong>:
-<code>{assay}_{subject}_{rep}</code> (e.g., “scrna_101_1”,
-“bulk_rna_101_2”)</li>
+<strong>Single-cell or RNA</strong>:
+<code>{assay}_{subject}_{rep}</code>, for example
+<code>"scrna_101_1"</code>, <code>"bulk_rna_101_2"</code>.</li>
 </ul>
-<p>Tumor/normal <strong>pairs</strong> are not stored in
-<code>sample_map</code>; derive them on demand with
-<code><a href="../reference/sample_pairs.html">sample_pairs()</a></code>, which yields a <code>pair_id</code> of
-<code>{tumor_sample_id}__{normal_sample_id}</code> (e.g.,
-“wes_T101__wes_N101”).</p>
+<p>Tumor and normal <strong>pairs</strong> are not stored in
+<code>sample_map</code>. Derive them on demand with
+<code><a href="../reference/sample_pairs.html">sample_pairs()</a></code>, which builds a <code>pair_id</code> of
+<code>{tumor_sample_id}__{normal_sample_id}</code>, for example
+<code>"wes_T101__wes_N101"</code>.</p>
 </div>
 <div class="section level2">
-<h2 id="object-names">Object Names<a class="anchor" aria-label="anchor" href="#object-names"></a>
+<h2 id="object-names">Object names<a class="anchor" aria-label="anchor" href="#object-names"></a>
 </h2>
 <div class="section level3">
-<h3 id="r-objects-and-variables">R Objects and Variables<a class="anchor" aria-label="anchor" href="#r-objects-and-variables"></a>
+<h3 id="r-objects-and-variables">R objects and variables<a class="anchor" aria-label="anchor" href="#r-objects-and-variables"></a>
 </h3>
 <ul>
 <li>
-<strong>Study objects</strong>: snake_case, descriptive (e.g.,
-<code>my_study</code>, <code>pilot_study</code>) or explicitly named
+<strong>Study objects</strong>: snake_case and descriptive, for
+example <code>my_study</code>, <code>pilot_study</code>, or just
 <code>study</code> in examples.</li>
 <li>
-<strong>Cohort objects</strong>: snake_case (e.g.,
+<strong>Cohort objects</strong>: snake_case, for example
 <code>cohort</code>, <code>pilot_cohort</code>,
-<code>study_cohort</code>).</li>
+<code>study_cohort</code>.</li>
 <li>
-<strong>Subject objects</strong>: Rarely used directly; built on
+<strong>Subject objects</strong>: rarely used directly. Build one on
 demand with <code>subject(cohort, subject_id)</code>.</li>
 <li>
-<strong>AnalysisSpec objects</strong>: Use spec name as primary
-identifier (stored in registry with name as key).</li>
+<strong>AnalysisSpec objects</strong>: identified by the spec’s own
+<code>name</code>, which is also its key in the registry.</li>
 <li>
-<strong>Data tables</strong>: snake_case with <code>_tbl</code>
-suffix or use descriptive names like <code>subject_data</code>,
+<strong>Data tables</strong>: snake_case with a <code>_tbl</code>
+suffix, or a descriptive name such as <code>subject_data</code> or
 <code>wes_samples</code>.</li>
 </ul>
 </div>
 <div class="section level3">
-<h3 id="example-object-creation">Example Object Creation<a class="anchor" aria-label="anchor" href="#example-object-creation"></a>
+<h3 id="example-object-creation">Example object creation<a class="anchor" aria-label="anchor" href="#example-object-creation"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Study</span></span>
@@ -329,84 +328,79 @@ suffix or use descriptive names like <code>subject_data</code>,
 <span><span class="co"># Read one subject as a Subject object</span></span>
 <span><span class="va">rat_101</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cohort-subject.html">subject</a></span><span class="op">(</span><span class="va">cohort</span>, <span class="st">"RAT_101"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Access analysis</span></span>
+<span><span class="co"># Read a stored analysis result</span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="va">cohort</span><span class="op">@</span><span class="va">analyses</span><span class="op">[[</span><span class="st">"my_analysis_name"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="function-names">Function Names<a class="anchor" aria-label="anchor" href="#function-names"></a>
+<h2 id="function-names">Function names<a class="anchor" aria-label="anchor" href="#function-names"></a>
 </h2>
 <ul>
 <li>
-<strong>Constructor functions</strong>: <code>{noun}_new()</code>
-(e.g., <code><a href="../reference/study_new.html">study_new()</a></code>, <code><a href="../reference/cohort_new.html">cohort_new()</a></code>)</li>
+<strong>Constructors</strong>: <code>{noun}_new()</code>, for
+example <code><a href="../reference/study_new.html">study_new()</a></code>, <code><a href="../reference/cohort_new.html">cohort_new()</a></code>.</li>
 <li>
-<strong>Validation functions</strong>:
-<code>validate_{noun}()</code> (e.g., <code><a href="../reference/validate_manifest.html">validate_manifest()</a></code>,
-<code><a href="../reference/validate_cohort.html">validate_cohort()</a></code>)</li>
+<strong>Validation</strong>: <code>validate_{noun}()</code>, for
+example <code><a href="../reference/validate_manifest.html">validate_manifest()</a></code>,
+<code><a href="../reference/validate_cohort.html">validate_cohort()</a></code>.</li>
 <li>
-<strong>Accessor/getter functions</strong>:
-<code>get_{property}()</code> or simply reference property directly
-(e.g., <code>cohort@subject_tbl</code>)</li>
+<strong>Accessors</strong>: a plain noun, for example
+<code><a href="../reference/subjects.html">subjects()</a></code>, <code><a href="../reference/samples.html">samples()</a></code>, or read the property
+directly with <code>@</code>, for example
+<code>cohort@subject_tbl</code>.</li>
 <li>
-<strong>IO functions</strong>: <code>read_{format}()</code> or
-<code>write_{format}()</code> (e.g.,
-<code><a href="../reference/read_manifest_csv.html">read_manifest_csv()</a></code>)</li>
+<strong>IO</strong>: <code>read_{format}()</code> or
+<code>write_{format}()</code>, for example
+<code><a href="../reference/read_manifest.html">read_manifest()</a></code>.</li>
 <li>
-<strong>Helper functions</strong>: lowercase with underscores (e.g.,
-<code><a href="../reference/sample_pairs.html">sample_pairs()</a></code>)</li>
+<strong>Helpers</strong>: lowercase with underscores, for example
+<code><a href="../reference/sample_pairs.html">sample_pairs()</a></code>.</li>
 <li>
-<strong>S7 methods</strong>: Dispatch on class; function name
-describes operation (e.g., <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method for Cohort)</li>
+<strong>S7 methods</strong>: dispatch on class, named for what they
+do, for example <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> on a <code>Cohort</code>.</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="file-names">File Names<a class="anchor" aria-label="anchor" href="#file-names"></a>
+<h2 id="file-names">File names<a class="anchor" aria-label="anchor" href="#file-names"></a>
 </h2>
 <div class="section level3">
-<h3 id="package-code-files">Package Code Files<a class="anchor" aria-label="anchor" href="#package-code-files"></a>
+<h3 id="package-code-files">Package code files<a class="anchor" aria-label="anchor" href="#package-code-files"></a>
 </h3>
 <ul>
 <li>
-<strong>Class definitions</strong>: <code>classes.R</code>
-</li>
+<strong>Class definitions</strong>: <code>classes.R</code>.</li>
 <li>
-<strong>Constructors</strong>: <code>constructors.R</code>
-</li>
+<strong>Constructors</strong>: <code>constructors.R</code>.</li>
 <li>
 <strong>Validation</strong>: <code>validate.R</code>,
-<code>validate_manifest.R</code>
-</li>
+<code>validate_manifest.R</code>.</li>
 <li>
-<strong>IO (read/write)</strong>: <code>io.R</code>
-</li>
+<strong>IO</strong>: <code>io.R</code>.</li>
 <li>
-<strong>Methods and utilities</strong>: <code>{feature}.R</code>
-(e.g., <code>analysis_registry.R</code>, <code>print.R</code>)</li>
+<strong>Methods and utilities</strong>: <code>{feature}.R</code>,
+for example <code>analysis_registry.R</code>, <code>print.R</code>.</li>
 </ul>
 </div>
 <div class="section level3">
-<h3 id="data-files">Data Files<a class="anchor" aria-label="anchor" href="#data-files"></a>
+<h3 id="data-files">Data files<a class="anchor" aria-label="anchor" href="#data-files"></a>
 </h3>
 <ul>
 <li>
-<strong>Raw data</strong>: Use consistent prefix and descriptor
-(e.g., <code>manifest_study_001.csv</code>,
-<code>cohort_pilot_data.rda</code>)</li>
+<strong>Raw data</strong>: a consistent prefix and descriptor, for
+example <code>manifest_study_001.csv</code>,
+<code>cohort_pilot_data.rda</code>.</li>
 <li>
 <strong>Intermediate data</strong>:
 <code>{description}_{date}.rda</code> or
-<code>{description}_{version}.fst</code>
-</li>
+<code>{description}_{version}.fst</code>.</li>
 <li>
 <strong>Results</strong>:
 <code>{analysis}_{date}_{version}.csv</code> or
-<code>{analysis}_results.rda</code>
-</li>
+<code>{analysis}_results.rda</code>.</li>
 </ul>
 </div>
 <div class="section level3">
-<h3 id="example-manifest-file-names">Example Manifest File Names<a class="anchor" aria-label="anchor" href="#example-manifest-file-names"></a>
+<h3 id="example-manifest-file-names">Example manifest file names<a class="anchor" aria-label="anchor" href="#example-manifest-file-names"></a>
 </h3>
 <pre><code><span><span class="va">manifest_pilot_wes_rna_v1.csv</span></span>
 <span><span class="va">manifest_pilot_cohort.csv</span></span>
@@ -414,97 +408,69 @@ describes operation (e.g., <code><a href="https://rdrr.io/r/base/print.html" cla
 </div>
 </div>
 <div class="section level2">
-<h2 id="variable-and-parameter-naming">Variable and Parameter Naming<a class="anchor" aria-label="anchor" href="#variable-and-parameter-naming"></a>
+<h2 id="variable-and-parameter-naming">Variable and parameter naming<a class="anchor" aria-label="anchor" href="#variable-and-parameter-naming"></a>
 </h2>
-<div class="section level3">
-<h3 id="parameters-in-functions">Parameters in Functions<a class="anchor" aria-label="anchor" href="#parameters-in-functions"></a>
-</h3>
 <ul>
 <li>
-<strong>Input data</strong>: Describe clearly (e.g.,
+<strong>Input data</strong>: a clear name, for example
 <code>manifest</code>, <code>subject_tbl</code>,
-<code>sample_map</code>)</li>
+<code>sample_map</code>.</li>
 <li>
-<strong>Flags</strong>: Prefix with <code>is_</code> or
-<code>has_</code> (e.g., <code>is_valid</code>,
-<code>has_missing</code>)</li>
+<strong>Flags</strong>: prefixed with <code>is_</code> or
+<code>has_</code>, for example <code>is_valid</code>,
+<code>has_missing</code>.</li>
 <li>
-<strong>Counts</strong>: Prefix with <code>n_</code> (e.g.,
-<code>n_subjects</code>, <code>n_samples</code>)</li>
+<strong>Counts</strong>: prefixed with <code>n_</code>, for example
+<code>n_subjects</code>, <code>n_samples</code>.</li>
 <li>
-<strong>Logical conditions</strong>: <code>strict</code>,
-<code>verbose</code>, <code>allow_*</code> (e.g.,
-<code>allow_duplicates</code>)</li>
+<strong>Logical arguments</strong>: <code>strict</code>,
+<code>verbose</code>, <code>allow_*</code>, for example
+<code>allow_duplicates</code>.</li>
+<li>
+<strong>Named lists</strong>: keys are plain identifiers, for
+example <code>cohort@analyses[["my_analysis"]]</code>.</li>
 </ul>
-</div>
-<div class="section level3">
-<h3 id="vector-and-list-names">Vector and List Names<a class="anchor" aria-label="anchor" href="#vector-and-list-names"></a>
-</h3>
-<ul>
-<li>
-<strong>Output vectors/lists</strong>: Descriptive plural or
-singular depending on context</li>
-<li>
-<strong>Named lists</strong>: Keys should be identifiers or logical
-names (e.g., <code>cohort@analyses[["my_analysis"]]</code>)</li>
-</ul>
-</div>
 </div>
 <div class="section level2">
-<h2 id="documentation-and-markdown">Documentation and Markdown<a class="anchor" aria-label="anchor" href="#documentation-and-markdown"></a>
+<h2 id="documentation-and-markdown">Documentation and markdown<a class="anchor" aria-label="anchor" href="#documentation-and-markdown"></a>
 </h2>
-<div class="section level3">
-<h3 id="vignette-titles">Vignette Titles<a class="anchor" aria-label="anchor" href="#vignette-titles"></a>
-</h3>
 <ul>
-<li>Use sentence case (e.g., “Glossary”, “Naming conventions”)</li>
-<li>Markdown files: <code>{title_snake_case}.Rmd</code> (e.g.,
-<code>glossary.Rmd</code>, <code>naming-conventions.Rmd</code>)</li>
+<li>
+<strong>Vignette titles</strong>: sentence case, for example
+“Glossary”, “Naming conventions”. File names:
+<code>{title-in-kebab-case}.Rmd</code>, for example
+<code>glossary.Rmd</code>, <code>naming-conventions.Rmd</code>.</li>
+<li>
+<strong>Roxygen</strong>: every exported function gets a title,
+<code>@param</code>, <code>@return</code>, and a runnable
+<code>@examples</code> block. Link related functions with
+<code>[function_name()]</code> or <code>[ClassName]</code>.</li>
 </ul>
-</div>
-<div class="section level3">
-<h3 id="roxygen-documentation">Roxygen Documentation<a class="anchor" aria-label="anchor" href="#roxygen-documentation"></a>
-</h3>
-<ul>
-<li>Document classes and functions with descriptive titles and
-sections</li>
-<li>Use <code>@param</code>, <code>@return</code>,
-<code>@details</code>, <code>@examples</code> consistently</li>
-<li>Link to related functions with <code>[function_name()]</code> or
-<code>[ClassName]</code>
-</li>
-</ul>
-</div>
 </div>
 <div class="section level2">
-<h2 id="consistency-checklist">Consistency Checklist<a class="anchor" aria-label="anchor" href="#consistency-checklist"></a>
+<h2 id="a-quick-check-before-adding-something-new">A quick check before adding something new<a class="anchor" aria-label="anchor" href="#a-quick-check-before-adding-something-new"></a>
 </h2>
-<p>When creating new functions or tables, ensure:</p>
-<ul class="task-list">
-<li><label><input type="checkbox">Uses snake_case for functions and
-variables</label></li>
-<li><label><input type="checkbox">Uses PascalCase for S7 classes
-(Study, Subject, Cohort)</label></li>
-<li><label><input type="checkbox">Assay column values are lowercase,
-free-form labels (e.g., “wes”, “atac”, “scrna”)</label></li>
-<li><label><input type="checkbox">Sample ID columns end with
-<code>_id</code> or <code>_sample_id</code></label></li>
-<li><label><input type="checkbox">Logical columns begin with
-<code>has_</code>, <code>is_</code>, or are boolean tests</label></li>
-<li><label><input type="checkbox">Counts begin with
-<code>n_</code></label></li>
-<li><label><input type="checkbox">Data tables end with
-<code>_tbl</code> or <code>_table</code></label></li>
-<li><label><input type="checkbox">Documentation and examples are
-provided via roxygen</label></li>
+<ul>
+<li>Functions and variables use snake_case.</li>
+<li>S7 classes use PascalCase (<code>Study</code>, <code>Subject</code>,
+<code>Cohort</code>).</li>
+<li>Assay values are lowercase and free-form, for example
+<code>"wes"</code>, <code>"atac"</code>, <code>"scrna"</code>.</li>
+<li>Sample ID columns end in <code>_id</code> or
+<code>_sample_id</code>.</li>
+<li>Logical columns start with <code>has_</code> or <code>is_</code>, or
+read as a plain yes-or-no question.</li>
+<li>Count columns start with <code>n_</code>.</li>
+<li>Data tables end in <code>_tbl</code> or <code>_table</code>.</li>
+<li>New exports have roxygen documentation with a working example.</li>
 </ul>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="further-reading">Further Reading<a class="anchor" aria-label="anchor" href="#further-reading"></a>
+<h2 id="further-reading">Further reading<a class="anchor" aria-label="anchor" href="#further-reading"></a>
 </h2>
-<p>See the <a href="glossary.html">Glossary</a> article for detailed
-definitions of key terms and concepts.</p>
+<p>See the <a href="glossary.html">Glossary</a> article for what these
+terms mean.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
