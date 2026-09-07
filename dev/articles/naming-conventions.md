@@ -13,7 +13,7 @@ bioroster for data columns, R objects, functions, and file names.
 | `species` | character | Species designation: “rat”, “mouse”, or “human”. |
 | `sex` | character | Biological sex: “M” (male), “F” (female), or NA if unknown. |
 | `strain` | character | Strain or breed (e.g., “Fischer 344”, “B6”). |
-| `genotype` | character | Genetic background or modification (e.g., “WT”, “KO”, “NF1+/-”). |
+| `genotype` | character | Genetic background or modification (e.g., “WT”, “KO”, “HET”). |
 | `cohort` | character | Treatment group or cohort membership (e.g., “Control”, “Treatment_A”). |
 | `timepoint` | character | Study visit, age, or collection date (e.g., “Day_0”, “Week_12”, “8wks”). |
 | `notes` | character | Free-form annotations or additional metadata. |
@@ -81,8 +81,8 @@ which yields a `pair_id` of `{tumor_sample_id}__{normal_sample_id}`
 ### R Objects and Variables
 
 - **Study objects**: snake_case, descriptive (e.g., `my_study`,
-  `nf1_study`) or explicitly named `study` in examples.
-- **Cohort objects**: snake_case (e.g., `cohort`, `nf1_cohort`,
+  `pilot_study`) or explicitly named `study` in examples.
+- **Cohort objects**: snake_case (e.g., `cohort`, `pilot_cohort`,
   `study_cohort`).
 - **Subject objects**: Rarely used directly; built on demand with
   `subject(cohort, subject_id)`.
@@ -97,8 +97,8 @@ which yields a `pair_id` of `{tumor_sample_id}__{normal_sample_id}`
 
 # Study
 study <- study_new(
-  study_id = "NF1_001",
-  title = "NF1 Rat Genomics Study"
+  study_id = "STUDY_001",
+  title = "Example Genomics Study"
 )
 
 # Cohort
@@ -147,7 +147,7 @@ result <- cohort@analyses[["my_analysis_name"]]
 ### Data Files
 
 - **Raw data**: Use consistent prefix and descriptor (e.g.,
-  `manifest_nf1_001.csv`, `cohort_pilot_data.rda`)
+  `manifest_study_001.csv`, `cohort_pilot_data.rda`)
 - **Intermediate data**: `{description}_{date}.rda` or
   `{description}_{version}.fst`
 - **Results**: `{analysis}_{date}_{version}.csv` or
@@ -155,7 +155,7 @@ result <- cohort@analyses[["my_analysis_name"]]
 
 ### Example Manifest File Names
 
-    manifest_nf1_wes_rna_v1.csv
+    manifest_pilot_wes_rna_v1.csv
     manifest_pilot_cohort.csv
     cohort_complete_metadata.csv
 

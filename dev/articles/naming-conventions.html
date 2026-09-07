@@ -103,8 +103,7 @@ rat, mouse, or human studies.</td>
 <tr class="odd">
 <td><code>genotype</code></td>
 <td>character</td>
-<td>Genetic background or modification (e.g., “WT”, “KO”,
-“NF1+/-”).</td>
+<td>Genetic background or modification (e.g., “WT”, “KO”, “HET”).</td>
 </tr>
 <tr class="even">
 <td><code>cohort</code></td>
@@ -292,11 +291,11 @@ ID can aid readability:</p>
 <ul>
 <li>
 <strong>Study objects</strong>: snake_case, descriptive (e.g.,
-<code>my_study</code>, <code>nf1_study</code>) or explicitly named
+<code>my_study</code>, <code>pilot_study</code>) or explicitly named
 <code>study</code> in examples.</li>
 <li>
 <strong>Cohort objects</strong>: snake_case (e.g.,
-<code>cohort</code>, <code>nf1_cohort</code>,
+<code>cohort</code>, <code>pilot_cohort</code>,
 <code>study_cohort</code>).</li>
 <li>
 <strong>Subject objects</strong>: Rarely used directly; built on
@@ -316,8 +315,8 @@ suffix or use descriptive names like <code>subject_data</code>,
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Study</span></span>
 <span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/study_new.html">study_new</a></span><span class="op">(</span></span>
-<span>  study_id <span class="op">=</span> <span class="st">"NF1_001"</span>,</span>
-<span>  title <span class="op">=</span> <span class="st">"NF1 Rat Genomics Study"</span></span>
+<span>  study_id <span class="op">=</span> <span class="st">"STUDY_001"</span>,</span>
+<span>  title <span class="op">=</span> <span class="st">"Example Genomics Study"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Cohort</span></span>
@@ -392,7 +391,7 @@ describes operation (e.g., <code><a href="https://rdrr.io/r/base/print.html" cla
 <ul>
 <li>
 <strong>Raw data</strong>: Use consistent prefix and descriptor
-(e.g., <code>manifest_nf1_001.csv</code>,
+(e.g., <code>manifest_study_001.csv</code>,
 <code>cohort_pilot_data.rda</code>)</li>
 <li>
 <strong>Intermediate data</strong>:
@@ -409,7 +408,7 @@ describes operation (e.g., <code><a href="https://rdrr.io/r/base/print.html" cla
 <div class="section level3">
 <h3 id="example-manifest-file-names">Example Manifest File Names<a class="anchor" aria-label="anchor" href="#example-manifest-file-names"></a>
 </h3>
-<pre><code><span><span class="va">manifest_nf1_wes_rna_v1.csv</span></span>
+<pre><code><span><span class="va">manifest_pilot_wes_rna_v1.csv</span></span>
 <span><span class="va">manifest_pilot_cohort.csv</span></span>
 <span><span class="va">cohort_complete_metadata.csv</span></span></code></pre>
 </div>
