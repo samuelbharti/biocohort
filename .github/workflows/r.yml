@@ -47,9 +47,11 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
+          working-directory: pkg-r
 
       - uses: r-lib/actions/check-r-package@v2
         with:
+          working-directory: pkg-r
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
 
@@ -69,9 +71,11 @@ jobs:
         with:
           extra-packages: any::lintr, local::.
           needs: lint
+          working-directory: pkg-r
 
       - name: Lint
         run: lintr::lint_package()
         shell: Rscript {0}
+        working-directory: pkg-r
         env:
           LINTR_ERROR_ON_LINT: true

@@ -14,6 +14,13 @@ features across species through pluggable backends.
 It does not run pipelines and it does not do heavy analysis. It reads and
 standardizes outputs that other tools created.
 
+## Repository layout
+
+The R package lives in `pkg-r/`, not at the repository root. Run every package
+command with that path, for example `devtools::document("pkg-r")`. Files that
+apply to the whole repository, such as this one, `CONTRIBUTING.md`, and
+`CITATION.cff`, stay at the root.
+
 ## Ground rules
 
 - S7 classes for the data model. No S3 or S4 classes for core objects.
@@ -47,9 +54,9 @@ standardizes outputs that other tools created.
 ## Before you push
 
 ```sh
-Rscript -e "devtools::document()"
-Rscript -e "devtools::test()"
-Rscript -e "devtools::check()"
+Rscript -e "devtools::document('pkg-r')"
+Rscript -e "devtools::test('pkg-r')"
+Rscript -e "rcmdcheck::rcmdcheck('pkg-r', args = '--no-manual')"
 prek run --all-files
 ```
 

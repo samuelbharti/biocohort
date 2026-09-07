@@ -1,4 +1,8 @@
-# bioroster
+# bioroster (R package)
+
+This directory holds the R package. See the repository root
+[README.md](../README.md) for what bioroster is for and how the repository is
+laid out.
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/samuelbharti/bioroster/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/bioroster/actions/workflows/r.yml)
@@ -9,28 +13,57 @@ study in one validated object. Species and assays are values in the data,
 not columns or classes, so the same functions work for any organism and any
 assay.
 
-> **Status:** 0.1.0.9000, not released. The API can still change before a
-> first tagged version.
-
 **Documentation**: <https://www.samuelbharti.com/bioroster/>
-
-## Repository layout
-
-The R package lives in `pkg-r/`, not at the repository root. Run package
-commands from there, for example `devtools::test("pkg-r")` or
-`rcmdcheck::rcmdcheck("pkg-r")`. See [CONTRIBUTING.md](CONTRIBUTING.md) for the
-full workflow.
 
 ## Installation
 
-The package is not on CRAN. From GitHub, note the `subdir`. The package sits
-in `pkg-r/` rather than at the repository root, and an install that leaves
-this out fails without saying why:
+```r
+# From GitHub, from a checkout of the repository root
+devtools::install("pkg-r")
+
+# From GitHub, from anywhere
+remotes::install_github("samuelbharti/bioroster", subdir = "pkg-r")
+```
+
+## Quick start
+
+A manifest is one long-format table, one row per sample. Four columns carry
+the shape of the study: `subject_id`, `assay`, `sample_id`, `role`. Every
+other column is metadata.
+
+```csv
+subject_id,species,genotype,assay,sample_id,role
+R1,rat,WT,wes,T1,tumor
+R1,rat,WT,wes,N1,normal
+R2,rat,KO,wes,T2,tumor
+R2,rat,KO,wes,N2,normal
+```
 
 ```r
-pak::pak("samuelbharti/bioroster/pkg-r")
-# or
-remotes::install_github("samuelbharti/bioroster", subdir = "pkg-r")
+library(bioroster)
+
+parsed <- read_manifest("manifest.csv")
+cohort <- cohort_new(parsed$subject_tbl, parsed$sample_map)
+cohort
+#> ── Cohort
+#> • 2 subjects (2 rat)
+#> • 4 samples (4 wes)
+
+subjects(cohort)
+samples(cohort, assay = "wes")
+completeness(cohort, wide = TRUE)
+```
+
+Some studies keep one row per subject, with one id column per assay.
+`manifest_from_wide()` turns that into the long form first:
+
+```r
+id_cols <- data.frame(
+  column = c("wes_tumor_id", "wes_normal_id"),
+  assay = c("wes", "wes"),
+  role = c("tumor", "normal")
+)
+long <- manifest_from_wide(wide_table, id_cols)
 ```
 
 ## What it does
@@ -56,8 +89,6 @@ remotes::install_github("samuelbharti/bioroster", subdir = "pkg-r")
   YAML file that names the study, the manifest, the paths, and the
   registered analyses.
 
-See [pkg-r/README.md](pkg-r/README.md) for a runnable quick start.
-
 ## Documentation
 
 The package website includes:
@@ -66,7 +97,7 @@ The package website includes:
 - **[Glossary](https://www.samuelbharti.com/bioroster/articles/glossary.html)**: key terms and definitions.
 - **[Naming Conventions](https://www.samuelbharti.com/bioroster/articles/naming-conventions.html)**: standard column, object, and file names.
 
-To build the site locally:
+To build the site locally, run from the repository root:
 
 ```r
 pkgdown::build_site("pkg-r")
@@ -74,7 +105,7 @@ pkgdown::build_site("pkg-r")
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for the development workflow.
 
 ## License
 
