@@ -13,7 +13,8 @@ sample_pairs(
   sample_map,
   assays = NULL,
   tumor_role = "tumor",
-  normal_role = "normal"
+  normal_role = "normal",
+  sep = "__"
 )
 ```
 
@@ -22,7 +23,7 @@ sample_pairs(
 - sample_map:
 
   A long-format sample map (e.g. from
-  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)),
+  [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)),
   with columns `subject_id`, `assay`, `sample_id`, and `role`. A
   Cohort's `sample_map` (i.e. `cohort@sample_map`) can be passed
   directly.
@@ -42,6 +43,12 @@ sample_pairs(
   Character scalar naming the role treated as the normal (or "control")
   side of a pair. Default `"normal"`.
 
+- sep:
+
+  Character scalar placed between the two sample ids in `pair_id`.
+  Default `"__"`. Use the separator your pipeline puts in its file
+  names.
+
 ## Value
 
 A tibble with one row per derived pair and columns:
@@ -55,7 +62,7 @@ A tibble with one row per derived pair and columns:
 - `normal_sample_id`: sample id of the `normal_role` member.
 
 - `pair_id`: composite id,
-  `paste0(tumor_sample_id, "__", normal_sample_id)`.
+  `paste0(tumor_sample_id, sep, normal_sample_id)`.
 
 Subjects lacking either role within an assay contribute no rows. When a
 subject has multiple tumor and/or normal samples in an assay, all tumor
@@ -63,7 +70,7 @@ x normal combinations are enumerated.
 
 ## See also
 
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 for producing a `sample_map`
 
 ## Examples
@@ -92,4 +99,11 @@ sample_pairs(parsed$sample_map, assays = "wes")
 #>   subject_id assay tumor_sample_id normal_sample_id pair_id
 #>   <chr>      <chr> <chr>           <chr>            <chr>  
 #> 1 S1         wes   T1              N1               T1__N1 
+
+# Match a pipeline that names files tumor_vs_normal
+sample_pairs(parsed$sample_map, sep = "_vs_")
+#> # A tibble: 1 × 5
+#>   subject_id assay tumor_sample_id normal_sample_id pair_id 
+#>   <chr>      <chr> <chr>           <chr>            <chr>   
+#> 1 S1         wes   T1              N1               T1_vs_N1
 ```

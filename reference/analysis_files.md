@@ -1,7 +1,7 @@
 # Retrieve analysis file manifests from a cohort
 
 After
-[`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md),
+[`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md),
 returns the per-analysis file manifests (resolved paths and whether each
 existed) recorded during loading.
 
@@ -15,15 +15,24 @@ analysis_files(cohort)
 
 - cohort:
 
-  A [Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   produced by
-  [`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md).
+  [`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md).
 
 ## Value
 
-A named list of tibbles (one per loaded analysis), or `NULL` if the
-cohort has not been loaded.
+A named list of tibbles, one per loaded analysis. Each has the unit
+keys, `path`, and `exists`. When the cohort has not been loaded, an
+empty tibble with columns `path` and `exists`.
 
 ## See also
 
-[`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md)
+[`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md)
+
+## Examples
+
+``` r
+analysis_files(example_cohort)
+#> # A tibble: 0 × 2
+#> # ℹ 2 variables: path <chr>, exists <lgl>
+```

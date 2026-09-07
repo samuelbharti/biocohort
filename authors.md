@@ -2,21 +2,22 @@
 
 ## Authors
 
-- **Samuel Bharti**. Author, maintainer.
+- **Samuel Bharti**. Author, maintainer, copyright holder.
+  [](https://orcid.org/0000-0003-4190-7058)
 
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/samuelbharti/myceliumr/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/samuelbharti/biocohort/blob/main/DESCRIPTION)
 
-Bharti S (2026). *myceliumr: Cross-Species Cohort Framework for Genomics
-Data*. R package version 0.3.0,
-<http://www.samuelbharti.com/myceliumr/>.
+Bharti S (2026). *biocohort: Cohort Objects for Subjects and Samples in
+Genomics Studies*. R package version 0.1.0.9000,
+<https://www.samuelbharti.com/biocohort/>.
 
     @Manual{,
-      title = {myceliumr: Cross-Species Cohort Framework for Genomics Data},
+      title = {biocohort: Cohort Objects for Subjects and Samples in Genomics Studies},
       author = {Samuel Bharti},
       year = {2026},
-      note = {R package version 0.3.0},
-      url = {http://www.samuelbharti.com/myceliumr/},
+      note = {R package version 0.1.0.9000},
+      url = {https://www.samuelbharti.com/biocohort/},
     }

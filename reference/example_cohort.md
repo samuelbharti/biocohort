@@ -1,9 +1,8 @@
 # Example Cohort Dataset
 
-A sample Cohort object containing cross-species study data with rat and
-mouse subjects. Provided for demonstration, testing, and learning the
-myceliumr data model. Includes a complete Study object with subject
-metadata.
+A small Cohort with two rat and two mouse subjects. Use it to explore
+the data model, to try the API, or as a template for a cohort built from
+real data.
 
 ## Usage
 
@@ -18,14 +17,13 @@ A Cohort object (S7 class) with the following structure:
 - study: A Study object with metadata for a cross-species genomics
   project
 
-- subjects (named list): 4 Subject objects automatically created,
-  accessible by subject_id
-
 - subject_tbl (tibble): 4 subjects (2 rat, 2 mouse) with species, sex,
   strain, genotype, cohort, timepoint
 
 - sample_map (tibble): Long-format map (subject_id, assay, sample_id,
-  role) covering WES tumor/normal and snRNA-seq samples
+  role, fastq_1, fastq_2) covering WES tumor/normal and snRNA-seq
+  samples. fastq_1/fastq_2 show that an extra sample-level column
+  survives validate_manifest() alongside the four canonical ones.
 
 - paths (list): Empty, ready for file paths
 
@@ -33,33 +31,27 @@ A Cohort object (S7 class) with the following structure:
 
 ## Details
 
-The example_cohort demonstrates the complete myceliumr data structure
-including:
+The cohort shows:
 
-- Cross-species data (rat and mouse)
+- Two species in one subject table
 
-- Automatic Subject object creation from manifest data
+- Two assays per subject in one long-format sample map
 
-- Subject-to-sample mappings with multiple assays
+- A Study object for project context
 
-- Integration with a Study object for project context
-
-- Proper data types and structure for downstream analysis
-
-Subject objects are automatically created when building the cohort,
-eliminating the need to manually instantiate individual Subject objects.
-Access them via the subjects property using subject IDs as names.
-
-Use this cohort to explore the API, test workflows, or as a template for
-creating your own cohorts from real data.
+Subjects are stored as rows of `subject_tbl`. Use
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md)
+to read one of them as a Subject object.
 
 ## See also
 
-[`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
 for creating Cohort objects,
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md)
+for reading one subject,
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 for preparing manifest data,
-[`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md)
+[`read_manifest_csv()`](https://www.samuelbharti.com/biocohort/reference/read_manifest_csv.md)
 for loading manifest from CSV file
 
 ## Examples
@@ -73,18 +65,18 @@ example_cohort@study
 #> Study <STUDY001>: Cross-species genomics comparison 
 #>   Example study comparing rat and mouse genomes
 
-# Access individual Subject objects (automatically created)
-rat1 <- example_cohort@subjects[["RAT001"]]
+# Read one subject as a Subject object
+rat1 <- subject(example_cohort, "RAT001")
 rat1@species
 #> [1] "rat"
 rat1@sex
 #> [1] "M"
 
-# List all subject IDs
-names(example_cohort@subjects)
+# List all subject ids
+example_cohort@subject_tbl$subject_id
 #> [1] "RAT001"   "RAT002"   "MOUSE001" "MOUSE002"
 
-# View all subjects with metadata (tibble for bulk operations)
+# View all subjects with metadata
 example_cohort@subject_tbl
 #> # A tibble: 4 × 7
 #>   subject_id species sex   strain  genotype cohort    timepoint
@@ -94,26 +86,26 @@ example_cohort@subject_tbl
 #> 3 MOUSE001   mouse   M     C57BL/6 WT       Control   Day0     
 #> 4 MOUSE002   mouse   F     C57BL/6 KO       Treatment Day0     
 
-# View sample mapping
+# View the sample map
 example_cohort@sample_map
-#> # A tibble: 12 × 4
-#>    subject_id assay sample_id  role  
-#>    <chr>      <chr> <chr>      <chr> 
-#>  1 RAT001     wes   WES_R001_T tumor 
-#>  2 RAT001     wes   WES_R001_N normal
-#>  3 RAT001     scrna SNRNA_R001 tumor 
-#>  4 RAT002     wes   WES_R002_T tumor 
-#>  5 RAT002     wes   WES_R002_N normal
-#>  6 RAT002     scrna SNRNA_R002 tumor 
-#>  7 MOUSE001   wes   WES_M001_T tumor 
-#>  8 MOUSE001   wes   WES_M001_N normal
-#>  9 MOUSE001   scrna SNRNA_M001 tumor 
-#> 10 MOUSE002   wes   WES_M002_T tumor 
-#> 11 MOUSE002   wes   WES_M002_N normal
-#> 12 MOUSE002   scrna SNRNA_M002 tumor 
+#> # A tibble: 12 × 6
+#>    subject_id assay sample_id  role   fastq_1                fastq_2            
+#>    <chr>      <chr> <chr>      <chr>  <chr>                  <chr>              
+#>  1 RAT001     wes   WES_R001_T tumor  wes_r001_t_R1.fastq.gz wes_r001_t_R2.fast…
+#>  2 RAT001     wes   WES_R001_N normal wes_r001_n_R1.fastq.gz wes_r001_n_R2.fast…
+#>  3 RAT001     scrna SNRNA_R001 tumor  snrna_r001_R1.fastq.gz snrna_r001_R2.fast…
+#>  4 RAT002     wes   WES_R002_T tumor  wes_r002_t_R1.fastq.gz wes_r002_t_R2.fast…
+#>  5 RAT002     wes   WES_R002_N normal wes_r002_n_R1.fastq.gz wes_r002_n_R2.fast…
+#>  6 RAT002     scrna SNRNA_R002 tumor  snrna_r002_R1.fastq.gz snrna_r002_R2.fast…
+#>  7 MOUSE001   wes   WES_M001_T tumor  wes_m001_t_R1.fastq.gz wes_m001_t_R2.fast…
+#>  8 MOUSE001   wes   WES_M001_N normal wes_m001_n_R1.fastq.gz wes_m001_n_R2.fast…
+#>  9 MOUSE001   scrna SNRNA_M001 tumor  snrna_m001_R1.fastq.gz snrna_m001_R2.fast…
+#> 10 MOUSE002   wes   WES_M002_T tumor  wes_m002_t_R1.fastq.gz wes_m002_t_R2.fast…
+#> 11 MOUSE002   wes   WES_M002_N normal wes_m002_n_R1.fastq.gz wes_m002_n_R2.fast…
+#> 12 MOUSE002   scrna SNRNA_M002 tumor  snrna_m002_R1.fastq.gz snrna_m002_R2.fast…
 
-# Get summary statistics
-table(example_cohort@subject_tbl$species)  # Count by species
+# Count subjects by species
+table(example_cohort@subject_tbl$species)
 #> 
 #> mouse   rat 
 #>     2     2 

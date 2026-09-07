@@ -16,7 +16,7 @@ Study(
   aims = character(0),
   assays = character(0),
   genome_builds = list(),
-  created_at = NULL,
+  created_at = Sys.time(),
   tags = character(0)
 )
 ```
@@ -34,8 +34,7 @@ Study(
 - description:
 
   Character scalar for longer description of study purpose, design, or
-  protocols. Can be a file path (ending with .md, .txt, or .rtf) to read
-  README content. Optional.
+  protocols. Optional.
 
 - hypotheses:
 
@@ -61,7 +60,8 @@ Study(
 
 - created_at:
 
-  POSIXct timestamp for creation. Defaults to current time.
+  POSIXct timestamp for creation. Defaults to the time the object is
+  built.
 
 - tags:
 
@@ -70,8 +70,10 @@ Study(
 ## Details
 
 Use
-[`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md)
-to construct Study objects with immediate validation.
+[`study_new()`](https://www.samuelbharti.com/biocohort/reference/study_new.md)
+to construct Study objects with immediate validation. Construction also
+validates `study_id` and `title` directly, so building a `Study` any
+other way still enforces the two required fields.
 
 Access properties via the `@` operator:
 
@@ -87,7 +89,7 @@ Access properties via the `@` operator:
 
 ## See also
 
-[`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md)
+[`study_new()`](https://www.samuelbharti.com/biocohort/reference/study_new.md)
 for object construction,
-[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md) for
+[Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md) for
 combining studies with subject data

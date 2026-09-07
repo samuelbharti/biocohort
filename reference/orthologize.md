@@ -1,18 +1,18 @@
-# Translate features (or a whole cohort) across species or assemblies
+# Deprecated alias for translate()
 
-High-level entry point for cross-species translation. `orthologize()` is
-the modality dispatcher that makes translation a single, first-class
-operation: coordinate features (variants, peaks, intervals) route to
-liftover, and gene-level features route to ortholog mapping. Given a
-[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md), it
-translates every registered analysis according to its
-[AnalysisSpec](http://www.samuelbharti.com/myceliumr/reference/AnalysisSpec.md)
-and returns a new, target-species cohort.
+`orthologize()` is the earlier name for
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md).
+It still works and calls
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
+with the same arguments, and warns once per session. New code should
+call
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
+directly.
 
 ## Usage
 
 ``` r
-orthologize(x, to, from = NA_character_, ...)
+orthologize(x, to, from = NULL, ...)
 ```
 
 ## Arguments
@@ -24,7 +24,7 @@ orthologize(x, to, from = NA_character_, ...)
   - a data.frame/tibble of features, or
 
   - a
-    [Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md)
+    [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
     object.
 
 - to:
@@ -33,17 +33,22 @@ orthologize(x, to, from = NA_character_, ...)
 
 - from:
 
-  Character scalar naming the source species/assembly. Required for the
-  `"ortholog"` strategy and for cohort-level translation.
+  For a feature table, a character scalar naming the source
+  species/assembly; required for the `"ortholog"` strategy, optional
+  (recorded as provenance) for `"liftover"`. For a Cohort, `NULL`
+  (default) infers the source species from `subject_tbl$species`: used
+  directly when the cohort has one species, or resolved per analysis
+  (and, for an analysis with a `subject_id` column, per subject) when it
+  has more than one. Give it explicitly to override inference.
 
 - ...:
 
   Strategy-specific arguments. For a **feature table**:
 
   - `strategy`: `"liftover"` (coordinate features; see
-    [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md))
+    [`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md))
     or `"ortholog"` (gene features; see
-    [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)).
+    [`ortholog_genes()`](https://www.samuelbharti.com/biocohort/reference/ortholog_genes.md)).
 
   - `chain`: chain-file path for `"liftover"`.
 
@@ -55,10 +60,12 @@ orthologize(x, to, from = NA_character_, ...)
   For a **Cohort**:
 
   - `chain`: chain-file path used for any `feature_type = "interval"`
-    analysis.
+    analysis. A cohort translated from more than one source species can
+    pass a named list instead, one chain per source species (e.g.
+    `list(rat = "rn7ToHg38.chain", mouse = "mm39ToHg38.chain")`).
 
-  - `liftover_backend`, `ortholog_backend`: backends for the two
-    modalities.
+  - `liftover_backend`, `ortholog_backend`: backends for the two feature
+    kinds.
 
   - `analyses`: optional character vector restricting which analyses to
     translate (defaults to all that have a registered spec with a
@@ -66,58 +73,9 @@ orthologize(x, to, from = NA_character_, ...)
 
 ## Value
 
-A
-[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
-(feature table input) or a new
-[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md)
-whose analyses are expressed in `to` (Cohort input). For a cohort,
-per-analysis
-[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)s
-(including unmapped features) are retrievable with
-[`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md).
-
-## Details
-
-This function is **experimental** while the API settles.
-
-Cohort-level translation keeps subjects and the sample map unchanged
-(the same biological subjects, viewed in another species'
-coordinate/gene space) and re-expresses each analysis's feature table.
-Analyses without a registered
-[AnalysisSpec](http://www.samuelbharti.com/myceliumr/reference/AnalysisSpec.md)
-or without a `feature_type` are skipped with a warning rather than
-guessed at.
+See
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md).
 
 ## See also
 
-[`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md),
-[`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md),
-[`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md),
-[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
-
-## Examples
-
-``` r
-# Feature-table input -----------------------------------------------------
-ints <- data.frame(seqnames = "chr1", start = 100, end = 200)
-backend <- function(intervals, chain, ...) {
-  list(
-    mapped = tibble::tibble(
-      .liftover_id = intervals$.liftover_id,
-      seqnames = "chrT", start = 1L, end = 100L, strand = "*"
-    ),
-    unmapped = intervals[0, , drop = FALSE]
-  )
-}
-orthologize(
-  ints,
-  to = "human", from = "rat",
-  strategy = "liftover", chain = "none", backend = backend
-)
-#> 
-#> ── TranslationResult (rat -> human, backend: custom) 
-#> • input: 1
-#> ✔ mapped: 1 (100%)
-#> ✖ unmapped: 0
-#> ! multi: 0
-```
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)

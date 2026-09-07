@@ -1,125 +1,168 @@
 # Changelog
 
-## myceliumr 0.3.0
+## biocohort 0.1.0.9000
 
-### New features
+The package is not released. Earlier drafts carried the numbers 0.1.0 to
+0.3.0 and were never tagged. The version restarts at 0.1.0.9000 while
+the API settles.
 
-- **Cross-species translation (experimental)**: first-class coordinate
-  translation across assemblies and species.
-  - [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
-    — modality-dispatching front door routing coordinate features to
-    liftover and gene features to ortholog mapping. Given a `Cohort`, it
-    translates every registered analysis according to its `AnalysisSpec`
-    `feature_type` and returns a new, target-species cohort (subjects
-    and sample map unchanged); per-analysis results, including unmapped
-    features, are retrievable with
-    [`translation_report()`](http://www.samuelbharti.com/myceliumr/reference/translation_report.md).
-  - `AnalysisSpec` gains optional `feature_type`
-    (`"interval"`/`"gene"`), `gene_col`, and `id_type` fields that drive
-    cohort-level auto-dispatch.
-  - [`load_analysis()`](http://www.samuelbharti.com/myceliumr/reference/load_analysis.md)
-    /
-    [`load_analyses()`](http://www.samuelbharti.com/myceliumr/reference/load_analyses.md)
-    — read analysis feature tables from disk by resolving each
-    `AnalysisSpec`’s `path_template` (`{root}`, `{subject_id}`,
-    `{pair_id}`, …) per `level`, via the spec’s `reader`. Missing files
-    are reported, not silently skipped; manifests are retrievable with
-    [`analysis_files()`](http://www.samuelbharti.com/myceliumr/reference/analysis_files.md).
-    This takes a cohort from *paths* to *loaded feature tables*, ready
-    for
-    [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md).
-  - [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)
-    — gene-level cross-species mapping returning a `TranslationResult`;
-    pluggable backends via
-    [`register_ortholog_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_ortholog_backend.md)
-    /
-    [`ortholog_backends()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_backends.md),
-    with an offline `babelgene` default
-    ([`ortholog_babelgene()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_babelgene.md)).
-    Model-to-model pairs (e.g. rat-to-mouse) are pivoted through human.
-  - [`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)
-    — translate intervals (variants, peaks, regions) via a chain file,
-    returning a `TranslationResult` that retains both mapped and
-    **unmapped** features so loss is never silent.
-  - Pluggable backends via
-    [`register_liftover_backend()`](http://www.samuelbharti.com/myceliumr/reference/register_liftover_backend.md)
-    /
-    [`liftover_backends()`](http://www.samuelbharti.com/myceliumr/reference/liftover_backends.md):
-    an R-native `rtracklayer` default, plus a `crossmap` adapter and the
-    allele-aware
-    [`liftover_vcf()`](http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.md)
-    wrapper for the external CrossMap tool.
-  - `TranslationResult` S7 class and
-    [`translation_stats()`](http://www.samuelbharti.com/myceliumr/reference/translation_stats.md)
-    for mapped/unmapped/ multi-mapped accounting.
-- **[`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)**:
-  derive tumor/normal (case/control) sample pairs from a long-format
-  `sample_map`. Pairing is assay-agnostic and computed on demand rather
-  than stored, replacing the old WES-specific `pair_id` column. Returns
-  `subject_id`, `assay`, `tumor_sample_id`, `normal_sample_id`,
-  `pair_id`, with configurable role labels via
-  `tumor_role`/`normal_role`.
+### Data model
 
-### Breaking changes
+- S7 classes `Study`, `Subject`, `Cohort`, and `AnalysisSpec`, built
+  with
+  [`study_new()`](https://www.samuelbharti.com/biocohort/reference/study_new.md),
+  [`subject_new()`](https://www.samuelbharti.com/biocohort/reference/subject_new.md),
+  [`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md),
+  and
+  [`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md).
+  Each class validates on construction, including the raw
+  [`Study()`](https://www.samuelbharti.com/biocohort/reference/Study.md),
+  [`Subject()`](https://www.samuelbharti.com/biocohort/reference/Subject.md),
+  and
+  [`Cohort()`](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
+  constructors.
+- [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
+  takes one long-format manifest (one row per sample, required columns
+  `subject_id`, `assay`, `sample_id`, optional `role` plus subject-level
+  columns) and returns `subject_tbl`, `sample_map`, and
+  `completeness_tbl`. Species and assays are free-form values, never a
+  fixed list and never columns. Every column is coerced to character, so
+  a factor or a numeric column never breaks a downstream join.
+- `validate_manifest(sample_cols = )` keeps named extra columns
+  (`fastq_1`, `fastq_2`, `lane`, `qc_status`, and more) at the sample
+  level instead of raising a false conflict.
+- [`read_manifest_csv()`](https://www.samuelbharti.com/biocohort/reference/read_manifest_csv.md)
+  reads a manifest from CSV and delegates to
+  [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md).
+- [`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md)
+  checks a `Cohort` for the four required `sample_map` columns,
+  non-missing species, unique subject ids, and referential integrity.
+- [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
+  derives tumor and normal pairs from a `sample_map` on demand, with
+  configurable role labels and a `sep` argument for the pair id.
+- `example_cohort` ships as a small demonstration dataset.
 
-- **Generic, species- and assay-agnostic manifest layer**
-  ([\#7](https://github.com/samuelbharti/myceliumr/issues/7)). The
-  manifest model is no longer hardcoded to rat / WES / snRNA-seq. The
-  canonical representation is a tidy, long-format `sample_map` with
-  columns `subject_id`, `assay`, `sample_id`, `role`, where `assay` is a
-  free-form value (`wgs`, `wes`, `atac`, `bulk_rna`, `scrna`, …). New
-  assays are new rows, never new columns or per-assay tables.
-- [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
-  now takes a single long-format `manifest` (required columns
-  `subject_id`, `assay`, `sample_id`; optional `role` plus subject-level
-  metadata) and returns `subject_tbl`, `sample_map`, and
-  `completeness_tbl`. The previous
-  `rat_id`/`wes_tumor_id`/`wes_normal_id`/`sn_id` inputs and the
-  `dna_tbl`/`rna_tbl` outputs have been removed. The `strict` and
-  `allow_rna_duplicates` arguments are replaced by `allow_duplicates`.
-- [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md)
-  now reads a long-format CSV and delegates to
-  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md),
-  restoring a single source of truth for manifest parsing. It returns
-  the same three tables and no longer emits `wes_pair_tbl`.
-- `completeness_tbl` is now one row per `subject_id` x `assay` with an
-  `n_samples` count, replacing the WES-specific `has_dna_*` /
-  `n_rna_samples` columns.
+### Accessors and cohort tools
 
-## myceliumr 0.2.0
+- [`subjects()`](https://www.samuelbharti.com/biocohort/reference/subjects.md),
+  [`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md),
+  and
+  [`completeness()`](https://www.samuelbharti.com/biocohort/reference/completeness.md)
+  return plain tibbles read from a cohort. `completeness(wide = TRUE)`
+  gives one row per subject and one column per assay.
+- [`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md)
+  reads one subject from `subject_tbl` as a `Subject` object.
+- [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
+  keeps a subset of subjects or assays and returns a cohort that is
+  still valid.
+- [`print()`](https://rdrr.io/r/base/print.html) for `Cohort`,
+  `Subject`, and `AnalysisSpec` shows subject and sample counts, extra
+  sample columns, and registered analyses.
 
-### New Features
+### Reading and writing files
 
-- **Automatic Subject Object Creation**: Cohort objects now
-  automatically create Subject objects from subject_tbl rows. Access
-  individual subjects via `cohort@subjects[["subject_id"]]`
-- **Multiple Hypotheses and Aims**: Study objects now properly support
-  multiple hypotheses and aims as character vectors
-- **README File Support**: Study `description` parameter can now accept
-  file paths (.md, .txt, .rtf) to load README content directly
-- **Genome Build Updates**: Added rn7 support for rat genomes.
-  Documentation clarifies supported builds (rat: rn6/rn7, mouse:
-  mm9/mm10/mm39, human: hg19/hg38)
+- [`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md)
+  reads a manifest from CSV, TSV, or Excel, always as text, and
+  validates it in one call.
+- [`manifest_from_wide()`](https://www.samuelbharti.com/biocohort/reference/manifest_from_wide.md)
+  reshapes a wide, one-row-per-subject table with one id column per
+  assay into the long form
+  [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
+  expects.
+- [`write_manifest()`](https://www.samuelbharti.com/biocohort/reference/write_manifest.md)
+  writes a cohort’s tables back out as one manifest.
+  [`cohort_save()`](https://www.samuelbharti.com/biocohort/reference/cohort_save.md)
+  and
+  [`cohort_read()`](https://www.samuelbharti.com/biocohort/reference/cohort_read.md)
+  keep a whole cohort as an RDS file.
+- [`read_study_yaml()`](https://www.samuelbharti.com/biocohort/reference/read_study_yaml.md)
+  builds a cohort from one YAML file that names the study, the manifest,
+  the file paths, and the registered analyses.
+  [`write_study_yaml()`](https://www.samuelbharti.com/biocohort/reference/write_study_yaml.md)
+  writes one back. Every path is resolved relative to the YAML file’s
+  own directory.
+- [`apply_corrections()`](https://www.samuelbharti.com/biocohort/reference/apply_corrections.md)
+  applies a table of documented overrides (`level`, `id`, `column`,
+  `value`, `reason`) to a manifest before it is validated, and keeps an
+  audit trail.
+  [`read_corrections()`](https://www.samuelbharti.com/biocohort/reference/read_corrections.md)
+  reads that table from a file.
 
-### Enhancements
+### Pipeline integration
 
-- Enhanced documentation across all functions with verbose descriptions,
-  detailed parameters, examples, and cross-references
-- Added GitHub Copilot as contributor
-- Improved example_cohort dataset with rn7 genome build
-- Package now displays version and documentation URL on load
+- [`sample_sheet()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet.md)
+  writes the sample list a pipeline expects, with built-in templates for
+  `nf-core/rnaseq`, `nf-core/rnavar`, `nf-core/atacseq`, and
+  `nf-core/sarek`.
+  [`sample_sheet_templates()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet_templates.md)
+  lists the built-in names.
+- [`check_paths()`](https://www.samuelbharti.com/biocohort/reference/check_paths.md)
+  tests that the file paths named in `cohort@paths` and in known
+  sample-level path columns exist, without ever raising an error.
+- [`as_coldata()`](https://www.samuelbharti.com/biocohort/reference/as_coldata.md)
+  returns a `Cohort`’s per-sample metadata as row-named data, ready for
+  a `SummarizedExperiment`’s `colData`.
+  [`join_metadata()`](https://www.samuelbharti.com/biocohort/reference/join_metadata.md)
+  carries that metadata into a `SummarizedExperiment`, a Seurat object,
+  or a plain data frame.
+- [`project_root()`](https://www.samuelbharti.com/biocohort/reference/project_root.md),
+  [`project_path()`](https://www.samuelbharti.com/biocohort/reference/project_path.md),
+  [`ensure_dir()`](https://www.samuelbharti.com/biocohort/reference/ensure_dir.md),
+  and
+  [`read_dotenv()`](https://www.samuelbharti.com/biocohort/reference/read_dotenv.md)
+  find a project’s root folder, build paths under it, and read a `.env`
+  file.
 
-## myceliumr 0.1.0
+### Analysis registry and loading
 
-### Initial Release
+- [`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md),
+  [`analysis_list()`](https://www.samuelbharti.com/biocohort/reference/analysis_list.md),
+  and
+  [`analysis_spec()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec.md)
+  manage `AnalysisSpec` entries in a cohort. `format`, `reader`, and
+  `key_cols` default from the spec’s `path_template` and `level` when
+  not given.
+- [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
+  and
+  [`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md)
+  resolve a spec’s `path_template` per subject, per pair, or per cohort,
+  read the files with the spec’s reader, and record which files were
+  found. Subject and pair units are enumerated only for the spec’s own
+  assay.
+  [`analysis_files()`](https://www.samuelbharti.com/biocohort/reference/analysis_files.md)
+  returns that record.
 
-- S7 classes for Study, Subject, and Cohort with validation
-- Manifest reading and validation
-  ([`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md),
-  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md))
-- Constructors:
-  [`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md),
-  [`subject_new()`](http://www.samuelbharti.com/myceliumr/reference/subject_new.md),
-  [`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md)
-- Cross-species support for rat, mouse, and human
-- Comprehensive test coverage with testthat
+### Cross-species translation (experimental)
+
+- [`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
+  moves a feature table across genome builds or species. Coordinate
+  features go through a liftover backend; gene features go through an
+  ortholog backend.
+  [`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md)
+  still works as an alias and warns once per session.
+  [`translation_report()`](https://www.samuelbharti.com/biocohort/reference/translation_report.md)
+  returns the per-analysis results.
+- For a whole cohort, the source species is inferred from `subject_tbl`
+  when every subject shares one species. A cohort with more than one
+  species is split by species, translated, and recombined, as long as
+  the analysis table carries a `subject_id` column.
+- [`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md)
+  with an `rtracklayer` backend and a `crossmap` backend, plus
+  [`liftover_vcf()`](https://www.samuelbharti.com/biocohort/reference/liftover_vcf.md)
+  for allele-aware variant liftover through CrossMap. Backends are
+  registered with
+  [`register_liftover_backend()`](https://www.samuelbharti.com/biocohort/reference/register_liftover_backend.md).
+- [`ortholog_genes()`](https://www.samuelbharti.com/biocohort/reference/ortholog_genes.md)
+  with an offline `babelgene` backend, registered with
+  [`register_ortholog_backend()`](https://www.samuelbharti.com/biocohort/reference/register_ortholog_backend.md).
+  Model-to-model pairs pivot through human. The backend accepts a
+  `cache` file so repeated lookups skip babelgene.
+- `TranslationResult` keeps mapped and unmapped features under one
+  `.feature_id` key, for both coordinate and gene features.
+  [`translation_stats()`](https://www.samuelbharti.com/biocohort/reference/translation_stats.md)
+  summarizes them.
+
+### Internal
+
+- Formatting with air, hooks with prek, lintr config, and CI on pull
+  requests into `dev` and `main`.

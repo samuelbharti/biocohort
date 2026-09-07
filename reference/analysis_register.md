@@ -37,11 +37,11 @@ Validates that:
 
 ## See also
 
-[`analysis_spec_new()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec_new.md)
+[`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
 for creating specs,
-[`analysis_list()`](http://www.samuelbharti.com/myceliumr/reference/analysis_list.md)
+[`analysis_list()`](https://www.samuelbharti.com/biocohort/reference/analysis_list.md)
 for listing registered specs,
-[`analysis_spec()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec.md)
+[`analysis_spec()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec.md)
 for retrieving a spec from registry
 
 ## Examples
@@ -66,7 +66,7 @@ cohort <- cohort_new(
 # Create and register an analysis spec
 spec <- analysis_spec_new(
   name = "somatic_vars",
-  assay = "wes_somatic",
+  assay = "wes",
   level = "pair",
   format = "tsv",
   reader = "read_tsv",
@@ -76,7 +76,7 @@ spec <- analysis_spec_new(
 cohort_with_spec <- analysis_register(cohort, spec)
 print(analysis_list(cohort_with_spec))
 #> # A tibble: 1 × 6
-#>   name         assay       level format reader   root_key
-#>   <chr>        <chr>       <chr> <chr>  <chr>    <chr>   
-#> 1 somatic_vars wes_somatic pair  tsv    read_tsv NA      
+#>   name         assay level format reader   root_key
+#>   <chr>        <chr> <chr> <chr>  <chr>    <chr>   
+#> 1 somatic_vars wes   pair  tsv    read_tsv NA      
 ```

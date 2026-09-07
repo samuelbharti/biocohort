@@ -1,7 +1,7 @@
 # Naming conventions
 
 This document describes standardized naming conventions used in
-myceliumr for data columns, R objects, functions, and file names.
+biocohort for data columns, R objects, functions, and file names.
 
 ## Column Names
 
@@ -13,7 +13,7 @@ myceliumr for data columns, R objects, functions, and file names.
 | `species` | character | Species designation: “rat”, “mouse”, or “human”. |
 | `sex` | character | Biological sex: “M” (male), “F” (female), or NA if unknown. |
 | `strain` | character | Strain or breed (e.g., “Fischer 344”, “B6”). |
-| `genotype` | character | Genetic background or modification (e.g., “WT”, “KO”, “NF1+/-”). |
+| `genotype` | character | Genetic background or modification (e.g., “WT”, “KO”, “HET”). |
 | `cohort` | character | Treatment group or cohort membership (e.g., “Control”, “Treatment_A”). |
 | `timepoint` | character | Study visit, age, or collection date (e.g., “Day_0”, “Week_12”, “8wks”). |
 | `notes` | character | Free-form annotations or additional metadata. |
@@ -30,6 +30,13 @@ as new rows, never new columns or per-assay tables.
 | `assay` | character | Assay type (free-form value), e.g. `"wgs"`, `"wes"`, `"atac"`, `"bulk_rna"`, `"scrna"`. |
 | `sample_id` | character | Unique sample identifier. |
 | `role` | character | Sample role within its assay, e.g. `"tumor"`, `"normal"`, or `NA` when not applicable. |
+
+Other sample-level columns (e.g. `fastq_1`, `fastq_2`, `bam`, `lane`,
+`replicate`, `qc_status`) stay in `sample_map` when their name is one
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
+recognizes, or when passed in its `sample_cols` argument. A column that
+varies within a subject but is not recognized or declared trips the
+subject-level conflict check instead.
 
 ### Completeness Summary Columns (`completeness_tbl`)
 
@@ -54,7 +61,7 @@ stable label per assay and reuse it consistently. Common examples:
 
 ## Sample ID Formats
 
-While myceliumr does not enforce specific sample ID formats, adopt a
+While biocohort does not enforce specific sample ID formats, adopt a
 consistent project-wide convention. Encoding the assay and role in the
 ID can aid readability:
 
@@ -65,7 +72,7 @@ ID can aid readability:
 
 Tumor/normal **pairs** are not stored in `sample_map`; derive them on
 demand with
-[`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md),
+[`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md),
 which yields a `pair_id` of `{tumor_sample_id}__{normal_sample_id}`
 (e.g., “wes_T101\_\_wes_N101”).
 
@@ -74,11 +81,11 @@ which yields a `pair_id` of `{tumor_sample_id}__{normal_sample_id}`
 ### R Objects and Variables
 
 - **Study objects**: snake_case, descriptive (e.g., `my_study`,
-  `nf1_study`) or explicitly named `study` in examples.
-- **Cohort objects**: snake_case (e.g., `cohort`, `nf1_cohort`,
+  `pilot_study`) or explicitly named `study` in examples.
+- **Cohort objects**: snake_case (e.g., `cohort`, `pilot_cohort`,
   `study_cohort`).
-- **Subject objects**: Rarely used directly; accessed via
-  `cohort@subjects[[subject_id]]`.
+- **Subject objects**: Rarely used directly; built on demand with
+  `subject(cohort, subject_id)`.
 - **AnalysisSpec objects**: Use spec name as primary identifier (stored
   in registry with name as key).
 - **Data tables**: snake_case with `_tbl` suffix or use descriptive
@@ -90,8 +97,8 @@ which yields a `pair_id` of `{tumor_sample_id}__{normal_sample_id}`
 
 # Study
 study <- study_new(
-  study_id = "NF1_001",
-  title = "NF1 Rat Genomics Study"
+  study_id = "STUDY_001",
+  title = "Example Genomics Study"
 )
 
 # Cohort
@@ -101,8 +108,8 @@ cohort <- cohort_new(
   study = study
 )
 
-# Access subject
-subject <- cohort@subjects[["RAT_101"]]
+# Read one subject as a Subject object
+rat_101 <- subject(cohort, "RAT_101")
 
 # Access analysis
 result <- cohort@analyses[["my_analysis_name"]]
@@ -111,17 +118,17 @@ result <- cohort@analyses[["my_analysis_name"]]
 ## Function Names
 
 - **Constructor functions**: `{noun}_new()` (e.g.,
-  [`study_new()`](http://www.samuelbharti.com/myceliumr/reference/study_new.md),
-  [`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md))
+  [`study_new()`](https://www.samuelbharti.com/biocohort/reference/study_new.md),
+  [`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md))
 - **Validation functions**: `validate_{noun}()` (e.g.,
-  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md),
-  [`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md))
+  [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md),
+  [`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md))
 - **Accessor/getter functions**: `get_{property}()` or simply reference
   property directly (e.g., `cohort@subject_tbl`)
 - **IO functions**: `read_{format}()` or `write_{format}()` (e.g.,
-  [`read_manifest_csv()`](http://www.samuelbharti.com/myceliumr/reference/read_manifest_csv.md))
+  [`read_manifest_csv()`](https://www.samuelbharti.com/biocohort/reference/read_manifest_csv.md))
 - **Helper functions**: lowercase with underscores (e.g.,
-  [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md))
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md))
 - **S7 methods**: Dispatch on class; function name describes operation
   (e.g., [`print()`](https://rdrr.io/r/base/print.html) method for
   Cohort)
@@ -140,7 +147,7 @@ result <- cohort@analyses[["my_analysis_name"]]
 ### Data Files
 
 - **Raw data**: Use consistent prefix and descriptor (e.g.,
-  `manifest_nf1_001.csv`, `cohort_pilot_data.rda`)
+  `manifest_study_001.csv`, `cohort_pilot_data.rda`)
 - **Intermediate data**: `{description}_{date}.rda` or
   `{description}_{version}.fst`
 - **Results**: `{analysis}_{date}_{version}.csv` or
@@ -148,7 +155,7 @@ result <- cohort@analyses[["my_analysis_name"]]
 
 ### Example Manifest File Names
 
-    manifest_nf1_wes_rna_v1.csv
+    manifest_pilot_wes_rna_v1.csv
     manifest_pilot_cohort.csv
     cohort_complete_metadata.csv
 
@@ -169,7 +176,7 @@ result <- cohort@analyses[["my_analysis_name"]]
 - **Output vectors/lists**: Descriptive plural or singular depending on
   context
 - **Named lists**: Keys should be identifiers or logical names (e.g.,
-  `cohort@subjects[["RAT_101"]]`)
+  `cohort@analyses[["my_analysis"]]`)
 
 ## Documentation and Markdown
 
@@ -211,5 +218,5 @@ Documentation and examples are provided via roxygen
 ## Further Reading
 
 See the
-[Glossary](http://www.samuelbharti.com/myceliumr/articles/glossary.md)
+[Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.md)
 article for detailed definitions of key terms and concepts.

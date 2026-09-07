@@ -2,10 +2,8 @@
 
 Reads a tidy, long-format manifest CSV (one row per sample) and
 delegates to
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
-for validation and structuring. This is the primary entry point for
-loading external manifest data and is the single source of truth for
-manifest parsing rules.
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
+for validation and structuring.
 
 ## Usage
 
@@ -28,43 +26,33 @@ read_manifest_csv(path, ..., allow_duplicates = FALSE)
 
 - allow_duplicates:
 
-  Logical. If `TRUE`, repeated `(subject_id, assay, sample_id)`
-  combinations are permitted. If `FALSE` (default), duplicates raise an
-  error. Passed through to
-  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md).
+  Logical. If `TRUE`, a repeated `sample_id` is permitted. If `FALSE`
+  (default), it raises an error. Passed through to
+  [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md).
 
 ## Value
 
 The list returned by
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md):
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md):
 `subject_tbl`, `sample_map`, and `completeness_tbl`.
 
 ## Details
 
-The CSV must be in long format with one row per sample. Required
-columns:
-
-- `subject_id`: subject the sample belongs to
-
-- `assay`: assay type, e.g. `wgs`, `wes`, `atac`, `bulk_rna`, `scrna`
-
-- `sample_id`: unique sample identifier
-
-Optional sample-level column:
-
-- `role`: role within the assay, e.g. `tumor`, `normal`
-
-Any remaining columns (e.g. `species`, `sex`, `strain`, `genotype`,
-`cohort`, `timepoint`, `notes`) are treated as subject-level metadata
-and must be constant within a `subject_id`. See
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
-for the full validation rules.
+Superseded by
+[`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md),
+which also reads TSV and Excel files. This function stays for existing
+code; new code should call
+[`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md)
+instead. Every column is read as character unless `...` supplies its own
+`col_types`.
 
 ## See also
 
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
-for detailed validation rules,
-[`cohort_new()`](http://www.samuelbharti.com/myceliumr/reference/cohort_new.md)
+[`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md)
+for CSV, TSV, and Excel in one function,
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
+for the validation rules,
+[`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
 for creating a Cohort from manifest data
 
 ## Examples

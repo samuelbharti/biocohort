@@ -11,15 +11,18 @@ AnalysisSpec(
   name = character(0),
   assay = character(0),
   level = character(0),
-  format = character(0),
+  format = NA_character_,
   description = NA_character_,
   path_template = NA_character_,
   root_key = NA_character_,
-  reader = character(0),
+  reader = NA_character_,
   key_cols = character(0),
   feature_type = NA_character_,
   gene_col = NA_character_,
-  id_type = NA_character_
+  id_type = NA_character_,
+  tumor_role = "tumor",
+  normal_role = "normal",
+  pair_sep = "__"
 )
 ```
 
@@ -31,8 +34,8 @@ AnalysisSpec(
 
 - assay:
 
-  Character scalar for assay type (e.g., "wes_somatic", "wes_germline",
-  "snrna"). Required.
+  Character scalar for the assay label, spelled as in the cohort's
+  `sample_map` (e.g., "wes", "wgs", "scrna"). Required.
 
 - level:
 
@@ -43,7 +46,7 @@ AnalysisSpec(
 
   - `"pair"`: one result per tumor/normal (case/control) pair, as
     derived by
-    [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
+    [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
     from the cohort's `sample_map`.
 
   - `"cohort"`: a single result for the whole cohort.
@@ -53,7 +56,9 @@ AnalysisSpec(
 - format:
 
   Character scalar for file format (e.g., "rds", "tsv", "txt").
-  Required.
+  Optional.
+  [`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
+  fills it from the `path_template` extension. NA when unknown.
 
 - description:
 
@@ -66,7 +71,7 @@ AnalysisSpec(
   substitution tokens: `{root}` (from `root_key`), `{subject_id}`, and
   the pair tokens `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}`
   (the latter three supplied by
-  [`sample_pairs()`](http://www.samuelbharti.com/myceliumr/reference/sample_pairs.md)
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
   for `level = "pair"`). Optional, defaults to NA.
 
 - root_key:
@@ -78,20 +83,24 @@ AnalysisSpec(
 - reader:
 
   Character scalar for function name to read files matching this spec
-  (e.g., "read_msi_txt", "read.csv"). Must be a valid function name.
-  Required.
+  (e.g., "readr::read_tsv", "read.csv"). Optional.
+  [`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
+  fills it from `format`. NA when unknown.
 
 - key_cols:
 
-  Character vector of column names to use as keys when loading the
-  analysis table. Determines how rows are indexed (e.g.,
-  `c("subject_id")` or `c("pair_id")`). Required.
+  Character vector of column names that must be present in the loaded
+  analysis table.
+  [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
+  checks them after reading. Optional.
+  [`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
+  fills it by `level`.
 
 - feature_type:
 
   Optional character scalar declaring how this analysis's features
   translate across species in
-  [`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md):
+  [`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md):
   `"interval"` (liftover) or `"gene"` (ortholog mapping). Optional,
   defaults to NA.
 
@@ -105,13 +114,29 @@ AnalysisSpec(
   Optional gene identifier type for `feature_type = "gene"`: `"symbol"`,
   `"entrez"`, or `"ensembl"`. Optional, defaults to NA.
 
+- tumor_role:
+
+  Character scalar naming the sample role on the tumor (or case) side of
+  a pair. Used for `level = "pair"`. Default `"tumor"`.
+
+- normal_role:
+
+  Character scalar naming the sample role on the normal (or control)
+  side of a pair. Used for `level = "pair"`. Default `"normal"`.
+
+- pair_sep:
+
+  Character scalar placed between the two sample ids when
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
+  builds `pair_id`. Used for `level = "pair"`. Default `"__"`.
+
 ## Details
 
 Use
-[`analysis_spec_new()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec_new.md)
+[`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
 to construct AnalysisSpec objects with immediate validation.
 AnalysisSpec objects are typically registered in a Cohort via
-[`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md).
+[`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md).
 
 Access properties via the `@` operator:
 
@@ -124,10 +149,13 @@ Access properties via the `@` operator:
     spec@root_key
     spec@reader
     spec@key_cols
+    spec@tumor_role
+    spec@normal_role
+    spec@pair_sep
 
 ## See also
 
-[`analysis_spec_new()`](http://www.samuelbharti.com/myceliumr/reference/analysis_spec_new.md)
+[`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
 for object construction,
-[`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md)
+[`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md)
 for registering specs in a Cohort

@@ -1,9 +1,9 @@
 # Result of a cross-species or cross-assembly translation
 
-An S7 class holding the outcome of translating coordinate features (or,
-in future, gene-level features) from one species/assembly to another. It
-keeps the successfully translated features, the features that failed to
-map, and provenance so that translation is never lossy *silently*.
+An S7 class holding the outcome of translating coordinate features or
+gene-level features from one species or assembly to another. It keeps
+the successfully translated features, the features that failed to map,
+and provenance so that translation is never lossy *silently*.
 
 ## Usage
 
@@ -22,9 +22,9 @@ TranslationResult(
 
 - mapped:
 
-  A tibble of successfully translated features. Includes a
-  `.liftover_id` column linking each output row back to its input row;
-  one input may yield multiple output rows (multi-mapping).
+  A tibble of successfully translated features. Includes a `.feature_id`
+  column linking each output row back to its input row; one input may
+  yield multiple output rows (multi-mapping).
 
 - unmapped:
 
@@ -50,15 +50,15 @@ TranslationResult(
 ## Details
 
 Construct these via
-[`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md)
+[`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md)
 or
-[`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
+[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md)
 rather than directly. Access the pieces with `result@mapped`,
 `result@unmapped`, and
-[`translation_stats()`](http://www.samuelbharti.com/myceliumr/reference/translation_stats.md).
+[`translation_stats()`](https://www.samuelbharti.com/biocohort/reference/translation_stats.md).
 
 ## See also
 
-[`liftover_intervals()`](http://www.samuelbharti.com/myceliumr/reference/liftover_intervals.md),
-[`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md),
-[`translation_stats()`](http://www.samuelbharti.com/myceliumr/reference/translation_stats.md)
+[`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md),
+[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md),
+[`translation_stats()`](https://www.samuelbharti.com/biocohort/reference/translation_stats.md)

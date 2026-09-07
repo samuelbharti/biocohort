@@ -31,9 +31,9 @@ registry.
 
 ## See also
 
-[`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md)
+[`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md)
 for registering specs,
-[`analysis_list()`](http://www.samuelbharti.com/myceliumr/reference/analysis_list.md)
+[`analysis_list()`](https://www.samuelbharti.com/biocohort/reference/analysis_list.md)
 for listing all registered specs
 
 ## Examples
@@ -57,7 +57,7 @@ cohort <- cohort_new(
 
 spec <- analysis_spec_new(
   name = "somatic_vars",
-  assay = "wes_somatic",
+  assay = "wes",
   level = "pair",
   format = "tsv",
   reader = "read_tsv",

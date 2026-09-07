@@ -3,21 +3,21 @@
 Gene-ortholog backend using the offline babelgene package, which ships
 precomputed orthologs between human and a range of model organisms. This
 is the default backend for
-[`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md).
+[`ortholog_genes()`](https://www.samuelbharti.com/biocohort/reference/ortholog_genes.md).
 
 ## Usage
 
 ``` r
-ortholog_babelgene(features, from, to, gene_col, id_type, ...)
+ortholog_babelgene(features, from, to, gene_col, id_type, cache = NULL, ...)
 ```
 
 ## Arguments
 
 - features:
 
-  A tibble of features with a gene column and a `.ortholog_id` key
+  A tibble of features with a gene column and a `.feature_id` key
   (supplied by
-  [`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)).
+  [`ortholog_genes()`](https://www.samuelbharti.com/biocohort/reference/ortholog_genes.md)).
 
 - from, to:
 
@@ -33,6 +33,13 @@ ortholog_babelgene(features, from, to, gene_col, id_type, ...)
 
   One of `"symbol"`, `"entrez"`, `"ensembl"`.
 
+- cache:
+
+  Optional path to a TSV file caching prior lookups. When given, a gene
+  already in the file is read from there instead of queried again, and a
+  newly queried gene is appended for next time. The cache is shared
+  across `from`/`to`/`id_type` combinations in one file.
+
 - ...:
 
   Passed to
@@ -45,4 +52,4 @@ A list with `mapped` and `unmapped` tibbles.
 
 ## See also
 
-[`ortholog_genes()`](http://www.samuelbharti.com/myceliumr/reference/ortholog_genes.md)
+[`ortholog_genes()`](https://www.samuelbharti.com/biocohort/reference/ortholog_genes.md)

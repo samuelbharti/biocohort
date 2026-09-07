@@ -1,17 +1,17 @@
 # Load registered analyses into a cohort from disk
 
 Loads the feature table for each registered
-[AnalysisSpec](http://www.samuelbharti.com/myceliumr/reference/AnalysisSpec.md)
+[AnalysisSpec](https://www.samuelbharti.com/biocohort/reference/AnalysisSpec.md)
 (via
-[`load_analysis()`](http://www.samuelbharti.com/myceliumr/reference/load_analysis.md))
+[`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md))
 and returns a new
-[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md) with
-`analyses` populated. The per-analysis file manifests are stored in the
-cohort cache and retrievable with
-[`analysis_files()`](http://www.samuelbharti.com/myceliumr/reference/analysis_files.md).
+[Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
+with `analyses` populated. The per-analysis file manifests are stored in
+the cohort cache and retrievable with
+[`analysis_files()`](https://www.samuelbharti.com/biocohort/reference/analysis_files.md).
 This is the step that takes a cohort from *paths* to *loaded feature
 tables*, ready for
-[`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md).
+[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md).
 
 ## Usage
 
@@ -23,9 +23,9 @@ load_analyses(cohort, analyses = NULL, readers = NULL)
 
 - cohort:
 
-  A [Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   with registered specs (see
-  [`analysis_register()`](http://www.samuelbharti.com/myceliumr/reference/analysis_register.md)).
+  [`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md)).
 
 - analyses:
 
@@ -40,17 +40,17 @@ load_analyses(cohort, analyses = NULL, readers = NULL)
 ## Value
 
 A new
-[Cohort](http://www.samuelbharti.com/myceliumr/reference/Cohort.md) with
-`analyses` populated for the loaded specs.
+[Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
+with `analyses` populated for the loaded specs.
 
 ## Details
 
 Specs without a `path_template` are skipped with a warning. Use
-[`analysis_files()`](http://www.samuelbharti.com/myceliumr/reference/analysis_files.md)
+[`analysis_files()`](https://www.samuelbharti.com/biocohort/reference/analysis_files.md)
 to inspect which files were found or missing.
 
 ## See also
 
-[`load_analysis()`](http://www.samuelbharti.com/myceliumr/reference/load_analysis.md),
-[`analysis_files()`](http://www.samuelbharti.com/myceliumr/reference/analysis_files.md),
-[`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
+[`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md),
+[`analysis_files()`](https://www.samuelbharti.com/biocohort/reference/analysis_files.md),
+[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md)

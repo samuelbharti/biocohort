@@ -3,7 +3,7 @@
 Translates coordinate features (intervals such as variants, peaks, or
 regions) from one genome assembly or species to another using a chain
 file, via a pluggable backend. Returns a
-[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
+[TranslationResult](https://www.samuelbharti.com/biocohort/reference/TranslationResult.md)
 that keeps both the mapped and the unmapped features, so loss is
 explicit.
 
@@ -42,7 +42,7 @@ liftover_intervals(
 - backend:
 
   Either the name of a registered backend (see
-  [`liftover_backends()`](http://www.samuelbharti.com/myceliumr/reference/liftover_backends.md))
+  [`liftover_backends()`](https://www.samuelbharti.com/biocohort/reference/liftover_backends.md))
   or a backend function. Defaults to `"rtracklayer"`.
 
 - ...:
@@ -52,23 +52,23 @@ liftover_intervals(
 ## Value
 
 A
-[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md).
+[TranslationResult](https://www.samuelbharti.com/biocohort/reference/TranslationResult.md).
 
 ## Details
 
 Cross-species liftover is inherently lossy and limited to syntenic,
 alignable regions; non-conserved regions (and many regulatory elements)
 will not map. Always inspect
-[`translation_stats()`](http://www.samuelbharti.com/myceliumr/reference/translation_stats.md)
+[`translation_stats()`](https://www.samuelbharti.com/biocohort/reference/translation_stats.md)
 and the `unmapped` table rather than assuming full recovery. For
 allele-aware variant (VCF) translation, see
-[`liftover_vcf()`](http://www.samuelbharti.com/myceliumr/reference/liftover_vcf.md).
+[`liftover_vcf()`](https://www.samuelbharti.com/biocohort/reference/liftover_vcf.md).
 
 ## See also
 
-[`liftover_rtracklayer()`](http://www.samuelbharti.com/myceliumr/reference/liftover_rtracklayer.md),
-[`liftover_crossmap()`](http://www.samuelbharti.com/myceliumr/reference/liftover_crossmap.md),
-[`orthologize()`](http://www.samuelbharti.com/myceliumr/reference/orthologize.md)
+[`liftover_rtracklayer()`](https://www.samuelbharti.com/biocohort/reference/liftover_rtracklayer.md),
+[`liftover_crossmap()`](https://www.samuelbharti.com/biocohort/reference/liftover_crossmap.md),
+[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md)
 
 ## Examples
 
@@ -82,7 +82,7 @@ ints <- data.frame(
 backend <- function(intervals, chain, ...) {
   list(
     mapped = tibble::tibble(
-      .liftover_id = intervals$.liftover_id[1],
+      .feature_id = intervals$.feature_id[1],
       seqnames = "chrT", start = 1L, end = 100L, strand = "*"
     ),
     unmapped = intervals[-1, , drop = FALSE]

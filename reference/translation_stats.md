@@ -15,7 +15,7 @@ translation_stats(x)
 - x:
 
   A
-  [TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
+  [TranslationResult](https://www.samuelbharti.com/biocohort/reference/TranslationResult.md)
   object.
 
 ## Value
@@ -25,7 +25,7 @@ A one-row tibble with columns `from`, `to`, `backend`, `n_input`,
 
 ## See also
 
-[TranslationResult](http://www.samuelbharti.com/myceliumr/reference/TranslationResult.md)
+[TranslationResult](https://www.samuelbharti.com/biocohort/reference/TranslationResult.md)
 
 ## Examples
 
@@ -39,7 +39,7 @@ ints <- data.frame(
 backend <- function(intervals, chain, ...) {
   list(
     mapped = tibble::tibble(
-      .liftover_id = intervals$.liftover_id[1],
+      .feature_id = intervals$.feature_id[1],
       seqnames = "chrT", start = 1L, end = 100L, strand = "*"
     ),
     unmapped = intervals[-1, , drop = FALSE]

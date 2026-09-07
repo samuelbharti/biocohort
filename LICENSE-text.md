@@ -1,4 +1,4 @@
 # License
 
     YEAR: 2026
-    COPYRIGHT HOLDER: myceliumr authors
+    COPYRIGHT HOLDER: Samuel Bharti

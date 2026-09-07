@@ -1,10 +1,9 @@
 # Create a Cohort object
 
-Constructs a Cohort object by combining validated subject data with
-optional study metadata, file paths, and analysis results. Cohorts serve
-as the primary container for cross-species genomics data, ensuring
-schema validation and data integrity across rat, mouse, and human
-studies.
+Builds a Cohort from a subject table and a sample map, with an optional
+Study, file paths, and analysis tables. The two tables are usually the
+output of
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md).
 
 ## Usage
 
@@ -22,92 +21,71 @@ cohort_new(
 
 - subject_tbl:
 
-  A tibble containing subject-level metadata. Required columns:
-  `subject_id` (character) and `species` (rat/mouse/human). Optional
-  columns: `sex`, `strain`, `genotype`, `cohort`, `timepoint`, `notes`.
-  Typically obtained from
-  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md).
+  A data frame with one row per subject. Required columns: `subject_id`
+  and `species`, both character. Other columns are kept as given.
 
 - sample_map:
 
-  A canonical long-format tibble mapping subjects to samples, one row
-  per sample. Columns: `subject_id`, `assay`, `sample_id`, `role`. Must
-  have at least a `subject_id` column to link to `subject_tbl`.
-  Typically obtained from
-  [`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md).
+  A long-format data frame with one row per sample. Required columns:
+  `subject_id`, `assay`, `sample_id`, `role`, all character.
 
 - study:
 
-  A Study object providing project-level metadata and context, or NULL
-  if not applicable. Defaults to NULL.
+  A Study object, or NULL. Defaults to NULL.
 
 - paths:
 
-  Named list of file paths to data files or results directories.
-  Optional and defaults to empty list.
+  Named list of file paths to data files or result folders. Defaults to
+  an empty list.
 
 - analyses:
 
-  Named list containing analysis results or intermediate data objects
-  for later retrieval. Optional and defaults to empty list.
+  Named list of analysis tables or other data objects. Defaults to an
+  empty list.
 
 ## Value
 
-A Cohort object with validated subject data and optional metadata.
-Raises informative errors if validation fails.
+A Cohort object. An error when the tables fail
+[`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md).
 
 ## Details
 
-Cohort objects are S7 classes for managing cross-species study data.
-Construction automatically runs
-[`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
-to ensure:
+The steps are:
 
-- Required columns are present
+1.  Check that `subject_tbl` and `sample_map` are data frames.
 
-- Species values are valid (rat/mouse/human)
+2.  Convert both to tibbles.
 
-- No duplicate subject IDs
+3.  Build the Cohort.
 
-- Sample map can be linked to subjects
+4.  Run
+    [`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md).
 
-**Automatic Subject Object Creation:** Subject objects are automatically
-created from each row in `subject_tbl`. These are stored in the
-`subjects` property as a named list, accessible by subject_id. This
-eliminates the need to manually create Subject objects.
-
-Use the `@` operator to access cohort components:
-
-- `cohort@study` - Study metadata
-
-- `cohort@subjects` - Named list of Subject objects
-
-- `cohort@subjects[[\"RAT001\"]]` - Access individual Subject
-
-- `cohort@subject_tbl` - Subject table (for bulk operations)
-
-- `cohort@sample_map` - Sample mapping
+The function does not build Subject objects. Use
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md)
+to read one subject from the cohort when an object is needed.
 
 ## See also
 
-[`validate_manifest()`](http://www.samuelbharti.com/myceliumr/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 for preparing input tables,
-[`validate_cohort()`](http://www.samuelbharti.com/myceliumr/reference/validate_cohort.md)
-for detailed validation,
-[Study](http://www.samuelbharti.com/myceliumr/reference/Study.md) for
+[`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md)
+for the checks,
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md)
+for reading one subject,
+[Study](https://www.samuelbharti.com/biocohort/reference/Study.md) for
 study metadata
 
 ## Examples
 
 ``` r
-# Create a study
 study <- study_new(
   study_id = "STUDY001",
   title = "Cross-species study",
   assays = c("WES", "snRNA-seq")
 )
 
-# Create manifest data (long format: one row per sample)
+# A long-format manifest: one row per sample
 manifest <- data.frame(
   subject_id = c("RAT001", "RAT001", "MOUSE1", "MOUSE1"),
   species = c("rat", "rat", "mouse", "mouse"),
@@ -117,26 +95,19 @@ manifest <- data.frame(
   role = c("tumor", "tumor", "tumor", NA)
 )
 
-# Validate and create cohort
-manifest_split <- validate_manifest(manifest)
+parsed <- validate_manifest(manifest)
 cohort <- cohort_new(
   study = study,
-  subject_tbl = manifest_split$subject_tbl,
-  sample_map = manifest_split$sample_map
+  subject_tbl = parsed$subject_tbl,
+  sample_map = parsed$sample_map
 )
 print(cohort)
-#> Cohort: 2 subjects, 4 sample rows 
+#> 
+#> ── Cohort: Cross-species study 
+#> • 2 subjects (1 mouse, 1 rat)
+#> • 4 samples (2 wes, 1 atac, 1 scrna)
 
-# Access individual Subject objects (automatically created)
-rat_subject <- cohort@subjects[["RAT001"]]
-print(rat_subject)
-#> <myceliumr::Subject>
-#>  @ subject_id: chr "RAT001"
-#>  @ species   : chr "rat"
-#>  @ sex       : chr "M"
-#>  @ strain    : chr NA
-#>  @ genotype  : chr NA
-#>  @ cohort    : chr NA
-#>  @ timepoint : chr NA
-#>  @ notes     : chr NA
+# Read one subject as a Subject object
+subject(cohort, "RAT001")
+#> Subject <RAT001>: rat 
 ```
