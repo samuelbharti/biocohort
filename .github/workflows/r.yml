@@ -15,10 +15,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: r-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
     name: R-CMD-check (${{ matrix.config.os }}, ${{ matrix.config.r }})
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
@@ -33,7 +38,7 @@ jobs:
       # them, so the suggested packages are not forced.
       _R_CHECK_FORCE_SUGGESTS_: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -58,10 +63,11 @@ jobs:
   lint-r:
     runs-on: ubuntu-latest
     name: lint-r
+    timeout-minutes: 15
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: r-lib/actions/setup-r@v2
         with:
@@ -79,3 +85,31 @@ jobs:
         working-directory: pkg-r
         env:
           LINTR_ERROR_ON_LINT: true
+
+  # Imports stays small on purpose (CLAUDE.md, test-package.R). This job
+  # installs only Depends, Imports, and LinkingTo, plus the test harness
+  # itself (testthat, withr), so a Suggests package used without a
+  # requireNamespace() or skip_if_not_installed() guard fails here rather
+  # than only showing up for a study that has not installed it.
+  imports-only:
+    runs-on: ubuntu-latest
+    name: imports-only
+    timeout-minutes: 15
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: '"hard"'
+          extra-packages: any::testthat, any::withr, local::.
+          working-directory: pkg-r
+
+      - name: Run the suite with no Suggests installed
+        run: Rscript testthat.R
+        working-directory: pkg-r/tests
