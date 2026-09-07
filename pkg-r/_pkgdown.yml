@@ -1,0 +1,144 @@
+url: https://www.samuelbharti.com/biocohort/
+
+# pkgdown defaults to docs/, but docs/local/ holds the working plans, so the
+# generated site gets its own directory instead of sharing one.
+destination: _site
+
+template:
+  bootstrap: 5
+  bootswatch: flatly
+  light-switch: true
+home:
+  title: biocohort
+  description: Study manifests, sample sheets, and analysis registries for genomics projects
+navbar:
+  structure:
+    left:
+    - home
+    - intro
+    - reference
+    - articles
+    - news
+    right: github
+  components:
+    home:
+      icon: fa-home
+      href: index.html
+      aria-label: Home
+    reference:
+      text: Reference
+      href: reference/index.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/samuelbharti/biocohort
+      aria-label: GitHub
+articles:
+- title: Reference
+  contents:
+  - starts_with("glossary")
+  - starts_with("naming")
+reference:
+- title: Package
+  desc: Package overview and entry point
+  contents:
+  - biocohort-package
+- title: Core Classes
+  desc: S7 classes for study data structures
+  contents:
+  - Study
+  - Subject
+  - Cohort
+  - AnalysisSpec
+  - example_cohort
+- title: Constructors
+  desc: Create and validate objects
+  contents:
+  - study_new
+  - subject_new
+  - cohort_new
+  - analysis_spec_new
+- title: Accessors
+  desc: Read parts of a cohort
+  contents:
+  - subject
+  - subjects
+  - samples
+  - completeness
+  - cohort_filter
+- title: IO Functions
+  desc: Read and write data
+  contents:
+  - read_manifest
+  - read_manifest_csv
+  - manifest_from_wide
+  - write_manifest
+  - cohort_save
+  - cohort_read
+- title: Analysis Registry
+  desc: Register and list analyses
+  contents:
+  - analysis_register
+  - analysis_list
+  - analysis_spec
+- title: Validation
+  desc: Data validation functions
+  contents:
+  - validate_manifest
+  - validate_cohort
+- title: Samples
+  desc: Work with the sample map
+  contents:
+  - sample_pairs
+- title: Pipeline sample sheets
+  desc: Write the sample sheet a pipeline expects, and check its file paths
+  contents:
+  - sample_sheet
+  - sample_sheet_templates
+  - check_paths
+- title: Analysis loading
+  desc: Read analysis feature tables from disk (experimental)
+  contents:
+  - load_analysis
+  - load_analyses
+  - analysis_files
+- title: Bridges
+  desc: Carry cohort metadata into other analysis objects
+  contents:
+  - as_coldata
+  - join_metadata
+- title: Cross-species translation
+  desc: Translate features across assemblies and species (experimental)
+  contents:
+  - translate
+  - orthologize
+  - liftover_intervals
+  - liftover_vcf
+  - liftover_rtracklayer
+  - liftover_crossmap
+  - register_liftover_backend
+  - liftover_backends
+  - ortholog_genes
+  - ortholog_babelgene
+  - register_ortholog_backend
+  - ortholog_backends
+  - translation_report
+  - TranslationResult
+  - translation_stats
+- title: Project paths
+  desc: Find the project root, build paths under it, and read a dotenv file
+  contents:
+  - project_root
+  - project_path
+  - ensure_dir
+  - read_dotenv
+- title: Corrections
+  desc: Apply documented overrides to a manifest and keep an audit trail
+  contents:
+  - apply_corrections
+  - corrections_log
+  - read_corrections
+- title: Study configuration
+  desc: Declare a study, its manifest, and its analyses in one YAML file
+  contents:
+  - read_study_yaml
+  - write_study_yaml

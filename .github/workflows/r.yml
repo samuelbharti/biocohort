@@ -1,0 +1,115 @@
+name: R-CMD-check
+
+# Every pull request runs this, into dev as well as main. Pushes do not: a
+# branch is checked when it is proposed, and the same commits do not need
+# checking twice. See CONTRIBUTING.md.
+#
+# The repository is private, so Actions minutes are metered (macOS counts ten
+# times, Windows twice). A pull request into dev runs one Ubuntu check. The
+# full platform matrix runs for a pull request into main and on manual runs.
+on:
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: r-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  R-CMD-check:
+    runs-on: ${{ matrix.config.os }}
+    name: R-CMD-check (${{ matrix.config.os }}, ${{ matrix.config.r }})
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        config: >-
+          ${{ fromJSON((github.base_ref == 'main' || github.event_name == 'workflow_dispatch')
+            && '[{"os":"ubuntu-latest","r":"devel","http-user-agent":"release"},{"os":"ubuntu-latest","r":"release"},{"os":"ubuntu-latest","r":"oldrel-1"},{"os":"windows-latest","r":"release"},{"os":"macos-latest","r":"release"}]'
+            || '[{"os":"ubuntu-latest","r":"release"}]') }}
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      # Bioconductor and babelgene are optional. The check must pass without
+      # them, so the suggested packages are not forced.
+      _R_CHECK_FORCE_SUGGESTS_: false
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+          working-directory: pkg-r
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          working-directory: pkg-r
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  lint-r:
+    runs-on: ubuntu-latest
+    name: lint-r
+    timeout-minutes: 15
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::lintr, local::.
+          needs: lint
+          working-directory: pkg-r
+
+      - name: Lint
+        run: lintr::lint_package()
+        shell: Rscript {0}
+        working-directory: pkg-r
+        env:
+          LINTR_ERROR_ON_LINT: true
+
+  # Imports stays small on purpose (CLAUDE.md, test-package.R). This job
+  # installs only Depends, Imports, and LinkingTo, plus the test harness
+  # itself (testthat, withr), so a Suggests package used without a
+  # requireNamespace() or skip_if_not_installed() guard fails here rather
+  # than only showing up for a study that has not installed it.
+  imports-only:
+    runs-on: ubuntu-latest
+    name: imports-only
+    timeout-minutes: 15
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: '"hard"'
+          extra-packages: any::testthat, any::withr, local::.
+          working-directory: pkg-r
+
+      - name: Run the suite with no Suggests installed
+        run: Rscript testthat.R
+        working-directory: pkg-r/tests

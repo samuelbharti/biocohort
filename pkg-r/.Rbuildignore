@@ -1,0 +1,11 @@
+^biocohort\.Rproj$
+^\.Rproj\.user$
+^\.Rhistory$
+^_pkgdown\.yml$
+^_site$
+^pkgdown$
+^docs$
+^data-raw$
+^LICENSE\.md$
+^cran-comments\.md$
+^\.git$

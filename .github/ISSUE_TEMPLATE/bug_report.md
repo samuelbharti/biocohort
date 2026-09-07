@@ -18,15 +18,15 @@ Brief description of the bug.
 ## Example Code
 ```r
 # Minimal reproducible example
-library(myceliumr)
+library(biocohort)
 
 # Code that triggers the bug
 ```
 
 ## Environment
-- myceliumr version: 
-- R version: 
-- OS: 
+- biocohort version:
+- R version:
+- OS:
 
 ## Error Message
 ```
