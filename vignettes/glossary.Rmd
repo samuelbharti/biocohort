@@ -64,7 +64,7 @@ This glossary defines key terms and concepts used throughout bioroster documenta
 
 | Term | Definition |
 |------|-----------|
-| **Genotype** | The genetic makeup or background of a subject (e.g., "WT" = wild-type, "KO" = knockout, "NF1+/-" = heterozygous). Optional metadata field. |
+| **Genotype** | The genetic makeup or background of a subject (e.g., "WT" = wild-type, "KO" = knockout, "HET" = heterozygous). Optional metadata field. |
 | **Sex** | Biological sex of the subject: "M" (male) or "F" (female). Optional metadata field. |
 | **Strain** | The inbred strain or breed designation of the subject (e.g., "Fischer 344", "B6"). Optional metadata field. |
 | **Cohort** | A treatment group, experimental condition, or temporal grouping of subjects (e.g., "Control", "Treatment_A", "Tumor_Bearing"). Optional metadata field distinct from Cohort objects. |
