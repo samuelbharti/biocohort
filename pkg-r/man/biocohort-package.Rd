@@ -66,7 +66,7 @@ subject or pair, read the files, and record which ones were found.
 \itemize{
 \item \code{\link[=translate]{translate()}} moves a feature table across genome builds or species.
 Coordinate features go through a liftover backend
-(\code{\link[=liftover_intervals]{liftover_intervals()}}); gene features go through an ortholog backend
+(\code{\link[=liftover_intervals]{liftover_intervals()}}). Gene features go through an ortholog backend
 (\code{\link[=ortholog_genes]{ortholog_genes()}}). Both kinds of backend are pluggable through
 \code{\link[=register_liftover_backend]{register_liftover_backend()}} and \code{\link[=register_ortholog_backend]{register_ortholog_backend()}}.
 }
@@ -103,7 +103,7 @@ sample count.
 The \href{articles/biocohort.html}{Get started} article walks through a
 manifest, a cohort, and a sample sheet end to end. The
 \href{articles/glossary.html}{Glossary} defines the terms used across the
-package, and \href{articles/naming-conventions.html}{Naming Conventions}
+package, and \href{articles/naming-conventions.html}{Naming conventions}
 lists the standard names for columns, objects, and files.
 }
 
