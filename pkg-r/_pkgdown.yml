@@ -16,6 +16,13 @@ template:
     heading_font: {google: "Bricolage Grotesque"}
     code_font: {google: "JetBrains Mono"}
     border-radius: "0.25rem"
+
+# The sidebar lists the thesis advisors next to the author. pkgdown's
+# default only shows aut and cre there.
+authors:
+  sidebar:
+    roles: [aut, cre, ths]
+
 home:
   title: biocohort
   description: Study manifests, sample sheets, and analysis registries for any omics project
