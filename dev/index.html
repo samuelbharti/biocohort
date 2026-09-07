@@ -47,8 +47,9 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="bioroster">bioroster<a class="anchor" aria-label="anchor" href="#bioroster"></a>
+<div class="page-header"><h1 id="bioroster-r-package">bioroster (R package)<a class="anchor" aria-label="anchor" href="#bioroster-r-package"></a>
 </h1></div>
+<p>This directory holds the R package. See the repository root <a href="../README.html">README.md</a> for what bioroster is for and how the repository is laid out.</p>
 <!-- badges: start -->
 
 <p>bioroster keeps the subjects, samples, and analysis outputs of a genomics study in one validated object. Species and assays are values in the data, not columns or classes, so the same functions work for any organism and any assay.</p>
@@ -57,11 +58,11 @@
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># From GitHub</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"samuelbharti/bioroster"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># From GitHub, from a checkout of the repository root</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"pkg-r"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># From source</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># From GitHub, from anywhere</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"samuelbharti/bioroster"</span>, subdir <span class="op">=</span> <span class="st">"pkg-r"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
@@ -126,14 +127,14 @@ R2,rat,KO,wes,N2,normal</code></pre>
 <li>
 <strong><a href="https://www.samuelbharti.com/bioroster/articles/naming-conventions.html">Naming Conventions</a></strong>: standard column, object, and file names.</li>
 </ul>
-<p>To build the site locally:</p>
+<p>To build the site locally, run from the repository root:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="st">"pkg-r"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
 </h2>
-<p>See <a href="CONTRIBUTING.html">CONTRIBUTING.md</a> for the development workflow.</p>
+<p>See <a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> for the development workflow.</p>
 </div>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
@@ -152,19 +153,11 @@ R2,rat,KO,wes,N2,normal</code></pre>
 <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li>
-<a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
-</li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
 
-<div class="community">
-<h2 data-toc-skip>Community</h2>
-<ul class="list-unstyled">
-<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
-<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
-</ul>
-</div>
 
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>

@@ -1,4 +1,8 @@
-# bioroster
+# bioroster (R package)
+
+This directory holds the R package. See the repository root
+[README.md](https://www.samuelbharti.com/README.md) for what bioroster
+is for and how the repository is laid out.
 
 bioroster keeps the subjects, samples, and analysis outputs of a
 genomics study in one validated object. Species and assays are values in
@@ -11,11 +15,11 @@ organism and any assay.
 
 ``` r
 
-# From GitHub
-devtools::install_github("samuelbharti/bioroster")
+# From GitHub, from a checkout of the repository root
+devtools::install("pkg-r")
 
-# From source
-devtools::install()
+# From GitHub, from anywhere
+remotes::install_github("samuelbharti/bioroster", subdir = "pkg-r")
 ```
 
 ## Quick start
@@ -119,18 +123,17 @@ The package website includes:
   Conventions](https://www.samuelbharti.com/bioroster/articles/naming-conventions.html)**:
   standard column, object, and file names.
 
-To build the site locally:
+To build the site locally, run from the repository root:
 
 ``` r
 
-pkgdown::build_site()
+pkgdown::build_site("pkg-r")
 ```
 
 ## Contributing
 
-See
-[CONTRIBUTING.md](https://www.samuelbharti.com/bioroster/CONTRIBUTING.md)
-for the development workflow.
+See [CONTRIBUTING.md](https://www.samuelbharti.com/CONTRIBUTING.md) for
+the development workflow.
 
 ## License
 
