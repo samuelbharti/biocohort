@@ -6,11 +6,19 @@ destination: _site
 
 template:
   bootstrap: 5
-  bootswatch: flatly
   light-switch: true
+  bslib:
+    # Taken from the logo, so the site and the hex are the same object.
+    # Aubergine is the ring color in the hex; moss and ochre are the two
+    # other strands, used sparingly rather than as the site's primary.
+    primary: "#4b2e4f"
+    base_font: {google: "Source Sans 3"}
+    heading_font: {google: "Bricolage Grotesque"}
+    code_font: {google: "JetBrains Mono"}
+    border-radius: "0.25rem"
 home:
   title: biocohort
-  description: Study manifests, sample sheets, and analysis registries for genomics projects
+  description: Study manifests, sample sheets, and analysis registries for any omics project
 navbar:
   structure:
     left:

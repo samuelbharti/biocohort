@@ -4,12 +4,15 @@
 [![R-CMD-check](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml)
 <!-- badges: end -->
 
-biocohort keeps the subjects, samples, and analysis outputs of a genomics
-study in one validated object. Species and assays are values in the data,
-not columns or classes, so the same functions work for any organism and any
-assay.
+biocohort keeps the subjects, samples, and analysis outputs of a study in
+one validated object. Species and assays are values in the data, not
+columns or classes, so the same functions work for any organism and any
+omics assay.
 
 **Documentation**: <https://www.samuelbharti.com/biocohort/>
+
+See the [repository root README](https://github.com/samuelbharti/biocohort#readme)
+for why this package exists.
 
 ## Installation
 
@@ -77,6 +80,9 @@ long <- manifest_from_wide(wide_table, id_cols)
 - **Track analysis outputs.** `analysis_spec_new()` and `load_analysis()`
   resolve a path template per subject or pair, read the files, and record
   which ones were found.
+- **Keep a record of manual fixes.** `apply_corrections()` applies a table
+  of documented overrides to a manifest and keeps an audit trail, instead
+  of a value changing quietly inside a script.
 - **Translate across species.** `translate()` moves a feature table across
   genome builds or species, through a liftover or an ortholog backend.
 - **Keep a study in one file.** `read_study_yaml()` builds a cohort from a
