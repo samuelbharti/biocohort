@@ -147,3 +147,11 @@ Authors:
 
 - Samuel Bharti <samuelbharti.io@gmail.com>
   ([ORCID](https://orcid.org/0000-0003-4190-7058)) \[copyright holder\]
+
+Other contributors:
+
+- Barret Schloerke <barret@posit.co>
+  ([ORCID](https://orcid.org/0000-0001-9986-114X)) \[thesis advisor\]
+
+- Carson Sievert <carson@posit.co>
+  ([ORCID](https://orcid.org/0000-0002-4958-2844)) \[thesis advisor\]
