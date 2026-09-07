@@ -43,7 +43,8 @@ Suggests:
     readxl,
     writexl,
     SummarizedExperiment,
-    SeuratObject
+    SeuratObject,
+    yaml
 SystemRequirements: CrossMap (optional, for the CrossMap liftover backend)
 VignetteBuilder: knitr
 Config/testthat/edition: 3

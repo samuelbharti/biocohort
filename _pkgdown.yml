@@ -137,3 +137,8 @@ reference:
   - apply_corrections
   - corrections_log
   - read_corrections
+- title: Study configuration
+  desc: Declare a study, its manifest, and its analyses in one YAML file
+  contents:
+  - read_study_yaml
+  - write_study_yaml

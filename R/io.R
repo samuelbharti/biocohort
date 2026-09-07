@@ -60,19 +60,27 @@ read_manifest <- function(
     cli::cli_abort("Manifest file not found: {.path {path}}.")
   }
 
+  manifest <- .read_manifest_file(path, delim = delim, sheet = sheet, ...)
+
+  validate_manifest(
+    manifest,
+    sample_cols = sample_cols,
+    species = species,
+    allow_duplicates = allow_duplicates
+  )
+}
+
+# The file-reading half of read_manifest(), without the validation step.
+# Used directly by read_study_yaml(), which validates only after optionally
+# applying corrections to the raw table.
+.read_manifest_file <- function(path, delim = NULL, sheet = NULL, ...) {
   ext <- tolower(fs::path_ext(path))
   manifest <- if (ext %in% c("xlsx", "xls")) {
     .read_manifest_excel(path, sheet, ...)
   } else {
     .read_manifest_delim(path, delim %||% .manifest_delim(path, ext), ...)
   }
-
-  validate_manifest(
-    tibble::as_tibble(manifest),
-    sample_cols = sample_cols,
-    species = species,
-    allow_duplicates = allow_duplicates
-  )
+  tibble::as_tibble(manifest)
 }
 
 # Fill in a default for each name in `defaults` that `dots` does not already
