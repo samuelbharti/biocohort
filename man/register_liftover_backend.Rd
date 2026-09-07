@@ -12,9 +12,9 @@ register_liftover_backend(name, fn)
 \item{fn}{A function with signature \verb{function(intervals, chain, ...)} that
 returns a list with two tibbles:
 \itemize{
-\item \code{mapped}: translated features, including a \code{.liftover_id} column linking
+\item \code{mapped}: translated features, including a \code{.feature_id} column linking
 each output row to its input row in \code{intervals}.
-\item \code{unmapped}: the input rows (carrying \code{.liftover_id}) that produced no
+\item \code{unmapped}: the input rows (carrying \code{.feature_id}) that produced no
 output.
 }}
 }
@@ -30,7 +30,7 @@ to be swapped in.
 }
 \details{
 \code{intervals} passed to a backend is guaranteed to have columns \code{seqnames},
-\code{start}, \code{end}, an optional \code{strand}, and a \code{.liftover_id} integer key added
+\code{start}, \code{end}, an optional \code{strand}, and a \code{.feature_id} integer key added
 by \code{\link[=liftover_intervals]{liftover_intervals()}}.
 }
 \seealso{

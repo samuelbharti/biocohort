@@ -8,7 +8,7 @@ liftover_rtracklayer(intervals, chain, ...)
 }
 \arguments{
 \item{intervals}{A tibble of intervals with \code{seqnames}, \code{start}, \code{end}, an
-optional \code{strand}, and a \code{.liftover_id} key (supplied by
+optional \code{strand}, and a \code{.feature_id} key (supplied by
 \code{\link[=liftover_intervals]{liftover_intervals()}}).}
 
 \item{chain}{Path to a UCSC chain file.}

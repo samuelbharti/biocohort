@@ -2,9 +2,9 @@
 % Please edit documentation in R/orthologize.R
 \name{orthologize}
 \alias{orthologize}
-\title{Translate features (or a whole cohort) across species or assemblies}
+\title{Deprecated alias for translate()}
 \usage{
-orthologize(x, to, from = NA_character_, ...)
+orthologize(x, to, from = NULL, ...)
 }
 \arguments{
 \item{x}{The thing to translate. Either:
@@ -15,8 +15,13 @@ orthologize(x, to, from = NA_character_, ...)
 
 \item{to}{Character scalar naming the target species/assembly.}
 
-\item{from}{Character scalar naming the source species/assembly. Required for
-the \code{"ortholog"} strategy and for cohort-level translation.}
+\item{from}{For a feature table, a character scalar naming the source
+species/assembly; required for the \code{"ortholog"} strategy, optional
+(recorded as provenance) for \code{"liftover"}. For a Cohort, \code{NULL}
+(default) infers the source species from \code{subject_tbl$species}: used
+directly when the cohort has one species, or resolved per analysis
+(and, for an analysis with a \code{subject_id} column, per subject) when it
+has more than one. Give it explicitly to override inference.}
 
 \item{...}{Strategy-specific arguments. For a \strong{feature table}:
 \itemize{
@@ -30,7 +35,10 @@ or \code{"ortholog"} (gene features; see \code{\link[=ortholog_genes]{ortholog_g
 
 For a \strong{Cohort}:
 \itemize{
-\item \code{chain}: chain-file path used for any \code{feature_type = "interval"} analysis.
+\item \code{chain}: chain-file path used for any \code{feature_type = "interval"}
+analysis. A cohort translated from more than one source species can
+pass a named list instead, one chain per source species (e.g.
+\code{list(rat = "rn7ToHg38.chain", mouse = "mm39ToHg38.chain")}).
 \item \code{liftover_backend}, \code{ortholog_backend}: backends for the two modalities.
 \item \code{analyses}: optional character vector restricting which analyses to
 translate (defaults to all that have a registered spec with a
@@ -38,48 +46,13 @@ translate (defaults to all that have a registered spec with a
 }}
 }
 \value{
-A \link{TranslationResult} (feature table input) or a new \link{Cohort} whose
-analyses are expressed in \code{to} (Cohort input). For a cohort, per-analysis
-\link{TranslationResult}s (including unmapped features) are retrievable with
-\code{\link[=translation_report]{translation_report()}}.
+See \code{\link[=translate]{translate()}}.
 }
 \description{
-High-level entry point for cross-species translation. \code{orthologize()} is the
-modality dispatcher that makes translation a single, first-class operation:
-coordinate features (variants, peaks, intervals) route to liftover, and
-gene-level features route to ortholog mapping. Given a \link{Cohort}, it translates
-every registered analysis according to its \link{AnalysisSpec} and returns a new,
-target-species cohort.
-}
-\details{
-This function is \strong{experimental} while the API settles.
-
-Cohort-level translation keeps subjects and the sample map unchanged (the
-same biological subjects, viewed in another species' coordinate/gene space)
-and re-expresses each analysis's feature table. Analyses without a registered
-\link{AnalysisSpec} or without a \code{feature_type} are skipped with a warning rather
-than guessed at.
-}
-\examples{
-# Feature-table input -----------------------------------------------------
-ints <- data.frame(seqnames = "chr1", start = 100, end = 200)
-backend <- function(intervals, chain, ...) {
-  list(
-    mapped = tibble::tibble(
-      .liftover_id = intervals$.liftover_id,
-      seqnames = "chrT", start = 1L, end = 100L, strand = "*"
-    ),
-    unmapped = intervals[0, , drop = FALSE]
-  )
-}
-orthologize(
-  ints,
-  to = "human", from = "rat",
-  strategy = "liftover", chain = "none", backend = backend
-)
-
+\code{orthologize()} is the earlier name for \code{\link[=translate]{translate()}}. It still works and
+calls \code{\link[=translate]{translate()}} with the same arguments, and warns once per session.
+New code should call \code{\link[=translate]{translate()}} directly.
 }
 \seealso{
-\code{\link[=liftover_intervals]{liftover_intervals()}}, \code{\link[=ortholog_genes]{ortholog_genes()}}, \code{\link[=translation_report]{translation_report()}},
-\link{TranslationResult}
+\code{\link[=translate]{translate()}}
 }

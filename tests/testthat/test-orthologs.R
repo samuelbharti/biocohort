@@ -80,3 +80,112 @@ test_that("ortholog_babelgene pivots model-to-model through human", {
   expect_true(S7::S7_inherits(res, TranslationResult))
   expect_true(nrow(res@mapped) >= 1)
 })
+
+# --- babelgene file cache ---------------------------------------------------
+
+test_that("ortholog_babelgene writes new lookups to the cache file", {
+  skip_if_not_installed("babelgene")
+  cache <- tempfile(fileext = ".tsv")
+  on.exit(unlink(cache), add = TRUE)
+
+  feats <- data.frame(gene = "TP53", stringsAsFactors = FALSE)
+  ortholog_genes(feats, from = "human", to = "mouse", cache = cache)
+
+  expect_true(file.exists(cache))
+  written <- readr::read_tsv(cache, show_col_types = FALSE)
+  expect_setequal(
+    names(written),
+    c("from", "to", "id_type", "input_id", "target_id")
+  )
+  expect_true("TP53" %in% written$input_id)
+})
+
+test_that("ortholog_babelgene reads a cached mapping instead of querying again", {
+  skip_if_not_installed("babelgene")
+  cache <- tempfile(fileext = ".tsv")
+  on.exit(unlink(cache), add = TRUE)
+
+  # Seed the cache with a deliberately fake mapping, so a hit proves the
+  # cache was used rather than a fresh babelgene lookup.
+  readr::write_tsv(
+    tibble::tibble(
+      from = "human",
+      to = "mouse",
+      id_type = "symbol",
+      input_id = "TP53",
+      target_id = "Fake_Ortholog"
+    ),
+    cache
+  )
+
+  feats <- data.frame(gene = "TP53", stringsAsFactors = FALSE)
+  res <- ortholog_genes(feats, from = "human", to = "mouse", cache = cache)
+
+  expect_equal(res@mapped$ortholog, "Fake_Ortholog")
+})
+
+test_that("ortholog_babelgene only queries genes not already cached", {
+  skip_if_not_installed("babelgene")
+  cache <- tempfile(fileext = ".tsv")
+  on.exit(unlink(cache), add = TRUE)
+
+  readr::write_tsv(
+    tibble::tibble(
+      from = "human",
+      to = "mouse",
+      id_type = "symbol",
+      input_id = "TP53",
+      target_id = "Fake_Ortholog"
+    ),
+    cache
+  )
+
+  feats <- data.frame(gene = c("TP53", "MYC"), stringsAsFactors = FALSE)
+  res <- ortholog_genes(feats, from = "human", to = "mouse", cache = cache)
+
+  expect_true("Fake_Ortholog" %in% res@mapped$ortholog)
+  expect_true("Myc" %in% res@mapped$ortholog) # freshly queried, real answer
+
+  written <- readr::read_tsv(cache, show_col_types = FALSE)
+  expect_equal(written$target_id[written$input_id == "TP53"], "Fake_Ortholog")
+  expect_true("MYC" %in% written$input_id)
+})
+
+test_that("ortholog_babelgene keeps separate cache rows per from/to/id_type", {
+  skip_if_not_installed("babelgene")
+  cache <- tempfile(fileext = ".tsv")
+  on.exit(unlink(cache), add = TRUE)
+
+  ortholog_genes(
+    data.frame(gene = "TP53", stringsAsFactors = FALSE),
+    from = "human",
+    to = "mouse",
+    cache = cache
+  )
+  ortholog_genes(
+    data.frame(gene = "TP53", stringsAsFactors = FALSE),
+    from = "human",
+    to = "rat",
+    cache = cache
+  )
+
+  written <- readr::read_tsv(cache, show_col_types = FALSE)
+  expect_setequal(written$to, c("mouse", "rat"))
+})
+
+test_that("ortholog_babelgene errors on a file that is not a cache", {
+  skip_if_not_installed("babelgene")
+  cache <- tempfile(fileext = ".tsv")
+  on.exit(unlink(cache), add = TRUE)
+  writeLines("not,a,cache,file", cache)
+
+  expect_error(
+    ortholog_genes(
+      data.frame(gene = "TP53", stringsAsFactors = FALSE),
+      from = "human",
+      to = "mouse",
+      cache = cache
+    ),
+    "not a babelgene cache file"
+  )
+})

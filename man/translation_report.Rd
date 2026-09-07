@@ -7,7 +7,7 @@
 translation_report(cohort)
 }
 \arguments{
-\item{cohort}{A Cohort produced by \code{orthologize()}.}
+\item{cohort}{A Cohort produced by \code{translate()}.}
 }
 \value{
 A named list with \code{from}, \code{to}, and \code{results} (a named list of
@@ -15,16 +15,16 @@ A named list with \code{from}, \code{to}, and \code{results} (a named list of
 cohort has not been translated.
 }
 \description{
-After \code{\link[=orthologize]{orthologize()}} has translated a \link{Cohort}, this returns the
+After \code{\link[=translate]{translate()}} has translated a \link{Cohort}, this returns the
 per-analysis \link{TranslationResult} objects (including the unmapped features and
 mapping statistics) recorded during translation.
 }
 \examples{
-# See ?orthologize for a cohort-translation example; then:
+# See ?translate for a cohort-translation example; then:
 # report <- translation_report(translated_cohort)
 # report$results[["somatic_vars"]]
 
 }
 \seealso{
-\code{\link[=orthologize]{orthologize()}}, \link{TranslationResult}
+\code{\link[=translate]{translate()}}, \link{TranslationResult}
 }

@@ -1,7 +1,7 @@
 lift_mock <- function(intervals, chain, ...) {
   list(
     mapped = tibble::tibble(
-      .liftover_id = intervals$.liftover_id,
+      .feature_id = intervals$.feature_id,
       seqnames = "chrH",
       start = intervals$start + 1L,
       end = intervals$end + 1L,
@@ -135,8 +135,20 @@ test_that("translation_report exposes per-analysis results", {
   expect_null(translation_report(coh)) # untranslated cohort
 })
 
-test_that("orthologize(cohort) requires `from`", {
-  expect_error(orthologize(make_cohort(), to = "human"), "`from` is required")
+test_that("translate(cohort) infers from from a single-species cohort", {
+  out <- translate(
+    make_cohort(),
+    to = "human",
+    chain = "none",
+    liftover_backend = lift_mock,
+    ortholog_backend = gene_mock
+  )
+  rep <- translation_report(out)
+  expect_equal(rep$from, "rat")
+})
+
+test_that("translate(cohort) requires `from` when there are no subjects to infer from", {
+  expect_error(translate(Cohort(), to = "human"), "no subjects to infer")
 })
 
 test_that("orthologize(cohort) requires a chain for interval analyses", {
@@ -202,7 +214,157 @@ test_that("orthologize(cohort) errors on unknown analyses", {
 test_that("orthologize(cohort) translates a gene analysis with babelgene", {
   skip_if_not_installed("babelgene")
   coh <- make_cohort()
-  out <- orthologize(coh, to = "mouse", from = "human", analyses = "expr")
+  # coh's subjects are rat, and from = "human" here names the convention the
+  # expr table's gene symbols already use, not the cohort's own species, so
+  # this is the one case where the from-not-in-cohort-species warning fires
+  # on purpose.
+  expect_warning(
+    translate(coh, to = "mouse", from = "human", analyses = "expr"),
+    "not among the cohort's species"
+  )
+  out <- suppressWarnings(
+    translate(coh, to = "mouse", from = "human", analyses = "expr")
+  )
   expect_true("ortholog" %in% names(out@analyses$expr))
   expect_true("Trp53" %in% out@analyses$expr$ortholog)
+})
+
+# --- Mixed-species cohorts --------------------------------------------------
+
+make_mixed_species_cohort <- function(analyses) {
+  manifest <- data.frame(
+    subject_id = c("R1", "M1"),
+    species = c("rat", "mouse"),
+    assay = "wes",
+    sample_id = c("T1", "T2"),
+    role = "tumor",
+    stringsAsFactors = FALSE
+  )
+  parsed <- validate_manifest(manifest)
+  coh <- cohort_new(parsed$subject_tbl, parsed$sample_map, analyses = analyses)
+  spec <- analysis_spec_new(
+    name = names(analyses)[[1]],
+    assay = "wes",
+    level = "subject",
+    format = "tsv",
+    reader = "read_tsv",
+    key_cols = "subject_id",
+    feature_type = if ("gene" %in% names(analyses[[1]])) "gene" else "interval",
+    gene_col = "gene",
+    id_type = "symbol"
+  )
+  analysis_register(coh, spec)
+}
+
+test_that("translate(cohort) splits an analysis by subject species when from is not given", {
+  coh <- make_mixed_species_cohort(list(
+    expr = data.frame(
+      subject_id = c("R1", "M1"),
+      gene = c("Trp53", "Trp53"),
+      stringsAsFactors = FALSE
+    )
+  ))
+
+  out <- translate(coh, to = "human", ortholog_backend = gene_mock)
+
+  expect_true(".source_species" %in% names(out@analyses$expr))
+  expect_setequal(out@analyses$expr$.source_species, c("rat", "mouse"))
+
+  rep <- translation_report(out)
+  expect_setequal(rep$results$expr@from, c("rat", "mouse"))
+})
+
+test_that("translate(cohort) errors on a mixed-species analysis with no subject_id column", {
+  coh <- make_mixed_species_cohort(list(
+    expr = data.frame(gene = c("Trp53", "Trp53"), stringsAsFactors = FALSE)
+  ))
+
+  expect_error(
+    translate(coh, to = "human", ortholog_backend = gene_mock),
+    "subject_id"
+  )
+})
+
+test_that("translate(cohort) accepts chain as a named list, one per source species", {
+  coh <- make_mixed_species_cohort(list(
+    somatic = data.frame(
+      subject_id = c("R1", "M1"),
+      seqnames = "chr1",
+      start = c(100, 200),
+      end = c(150, 250),
+      stringsAsFactors = FALSE
+    )
+  ))
+
+  out <- translate(
+    coh,
+    to = "human",
+    chain = list(rat = "rat_chain", mouse = "mouse_chain"),
+    liftover_backend = lift_mock
+  )
+
+  expect_setequal(out@analyses$somatic$.source_species, c("rat", "mouse"))
+})
+
+test_that("translate(cohort) names the missing species when a chain list lacks an entry", {
+  coh <- make_mixed_species_cohort(list(
+    somatic = data.frame(
+      subject_id = c("R1", "M1"),
+      seqnames = "chr1",
+      start = c(100, 200),
+      end = c(150, 250),
+      stringsAsFactors = FALSE
+    )
+  ))
+
+  err <- expect_error(
+    translate(
+      coh,
+      to = "human",
+      chain = list(rat = "rat_chain"),
+      liftover_backend = lift_mock
+    ),
+    "chain file"
+  )
+  expect_match(conditionMessage(err), "mouse", fixed = TRUE)
+})
+
+# --- orthologize() as a deprecated alias ------------------------------------
+
+test_that("orthologize() warns once per session and behaves like translate()", {
+  rlang:::reset_warning_verbosity("bioroster_orthologize")
+  coh <- make_cohort()
+
+  expect_warning(
+    orthologize(
+      coh,
+      to = "human",
+      from = "rat",
+      chain = "none",
+      liftover_backend = lift_mock,
+      ortholog_backend = gene_mock
+    ),
+    "now called"
+  )
+  rlang:::reset_warning_verbosity("bioroster_orthologize")
+  out <- suppressWarnings(orthologize(
+    coh,
+    to = "human",
+    from = "rat",
+    chain = "none",
+    liftover_backend = lift_mock,
+    ortholog_backend = gene_mock
+  ))
+  expect_true(S7::S7_inherits(out, Cohort))
+
+  expect_no_warning(
+    orthologize(
+      coh,
+      to = "human",
+      from = "rat",
+      chain = "none",
+      liftover_backend = lift_mock,
+      ortholog_backend = gene_mock
+    )
+  )
 })

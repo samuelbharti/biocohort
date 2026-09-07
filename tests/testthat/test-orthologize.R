@@ -1,7 +1,7 @@
 passthrough_backend <- function(intervals, chain, ...) {
   list(
     mapped = tibble::tibble(
-      .liftover_id = intervals$.liftover_id,
+      .feature_id = intervals$.feature_id,
       seqnames = "chrT",
       start = intervals$start + 1L,
       end = intervals$end + 1L,

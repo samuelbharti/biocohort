@@ -14,8 +14,8 @@ register_ortholog_backend(name, fn)
 with two tibbles:
 \itemize{
 \item \code{mapped}: input rows that had at least one ortholog, carrying the
-\code{.ortholog_id} key and an \code{ortholog} column with the target-species id.
-\item \code{unmapped}: input rows (carrying \code{.ortholog_id}) with no ortholog.
+\code{.feature_id} key and an \code{ortholog} column with the target-species id.
+\item \code{unmapped}: input rows (carrying \code{.feature_id}) with no ortholog.
 }}
 }
 \value{

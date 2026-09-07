@@ -1,12 +1,12 @@
 #' Result of a cross-species or cross-assembly translation
 #'
-#' An S7 class holding the outcome of translating coordinate features (or, in
-#' future, gene-level features) from one species/assembly to another. It keeps
-#' the successfully translated features, the features that failed to map, and
+#' An S7 class holding the outcome of translating coordinate features or
+#' gene-level features from one species or assembly to another. It keeps the
+#' successfully translated features, the features that failed to map, and
 #' provenance so that translation is never lossy *silently*.
 #'
 #' @param mapped A tibble of successfully translated features. Includes a
-#'   `.liftover_id` column linking each output row back to its input row; one
+#'   `.feature_id` column linking each output row back to its input row; one
 #'   input may yield multiple output rows (multi-mapping).
 #' @param unmapped A tibble of input features that produced no output.
 #' @param from Character scalar naming the source species/assembly. Optional.
@@ -65,7 +65,7 @@ TranslationResult <- S7::new_class(
 #' backend <- function(intervals, chain, ...) {
 #'   list(
 #'     mapped = tibble::tibble(
-#'       .liftover_id = intervals$.liftover_id[1],
+#'       .feature_id = intervals$.feature_id[1],
 #'       seqnames = "chrT", start = 1L, end = 100L, strand = "*"
 #'     ),
 #'     unmapped = intervals[-1, , drop = FALSE]

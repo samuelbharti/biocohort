@@ -15,8 +15,8 @@ NULL
 #'   `function(features, from, to, gene_col, id_type, ...)` returning a list
 #'   with two tibbles:
 #'   - `mapped`: input rows that had at least one ortholog, carrying the
-#'     `.ortholog_id` key and an `ortholog` column with the target-species id.
-#'   - `unmapped`: input rows (carrying `.ortholog_id`) with no ortholog.
+#'     `.feature_id` key and an `ortholog` column with the target-species id.
+#'   - `unmapped`: input rows (carrying `.feature_id`) with no ortholog.
 #'
 #' @return Invisibly, the backend name.
 #'
@@ -126,7 +126,7 @@ ortholog_genes <- function(
   }
 
   features <- tibble::as_tibble(features)
-  features$.ortholog_id <- seq_len(nrow(features))
+  features$.feature_id <- seq_len(nrow(features))
 
   backend_name <- if (is.character(backend)) backend else "custom"
   fn <- .get_ortholog_backend(backend)
@@ -137,9 +137,9 @@ ortholog_genes <- function(
       "Ortholog backend must return a list with `mapped` and `unmapped`."
     )
   }
-  if (!".ortholog_id" %in% names(out$mapped)) {
+  if (!".feature_id" %in% names(out$mapped)) {
     cli::cli_abort(
-      "Backend `mapped` output must include a `.ortholog_id` column."
+      "Backend `mapped` output must include a `.feature_id` column."
     )
   }
 
@@ -147,9 +147,9 @@ ortholog_genes <- function(
   unmapped <- tibble::as_tibble(out$unmapped)
 
   n_input <- nrow(features)
-  mapped_ids <- unique(mapped$.ortholog_id)
+  mapped_ids <- unique(mapped$.feature_id)
   n_mapped <- length(mapped_ids)
-  per_id <- as.integer(table(mapped$.ortholog_id))
+  per_id <- as.integer(table(mapped$.feature_id))
   n_multi <- sum(per_id > 1)
 
   stats <- list(
@@ -175,20 +175,32 @@ ortholog_genes <- function(
 #' precomputed orthologs between human and a range of model organisms. This is
 #' the default backend for [ortholog_genes()].
 #'
-#' @param features A tibble of features with a gene column and a `.ortholog_id`
+#' @param features A tibble of features with a gene column and a `.feature_id`
 #'   key (supplied by [ortholog_genes()]).
 #' @param from,to Source and target species (e.g. `"human"`, `"mouse"`,
 #'   `"rat"`). babelgene is human-centric, so model-to-model mappings (e.g.
 #'   rat-to-mouse) are routed through human.
 #' @param gene_col Name of the gene-identifier column.
 #' @param id_type One of `"symbol"`, `"entrez"`, `"ensembl"`.
+#' @param cache Optional path to a TSV file caching prior lookups. When
+#'   given, a gene already in the file is read from there instead of
+#'   queried again, and a newly queried gene is appended for next time. The
+#'   cache is shared across `from`/`to`/`id_type` combinations in one file.
 #' @param ... Passed to [babelgene::orthologs()] (e.g. `min_support`, `top`).
 #'
 #' @return A list with `mapped` and `unmapped` tibbles.
 #'
 #' @seealso [ortholog_genes()]
 #' @export
-ortholog_babelgene <- function(features, from, to, gene_col, id_type, ...) {
+ortholog_babelgene <- function(
+  features,
+  from,
+  to,
+  gene_col,
+  id_type,
+  cache = NULL,
+  ...
+) {
   if (!requireNamespace("babelgene", quietly = TRUE)) {
     cli::cli_abort(
       c(
@@ -199,7 +211,14 @@ ortholog_babelgene <- function(features, from, to, gene_col, id_type, ...) {
   }
 
   genes <- as.character(features[[gene_col]])
-  map <- .babelgene_map(unique(genes[!is.na(genes)]), from, to, id_type, ...)
+  map <- .babelgene_map_cached(
+    unique(genes[!is.na(genes)]),
+    from,
+    to,
+    id_type,
+    cache,
+    ...
+  )
 
   features[[gene_col]] <- as.character(features[[gene_col]])
   mapped <- dplyr::inner_join(
@@ -210,13 +229,81 @@ ortholog_babelgene <- function(features, from, to, gene_col, id_type, ...) {
   )
   mapped <- dplyr::rename(mapped, ortholog = "target_id")
 
-  unmapped_ids <- setdiff(features$.ortholog_id, mapped$.ortholog_id)
-  unmapped <- features[features$.ortholog_id %in% unmapped_ids, , drop = FALSE]
+  unmapped_ids <- setdiff(features$.feature_id, mapped$.feature_id)
+  unmapped <- features[features$.feature_id %in% unmapped_ids, , drop = FALSE]
 
   list(
     mapped = tibble::as_tibble(mapped),
     unmapped = tibble::as_tibble(unmapped)
   )
+}
+
+# Read what is already cached for this from/to/id_type, query babelgene only
+# for the genes not already there, append the new lookups to the file, and
+# return the combined mapping restricted to `genes`.
+.babelgene_map_cached <- function(genes, from, to, id_type, cache, ...) {
+  if (is.null(cache)) {
+    return(.babelgene_map(genes, from, to, id_type, ...))
+  }
+  checkmate::assert_string(cache, min.chars = 1)
+
+  cached <- .read_babelgene_cache(cache, from, to, id_type)
+  to_query <- setdiff(genes, cached$input_id)
+
+  fresh <- if (length(to_query) > 0) {
+    .babelgene_map(to_query, from, to, id_type, ...)
+  } else {
+    cached[0, , drop = FALSE]
+  }
+  if (nrow(fresh) > 0) {
+    .write_babelgene_cache(cache, from, to, id_type, fresh)
+  }
+
+  combined <- dplyr::bind_rows(cached, fresh)
+  combined[combined$input_id %in% genes, , drop = FALSE]
+}
+
+.babelgene_cache_cols <- c("from", "to", "id_type", "input_id", "target_id")
+
+.read_babelgene_cache <- function(path, from, to, id_type) {
+  if (!fs::file_exists(path)) {
+    return(.empty_babelgene_map())
+  }
+  cached <- readr::read_tsv(
+    path,
+    col_types = readr::cols(.default = readr::col_character()),
+    show_col_types = FALSE
+  )
+  missing <- setdiff(.babelgene_cache_cols, names(cached))
+  if (length(missing) > 0) {
+    cli::cli_abort(
+      c(
+        "{.path {path}} is not a babelgene cache file.",
+        "i" = "Missing column{?s}: {.field {missing}}."
+      )
+    )
+  }
+  cached <- cached[
+    cached$from == from & cached$to == to & cached$id_type == id_type,
+    c("input_id", "target_id"),
+    drop = FALSE
+  ]
+  tibble::as_tibble(cached)
+}
+
+.write_babelgene_cache <- function(path, from, to, id_type, fresh) {
+  rows <- tibble::tibble(
+    from = from,
+    to = to,
+    id_type = id_type,
+    input_id = fresh$input_id,
+    target_id = fresh$target_id
+  )
+  readr::write_tsv(rows, path, append = fs::file_exists(path))
+}
+
+.empty_babelgene_map <- function() {
+  tibble::tibble(input_id = character(), target_id = character())
 }
 
 # Map a set of gene ids from `from` to `to` via babelgene, returning a
