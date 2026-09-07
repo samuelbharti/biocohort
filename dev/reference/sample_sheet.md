@@ -2,7 +2,7 @@
 
 Builds the sample sheet a pipeline expects, from a cohort's sample map
 and subject table. A few common shapes ship with the package (see
-[`sample_sheet_templates()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet_templates.md));
+[`sample_sheet_templates()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet_templates.md));
 pass a custom mapping or a function for anything else.
 
 ## Usage
@@ -21,7 +21,7 @@ sample_sheet(
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
 
 - template:
@@ -29,7 +29,7 @@ sample_sheet(
   One of:
 
   - A character scalar naming a built-in template (see
-    [`sample_sheet_templates()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet_templates.md)).
+    [`sample_sheet_templates()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet_templates.md)).
 
   - A named character vector mapping an output column name to a column
     of `samples(cohort, with_subjects = TRUE)`, e.g.
@@ -83,9 +83,9 @@ if your manifest names it differently.
 
 ## See also
 
-[`sample_sheet_templates()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet_templates.md),
-[`samples()`](https://www.samuelbharti.com/bioroster/reference/samples.md),
-[`check_paths()`](https://www.samuelbharti.com/bioroster/reference/check_paths.md)
+[`sample_sheet_templates()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet_templates.md),
+[`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md),
+[`check_paths()`](https://www.samuelbharti.com/biocohort/reference/check_paths.md)
 
 ## Examples
 

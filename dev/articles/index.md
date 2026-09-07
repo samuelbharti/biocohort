@@ -2,6 +2,6 @@
 
 ### Reference
 
-- [Glossary](https://www.samuelbharti.com/bioroster/articles/glossary.md):
+- [Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.md):
 - [Naming
-  conventions](https://www.samuelbharti.com/bioroster/articles/naming-conventions.md):
+  conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.md):

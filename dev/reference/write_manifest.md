@@ -1,7 +1,7 @@
 # Write a manifest or a cohort's tables to a delimited file
 
 Joins a cohort's (or a
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 result's) `sample_map` and `subject_tbl` back into one long-format
 manifest and writes it to a CSV, TSV, or other delimited file.
 
@@ -15,11 +15,11 @@ write_manifest(x, path, delim = NULL)
 
 - x:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object, or the list returned by
-  [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+  [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
   or
-  [`read_manifest()`](https://www.samuelbharti.com/bioroster/reference/read_manifest.md)
+  [`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md)
   (anything with `subject_tbl` and `sample_map`).
 
 - path:
@@ -43,9 +43,9 @@ extra ones). A missing value is written as an empty field.
 
 ## See also
 
-[`read_manifest()`](https://www.samuelbharti.com/bioroster/reference/read_manifest.md),
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md),
-[`cohort_save()`](https://www.samuelbharti.com/bioroster/reference/cohort_save.md)
+[`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md),
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md),
+[`cohort_save()`](https://www.samuelbharti.com/biocohort/reference/cohort_save.md)
 
 ## Examples
 

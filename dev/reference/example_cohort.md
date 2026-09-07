@@ -40,18 +40,18 @@ The cohort shows:
 - A Study object for project context
 
 Subjects are stored as rows of `subject_tbl`. Use
-[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md)
 to read one of them as a Subject object.
 
 ## See also
 
-[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
 for creating Cohort objects,
-[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md)
 for reading one subject,
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 for preparing manifest data,
-[`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md)
+[`read_manifest_csv()`](https://www.samuelbharti.com/biocohort/reference/read_manifest_csv.md)
 for loading manifest from CSV file
 
 ## Examples

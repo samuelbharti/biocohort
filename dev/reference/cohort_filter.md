@@ -2,7 +2,7 @@
 
 Filters a cohort's subject table and sample map together, so the result
 stays a valid
-[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md).
+[Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md).
 Any loaded analysis table that has a `subject_id` column is filtered to
 match; the registry and paths are kept as they are.
 
@@ -22,7 +22,7 @@ cohort_filter(
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
 
 - ...:
@@ -49,7 +49,7 @@ cohort_filter(
 ## Value
 
 A new
-[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md).
+[Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md).
 The `cache` is reset, since it can hold loaded data or a translation
 result computed for the full set of subjects.
 
@@ -62,9 +62,9 @@ always restricted to the subjects that remain in `subject_tbl` after
 
 ## See also
 
-[`subjects()`](https://www.samuelbharti.com/bioroster/reference/subjects.md),
-[`samples()`](https://www.samuelbharti.com/bioroster/reference/samples.md),
-[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+[`subjects()`](https://www.samuelbharti.com/biocohort/reference/subjects.md),
+[`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md),
+[`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
 
 ## Examples
 

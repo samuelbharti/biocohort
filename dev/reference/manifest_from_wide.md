@@ -3,7 +3,7 @@
 Many sample sheets start wide: one row per subject, with one column per
 assay-and-role combination (e.g. `wes_tumor_id`, `wes_normal_id`,
 `scrna_id`). This turns such a table into the long format
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 expects, one row per non-missing sample id.
 
 ## Usage
@@ -40,7 +40,7 @@ manifest_from_wide(x, id_cols, subject_id = "subject_id")
 A long-format tibble: one row per non-missing sample id in any
 `id_cols$column`, with `subject_id`, `assay`, `sample_id`, `role`, and
 every column of `x` that is not in `id_cols$column`. Pass it to
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 next.
 
 ## Details
@@ -50,8 +50,8 @@ missing one assay is not stamped with an empty sample id.
 
 ## See also
 
-[`read_manifest()`](https://www.samuelbharti.com/bioroster/reference/read_manifest.md),
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md),
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 
 ## Examples
 

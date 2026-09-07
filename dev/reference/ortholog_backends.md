@@ -14,8 +14,8 @@ A character vector of registered backend names.
 
 ## See also
 
-[`register_ortholog_backend()`](https://www.samuelbharti.com/bioroster/reference/register_ortholog_backend.md),
-[`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md)
+[`register_ortholog_backend()`](https://www.samuelbharti.com/biocohort/reference/register_ortholog_backend.md),
+[`ortholog_genes()`](https://www.samuelbharti.com/biocohort/reference/ortholog_genes.md)
 
 ## Examples
 

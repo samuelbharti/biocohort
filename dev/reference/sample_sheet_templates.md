@@ -11,12 +11,12 @@ sample_sheet_templates()
 ## Value
 
 A character vector of template names accepted by
-[`sample_sheet()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet.md)'s
+[`sample_sheet()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet.md)'s
 `template` argument.
 
 ## See also
 
-[`sample_sheet()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet.md)
+[`sample_sheet()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet.md)
 
 ## Examples
 

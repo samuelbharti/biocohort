@@ -8,16 +8,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/samuelbharti/bioroster/blob/dev/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/samuelbharti/biocohort/blob/dev/DESCRIPTION)
 
-Bharti S (2026). *bioroster: Subject and Sample Rosters for Genomics
-Studies*. R package version 0.1.0.9000,
-<https://www.samuelbharti.com/bioroster/>.
+Bharti S (2026). *biocohort: Cohort Objects for Subjects and Samples in
+Genomics Studies*. R package version 0.1.0.9000,
+<https://www.samuelbharti.com/biocohort/>.
 
     @Manual{,
-      title = {bioroster: Subject and Sample Rosters for Genomics Studies},
+      title = {biocohort: Cohort Objects for Subjects and Samples in Genomics Studies},
       author = {Samuel Bharti},
       year = {2026},
       note = {R package version 0.1.0.9000},
-      url = {https://www.samuelbharti.com/bioroster/},
+      url = {https://www.samuelbharti.com/biocohort/},
     }

@@ -15,7 +15,7 @@ as_coldata(cohort, assay, samples = NULL, rownames = "sample_id", ref = NULL)
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
 
 - assay:
@@ -49,8 +49,8 @@ ordered to match `samples` when given.
 
 ## See also
 
-[`samples()`](https://www.samuelbharti.com/bioroster/reference/samples.md),
-[`join_metadata()`](https://www.samuelbharti.com/bioroster/reference/join_metadata.md)
+[`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md),
+[`join_metadata()`](https://www.samuelbharti.com/biocohort/reference/join_metadata.md)
 
 ## Examples
 

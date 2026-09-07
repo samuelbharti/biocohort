@@ -14,7 +14,7 @@ completeness(cohort, wide = FALSE)
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
 
 - wide:
@@ -36,9 +36,9 @@ assay that appears anywhere in `cohort@sample_map`.
 
 ## See also
 
-[`subjects()`](https://www.samuelbharti.com/bioroster/reference/subjects.md),
-[`samples()`](https://www.samuelbharti.com/bioroster/reference/samples.md),
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`subjects()`](https://www.samuelbharti.com/biocohort/reference/subjects.md),
+[`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md),
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 
 ## Examples
 

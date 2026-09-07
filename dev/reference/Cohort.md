@@ -31,7 +31,7 @@ Cohort(
   A data frame with one row per subject. Required columns: `subject_id`
   and `species`, both character. Common optional columns: `sex`,
   `strain`, `genotype`, `cohort`, `timepoint`, `notes`. Checked by
-  [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
+  [`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md).
   Defaults to an empty table with the two required columns.
 
 - sample_map:
@@ -39,7 +39,7 @@ Cohort(
   A long-format data frame with one row per sample. Required columns:
   `subject_id`, `assay`, `sample_id`, `role`, all character. A new assay
   is a new row, never a new column. Checked by
-  [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
+  [`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md).
   Defaults to an empty table with the four required columns.
 
 - paths:
@@ -65,18 +65,18 @@ Cohort(
 ## Details
 
 Use
-[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
 to build a Cohort. It checks the input types, converts both tables to
 tibbles, and runs
-[`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
+[`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md).
 Construction itself also checks `subject_tbl` and `sample_map` with the
 same rules, so building a `Cohort` any other way still enforces the
 required columns.
 
 Subjects live only in `subject_tbl`. Use
-[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md)
 to read one row as a
-[Subject](https://www.samuelbharti.com/bioroster/reference/Subject.md)
+[Subject](https://www.samuelbharti.com/biocohort/reference/Subject.md)
 object.
 
 Access properties with the `@` operator:
@@ -91,15 +91,15 @@ Access properties with the `@` operator:
 
 ## See also
 
-[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
 for object construction,
-[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md)
 for reading one subject,
-[`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md)
+[`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md)
 for validation details,
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 for manifest preparation,
-[`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md)
+[`read_manifest_csv()`](https://www.samuelbharti.com/biocohort/reference/read_manifest_csv.md)
 for loading manifest from file,
-[`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md)
+[`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md)
 for registering analyses

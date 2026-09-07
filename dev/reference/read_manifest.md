@@ -1,7 +1,7 @@
 # Read and validate a long-format manifest file
 
 Reads a manifest from CSV, TSV, or Excel and delegates to
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 for validation and structuring. Every column is read as character, so an
 id like `"007"` or `"1.10"` is never silently turned into a number.
 
@@ -49,28 +49,28 @@ read_manifest(
 - sample_cols, species, allow_duplicates:
 
   Passed to
-  [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md).
+  [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md).
 
 ## Value
 
 The list returned by
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md):
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md):
 `subject_tbl`, `sample_map`, and `completeness_tbl`.
 
 ## Details
 
 The file must be in long format with one row per sample. See
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 for the required columns and the full validation rules. Reading an Excel
 file needs the readxl package.
 
 ## See also
 
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 for the validation rules,
-[`manifest_from_wide()`](https://www.samuelbharti.com/bioroster/reference/manifest_from_wide.md)
+[`manifest_from_wide()`](https://www.samuelbharti.com/biocohort/reference/manifest_from_wide.md)
 for reshaping a wide table first,
-[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
 for creating a Cohort from manifest data
 
 ## Examples

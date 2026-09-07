@@ -14,7 +14,7 @@ subjects(cohort)
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
 
 ## Value
@@ -23,9 +23,9 @@ subjects(cohort)
 
 ## See also
 
-[`samples()`](https://www.samuelbharti.com/bioroster/reference/samples.md),
-[`completeness()`](https://www.samuelbharti.com/bioroster/reference/completeness.md),
-[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+[`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md),
+[`completeness()`](https://www.samuelbharti.com/biocohort/reference/completeness.md),
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md)
 
 ## Examples
 

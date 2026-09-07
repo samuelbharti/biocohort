@@ -15,7 +15,7 @@ translation_stats(x)
 - x:
 
   A
-  [TranslationResult](https://www.samuelbharti.com/bioroster/reference/TranslationResult.md)
+  [TranslationResult](https://www.samuelbharti.com/biocohort/reference/TranslationResult.md)
   object.
 
 ## Value
@@ -25,7 +25,7 @@ A one-row tibble with columns `from`, `to`, `backend`, `n_input`,
 
 ## See also
 
-[TranslationResult](https://www.samuelbharti.com/bioroster/reference/TranslationResult.md)
+[TranslationResult](https://www.samuelbharti.com/biocohort/reference/TranslationResult.md)
 
 ## Examples
 

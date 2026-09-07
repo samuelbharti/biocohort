@@ -1,7 +1,7 @@
 # Naming conventions
 
 This document describes standardized naming conventions used in
-bioroster for data columns, R objects, functions, and file names.
+biocohort for data columns, R objects, functions, and file names.
 
 ## Column Names
 
@@ -33,7 +33,7 @@ as new rows, never new columns or per-assay tables.
 
 Other sample-level columns (e.g. `fastq_1`, `fastq_2`, `bam`, `lane`,
 `replicate`, `qc_status`) stay in `sample_map` when their name is one
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 recognizes, or when passed in its `sample_cols` argument. A column that
 varies within a subject but is not recognized or declared trips the
 subject-level conflict check instead.
@@ -61,7 +61,7 @@ stable label per assay and reuse it consistently. Common examples:
 
 ## Sample ID Formats
 
-While bioroster does not enforce specific sample ID formats, adopt a
+While biocohort does not enforce specific sample ID formats, adopt a
 consistent project-wide convention. Encoding the assay and role in the
 ID can aid readability:
 
@@ -72,7 +72,7 @@ ID can aid readability:
 
 Tumor/normal **pairs** are not stored in `sample_map`; derive them on
 demand with
-[`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md),
+[`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md),
 which yields a `pair_id` of `{tumor_sample_id}__{normal_sample_id}`
 (e.g., “wes_T101\_\_wes_N101”).
 
@@ -118,17 +118,17 @@ result <- cohort@analyses[["my_analysis_name"]]
 ## Function Names
 
 - **Constructor functions**: `{noun}_new()` (e.g.,
-  [`study_new()`](https://www.samuelbharti.com/bioroster/reference/study_new.md),
-  [`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md))
+  [`study_new()`](https://www.samuelbharti.com/biocohort/reference/study_new.md),
+  [`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md))
 - **Validation functions**: `validate_{noun}()` (e.g.,
-  [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md),
-  [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md))
+  [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md),
+  [`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md))
 - **Accessor/getter functions**: `get_{property}()` or simply reference
   property directly (e.g., `cohort@subject_tbl`)
 - **IO functions**: `read_{format}()` or `write_{format}()` (e.g.,
-  [`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md))
+  [`read_manifest_csv()`](https://www.samuelbharti.com/biocohort/reference/read_manifest_csv.md))
 - **Helper functions**: lowercase with underscores (e.g.,
-  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md))
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md))
 - **S7 methods**: Dispatch on class; function name describes operation
   (e.g., [`print()`](https://rdrr.io/r/base/print.html) method for
   Cohort)
@@ -218,5 +218,5 @@ Documentation and examples are provided via roxygen
 ## Further Reading
 
 See the
-[Glossary](https://www.samuelbharti.com/bioroster/articles/glossary.md)
+[Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.md)
 article for detailed definitions of key terms and concepts.

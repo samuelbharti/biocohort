@@ -31,9 +31,9 @@ registry.
 
 ## See also
 
-[`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md)
+[`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md)
 for registering specs,
-[`analysis_list()`](https://www.samuelbharti.com/bioroster/reference/analysis_list.md)
+[`analysis_list()`](https://www.samuelbharti.com/biocohort/reference/analysis_list.md)
 for listing all registered specs
 
 ## Examples

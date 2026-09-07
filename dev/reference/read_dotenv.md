@@ -19,7 +19,7 @@ read_dotenv(path = NULL, overwrite = FALSE)
 - path:
 
   Path to the file. Defaults to `.env` in
-  [`project_root()`](https://www.samuelbharti.com/bioroster/reference/project_root.md).
+  [`project_root()`](https://www.samuelbharti.com/biocohort/reference/project_root.md).
 
 - overwrite:
 
@@ -37,16 +37,16 @@ env_file <- tempfile(fileext = ".env")
 writeLines(
   c(
     "# analysis settings",
-    "BIOROSTER_EXAMPLE_THREADS = 4",
-    "BIOROSTER_EXAMPLE_LABEL = 'batch one'"
+    "BIOCOHORT_EXAMPLE_THREADS = 4",
+    "BIOCOHORT_EXAMPLE_LABEL = 'batch one'"
   ),
   env_file
 )
 
 vars <- read_dotenv(env_file)
 names(vars)
-#> [1] "BIOROSTER_EXAMPLE_THREADS" "BIOROSTER_EXAMPLE_LABEL"  
-Sys.getenv("BIOROSTER_EXAMPLE_LABEL")
+#> [1] "BIOCOHORT_EXAMPLE_THREADS" "BIOCOHORT_EXAMPLE_LABEL"  
+Sys.getenv("BIOCOHORT_EXAMPLE_LABEL")
 #> [1] "batch one"
 
 Sys.unsetenv(names(vars))

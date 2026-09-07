@@ -1,7 +1,7 @@
 # Retrieve analysis file manifests from a cohort
 
 After
-[`load_analyses()`](https://www.samuelbharti.com/bioroster/reference/load_analyses.md),
+[`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md),
 returns the per-analysis file manifests (resolved paths and whether each
 existed) recorded during loading.
 
@@ -15,9 +15,9 @@ analysis_files(cohort)
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   produced by
-  [`load_analyses()`](https://www.samuelbharti.com/bioroster/reference/load_analyses.md).
+  [`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md).
 
 ## Value
 
@@ -27,7 +27,7 @@ empty tibble with columns `path` and `exists`.
 
 ## See also
 
-[`load_analyses()`](https://www.samuelbharti.com/bioroster/reference/load_analyses.md)
+[`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md)
 
 ## Examples
 

@@ -80,7 +80,7 @@ A list with three elements:
 
 Every column is coerced to character, so a numeric, logical, or factor
 column never reaches
-[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
 in a form that would fail there. Empty strings are treated as missing.
 Every sample row must carry a non-missing `subject_id`, `assay`, and
 `sample_id`.
@@ -103,13 +103,13 @@ subject or assay, unless `allow_duplicates = TRUE`.
 
 Per-assay wide views (e.g. tumor/normal pairs) are not part of the core
 contract; derive them on demand from `sample_map` with
-[`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md).
+[`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md).
 
 ## See also
 
-[`read_manifest_csv()`](https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.md)
+[`read_manifest_csv()`](https://www.samuelbharti.com/biocohort/reference/read_manifest_csv.md)
 for reading a manifest from CSV,
-[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
 for creating a Cohort from manifest data
 
 ## Examples

@@ -45,7 +45,7 @@ analysis_spec_new(
   Character scalar for the granularity at which the analysis produces
   results. Must be one of `"subject"` (one result per subject), `"pair"`
   (one result per tumor/normal pair, see
-  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)),
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)),
   or `"cohort"` (a single result for the whole cohort). Required.
 
 - format:
@@ -64,7 +64,7 @@ analysis_spec_new(
   Character scalar for templated file path. Supports tokens: `{root}`
   (from `root_key`), `{subject_id}`, and the pair tokens
   `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}` (from
-  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)).
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)).
   Optional, defaults to NA.
 
 - root_key:
@@ -78,7 +78,7 @@ analysis_spec_new(
   "read.csv"). Optional. Defaults by `format`: "csv" to
   "readr::read_csv", "tsv" and "txt" to "readr::read_tsv", "rds" to
   "readRDS". NA for any other format.
-  [`load_analysis()`](https://www.samuelbharti.com/bioroster/reference/load_analysis.md)
+  [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
   errors when neither the spec nor its `reader` argument names a reader.
 
 - key_cols:
@@ -92,7 +92,7 @@ analysis_spec_new(
 
   Optional character scalar declaring how this analysis's features are
   translated across species by
-  [`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md).
+  [`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md).
   One of `"interval"` (coordinate features, translated by liftover) or
   `"gene"` (gene-level features, translated by ortholog mapping).
   Defaults to NA (analysis is skipped by cohort-level translation).
@@ -112,21 +112,21 @@ analysis_spec_new(
 
   Character scalar naming the sample role on the tumor (or case) side of
   a pair. Passed to
-  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
   for `level = "pair"`. Default `"tumor"`.
 
 - normal_role:
 
   Character scalar naming the sample role on the normal (or control)
   side of a pair. Passed to
-  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
   for `level = "pair"`. Default `"normal"`.
 
 - pair_sep:
 
   Character scalar placed between the two sample ids in `pair_id`.
   Passed to
-  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
   for `level = "pair"`. Default `"__"`.
 
 ## Value
@@ -153,9 +153,9 @@ This constructor validates that:
 
 ## See also
 
-[AnalysisSpec](https://www.samuelbharti.com/bioroster/reference/AnalysisSpec.md)
+[AnalysisSpec](https://www.samuelbharti.com/biocohort/reference/AnalysisSpec.md)
 for class documentation,
-[`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md)
+[`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md)
 for registering in a Cohort
 
 ## Examples

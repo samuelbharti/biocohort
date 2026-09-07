@@ -1,7 +1,7 @@
 # Load an analysis's feature table from disk
 
 Resolves an
-[AnalysisSpec](https://www.samuelbharti.com/bioroster/reference/AnalysisSpec.md)'s
+[AnalysisSpec](https://www.samuelbharti.com/biocohort/reference/AnalysisSpec.md)'s
 `path_template` for each unit implied by its `level` (one file per
 subject, per pair, or one for the whole cohort), reads the existing
 files with the spec's `reader`, and row-binds them into a single feature
@@ -17,14 +17,14 @@ load_analysis(cohort, spec, reader = NULL)
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   providing `paths` (for `{root}`), subjects, and the sample map (for
   subject and pair enumeration).
 
 - spec:
 
   An
-  [AnalysisSpec](https://www.samuelbharti.com/bioroster/reference/AnalysisSpec.md)
+  [AnalysisSpec](https://www.samuelbharti.com/biocohort/reference/AnalysisSpec.md)
   or the name of one registered in `cohort`.
 
 - reader:
@@ -47,7 +47,7 @@ A list with:
 Units follow the spec's `assay`. A subject-level spec enumerates only
 the subjects with at least one sample of that assay. A pair-level spec
 calls
-[`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+[`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
 with the spec's `assay`, `tumor_role`, `normal_role`, and `pair_sep`.
 When no subject or pair matches, the function warns and returns empty
 tables.
@@ -55,7 +55,7 @@ tables.
 Path tokens supported: `{root}` (from `cohort@paths[[root_key]]`),
 `{subject_id}`, and for pair-level specs `{tumor_sample_id}`,
 `{normal_sample_id}`, `{pair_id}` (derived via
-[`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)).
+[`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)).
 Missing files are skipped (with a warning) and recorded in `files`, so
 loading is never silently partial.
 
@@ -66,8 +66,8 @@ count), or the function errors and names the missing columns.
 
 ## See also
 
-[`load_analyses()`](https://www.samuelbharti.com/bioroster/reference/load_analyses.md),
-[`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md)
+[`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md),
+[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md)
 
 ## Examples
 
@@ -113,5 +113,5 @@ loaded$files
 #> # A tibble: 1 × 3
 #>   subject_id path                                    exists
 #>   <chr>      <chr>                                   <lgl> 
-#> 1 S1         /tmp/Rtmp9pPmTs/file185b707a8db9/S1.csv TRUE  
+#> 1 S1         /tmp/Rtmpy1XFHI/file1859651b22db/S1.csv TRUE  
 ```

@@ -94,7 +94,7 @@ path when the file does not exist.
 
 ## See also
 
-[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md) for
+[Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md) for
 combining studies with subject data
 
 ## Examples

@@ -1,7 +1,7 @@
 # Register a liftover backend
 
 Adds a named liftover backend so it can be selected by name in
-[`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md).
+[`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md).
 A backend is a function that performs coordinate translation for a set
 of intervals; this pluggable design lets the package default to an
 R-native engine while allowing external tools (e.g. CrossMap) to be
@@ -39,11 +39,11 @@ Invisibly, the backend name.
 `intervals` passed to a backend is guaranteed to have columns
 `seqnames`, `start`, `end`, an optional `strand`, and a `.feature_id`
 integer key added by
-[`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md).
+[`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md).
 
 ## See also
 
-[`liftover_backends()`](https://www.samuelbharti.com/bioroster/reference/liftover_backends.md),
-[`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md),
-[`liftover_rtracklayer()`](https://www.samuelbharti.com/bioroster/reference/liftover_rtracklayer.md),
-[`liftover_crossmap()`](https://www.samuelbharti.com/bioroster/reference/liftover_crossmap.md)
+[`liftover_backends()`](https://www.samuelbharti.com/biocohort/reference/liftover_backends.md),
+[`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md),
+[`liftover_rtracklayer()`](https://www.samuelbharti.com/biocohort/reference/liftover_rtracklayer.md),
+[`liftover_crossmap()`](https://www.samuelbharti.com/biocohort/reference/liftover_crossmap.md)

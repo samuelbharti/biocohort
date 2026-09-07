@@ -50,15 +50,15 @@ TranslationResult(
 ## Details
 
 Construct these via
-[`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md)
+[`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md)
 or
-[`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md)
+[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md)
 rather than directly. Access the pieces with `result@mapped`,
 `result@unmapped`, and
-[`translation_stats()`](https://www.samuelbharti.com/bioroster/reference/translation_stats.md).
+[`translation_stats()`](https://www.samuelbharti.com/biocohort/reference/translation_stats.md).
 
 ## See also
 
-[`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md),
-[`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md),
-[`translation_stats()`](https://www.samuelbharti.com/bioroster/reference/translation_stats.md)
+[`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md),
+[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md),
+[`translation_stats()`](https://www.samuelbharti.com/biocohort/reference/translation_stats.md)

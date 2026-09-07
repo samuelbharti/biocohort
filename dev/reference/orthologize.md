@@ -1,12 +1,12 @@
 # Deprecated alias for translate()
 
 `orthologize()` is the earlier name for
-[`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md).
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md).
 It still works and calls
-[`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md)
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
 with the same arguments, and warns once per session. New code should
 call
-[`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md)
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
 directly.
 
 ## Usage
@@ -24,7 +24,7 @@ orthologize(x, to, from = NULL, ...)
   - a data.frame/tibble of features, or
 
   - a
-    [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+    [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
     object.
 
 - to:
@@ -46,9 +46,9 @@ orthologize(x, to, from = NULL, ...)
   Strategy-specific arguments. For a **feature table**:
 
   - `strategy`: `"liftover"` (coordinate features; see
-    [`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md))
+    [`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md))
     or `"ortholog"` (gene features; see
-    [`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md)).
+    [`ortholog_genes()`](https://www.samuelbharti.com/biocohort/reference/ortholog_genes.md)).
 
   - `chain`: chain-file path for `"liftover"`.
 
@@ -74,8 +74,8 @@ orthologize(x, to, from = NULL, ...)
 ## Value
 
 See
-[`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md).
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md).
 
 ## See also
 
-[`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md)
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)

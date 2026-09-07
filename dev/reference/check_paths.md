@@ -15,7 +15,7 @@ check_paths(cohort, cols = NULL)
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
 
 - cols:
@@ -34,8 +34,8 @@ missing (`NA`) path, so an unset path is not read as a broken one.
 
 ## See also
 
-[`sample_sheet()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet.md),
-[`samples()`](https://www.samuelbharti.com/bioroster/reference/samples.md)
+[`sample_sheet()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet.md),
+[`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md)
 
 ## Examples
 

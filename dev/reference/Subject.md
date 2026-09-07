@@ -29,7 +29,7 @@ Subject(
 - species:
 
   Character scalar naming the species. Any value is allowed;
-  [`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md)
+  [`subject_new()`](https://www.samuelbharti.com/biocohort/reference/subject_new.md)
   stores it lower-cased.
 
 - sex:
@@ -60,12 +60,12 @@ Subject(
 ## Details
 
 Use
-[`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md)
+[`subject_new()`](https://www.samuelbharti.com/biocohort/reference/subject_new.md)
 to construct Subject objects; it lower-cases `species`. Construction
 also validates that `subject_id` and `species` are present, so building
 a `Subject` any other way still enforces the two required fields.
 Individual subjects are typically read from a Cohort with
-[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md).
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md).
 
 Access properties via the `@` operator:
 
@@ -80,7 +80,7 @@ Access properties via the `@` operator:
 
 ## See also
 
-[`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md)
+[`subject_new()`](https://www.samuelbharti.com/biocohort/reference/subject_new.md)
 for object construction,
-[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md) for
+[Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md) for
 managing groups of subjects

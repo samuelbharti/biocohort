@@ -13,7 +13,7 @@ samples(cohort, assay = NULL, role = NULL, with_subjects = FALSE)
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
 
 - assay:
@@ -36,9 +36,9 @@ A tibble with the sample map, filtered and optionally joined.
 
 ## See also
 
-[`subjects()`](https://www.samuelbharti.com/bioroster/reference/subjects.md),
-[`completeness()`](https://www.samuelbharti.com/bioroster/reference/completeness.md),
-[`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+[`subjects()`](https://www.samuelbharti.com/biocohort/reference/subjects.md),
+[`completeness()`](https://www.samuelbharti.com/biocohort/reference/completeness.md),
+[`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
 
 ## Examples
 

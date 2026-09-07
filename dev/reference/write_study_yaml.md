@@ -1,7 +1,7 @@
 # Write a cohort as a study YAML file
 
 The inverse of
-[`read_study_yaml()`](https://www.samuelbharti.com/bioroster/reference/read_study_yaml.md):
+[`read_study_yaml()`](https://www.samuelbharti.com/biocohort/reference/read_study_yaml.md):
 writes the cohort's study metadata, its manifest, its paths, and its
 registered analysis specs to a study YAML file and a manifest file
 alongside it.
@@ -16,7 +16,7 @@ write_study_yaml(cohort, path, manifest = "manifest.csv")
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
 
 - path:
@@ -40,8 +40,8 @@ that was applied before the cohort was built.
 
 ## See also
 
-[`read_study_yaml()`](https://www.samuelbharti.com/bioroster/reference/read_study_yaml.md),
-[`write_manifest()`](https://www.samuelbharti.com/bioroster/reference/write_manifest.md)
+[`read_study_yaml()`](https://www.samuelbharti.com/biocohort/reference/read_study_yaml.md),
+[`write_manifest()`](https://www.samuelbharti.com/biocohort/reference/write_manifest.md)
 
 ## Examples
 

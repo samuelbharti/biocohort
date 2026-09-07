@@ -20,7 +20,7 @@ project_path(..., root = project_root())
 - root:
 
   Folder to join to. Defaults to
-  [`project_root()`](https://www.samuelbharti.com/bioroster/reference/project_root.md),
+  [`project_root()`](https://www.samuelbharti.com/biocohort/reference/project_root.md),
   which is only searched for when `root` is not given.
 
 ## Value
@@ -29,8 +29,8 @@ An `fs_path`.
 
 ## See also
 
-[`project_root()`](https://www.samuelbharti.com/bioroster/reference/project_root.md),
-[`ensure_dir()`](https://www.samuelbharti.com/bioroster/reference/ensure_dir.md)
+[`project_root()`](https://www.samuelbharti.com/biocohort/reference/project_root.md),
+[`ensure_dir()`](https://www.samuelbharti.com/biocohort/reference/ensure_dir.md)
 
 ## Examples
 

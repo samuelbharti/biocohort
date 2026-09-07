@@ -3,7 +3,7 @@
 Gene-ortholog backend using the offline babelgene package, which ships
 precomputed orthologs between human and a range of model organisms. This
 is the default backend for
-[`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md).
+[`ortholog_genes()`](https://www.samuelbharti.com/biocohort/reference/ortholog_genes.md).
 
 ## Usage
 
@@ -17,7 +17,7 @@ ortholog_babelgene(features, from, to, gene_col, id_type, cache = NULL, ...)
 
   A tibble of features with a gene column and a `.feature_id` key
   (supplied by
-  [`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md)).
+  [`ortholog_genes()`](https://www.samuelbharti.com/biocohort/reference/ortholog_genes.md)).
 
 - from, to:
 
@@ -52,4 +52,4 @@ A list with `mapped` and `unmapped` tibbles.
 
 ## See also
 
-[`ortholog_genes()`](https://www.samuelbharti.com/bioroster/reference/ortholog_genes.md)
+[`ortholog_genes()`](https://www.samuelbharti.com/biocohort/reference/ortholog_genes.md)

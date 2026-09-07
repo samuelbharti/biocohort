@@ -3,7 +3,7 @@
 Builds a Cohort from a subject table and a sample map, with an optional
 Study, file paths, and analysis tables. The two tables are usually the
 output of
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md).
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md).
 
 ## Usage
 
@@ -46,7 +46,7 @@ cohort_new(
 ## Value
 
 A Cohort object. An error when the tables fail
-[`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
+[`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md).
 
 ## Details
 
@@ -59,21 +59,21 @@ The steps are:
 3.  Build the Cohort.
 
 4.  Run
-    [`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md).
+    [`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md).
 
 The function does not build Subject objects. Use
-[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md)
 to read one subject from the cohort when an object is needed.
 
 ## See also
 
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 for preparing input tables,
-[`validate_cohort()`](https://www.samuelbharti.com/bioroster/reference/validate_cohort.md)
+[`validate_cohort()`](https://www.samuelbharti.com/biocohort/reference/validate_cohort.md)
 for the checks,
-[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md)
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md)
 for reading one subject,
-[Study](https://www.samuelbharti.com/bioroster/reference/Study.md) for
+[Study](https://www.samuelbharti.com/biocohort/reference/Study.md) for
 study metadata
 
 ## Examples

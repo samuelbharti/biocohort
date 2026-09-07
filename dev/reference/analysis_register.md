@@ -37,11 +37,11 @@ Validates that:
 
 ## See also
 
-[`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
+[`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
 for creating specs,
-[`analysis_list()`](https://www.samuelbharti.com/bioroster/reference/analysis_list.md)
+[`analysis_list()`](https://www.samuelbharti.com/biocohort/reference/analysis_list.md)
 for listing registered specs,
-[`analysis_spec()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec.md)
+[`analysis_spec()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec.md)
 for retrieving a spec from registry
 
 ## Examples

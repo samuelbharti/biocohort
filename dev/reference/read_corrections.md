@@ -2,7 +2,7 @@
 
 Reads a CSV or TSV file, chosen by extension, with every column as
 character, and checks that the columns
-[`apply_corrections()`](https://www.samuelbharti.com/bioroster/reference/apply_corrections.md)
+[`apply_corrections()`](https://www.samuelbharti.com/biocohort/reference/apply_corrections.md)
 needs are present. An empty value or `NA` in the file becomes `NA`.
 
 ## Usage
@@ -24,7 +24,7 @@ A tibble with character columns `level`, `id`, `column`, `value`, and
 
 ## See also
 
-[`apply_corrections()`](https://www.samuelbharti.com/bioroster/reference/apply_corrections.md)
+[`apply_corrections()`](https://www.samuelbharti.com/biocohort/reference/apply_corrections.md)
 
 ## Examples
 

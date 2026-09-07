@@ -1,10 +1,10 @@
 # Save a cohort to an RDS file
 
 Wraps a
-[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+[Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
 with a small format marker and the package version, and writes it with
 [`saveRDS()`](https://rdrr.io/r/base/readRDS.html). Read it back with
-[`cohort_read()`](https://www.samuelbharti.com/bioroster/reference/cohort_read.md).
+[`cohort_read()`](https://www.samuelbharti.com/biocohort/reference/cohort_read.md).
 
 ## Usage
 
@@ -16,7 +16,7 @@ cohort_save(cohort, path)
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
 
 - path:
@@ -29,8 +29,8 @@ cohort_save(cohort, path)
 
 ## See also
 
-[`cohort_read()`](https://www.samuelbharti.com/bioroster/reference/cohort_read.md),
-[`write_manifest()`](https://www.samuelbharti.com/bioroster/reference/write_manifest.md)
+[`cohort_read()`](https://www.samuelbharti.com/biocohort/reference/cohort_read.md),
+[`write_manifest()`](https://www.samuelbharti.com/biocohort/reference/write_manifest.md)
 
 ## Examples
 

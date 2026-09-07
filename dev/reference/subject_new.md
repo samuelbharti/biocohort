@@ -73,11 +73,11 @@ cross-species studies. The design is species-agnostic: `species` is a
 free-form value, lower-cased so that a study can group subjects by
 species without also matching on case. Individual subjects are typically
 read from a Cohort with
-[`subject()`](https://www.samuelbharti.com/bioroster/reference/cohort-subject.md).
+[`subject()`](https://www.samuelbharti.com/biocohort/reference/cohort-subject.md).
 
 ## See also
 
-[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md) for
+[Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md) for
 managing groups of subjects
 
 ## Examples

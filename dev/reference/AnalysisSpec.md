@@ -46,7 +46,7 @@ AnalysisSpec(
 
   - `"pair"`: one result per tumor/normal (case/control) pair, as
     derived by
-    [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+    [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
     from the cohort's `sample_map`.
 
   - `"cohort"`: a single result for the whole cohort.
@@ -57,7 +57,7 @@ AnalysisSpec(
 
   Character scalar for file format (e.g., "rds", "tsv", "txt").
   Optional.
-  [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
+  [`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
   fills it from the `path_template` extension. NA when unknown.
 
 - description:
@@ -71,7 +71,7 @@ AnalysisSpec(
   substitution tokens: `{root}` (from `root_key`), `{subject_id}`, and
   the pair tokens `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}`
   (the latter three supplied by
-  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
   for `level = "pair"`). Optional, defaults to NA.
 
 - root_key:
@@ -84,23 +84,23 @@ AnalysisSpec(
 
   Character scalar for function name to read files matching this spec
   (e.g., "readr::read_tsv", "read.csv"). Optional.
-  [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
+  [`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
   fills it from `format`. NA when unknown.
 
 - key_cols:
 
   Character vector of column names that must be present in the loaded
   analysis table.
-  [`load_analysis()`](https://www.samuelbharti.com/bioroster/reference/load_analysis.md)
+  [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
   checks them after reading. Optional.
-  [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
+  [`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
   fills it by `level`.
 
 - feature_type:
 
   Optional character scalar declaring how this analysis's features
   translate across species in
-  [`orthologize()`](https://www.samuelbharti.com/bioroster/reference/orthologize.md):
+  [`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md):
   `"interval"` (liftover) or `"gene"` (ortholog mapping). Optional,
   defaults to NA.
 
@@ -127,16 +127,16 @@ AnalysisSpec(
 - pair_sep:
 
   Character scalar placed between the two sample ids when
-  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
   builds `pair_id`. Used for `level = "pair"`. Default `"__"`.
 
 ## Details
 
 Use
-[`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
+[`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
 to construct AnalysisSpec objects with immediate validation.
 AnalysisSpec objects are typically registered in a Cohort via
-[`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md).
+[`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md).
 
 Access properties via the `@` operator:
 
@@ -155,7 +155,7 @@ Access properties via the `@` operator:
 
 ## See also
 
-[`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
+[`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
 for object construction,
-[`analysis_register()`](https://www.samuelbharti.com/bioroster/reference/analysis_register.md)
+[`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md)
 for registering specs in a Cohort

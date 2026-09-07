@@ -23,7 +23,7 @@ sample_pairs(
 - sample_map:
 
   A long-format sample map (e.g. from
-  [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)),
+  [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)),
   with columns `subject_id`, `assay`, `sample_id`, and `role`. A
   Cohort's `sample_map` (i.e. `cohort@sample_map`) can be passed
   directly.
@@ -70,7 +70,7 @@ x normal combinations are enumerated.
 
 ## See also
 
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 for producing a `sample_map`
 
 ## Examples

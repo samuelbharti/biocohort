@@ -1,7 +1,7 @@
 # Return the audit table of a corrected manifest
 
 Reads the `"corrections"` attribute that
-[`apply_corrections()`](https://www.samuelbharti.com/bioroster/reference/apply_corrections.md)
+[`apply_corrections()`](https://www.samuelbharti.com/biocohort/reference/apply_corrections.md)
 sets.
 
 ## Usage

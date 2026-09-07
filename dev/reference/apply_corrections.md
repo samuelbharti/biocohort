@@ -24,14 +24,14 @@ apply_corrections(manifest, corrections)
   `reason`. `level` is `"subject"` or `"sample"`. `id` names the subject
   or sample. `column` names the manifest column to change and `value` is
   the new value. See
-  [`read_corrections()`](https://www.samuelbharti.com/bioroster/reference/read_corrections.md)
+  [`read_corrections()`](https://www.samuelbharti.com/biocohort/reference/read_corrections.md)
   to read one from a file.
 
 ## Value
 
 The corrected manifest as a tibble. The `"corrections"` attribute holds
 the audit table, which
-[`corrections_log()`](https://www.samuelbharti.com/bioroster/reference/corrections_log.md)
+[`corrections_log()`](https://www.samuelbharti.com/biocohort/reference/corrections_log.md)
 returns.
 
 ## Details
@@ -54,8 +54,8 @@ manifest, or when a column is not in the manifest.
 
 ## See also
 
-[`read_corrections()`](https://www.samuelbharti.com/bioroster/reference/read_corrections.md),
-[`corrections_log()`](https://www.samuelbharti.com/bioroster/reference/corrections_log.md)
+[`read_corrections()`](https://www.samuelbharti.com/biocohort/reference/read_corrections.md),
+[`corrections_log()`](https://www.samuelbharti.com/biocohort/reference/corrections_log.md)
 
 ## Examples
 

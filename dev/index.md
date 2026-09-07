@@ -1,15 +1,15 @@
-# bioroster (R package)
+# biocohort (R package)
 
 This directory holds the R package. See the repository root
-[README.md](https://www.samuelbharti.com/README.md) for what bioroster
+[README.md](https://www.samuelbharti.com/README.md) for what biocohort
 is for and how the repository is laid out.
 
-bioroster keeps the subjects, samples, and analysis outputs of a
+biocohort keeps the subjects, samples, and analysis outputs of a
 genomics study in one validated object. Species and assays are values in
 the data, not columns or classes, so the same functions work for any
 organism and any assay.
 
-**Documentation**: <https://www.samuelbharti.com/bioroster/>
+**Documentation**: <https://www.samuelbharti.com/biocohort/>
 
 ## Installation
 
@@ -19,7 +19,7 @@ organism and any assay.
 devtools::install("pkg-r")
 
 # From GitHub, from anywhere
-remotes::install_github("samuelbharti/bioroster", subdir = "pkg-r")
+remotes::install_github("samuelbharti/biocohort", subdir = "pkg-r")
 ```
 
 ## Quick start
@@ -38,7 +38,7 @@ R2,rat,KO,wes,N2,normal
 
 ``` r
 
-library(bioroster)
+library(biocohort)
 
 parsed <- read_manifest("manifest.csv")
 cohort <- cohort_new(parsed$subject_tbl, parsed$sample_map)
@@ -53,7 +53,7 @@ completeness(cohort, wide = TRUE)
 ```
 
 Some studies keep one row per subject, with one id column per assay.
-[`manifest_from_wide()`](https://www.samuelbharti.com/bioroster/reference/manifest_from_wide.md)
+[`manifest_from_wide()`](https://www.samuelbharti.com/biocohort/reference/manifest_from_wide.md)
 turns that into the long form first:
 
 ``` r
@@ -69,44 +69,44 @@ long <- manifest_from_wide(wide_table, id_cols)
 ## What it does
 
 - **Read a manifest.**
-  [`read_manifest()`](https://www.samuelbharti.com/bioroster/reference/read_manifest.md)
+  [`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md)
   reads CSV, TSV, or Excel, always as text, so an id like `007` keeps
   its leading zero.
-  [`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+  [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
   checks it and splits subject-level columns from sample-level ones.
 - **Hold a cohort.**
-  [`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+  [`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
   builds a `Cohort`: one table of subjects, one long table of samples,
   an optional `Study`, and a registry of analyses.
 - **Read it back.**
-  [`subjects()`](https://www.samuelbharti.com/bioroster/reference/subjects.md),
-  [`samples()`](https://www.samuelbharti.com/bioroster/reference/samples.md),
-  [`completeness()`](https://www.samuelbharti.com/bioroster/reference/completeness.md),
+  [`subjects()`](https://www.samuelbharti.com/biocohort/reference/subjects.md),
+  [`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md),
+  [`completeness()`](https://www.samuelbharti.com/biocohort/reference/completeness.md),
   and
-  [`sample_pairs()`](https://www.samuelbharti.com/bioroster/reference/sample_pairs.md)
+  [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
   return plain tibbles.
-  [`cohort_filter()`](https://www.samuelbharti.com/bioroster/reference/cohort_filter.md)
+  [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
   keeps a subset and stays valid.
 - **Write files for other tools.**
-  [`sample_sheet()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet.md)
+  [`sample_sheet()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet.md)
   writes the sample list a pipeline expects.
-  [`as_coldata()`](https://www.samuelbharti.com/bioroster/reference/as_coldata.md)
+  [`as_coldata()`](https://www.samuelbharti.com/biocohort/reference/as_coldata.md)
   and
-  [`join_metadata()`](https://www.samuelbharti.com/bioroster/reference/join_metadata.md)
+  [`join_metadata()`](https://www.samuelbharti.com/biocohort/reference/join_metadata.md)
   carry cohort metadata into a `SummarizedExperiment`, a Seurat object,
   or a data frame.
 - **Track analysis outputs.**
-  [`analysis_spec_new()`](https://www.samuelbharti.com/bioroster/reference/analysis_spec_new.md)
+  [`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
   and
-  [`load_analysis()`](https://www.samuelbharti.com/bioroster/reference/load_analysis.md)
+  [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
   resolve a path template per subject or pair, read the files, and
   record which ones were found.
 - **Translate across species.**
-  [`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md)
+  [`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
   moves a feature table across genome builds or species, through a
   liftover or an ortholog backend.
 - **Keep a study in one file.**
-  [`read_study_yaml()`](https://www.samuelbharti.com/bioroster/reference/read_study_yaml.md)
+  [`read_study_yaml()`](https://www.samuelbharti.com/biocohort/reference/read_study_yaml.md)
   builds a cohort from a YAML file that names the study, the manifest,
   the paths, and the registered analyses.
 
@@ -115,12 +115,12 @@ long <- manifest_from_wide(wide_table, id_cols)
 The package website includes:
 
 - **[Get
-  started](https://www.samuelbharti.com/bioroster/articles/bioroster.html)**:
+  started](https://www.samuelbharti.com/biocohort/articles/biocohort.html)**:
   a manifest, a cohort, and a sample sheet, end to end.
-- **[Glossary](https://www.samuelbharti.com/bioroster/articles/glossary.html)**:
+- **[Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.html)**:
   key terms and definitions.
 - **[Naming
-  Conventions](https://www.samuelbharti.com/bioroster/articles/naming-conventions.html)**:
+  Conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.html)**:
   standard column, object, and file names.
 
 To build the site locally, run from the repository root:

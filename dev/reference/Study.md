@@ -70,7 +70,7 @@ Study(
 ## Details
 
 Use
-[`study_new()`](https://www.samuelbharti.com/bioroster/reference/study_new.md)
+[`study_new()`](https://www.samuelbharti.com/biocohort/reference/study_new.md)
 to construct Study objects with immediate validation. Construction also
 validates `study_id` and `title` directly, so building a `Study` any
 other way still enforces the two required fields.
@@ -89,7 +89,7 @@ Access properties via the `@` operator:
 
 ## See also
 
-[`study_new()`](https://www.samuelbharti.com/bioroster/reference/study_new.md)
+[`study_new()`](https://www.samuelbharti.com/biocohort/reference/study_new.md)
 for object construction,
-[Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md) for
+[Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md) for
 combining studies with subject data

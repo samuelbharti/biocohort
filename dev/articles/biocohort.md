@@ -1,11 +1,11 @@
-# Get started with bioroster
+# Get started with biocohort
 
 ``` r
 
-library(bioroster)
-#> bioroster version 0.1.0.9000
-#> Subject and Sample Rosters for Genomics Studies
-#> Documentation: https://www.samuelbharti.com/bioroster/
+library(biocohort)
+#> biocohort version 0.1.0.9000
+#> Cohort Objects for Subjects and Samples in Genomics Studies
+#> Documentation: https://www.samuelbharti.com/biocohort/
 ```
 
 This article shows the path most studies take: a manifest file becomes a
@@ -51,7 +51,7 @@ parsed$sample_map
 #> 4 R2         wes   N2        normal n2_R1.fq.gz n2_R2.fq.gz
 ```
 
-[`read_manifest()`](https://www.samuelbharti.com/bioroster/reference/read_manifest.md)
+[`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md)
 reads every column as text, so an id like `007` keeps its leading zero.
 Build the cohort from the parsed tables:
 
@@ -70,7 +70,7 @@ cohort
 
 Some studies keep one row per subject, with one id column per assay.
 Turn that into the long form with
-[`manifest_from_wide()`](https://www.samuelbharti.com/bioroster/reference/manifest_from_wide.md)
+[`manifest_from_wide()`](https://www.samuelbharti.com/biocohort/reference/manifest_from_wide.md)
 before building a cohort:
 
 ``` r
@@ -129,7 +129,7 @@ completeness(cohort, wide = TRUE)
 #> 2 R2             2
 ```
 
-[`cohort_filter()`](https://www.samuelbharti.com/bioroster/reference/cohort_filter.md)
+[`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
 keeps a subset of subjects and returns a cohort that is still valid:
 
 ``` r
@@ -144,7 +144,7 @@ cohort_filter(cohort, genotype == "KO")
 
 ## Writing a pipeline sample sheet
 
-[`sample_sheet()`](https://www.samuelbharti.com/bioroster/reference/sample_sheet.md)
+[`sample_sheet()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet.md)
 writes the sample list in the shape a pipeline expects. Built-in
 templates cover a few common nf-core pipelines:
 
@@ -166,7 +166,7 @@ sample_sheet(cohort, template = "nf-core/sarek", assay = "wes")
 
 An `AnalysisSpec` records where an analysis writes its output and how to
 read it back.
-[`load_analysis()`](https://www.samuelbharti.com/bioroster/reference/load_analysis.md)
+[`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
 then resolves the path for every subject or pair and reads what it
 finds.
 
@@ -198,25 +198,25 @@ identical(subjects(cohort), subjects(reread))
 
 A study with more than a manifest, a few paths, and a couple of analyses
 is easier to keep in one YAML file. See
-[`?read_study_yaml`](https://www.samuelbharti.com/bioroster/reference/read_study_yaml.md)
+[`?read_study_yaml`](https://www.samuelbharti.com/biocohort/reference/read_study_yaml.md)
 for the file format.
 
 ## Translating features across species
 
-[`translate()`](https://www.samuelbharti.com/bioroster/reference/translate.md)
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
 moves a feature table from one species or genome build to another.
 Coordinate features go through a liftover backend; gene features go
 through an ortholog backend. See
-[`?translate`](https://www.samuelbharti.com/bioroster/reference/translate.md)
+[`?translate`](https://www.samuelbharti.com/biocohort/reference/translate.md)
 and
-[`?liftover_intervals`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md)
+[`?liftover_intervals`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md)
 for the full set of options, including how to register a custom backend.
 
 ## Where to go next
 
 - The
-  [Glossary](https://www.samuelbharti.com/bioroster/articles/glossary.md)
+  [Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.md)
   article defines the terms used across the package.
 - The [Naming
-  Conventions](https://www.samuelbharti.com/bioroster/articles/naming-conventions.md)
+  Conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.md)
   article lists the standard names for columns, objects, and files.

@@ -1,7 +1,7 @@
 # Validate a Cohort object
 
 Checks the subject table, the sample map, and the link between them.
-[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
 calls this function after it builds the object. Call it directly to
 check a cohort that was built or changed by other means.
 
@@ -15,7 +15,7 @@ validate_cohort(x)
 
 - x:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
 
 ## Value
@@ -44,9 +44,9 @@ The checks are:
 
 ## See also
 
-[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+[`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
 for Cohort construction,
-[`validate_manifest()`](https://www.samuelbharti.com/bioroster/reference/validate_manifest.md)
+[`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
 for manifest validation
 
 ## Examples

@@ -30,7 +30,7 @@ as an `fs_path`.
 
 ## See also
 
-[`project_path()`](https://www.samuelbharti.com/bioroster/reference/project_path.md)
+[`project_path()`](https://www.samuelbharti.com/biocohort/reference/project_path.md)
 to join paths under the root.
 
 ## Examples
@@ -41,7 +41,7 @@ fs::dir_create(fs::path(root, "scripts", "qc"))
 fs::file_create(fs::path(root, "DESCRIPTION"))
 
 project_root(fs::path(root, "scripts", "qc"))
-#> /tmp/Rtmp9pPmTs/file185b458c0279/study
+#> /tmp/Rtmpy1XFHI/file1859591ebe14/study
 
 unlink(fs::path_dir(root), recursive = TRUE)
 ```

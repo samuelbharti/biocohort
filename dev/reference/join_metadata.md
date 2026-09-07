@@ -17,7 +17,7 @@ join_metadata(object, cohort, assay = NULL, by = "sample_id", col = NULL)
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
 
 - assay:
@@ -57,8 +57,8 @@ an unmatched row's new columns as `NA`.
 
 ## See also
 
-[`as_coldata()`](https://www.samuelbharti.com/bioroster/reference/as_coldata.md),
-[`samples()`](https://www.samuelbharti.com/bioroster/reference/samples.md)
+[`as_coldata()`](https://www.samuelbharti.com/biocohort/reference/as_coldata.md),
+[`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md)
 
 ## Examples
 

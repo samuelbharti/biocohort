@@ -4,10 +4,10 @@ Liftover backend that shells out to the external
 [CrossMap](https://crossmap.readthedocs.io/) tool (`CrossMap bed`).
 CrossMap must be installed and on the `PATH`. For most interval
 workflows the R-native
-[`liftover_rtracklayer()`](https://www.samuelbharti.com/bioroster/reference/liftover_rtracklayer.md)
+[`liftover_rtracklayer()`](https://www.samuelbharti.com/biocohort/reference/liftover_rtracklayer.md)
 backend is sufficient and easier to deploy; CrossMap is most valuable
 for allele-aware variant translation (see
-[`liftover_vcf()`](https://www.samuelbharti.com/bioroster/reference/liftover_vcf.md)).
+[`liftover_vcf()`](https://www.samuelbharti.com/biocohort/reference/liftover_vcf.md)).
 
 ## Usage
 
@@ -20,7 +20,7 @@ liftover_crossmap(intervals, chain, crossmap = NULL, ...)
 - intervals:
 
   A tibble of intervals (see
-  [`liftover_rtracklayer()`](https://www.samuelbharti.com/bioroster/reference/liftover_rtracklayer.md)).
+  [`liftover_rtracklayer()`](https://www.samuelbharti.com/biocohort/reference/liftover_rtracklayer.md)).
 
 - chain:
 
@@ -41,6 +41,6 @@ A list with `mapped` and `unmapped` tibbles.
 
 ## See also
 
-[`liftover_intervals()`](https://www.samuelbharti.com/bioroster/reference/liftover_intervals.md),
-[`liftover_rtracklayer()`](https://www.samuelbharti.com/bioroster/reference/liftover_rtracklayer.md),
-[`liftover_vcf()`](https://www.samuelbharti.com/bioroster/reference/liftover_vcf.md)
+[`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md),
+[`liftover_rtracklayer()`](https://www.samuelbharti.com/biocohort/reference/liftover_rtracklayer.md),
+[`liftover_vcf()`](https://www.samuelbharti.com/biocohort/reference/liftover_vcf.md)

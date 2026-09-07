@@ -2,7 +2,7 @@
 
 Reads the row of `cohort@subject_tbl` whose `subject_id` equals `id` and
 returns it as a
-[Subject](https://www.samuelbharti.com/bioroster/reference/Subject.md)
+[Subject](https://www.samuelbharti.com/biocohort/reference/Subject.md)
 object. A cohort stores its subjects as a table. Use this function when
 one subject is needed as an object.
 
@@ -16,7 +16,7 @@ subject(cohort, id)
 
 - cohort:
 
-  A [Cohort](https://www.samuelbharti.com/bioroster/reference/Cohort.md)
+  A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
 
 - id:
@@ -25,7 +25,7 @@ subject(cohort, id)
 
 ## Value
 
-A [Subject](https://www.samuelbharti.com/bioroster/reference/Subject.md)
+A [Subject](https://www.samuelbharti.com/biocohort/reference/Subject.md)
 built from the matching row.
 
 ## Details
@@ -40,9 +40,9 @@ cohort does have.
 
 ## See also
 
-[Subject](https://www.samuelbharti.com/bioroster/reference/Subject.md),
-[`subject_new()`](https://www.samuelbharti.com/bioroster/reference/subject_new.md),
-[`cohort_new()`](https://www.samuelbharti.com/bioroster/reference/cohort_new.md)
+[Subject](https://www.samuelbharti.com/biocohort/reference/Subject.md),
+[`subject_new()`](https://www.samuelbharti.com/biocohort/reference/subject_new.md),
+[`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
 
 ## Examples
 
