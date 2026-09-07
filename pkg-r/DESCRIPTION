@@ -1,17 +1,18 @@
 Package: biocohort
-Title: Cohort Objects for Subjects and Samples in Genomics Studies
+Title: Cohort Objects for Subjects and Samples in Omics Studies
 Version: 0.1.0.9000
 Authors@R:
     person("Samuel", "Bharti", , "samuelbharti.io@gmail.com",
            role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0003-4190-7058"))
-Description: Keeps the subjects, samples, and analysis outputs of a genomics
-    study in one validated object. A long-format sample manifest is read and
-    validated, tumor and normal pairs are derived on demand, analysis outputs
-    are registered and loaded by path template, and features can be
-    translated across species through pluggable liftover and ortholog
-    backends. Species and assays are values in the manifest, not columns, so
-    any organism and any assay fit the same model.
+Description: Keeps the subjects, samples, and analysis outputs of a study in
+    one validated object. Species and assay are values in the data, not fixed
+    types, so the same model fits any organism and any omics assay. A
+    long-format sample manifest is read and validated, tumor and normal pairs
+    are derived on demand, a pipeline sample sheet is written from the same
+    object, and analysis outputs are registered and loaded by path template.
+    Manual fixes are kept in an audit trail, and features can be translated
+    across species through pluggable liftover and ortholog backends.
 License: MIT + file LICENSE
 URL: https://www.samuelbharti.com/biocohort/, https://github.com/samuelbharti/biocohort
 BugReports: https://github.com/samuelbharti/biocohort/issues
