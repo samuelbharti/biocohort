@@ -17,12 +17,8 @@
     " version ",
     cli::col_green(version),
     "\n",
-    "Cross-Species Cohort Framework for Genomics Data\n",
+    "Subject and Sample Rosters for Genomics Studies\n",
     "Documentation: ",
     cli::col_cyan("https://www.samuelbharti.com/bioroster/")
   )
-}
-
-if (getRversion() >= "2.15.1") {
-  utils::globalVariables(c("subject_id"))
 }

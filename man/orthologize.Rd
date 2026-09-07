@@ -39,7 +39,8 @@ For a \strong{Cohort}:
 analysis. A cohort translated from more than one source species can
 pass a named list instead, one chain per source species (e.g.
 \code{list(rat = "rn7ToHg38.chain", mouse = "mm39ToHg38.chain")}).
-\item \code{liftover_backend}, \code{ortholog_backend}: backends for the two modalities.
+\item \code{liftover_backend}, \code{ortholog_backend}: backends for the two feature
+kinds.
 \item \code{analyses}: optional character vector restricting which analyses to
 translate (defaults to all that have a registered spec with a
 \code{feature_type}).

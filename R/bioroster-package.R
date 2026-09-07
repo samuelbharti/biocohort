@@ -1,75 +1,82 @@
-#' bioroster: Cross-Species Cohort Framework
-#'
-#' A lightweight R package for managing cross-species cohort data (rat/mouse/human)
-#' with manifest validation and standardized storage for multi-omics outputs.
+#' bioroster: Subject and Sample Rosters for Genomics Studies
 #'
 #' @description
-#' bioroster provides S7 classes and tools for organizing genomic study metadata
-#' across species (rat, mouse, human) with support for any omics assay
-#' (WGS, WES, ATAC-seq, bulk RNA, single-cell, ...) via a generic, long-format
-#' sample model.
+#' bioroster keeps the subjects, samples, and analysis outputs of a genomics
+#' study in one validated object, called a `Cohort`. Species and assays are
+#' values in the data, not columns or classes, so the same functions work for
+#' a rat exome study, a mouse single-cell study, or any other organism and
+#' assay.
 #'
-#' @section Core Concepts:
+#' @section From a manifest to a cohort:
 #'
-#' The package organizes study data using these main components:
+#' - [read_manifest()] reads a manifest from CSV, TSV, or Excel and returns
+#'   `subject_tbl` and `sample_map`. [manifest_from_wide()] reshapes a wide,
+#'   one-row-per-subject table into the long form first.
+#' - [validate_manifest()] does the actual checking: it coerces every column
+#'   to character, fills in `role` and `species` where they are missing, and
+#'   splits subject-level columns from sample-level ones.
+#' - [cohort_new()] builds a `Cohort` from validated tables. [study_new()]
+#'   attaches optional project metadata (title, aims, genome builds).
 #'
-#' - **Study**: Project-level metadata (hypotheses, aims, assay types, genome builds)
-#' - **Subject**: Individual entity with species, genotype, phenotype metadata
-#' - **Cohort**: Collection of subjects with sample-to-assay mappings and analysis registry
-#' - **AnalysisSpec**: Specification for a registered analysis with provenance metadata
+#' @section Reading a cohort:
 #'
-#' @section Assays:
+#' - [subjects()], [samples()], and [completeness()] return plain tibbles.
+#' - [subject()] reads one subject as a `Subject` object.
+#' - [cohort_filter()] keeps a subset of subjects or assays and returns a
+#'   cohort that is still valid.
+#' - [sample_pairs()] derives tumor and normal pairs from `sample_map` on
+#'   demand, with configurable role labels.
 #'
-#' Assays are free-form values, not a fixed enumeration. Any omics assay is
-#' supported by using a consistent label in the `assay` column, for example:
+#' @section Writing files for other tools:
 #'
-#' - `wgs`: Whole genome sequencing
-#' - `wes`: Whole exome sequencing
-#' - `atac`: ATAC-seq
-#' - `bulk_rna`: Bulk RNA-sequencing
-#' - `scrna`: Single-cell / single-nucleus RNA-sequencing
+#' - [sample_sheet()] writes the sample list a pipeline expects, with
+#'   built-in templates for a few common nf-core pipelines.
+#' - [check_paths()] tests that the file paths named in a cohort exist.
+#' - [as_coldata()] and [join_metadata()] carry cohort metadata into a
+#'   `SummarizedExperiment`, a Seurat object, or a plain data frame.
+#' - [write_manifest()], [cohort_save()], and [cohort_read()] keep a cohort
+#'   as a file in a project instead of a script that rebuilds it each time.
 #'
-#' @section Key Functions:
+#' @section Analysis outputs:
 #'
-#' **Constructors:**
-#' - [study_new()]: Create a Study object
-#' - [subject_new()]: Create a Subject object
-#' - [cohort_new()]: Create a Cohort object
+#' - [analysis_spec_new()] and [analysis_register()] describe where an
+#'   analysis writes its output and how to read it back.
+#' - [load_analysis()] and [load_analyses()] resolve the path for every
+#'   subject or pair, read the files, and record which ones were found.
 #'
-#' **IO:**
-#' - [read_manifest_csv()]: Read and validate manifest CSV
-#' - [validate_manifest()]: Validate and structure manifest data
+#' @section Cross-species translation:
 #'
-#' **Samples:**
-#' - [sample_pairs()]: Derive tumor/normal sample pairs from a sample map
+#' - [translate()] moves a feature table across genome builds or species.
+#'   Coordinate features go through a liftover backend
+#'   ([liftover_intervals()]); gene features go through an ortholog backend
+#'   ([ortholog_genes()]). Both kinds of backend are pluggable through
+#'   [register_liftover_backend()] and [register_ortholog_backend()].
 #'
-#' **Validation:**
-#' - [validate_cohort()]: Validate a Cohort object
+#' @section Configuration:
 #'
-#' **Registry:**
-#' - [analysis_register()]: Register an analysis in the cohort registry
-#' - [analysis_spec_new()]: Create an AnalysisSpec
+#' - [read_study_yaml()] builds a cohort from one YAML file that names the
+#'   study, the manifest, the file paths, and the registered analyses.
+#'   [write_study_yaml()] writes one back.
+#' - [apply_corrections()] and [read_corrections()] apply documented
+#'   overrides to a manifest and keep an audit trail.
 #'
-#' @section Data Tables:
+#' @section Data tables:
 #'
-#' Cohorts use standardized tables:
+#' - `subject_tbl`: one row per subject. Always has `subject_id` and
+#'   `species`, plus any other subject-level metadata (`sex`, `genotype`,
+#'   `strain`, ...).
+#' - `sample_map`: one row per sample, in long format. Always has
+#'   `subject_id`, `assay`, `sample_id`, and `role`. A new assay is a new
+#'   row, never a new column.
+#' - `completeness_tbl`: one row per `subject_id` and `assay` pair, with the
+#'   sample count.
 #'
-#' - **subject_tbl**: One row per subject; columns: `subject_id`, `species`,
-#'   and any subject-level metadata (`sex`, `strain`, `genotype`, `cohort`,
-#'   `timepoint`, `notes`, ...)
+#' @section Further reading:
 #'
-#' - **sample_map**: Canonical long-format table, one row per sample; columns:
-#'   `subject_id`, `assay`, `sample_id`, `role`. New assays are new rows, never
-#'   new columns or tables.
-#'
-#' - **completeness_tbl**: One row per `subject_id` x `assay`; columns:
-#'   `subject_id`, `assay`, `n_samples`
-#'
-#' @section Documentation:
-#'
-#' For terminology and definitions, see the [Glossary](articles/glossary.html).
-#'
-#' For standardized naming conventions (columns, objects, functions, files),
-#' see [Naming Conventions](articles/naming-conventions.html).
+#' The [Get started](articles/bioroster.html) article walks through a
+#' manifest, a cohort, and a sample sheet end to end. The
+#' [Glossary](articles/glossary.html) defines the terms used across the
+#' package, and [Naming Conventions](articles/naming-conventions.html)
+#' lists the standard names for columns, objects, and files.
 #'
 "_PACKAGE"
