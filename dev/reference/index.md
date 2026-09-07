@@ -184,3 +184,12 @@ Apply documented overrides to a manifest and keep an audit trail
   : Return the audit table of a corrected manifest
 - [`read_corrections()`](https://www.samuelbharti.com/bioroster/reference/read_corrections.md)
   : Read a corrections table from a file
+
+## Study configuration
+
+Declare a study, its manifest, and its analyses in one YAML file
+
+- [`read_study_yaml()`](https://www.samuelbharti.com/bioroster/reference/read_study_yaml.md)
+  : Build a cohort from a study YAML file
+- [`write_study_yaml()`](https://www.samuelbharti.com/bioroster/reference/write_study_yaml.md)
+  : Write a cohort as a study YAML file

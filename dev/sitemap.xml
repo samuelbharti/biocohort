@@ -54,6 +54,7 @@
 <url><loc>https://www.samuelbharti.com/bioroster/reference/read_dotenv.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/read_manifest.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/read_manifest_csv.html</loc></url>
+<url><loc>https://www.samuelbharti.com/bioroster/reference/read_study_yaml.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/register_liftover_backend.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/register_ortholog_backend.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/sample_pairs.html</loc></url>
@@ -69,5 +70,6 @@
 <url><loc>https://www.samuelbharti.com/bioroster/reference/validate_cohort.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/validate_manifest.html</loc></url>
 <url><loc>https://www.samuelbharti.com/bioroster/reference/write_manifest.html</loc></url>
+<url><loc>https://www.samuelbharti.com/bioroster/reference/write_study_yaml.html</loc></url>
 </urlset>
 
