@@ -45,3 +45,5 @@ Thumbs.db
 *.log
 *.tmp
 *.swp
+
+*.exe
