@@ -30,22 +30,25 @@ hypotheses. Optional.}
 \item{aims}{Character vector of specific research aims. Accepts multiple aims.
 Optional.}
 
-\item{assays}{Character vector of assay types used (e.g., "WES", "snRNA-seq").
+\item{assays}{Character vector of assay types used (e.g., "wes", "scrna").
 Optional.}
 
-\item{genome_builds}{Named list mapping species to genome build versions
-(e.g., \code{list(rat = "rn7", mouse = "mm10", human = "hg38")}). Supports rn6,
-rn7 for rat; mm9, mm10, mm39 for mouse; hg19, hg38 for human. Optional.}
+\item{genome_builds}{Named list mapping species to genome build versions,
+e.g. \code{list(rat = "rn7", mouse = "mm39", human = "hg38")}. Any species
+name and any build string are accepted. Optional.}
 
 \item{created_at}{POSIXct timestamp for creation. Defaults to the time the
 object is built.}
 
 \item{tags}{Character vector of arbitrary tags for categorization. Optional.}
 }
+\value{
+A \code{Study} object with the given properties.
+}
 \description{
-An immutable S7 class for storing research project metadata in cross-species
-genomics studies. Study objects provide high-level context and configuration
-for cohorts and analyses involving rat, mouse, and human subjects.
+An immutable S7 class for storing project-level metadata for a study.
+Study objects provide high-level context and configuration for cohorts
+and analyses, for any organism and any omics assay.
 }
 \details{
 Use \code{\link[=study_new]{study_new()}} to construct Study objects with immediate validation.

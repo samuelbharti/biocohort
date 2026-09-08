@@ -42,6 +42,9 @@ Defaults to an empty list.}
 \item{cache}{Named list used to memoize loaded analysis data. Defaults to
 an empty list.}
 }
+\value{
+A \code{Cohort} object with the given properties.
+}
 \description{
 An S7 class that keeps the subjects and samples of a study in one object.
 A Cohort holds a subject table, a long-format sample map, an optional

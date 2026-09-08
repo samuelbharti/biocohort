@@ -17,7 +17,7 @@
     " version ",
     cli::col_green(version),
     "\n",
-    "Cohort Objects for Subjects and Samples in Genomics Studies\n",
+    "Cohort Objects for Subjects and Samples in Omics Studies\n",
     "Documentation: ",
     cli::col_cyan("https://www.samuelbharti.com/biocohort/")
   )

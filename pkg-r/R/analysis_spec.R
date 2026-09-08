@@ -35,7 +35,7 @@
 #'   the loaded analysis table. [load_analysis()] checks them after reading.
 #'   Optional. [analysis_spec_new()] fills it by `level`.
 #' @param feature_type Optional character scalar declaring how this analysis's
-#'   features translate across species in [orthologize()]: `"interval"`
+#'   features translate across species in [translate()]: `"interval"`
 #'   (liftover) or `"gene"` (ortholog mapping). Optional, defaults to NA.
 #' @param gene_col Optional character scalar naming the gene-identifier column
 #'   for `feature_type = "gene"`. Optional, defaults to NA.
@@ -48,6 +48,8 @@
 #' @param pair_sep Character scalar placed between the two sample ids when
 #'   [sample_pairs()] builds `pair_id`. Used for `level = "pair"`. Default
 #'   `"__"`.
+#'
+#' @return An `AnalysisSpec` object with the given properties.
 #'
 #' @details
 #' Use [analysis_spec_new()] to construct AnalysisSpec objects with immediate
