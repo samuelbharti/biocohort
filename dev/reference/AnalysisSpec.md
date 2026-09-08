@@ -100,7 +100,7 @@ AnalysisSpec(
 
   Optional character scalar declaring how this analysis's features
   translate across species in
-  [`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md):
+  [`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md):
   `"interval"` (liftover) or `"gene"` (ortholog mapping). Optional,
   defaults to NA.
 
@@ -129,6 +129,10 @@ AnalysisSpec(
   Character scalar placed between the two sample ids when
   [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
   builds `pair_id`. Used for `level = "pair"`. Default `"__"`.
+
+## Value
+
+An `AnalysisSpec` object with the given properties.
 
 ## Details
 

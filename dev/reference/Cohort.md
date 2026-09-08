@@ -62,6 +62,10 @@ Cohort(
   Named list used to memoize loaded analysis data. Defaults to an empty
   list.
 
+## Value
+
+A `Cohort` object with the given properties.
+
 ## Details
 
 Use

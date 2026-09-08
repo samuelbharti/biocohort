@@ -47,12 +47,16 @@ TranslationResult(
   Named list of summary counts (`n_input`, `n_mapped`, `n_unmapped`,
   `n_multi`).
 
+## Value
+
+A `TranslationResult` object with the given properties.
+
 ## Details
 
 Construct these via
 [`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md)
 or
-[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md)
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
 rather than directly. Access the pieces with `result@mapped`,
 `result@unmapped`, and
 [`translation_stats()`](https://www.samuelbharti.com/biocohort/reference/translation_stats.md).
@@ -60,5 +64,5 @@ rather than directly. Access the pieces with `result@mapped`,
 ## See also
 
 [`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md),
-[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md),
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md),
 [`translation_stats()`](https://www.samuelbharti.com/biocohort/reference/translation_stats.md)

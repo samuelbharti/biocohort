@@ -125,7 +125,7 @@ Optional. <code><a href="analysis_spec_new.html">analysis_spec_new()</a></code> 
 
 <dt id="arg-feature-type">feature_type<a class="anchor" aria-label="anchor" href="#arg-feature-type"></a></dt>
 <dd><p>Optional character scalar declaring how this analysis's
-features translate across species in <code><a href="orthologize.html">orthologize()</a></code>: <code>"interval"</code>
+features translate across species in <code><a href="translate.html">translate()</a></code>: <code>"interval"</code>
 (liftover) or <code>"gene"</code> (ortholog mapping). Optional, defaults to NA.</p></dd>
 
 
@@ -155,6 +155,10 @@ control) side of a pair. Used for <code>level = "pair"</code>. Default <code>"no
 <code>"__"</code>.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>An <code>AnalysisSpec</code> object with the given properties.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Use <code><a href="analysis_spec_new.html">analysis_spec_new()</a></code> to construct AnalysisSpec objects with immediate

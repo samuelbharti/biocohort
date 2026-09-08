@@ -1,9 +1,8 @@
 # S7 Study class
 
-An immutable S7 class for storing research project metadata in
-cross-species genomics studies. Study objects provide high-level context
-and configuration for cohorts and analyses involving rat, mouse, and
-human subjects.
+An immutable S7 class for storing project-level metadata for a study.
+Study objects provide high-level context and configuration for cohorts
+and analyses, for any organism and any omics assay.
 
 ## Usage
 
@@ -48,15 +47,13 @@ Study(
 
 - assays:
 
-  Character vector of assay types used (e.g., "WES", "snRNA-seq").
-  Optional.
+  Character vector of assay types used (e.g., "wes", "scrna"). Optional.
 
 - genome_builds:
 
-  Named list mapping species to genome build versions (e.g.,
-  `list(rat = "rn7", mouse = "mm10", human = "hg38")`). Supports rn6,
-  rn7 for rat; mm9, mm10, mm39 for mouse; hg19, hg38 for human.
-  Optional.
+  Named list mapping species to genome build versions, e.g.
+  `list(rat = "rn7", mouse = "mm39", human = "hg38")`. Any species name
+  and any build string are accepted. Optional.
 
 - created_at:
 
@@ -66,6 +63,10 @@ Study(
 - tags:
 
   Character vector of arbitrary tags for categorization. Optional.
+
+## Value
+
+A `Study` object with the given properties.
 
 ## Details
 

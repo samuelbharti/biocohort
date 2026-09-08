@@ -57,6 +57,10 @@ Subject(
 
   Character scalar for free-form annotations. Optional.
 
+## Value
+
+A `Subject` object with the given properties.
+
 ## Details
 
 Use

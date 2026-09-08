@@ -4,7 +4,7 @@
 
 library(biocohort)
 #> biocohort version 0.1.0.9000
-#> Cohort Objects for Subjects and Samples in Genomics Studies
+#> Cohort Objects for Subjects and Samples in Omics Studies
 #> Documentation: https://www.samuelbharti.com/biocohort/
 ```
 

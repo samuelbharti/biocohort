@@ -26,7 +26,7 @@ ensure_dir(path)
 out <- fs::path(tempfile(), "results", "qc")
 ensure_dir(out)
 fs::dir_exists(out)
-#> /tmp/RtmpGIMAUE/file18625d4347de/results/qc 
+#> /tmp/Rtmpy4CMLM/file184332e95d50/results/qc 
 #>                                        TRUE 
 
 unlink(fs::path_dir(fs::path_dir(out)), recursive = TRUE)
