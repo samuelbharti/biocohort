@@ -36,6 +36,9 @@ Optional.}
 
 \item{notes}{Character scalar for free-form annotations. Optional.}
 }
+\value{
+A \code{Subject} object with the given properties.
+}
 \description{
 An immutable S7 class for storing individual-level metadata in cross-species
 genomics studies. Subject objects represent individual animals or biological

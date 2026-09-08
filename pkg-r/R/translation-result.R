@@ -15,12 +15,14 @@
 #' @param stats Named list of summary counts (`n_input`, `n_mapped`,
 #'   `n_unmapped`, `n_multi`).
 #'
+#' @return A `TranslationResult` object with the given properties.
+#'
 #' @details
-#' Construct these via [liftover_intervals()] or [orthologize()] rather than
+#' Construct these via [liftover_intervals()] or [translate()] rather than
 #' directly. Access the pieces with `result@mapped`, `result@unmapped`, and
 #' [translation_stats()].
 #'
-#' @seealso [liftover_intervals()], [orthologize()], [translation_stats()]
+#' @seealso [liftover_intervals()], [translate()], [translation_stats()]
 #' @export
 TranslationResult <- S7::new_class(
   "TranslationResult",
