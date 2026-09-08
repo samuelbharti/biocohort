@@ -65,7 +65,7 @@ the loaded analysis table. \code{\link[=load_analysis]{load_analysis()}} checks 
 Optional. \code{\link[=analysis_spec_new]{analysis_spec_new()}} fills it by \code{level}.}
 
 \item{feature_type}{Optional character scalar declaring how this analysis's
-features translate across species in \code{\link[=orthologize]{orthologize()}}: \code{"interval"}
+features translate across species in \code{\link[=translate]{translate()}}: \code{"interval"}
 (liftover) or \code{"gene"} (ortholog mapping). Optional, defaults to NA.}
 
 \item{gene_col}{Optional character scalar naming the gene-identifier column
@@ -83,6 +83,9 @@ control) side of a pair. Used for \code{level = "pair"}. Default \code{"normal"}
 \item{pair_sep}{Character scalar placed between the two sample ids when
 \code{\link[=sample_pairs]{sample_pairs()}} builds \code{pair_id}. Used for \code{level = "pair"}. Default
 \code{"__"}.}
+}
+\value{
+An \code{AnalysisSpec} object with the given properties.
 }
 \description{
 An immutable S7 class for defining analysis specifications in a Cohort.

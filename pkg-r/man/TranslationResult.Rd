@@ -29,6 +29,9 @@ input may yield multiple output rows (multi-mapping).}
 \item{stats}{Named list of summary counts (\code{n_input}, \code{n_mapped},
 \code{n_unmapped}, \code{n_multi}).}
 }
+\value{
+A \code{TranslationResult} object with the given properties.
+}
 \description{
 An S7 class holding the outcome of translating coordinate features or
 gene-level features from one species or assembly to another. It keeps the
@@ -36,10 +39,10 @@ successfully translated features, the features that failed to map, and
 provenance so that translation is never lossy \emph{silently}.
 }
 \details{
-Construct these via \code{\link[=liftover_intervals]{liftover_intervals()}} or \code{\link[=orthologize]{orthologize()}} rather than
+Construct these via \code{\link[=liftover_intervals]{liftover_intervals()}} or \code{\link[=translate]{translate()}} rather than
 directly. Access the pieces with \code{result@mapped}, \code{result@unmapped}, and
 \code{\link[=translation_stats]{translation_stats()}}.
 }
 \seealso{
-\code{\link[=liftover_intervals]{liftover_intervals()}}, \code{\link[=orthologize]{orthologize()}}, \code{\link[=translation_stats]{translation_stats()}}
+\code{\link[=liftover_intervals]{liftover_intervals()}}, \code{\link[=translate]{translate()}}, \code{\link[=translation_stats]{translation_stats()}}
 }
