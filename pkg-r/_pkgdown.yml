@@ -17,6 +17,10 @@ template:
     code_font: {google: "JetBrains Mono"}
     border-radius: "0.25rem"
 
+authors:
+  sidebar:
+    roles: [aut, cre, ths, fnd]
+
 home:
   title: biocohort
   description: Study manifests, sample sheets, and analysis registries for any omics project
