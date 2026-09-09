@@ -14,7 +14,17 @@ omics assay.
 
 **Documentation**: <https://www.samuelbharti.com/biocohort/>
 
-## Why I built this
+## Installation
+
+The package is not on CRAN. From GitHub, note the `subdir`. The package sits
+in `pkg-r/` rather than at the repository root, and an install that leaves
+this out fails without saying why:
+
+```r
+pak::pak("samuelbharti/biocohort/pkg-r")
+```
+
+## Motivation
 
 Every study I run starts the same way. A spreadsheet of subjects. A folder
 of sample IDs that do not quite match the spreadsheet. A script that fixes
@@ -52,18 +62,6 @@ The R package lives in `pkg-r/`, not at the repository root. Run package
 commands from there, for example `devtools::test("pkg-r")` or
 `rcmdcheck::rcmdcheck("pkg-r")`. See [CONTRIBUTING.md](CONTRIBUTING.md) for the
 full workflow.
-
-## Installation
-
-The package is not on CRAN. From GitHub, note the `subdir`. The package sits
-in `pkg-r/` rather than at the repository root, and an install that leaves
-this out fails without saying why:
-
-```r
-pak::pak("samuelbharti/biocohort/pkg-r")
-# or
-remotes::install_github("samuelbharti/biocohort", subdir = "pkg-r")
-```
 
 ## Learn more
 
