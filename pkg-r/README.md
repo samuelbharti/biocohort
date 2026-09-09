@@ -18,8 +18,6 @@ for why this package exists.
 
 ```r
 pak::pak("samuelbharti/biocohort/pkg-r")
-# or
-remotes::install_github("samuelbharti/biocohort", subdir = "pkg-r")
 ```
 
 ## Quick start
