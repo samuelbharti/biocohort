@@ -1,12 +1,12 @@
 name: pkgdown
 
 # Every pull request builds the site to prove that it still builds. A push to
-# main publishes the site. A push to dev publishes a preview under /dev/.
+# main publishes the site.
 on:
   push:
-    branches: [main, dev]
+    branches: [main]
   pull_request:
-    branches: [main, dev]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -48,23 +48,11 @@ jobs:
         shell: Rscript {0}
         working-directory: pkg-r
 
-      # clean removes pages of deleted articles from the branch. The dev
-      # preview folder is kept.
+      # clean removes pages of deleted articles from the branch.
       - name: Deploy site (main)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4.9.0
         with:
           branch: gh-pages
           folder: pkg-r/_site
-          clean: true
-          clean-exclude: |
-            dev
-
-      - name: Deploy preview (dev)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
-        uses: JamesIves/github-pages-deploy-action@v4.9.0
-        with:
-          branch: gh-pages
-          folder: pkg-r/_site
-          target-folder: dev
           clean: true
