@@ -32,12 +32,12 @@ list. Heavy or optional packages go in `Suggests` and are reached through
 
 ## Branches and commits
 
-- `dev` is the integration branch. Every pull request targets `dev`, not
-  `main`. `dev` is merged into `main` at a release.
-- Do not commit to `main` or `dev` directly. The `no-commit-to-branch` hook
-  blocks it locally.
-- Name branches with a type prefix: `feat/<slug>`, `fix/<slug>`, or
-  `chore/<slug>`.
+- Every pull request targets `main` directly. There is no separate
+  integration branch.
+- Do not commit to `main` directly. The `no-commit-to-branch` hook blocks it
+  locally.
+- Name branches with a type prefix: `feat/<slug>`, `fix/<slug>`, `chore/<slug>`,
+  or `docs/<slug>`.
 - Use Conventional Commit messages, for example `feat: add sample_sheet()`.
   Keep commits small and focused. The commit-msg hook checks the format.
 - The pull request title also follows Conventional Commits.
@@ -45,9 +45,12 @@ list. Heavy or optional packages go in `Suggests` and are reached through
 ## Where the checks run
 
 Every pull request runs R CMD check, lintr, the prek hooks, a secret scan, and
-a pkgdown build on GitHub, into `dev` as well as `main`. A push to `main`
-publishes the documentation site. A push to `dev` publishes a preview under
-`/dev/`.
+a pkgdown build on GitHub. A push to `main` publishes the documentation site.
+
+R CMD check on a pull request runs one Ubuntu job, to keep the wait short.
+The full matrix (every supported R version, three operating systems) runs
+only on demand, from the Actions tab: trigger it before a release or a CRAN
+submission.
 
 CI is a backstop, not the first line of defence. Run the checks locally before
 you push:
@@ -76,6 +79,5 @@ prek install --hook-type commit-msg
 
 ## Releases
 
-A release is a merge from `dev` into `main` with a version bump in
-`DESCRIPTION`, a dated heading in `NEWS.md`, and a git tag `v<version>`.
-Until the API settles, the version keeps a `.9000` development suffix.
+A release bumps the version in `DESCRIPTION`, adds a dated heading in
+`NEWS.md`, and tags `v<version>` once the change is on `main`.
