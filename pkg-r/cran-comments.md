@@ -2,9 +2,9 @@
 
 ## Resubmission
 
-This is a resubmission of 0.1.0. The first submission came back from the
-incoming pretest with two NOTEs. Both are answered below, and the version
-stays 0.1.0 because that version was never published.
+This is a resubmission. The first submission, 0.1.0, came back from the
+incoming pretest with two NOTEs. Both are answered below. This is 0.1.1: the
+package code is unchanged, and every change is in the documentation.
 
 * **"Found the following (possibly) invalid file URIs".** The package help
   page, `?biocohort`, linked to the three articles by a relative path that
@@ -100,8 +100,10 @@ pretest on Debian and Windows did not report it.
   suite with no `Suggests` present. The full matrix, ubuntu-latest (R-devel,
   R-release, R-oldrel-1), windows-latest (R-release), and macos-latest
   (R-release), runs on demand and was run for this release.
-* CRAN incoming pretest, 2026-09-10: Debian (R-devel) and Windows (R-devel).
-  Both passed every check except the two NOTEs answered above.
+* CRAN incoming pretest of 0.1.0, 2026-09-10: Debian (R-devel) and Windows
+  (R-devel). Both passed every check except the two NOTEs answered above.
+* win-builder, R-devel, 2026-09-10, on the fixed package: 1 NOTE, the
+  incoming feasibility NOTE with the three words above and nothing else.
 
 ## Tests
 
