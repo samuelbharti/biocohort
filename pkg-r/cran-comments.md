@@ -95,11 +95,11 @@ pretest on Debian and Windows did not report it.
 ## Test environments
 
 * Local: Windows 11, R 4.6.1, x86_64
-* GitHub Actions, on every pull request into `main`: ubuntu-latest
-  (R-release), plus a job that installs hard dependencies only and runs the
-  suite with no `Suggests` present. The full matrix, ubuntu-latest (R-devel,
-  R-release, R-oldrel-1), windows-latest (R-release), and macos-latest
-  (R-release), runs on demand and was run for this release.
+* GitHub Actions, on every pull request into `main`: ubuntu-latest,
+  windows-latest, and macos-latest (R-release), plus a job that installs hard
+  dependencies only and runs the suite with no `Suggests` present. The full
+  matrix adds ubuntu-latest R-devel and R-oldrel-1; it runs weekly and on
+  demand, and was run for this release.
 * CRAN incoming pretest of 0.1.0, 2026-09-10: Debian (R-devel) and Windows
   (R-devel). Both passed every check except the two NOTEs answered above.
 * win-builder, R-devel, 2026-09-10, on the fixed package: 1 NOTE, the

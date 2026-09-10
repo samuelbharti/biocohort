@@ -47,10 +47,11 @@ list. Heavy or optional packages go in `Suggests` and are reached through
 Every pull request runs R CMD check, lintr, the prek hooks, a secret scan, and
 a pkgdown build on GitHub. A push to `main` publishes the documentation site.
 
-R CMD check on a pull request runs one Ubuntu job, to keep the wait short.
-The full matrix (every supported R version, three operating systems) runs
-only on demand, from the Actions tab: trigger it before a release or a CRAN
-submission.
+R CMD check on a pull request runs R-release on Ubuntu, Windows, and macOS,
+in parallel, so the wait is a few minutes. The full matrix adds R-devel and
+R-oldrel on Ubuntu, which build Bioconductor from source and take up to
+thirty minutes. It runs every Monday and on demand from the Actions tab:
+trigger it before a release or a CRAN submission.
 
 A second workflow, `cran`, runs the check the way CRAN's incoming pretest
 does, with the incoming checks, the URL check, the relative-link check, and
