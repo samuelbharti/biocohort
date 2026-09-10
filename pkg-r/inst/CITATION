@@ -1,0 +1,9 @@
+bibentry(
+  bibtype = "Manual",
+  title   = "biocohort: Cohort Objects for Subjects and Samples in Omics Studies",
+  author  = person("Samuel", "Bharti"),
+  year    = "2026",
+  note    = paste("R package version", meta$Version),
+  url     = "https://www.samuelbharti.com/biocohort/",
+  doi     = "10.5281/zenodo.22685057"
+)
