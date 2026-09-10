@@ -6,11 +6,16 @@ destination: _site
 
 template:
   bootstrap: 5
-  light-switch: true
+  # Light only, on purpose: the site's background is the same parchment as
+  # the hex logo's ground, so a dark-mode toggle would fight the palette
+  # rather than switch within it.
+  light-switch: false
   bslib:
     # Taken from the logo, so the site and the hex are the same object.
     # Aubergine is the ring color in the hex; moss and ochre are the two
     # other strands, used sparingly rather than as the site's primary.
+    bg: "#f3ecdd"
+    fg: "#2a1a2d"
     primary: "#4b2e4f"
     base_font: {google: "Source Sans 3"}
     heading_font: {google: "Bricolage Grotesque"}

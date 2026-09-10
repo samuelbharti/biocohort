@@ -9,9 +9,6 @@ one validated object. Species and assays are values in the data, not
 columns or classes, so the same functions work for any organism and any
 omics assay.
 
-> **Status:** 0.1.0.9000, not released. The API can still change before a
-> first tagged version.
-
 **Documentation**: <https://www.samuelbharti.com/biocohort/>
 
 ## Installation
