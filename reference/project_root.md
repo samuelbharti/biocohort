@@ -41,7 +41,7 @@ fs::dir_create(fs::path(root, "scripts", "qc"))
 fs::file_create(fs::path(root, "DESCRIPTION"))
 
 project_root(fs::path(root, "scripts", "qc"))
-#> /tmp/RtmpXrqYZd/file194d772d630f/study
+#> /tmp/Rtmpqcd0mP/file196e7acb47e4/study
 
 unlink(fs::path_dir(root), recursive = TRUE)
 ```
