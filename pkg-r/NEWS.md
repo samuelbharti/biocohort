@@ -83,6 +83,9 @@ settles.
   reader, and record which files were found. Subject and pair units are
   enumerated only for the spec's own assay. `analysis_files()` returns that
   record.
+- A `path_template` ending in `.parquet` now gets `arrow::read_parquet` as
+  its default reader, the same way `.csv`, `.tsv`, `.txt`, and `.rds`
+  already do.
 
 ## Cross-species translation (experimental)
 
