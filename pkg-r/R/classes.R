@@ -186,6 +186,9 @@ Subject <- S7::new_class(
 #'   `id`, `action`, `reason`, `previous_status`, `timestamp`). Unlike
 #'   `cache`, this is a durable record and is not cleared by
 #'   [cohort_filter()]. Defaults to an empty table.
+#' @param derived A tibble recording every [cohort_derive()] call (columns
+#'   `name`, `from`, `level`, `cutoffs`, `n_derived`, `n_na`, `timestamp`).
+#'   Durable in the same way as `qc`. Defaults to an empty table.
 #'
 #' @return A `Cohort` object with the given properties.
 #'
@@ -208,6 +211,7 @@ Subject <- S7::new_class(
 #' cohort@registry      # Named list of AnalysisSpec objects
 #' cohort@cache         # Memoization cache
 #' cohort@qc            # QC audit log
+#' cohort@derived       # Derived-column provenance
 #' ```
 #'
 #' @seealso [cohort_new()] for object construction,
@@ -250,6 +254,18 @@ Cohort <- S7::new_class(
         action = character(),
         reason = character(),
         previous_status = character(),
+        timestamp = as.POSIXct(character())
+      ))
+    ),
+    derived = S7::new_property(
+      S7::class_data.frame,
+      default = quote(tibble::tibble(
+        name = character(),
+        from = character(),
+        level = character(),
+        cutoffs = list(),
+        n_derived = integer(),
+        n_na = integer(),
         timestamp = as.POSIXct(character())
       ))
     )

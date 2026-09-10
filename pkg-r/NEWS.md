@@ -58,6 +58,15 @@ settles.
   contrast between those groups, ready to pipe into `cohort_filter()` for
   each side.
 
+## Derived columns
+
+- `cohort_derive()` bins an existing numeric column at one or more named
+  cutoffs and writes the result as a new column on `subject_tbl` or
+  `sample_map`, so a cutoff like "early onset is 120 days or under" is a
+  value passed in, not code. `derive_log()` reads the provenance every call
+  appends to `cohort@derived`, which, like `cohort@qc`, is not cleared by
+  `cohort_filter()`.
+
 ## Reading and writing files
 
 - `read_manifest()` reads a manifest from CSV, TSV, or Excel, always as

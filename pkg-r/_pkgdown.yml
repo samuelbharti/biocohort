@@ -88,6 +88,11 @@ reference:
   contents:
   - cohort_groups
   - cohort_contrasts
+- title: Derived columns
+  desc: Bin a numeric column at named cutoffs, with provenance
+  contents:
+  - cohort_derive
+  - derive_log
 - title: IO Functions
   desc: Read and write data
   contents:
