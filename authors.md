@@ -20,13 +20,13 @@ Source:
 [`DESCRIPTION`](https://github.com/samuelbharti/biocohort/blob/main/DESCRIPTION)
 
 Bharti S (2026). *biocohort: Cohort Objects for Subjects and Samples in
-Omics Studies*. R package version 0.1.0.9000,
+Omics Studies*. R package version 0.1.0,
 <https://www.samuelbharti.com/biocohort/>.
 
     @Manual{,
       title = {biocohort: Cohort Objects for Subjects and Samples in Omics Studies},
       author = {Samuel Bharti},
       year = {2026},
-      note = {R package version 0.1.0.9000},
+      note = {R package version 0.1.0},
       url = {https://www.samuelbharti.com/biocohort/},
     }

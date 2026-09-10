@@ -51,6 +51,33 @@ Read parts of a cohort
 - [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
   : Keep a subset of a cohort's subjects or assays
 
+## Quality control
+
+Flag or drop subjects or samples, with an audit trail
+
+- [`cohort_qc()`](https://www.samuelbharti.com/biocohort/reference/cohort_qc.md)
+  : Flag or drop subjects or samples for quality control
+- [`qc_log()`](https://www.samuelbharti.com/biocohort/reference/qc_log.md)
+  : Read a cohort's QC log
+
+## Groups and contrasts
+
+Group subjects and enumerate pairwise comparisons
+
+- [`cohort_groups()`](https://www.samuelbharti.com/biocohort/reference/cohort_groups.md)
+  : Group a cohort's subjects by one or more columns
+- [`cohort_contrasts()`](https://www.samuelbharti.com/biocohort/reference/cohort_contrasts.md)
+  : Every pairwise contrast between a cohort's groups
+
+## Derived columns
+
+Bin a numeric column at named cutoffs, with provenance
+
+- [`cohort_derive()`](https://www.samuelbharti.com/biocohort/reference/cohort_derive.md)
+  : Derive a column from cutoffs on an existing numeric column
+- [`derive_log()`](https://www.samuelbharti.com/biocohort/reference/derive_log.md)
+  : Read a cohort's derived-column log
+
 ## IO Functions
 
 Read and write data

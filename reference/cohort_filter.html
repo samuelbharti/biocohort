@@ -11,7 +11,7 @@ column is filtered to match; the registry and paths are kept as they are."><meta
 
     <a class="navbar-brand me-2" href="../index.html">biocohort</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,7 @@ column is filtered to match; the registry and paths are kept as they are.</p>
 <span>  <span class="va">...</span>,</span>
 <span>  subject_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  assays <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  drop_sample_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  drop_empty <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -76,10 +77,18 @@ column is filtered to match; the registry and paths are kept as they are.</p>
 assays.</p></dd>
 
 
+<dt id="arg-drop-sample-ids">drop_sample_ids<a class="anchor" aria-label="anchor" href="#arg-drop-sample-ids"></a></dt>
+<dd><p>Optional character vector. Remove sample rows with
+these sample ids. Unlike <code>subject_ids</code> and <code>assays</code>, which both keep a
+match, this one drops a match: it is the only way to remove specific
+samples without also naming every sample to keep.</p></dd>
+
+
 <dt id="arg-drop-empty">drop_empty<a class="anchor" aria-label="anchor" href="#arg-drop-empty"></a></dt>
 <dd><p>Logical. When <code>TRUE</code> (default), a subject left with no
-sample after the <code>assays</code> filter is also removed from <code>subject_tbl</code>.
-When <code>FALSE</code>, such a subject is kept with no rows in <code>sample_map</code>.</p></dd>
+sample after the <code>assays</code>/<code>drop_sample_ids</code> filters is also removed from
+<code>subject_tbl</code>. When <code>FALSE</code>, such a subject is kept with no rows in
+<code>sample_map</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -89,10 +98,10 @@ data or a translation result computed for the full set of subjects.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The four ways to narrow a cohort combine: <code>...</code> and <code>subject_ids</code> both
-narrow <code>subject_tbl</code>, and <code>assays</code> narrows <code>sample_map</code>. <code>sample_map</code> is
-always restricted to the subjects that remain in <code>subject_tbl</code> after
-<code>...</code> and <code>subject_ids</code>, regardless of <code>drop_empty</code>.</p>
+    <p>The five ways to narrow a cohort combine: <code>...</code> and <code>subject_ids</code> both
+narrow <code>subject_tbl</code>, and <code>assays</code>/<code>drop_sample_ids</code> narrow <code>sample_map</code>.
+<code>sample_map</code> is always restricted to the subjects that remain in
+<code>subject_tbl</code> after <code>...</code> and <code>subject_ids</code>, regardless of <code>drop_empty</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -125,6 +134,15 @@ always restricted to the subjects that remain in <code>subject_tbl</code> after
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── Cohort: Cross-species genomics comparison </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> 4 subjects (2 mouse, 2 rat)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> 4 samples (4 scrna)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Extra sample columns: fastq_1, fastq_2</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># By excluding specific sample ids (e.g. samples that failed QC)</span></span></span>
+<span class="r-in"><span><span class="va">bad_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="samples.html">samples</a></span><span class="op">(</span><span class="va">example_cohort</span><span class="op">)</span><span class="op">$</span><span class="va">sample_id</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu">cohort_filter</span><span class="op">(</span><span class="va">example_cohort</span>, drop_sample_ids <span class="op">=</span> <span class="va">bad_id</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Cohort: Cross-species genomics comparison </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> 4 subjects (2 mouse, 2 rat)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> 11 samples (7 wes, 4 scrna)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Extra sample columns: fastq_1, fastq_2</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

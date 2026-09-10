@@ -15,7 +15,7 @@ organism and assay."><meta property="og:image" content="https://www.samuelbharti
 
     <a class="navbar-brand me-2" href="../index.html">biocohort</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,6 +73,20 @@ attaches optional project metadata (title, aims, genome builds).</p></li>
 cohort that is still valid.</p></li>
 <li><p><code><a href="sample_pairs.html">sample_pairs()</a></code> derives tumor and normal pairs from <code>sample_map</code> on
 demand, with configurable role labels.</p></li>
+</ul></div>
+    <div class="section level2">
+    <h2 id="quality-control-groups-and-derived-columns">Quality control, groups, and derived columns<a class="anchor" aria-label="anchor" href="#quality-control-groups-and-derived-columns"></a></h2>
+
+
+<ul><li><p><code><a href="cohort_qc.html">cohort_qc()</a></code> flags or drops subjects or samples, with a required
+reason. <code><a href="qc_log.html">qc_log()</a></code> reads the audit trail every call appends to the
+cohort, which survives later <code><a href="cohort_filter.html">cohort_filter()</a></code> calls.</p></li>
+<li><p><code><a href="cohort_groups.html">cohort_groups()</a></code> groups a cohort's subjects by one or more columns.
+<code><a href="cohort_contrasts.html">cohort_contrasts()</a></code> enumerates every pairwise contrast between those
+groups, ready to filter one side against the other.</p></li>
+<li><p><code><a href="cohort_derive.html">cohort_derive()</a></code> bins an existing numeric column at named cutoffs and
+writes the result as a new column, so a cutoff is a value passed in,
+not code. <code><a href="derive_log.html">derive_log()</a></code> reads its provenance.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="writing-files-for-other-tools">Writing files for other tools<a class="anchor" aria-label="anchor" href="#writing-files-for-other-tools"></a></h2>

@@ -53,3 +53,24 @@ A list with `mapped` and `unmapped` tibbles.
 ## See also
 
 [`ortholog_genes()`](https://www.samuelbharti.com/biocohort/reference/ortholog_genes.md)
+
+## Examples
+
+``` r
+if (requireNamespace("babelgene", quietly = TRUE)) {
+  feats <- tibble::tibble(gene = c("TP53", "MYC"), .feature_id = 1:2)
+  out <- ortholog_babelgene(
+    feats,
+    from = "human",
+    to = "mouse",
+    gene_col = "gene",
+    id_type = "symbol"
+  )
+  out$mapped
+}
+#> # A tibble: 2 × 3
+#>   gene  .feature_id ortholog
+#>   <chr>       <int> <chr>   
+#> 1 TP53            1 Trp53   
+#> 2 MYC             2 Myc     
+```

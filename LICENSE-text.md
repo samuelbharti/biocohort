@@ -1,4 +1,4 @@
 # License
 
     YEAR: 2026
-    COPYRIGHT HOLDER: Samuel Bharti
+    COPYRIGHT HOLDER: Samuel Bharti; Posit Software, PBC

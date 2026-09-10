@@ -24,12 +24,17 @@
 <url><loc>https://www.samuelbharti.com/biocohort/reference/biocohort-package.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/check_paths.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/cohort-subject.html</loc></url>
+<url><loc>https://www.samuelbharti.com/biocohort/reference/cohort_contrasts.html</loc></url>
+<url><loc>https://www.samuelbharti.com/biocohort/reference/cohort_derive.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/cohort_filter.html</loc></url>
+<url><loc>https://www.samuelbharti.com/biocohort/reference/cohort_groups.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/cohort_new.html</loc></url>
+<url><loc>https://www.samuelbharti.com/biocohort/reference/cohort_qc.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/cohort_read.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/cohort_save.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/completeness.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/corrections_log.html</loc></url>
+<url><loc>https://www.samuelbharti.com/biocohort/reference/derive_log.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/ensure_dir.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/example_cohort.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/index.html</loc></url>
@@ -48,6 +53,7 @@
 <url><loc>https://www.samuelbharti.com/biocohort/reference/orthologize.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/project_path.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/project_root.html</loc></url>
+<url><loc>https://www.samuelbharti.com/biocohort/reference/qc_log.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/read_corrections.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/read_dotenv.html</loc></url>
 <url><loc>https://www.samuelbharti.com/biocohort/reference/read_manifest.html</loc></url>

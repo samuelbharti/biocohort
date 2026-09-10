@@ -5,11 +5,9 @@ in one validated object. Species and assays are values in the data, not
 columns or classes, so the same functions work for any organism and any
 omics assay.
 
-**Documentation**: <https://www.samuelbharti.com/biocohort/>
-
 See the [repository root
-README](https://github.com/samuelbharti/biocohort#readme) for why this
-package exists.
+README](https://github.com/samuelbharti/biocohort#readme) for the
+motivation behind this package.
 
 ## Installation
 
@@ -83,6 +81,24 @@ long <- manifest_from_wide(wide_table, id_cols)
   return plain tibbles.
   [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
   keeps a subset and stays valid.
+- **Flag or drop for QC.**
+  [`cohort_qc()`](https://www.samuelbharti.com/biocohort/reference/cohort_qc.md)
+  flags or drops subjects or samples with a required reason.
+  [`qc_log()`](https://www.samuelbharti.com/biocohort/reference/qc_log.md)
+  reads the audit trail, which survives later
+  [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
+  calls.
+- **Group and contrast.**
+  [`cohort_groups()`](https://www.samuelbharti.com/biocohort/reference/cohort_groups.md)
+  groups subjects by one or more columns.
+  [`cohort_contrasts()`](https://www.samuelbharti.com/biocohort/reference/cohort_contrasts.md)
+  enumerates every pairwise contrast between those groups.
+- **Derive a column from cutoffs.**
+  [`cohort_derive()`](https://www.samuelbharti.com/biocohort/reference/cohort_derive.md)
+  bins an existing numeric column at named cutoffs, so a cutoff is a
+  value passed in, not code.
+  [`derive_log()`](https://www.samuelbharti.com/biocohort/reference/derive_log.md)
+  reads its provenance.
 - **Write files for other tools.**
   [`sample_sheet()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet.md)
   writes the sample list a pipeline expects.

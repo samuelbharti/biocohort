@@ -14,6 +14,7 @@ cohort_filter(
   ...,
   subject_ids = NULL,
   assays = NULL,
+  drop_sample_ids = NULL,
   drop_empty = TRUE
 )
 ```
@@ -40,11 +41,19 @@ cohort_filter(
 
   Optional character vector. Keep only sample rows with these assays.
 
+- drop_sample_ids:
+
+  Optional character vector. Remove sample rows with these sample ids.
+  Unlike `subject_ids` and `assays`, which both keep a match, this one
+  drops a match: it is the only way to remove specific samples without
+  also naming every sample to keep.
+
 - drop_empty:
 
   Logical. When `TRUE` (default), a subject left with no sample after
-  the `assays` filter is also removed from `subject_tbl`. When `FALSE`,
-  such a subject is kept with no rows in `sample_map`.
+  the `assays`/`drop_sample_ids` filters is also removed from
+  `subject_tbl`. When `FALSE`, such a subject is kept with no rows in
+  `sample_map`.
 
 ## Value
 
@@ -55,10 +64,11 @@ result computed for the full set of subjects.
 
 ## Details
 
-The four ways to narrow a cohort combine: `...` and `subject_ids` both
-narrow `subject_tbl`, and `assays` narrows `sample_map`. `sample_map` is
-always restricted to the subjects that remain in `subject_tbl` after
-`...` and `subject_ids`, regardless of `drop_empty`.
+The five ways to narrow a cohort combine: `...` and `subject_ids` both
+narrow `subject_tbl`, and `assays`/`drop_sample_ids` narrow
+`sample_map`. `sample_map` is always restricted to the subjects that
+remain in `subject_tbl` after `...` and `subject_ids`, regardless of
+`drop_empty`.
 
 ## See also
 
@@ -93,5 +103,14 @@ cohort_filter(example_cohort, assays = "scrna")
 #> ── Cohort: Cross-species genomics comparison 
 #> • 4 subjects (2 mouse, 2 rat)
 #> • 4 samples (4 scrna)
+#> ℹ Extra sample columns: fastq_1, fastq_2
+
+# By excluding specific sample ids (e.g. samples that failed QC)
+bad_id <- samples(example_cohort)$sample_id[[1]]
+cohort_filter(example_cohort, drop_sample_ids = bad_id)
+#> 
+#> ── Cohort: Cross-species genomics comparison 
+#> • 4 subjects (2 mouse, 2 rat)
+#> • 11 samples (7 wes, 4 scrna)
 #> ℹ Extra sample columns: fastq_1, fastq_2
 ```

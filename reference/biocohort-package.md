@@ -43,6 +43,28 @@ any other organism and assay.
   derives tumor and normal pairs from `sample_map` on demand, with
   configurable role labels.
 
+## Quality control, groups, and derived columns
+
+- [`cohort_qc()`](https://www.samuelbharti.com/biocohort/reference/cohort_qc.md)
+  flags or drops subjects or samples, with a required reason.
+  [`qc_log()`](https://www.samuelbharti.com/biocohort/reference/qc_log.md)
+  reads the audit trail every call appends to the cohort, which survives
+  later
+  [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
+  calls.
+
+- [`cohort_groups()`](https://www.samuelbharti.com/biocohort/reference/cohort_groups.md)
+  groups a cohort's subjects by one or more columns.
+  [`cohort_contrasts()`](https://www.samuelbharti.com/biocohort/reference/cohort_contrasts.md)
+  enumerates every pairwise contrast between those groups, ready to
+  filter one side against the other.
+
+- [`cohort_derive()`](https://www.samuelbharti.com/biocohort/reference/cohort_derive.md)
+  bins an existing numeric column at named cutoffs and writes the result
+  as a new column, so a cutoff is a value passed in, not code.
+  [`derive_log()`](https://www.samuelbharti.com/biocohort/reference/derive_log.md)
+  reads its provenance.
+
 ## Writing files for other tools
 
 - [`sample_sheet()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet.md)
