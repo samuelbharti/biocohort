@@ -54,10 +54,23 @@ the API settles.
   reads one subject from `subject_tbl` as a `Subject` object.
 - [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
   keeps a subset of subjects or assays and returns a cohort that is
-  still valid.
+  still valid. `drop_sample_ids` removes specific sample ids instead of
+  naming every sample to keep.
 - [`print()`](https://rdrr.io/r/base/print.html) for `Cohort`,
   `Subject`, and `AnalysisSpec` shows subject and sample counts, extra
-  sample columns, and registered analyses.
+  sample columns, a QC summary, and registered analyses.
+
+### Quality control
+
+- [`cohort_qc()`](https://www.samuelbharti.com/biocohort/reference/cohort_qc.md)
+  flags or drops subjects or samples, recording the reason in
+  `qc_status`/`qc_reason` columns (flag) or by removing the matching
+  rows (drop).
+  [`qc_log()`](https://www.samuelbharti.com/biocohort/reference/qc_log.md)
+  reads the audit trail every call appends to `cohort@qc`, which is not
+  cleared by
+  [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md),
+  so the record survives later structural changes to the cohort.
 
 ### Reading and writing files
 

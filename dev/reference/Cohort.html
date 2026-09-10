@@ -53,7 +53,9 @@ Study, file paths, analysis tables, and a registry of analysis specs.</p>
 <span>  paths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  analyses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  registry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  cache <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  cache <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  qc <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, action <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, reason</span>
+<span>    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, previous_status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, timestamp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -97,8 +99,16 @@ Defaults to an empty list.</p></dd>
 
 
 <dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>
-<dd><p>Named list used to memoize loaded analysis data. Defaults to
-an empty list.</p></dd>
+<dd><p>Named list used to memoize loaded analysis data. Cleared by
+<code><a href="cohort_filter.html">cohort_filter()</a></code> on every structural change, since it holds state that
+can always be recomputed. Defaults to an empty list.</p></dd>
+
+
+<dt id="arg-qc">qc<a class="anchor" aria-label="anchor" href="#arg-qc"></a></dt>
+<dd><p>A tibble recording every <code><a href="cohort_qc.html">cohort_qc()</a></code> call (columns <code>scope</code>,
+<code>id</code>, <code>action</code>, <code>reason</code>, <code>previous_status</code>, <code>timestamp</code>). Unlike
+<code>cache</code>, this is a durable record and is not cleared by
+<code><a href="cohort_filter.html">cohort_filter()</a></code>. Defaults to an empty table.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -120,7 +130,8 @@ a <code>Cohort</code> any other way still enforces the required columns.</p>
 <span><span class="va">cohort</span><span class="op">@</span><span class="va">paths</span>         <span class="co"># File paths</span></span>
 <span><span class="va">cohort</span><span class="op">@</span><span class="va">analyses</span>      <span class="co"># Stored analysis results</span></span>
 <span><span class="va">cohort</span><span class="op">@</span><span class="va">registry</span>      <span class="co"># Named list of AnalysisSpec objects</span></span>
-<span><span class="va">cohort</span><span class="op">@</span><span class="va">cache</span>         <span class="co"># Memoization cache</span></span></code></pre><p></p></div>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">cache</span>         <span class="co"># Memoization cache</span></span>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">qc</span>            <span class="co"># QC audit log</span></span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

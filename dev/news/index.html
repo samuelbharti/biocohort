@@ -58,9 +58,14 @@
 <li>
 <code><a href="../reference/cohort-subject.html">subject()</a></code> reads one subject from <code>subject_tbl</code> as a <code>Subject</code> object.</li>
 <li>
-<code><a href="../reference/cohort_filter.html">cohort_filter()</a></code> keeps a subset of subjects or assays and returns a cohort that is still valid.</li>
+<code><a href="../reference/cohort_filter.html">cohort_filter()</a></code> keeps a subset of subjects or assays and returns a cohort that is still valid. <code>drop_sample_ids</code> removes specific sample ids instead of naming every sample to keep.</li>
 <li>
-<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> for <code>Cohort</code>, <code>Subject</code>, and <code>AnalysisSpec</code> shows subject and sample counts, extra sample columns, and registered analyses.</li>
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> for <code>Cohort</code>, <code>Subject</code>, and <code>AnalysisSpec</code> shows subject and sample counts, extra sample columns, a QC summary, and registered analyses.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="quality-control-0-1-0-9000">Quality control<a class="anchor" aria-label="anchor" href="#quality-control-0-1-0-9000"></a></h3>
+<ul><li>
+<code><a href="../reference/cohort_qc.html">cohort_qc()</a></code> flags or drops subjects or samples, recording the reason in <code>qc_status</code>/<code>qc_reason</code> columns (flag) or by removing the matching rows (drop). <code><a href="../reference/qc_log.html">qc_log()</a></code> reads the audit trail every call appends to <code>cohort@qc</code>, which is not cleared by <code><a href="../reference/cohort_filter.html">cohort_filter()</a></code>, so the record survives later structural changes to the cohort.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="reading-and-writing-files-0-1-0-9000">Reading and writing files<a class="anchor" aria-label="anchor" href="#reading-and-writing-files-0-1-0-9000"></a></h3>

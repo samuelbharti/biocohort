@@ -16,7 +16,9 @@ Cohort(
   paths = list(),
   analyses = list(),
   registry = list(),
-  cache = list()
+  cache = list(),
+  qc = tibble::tibble(scope = character(), id = character(), action = character(), reason
+    = character(), previous_status = character(), timestamp = as.POSIXct(character()))
 )
 ```
 
@@ -59,8 +61,20 @@ Cohort(
 
 - cache:
 
-  Named list used to memoize loaded analysis data. Defaults to an empty
-  list.
+  Named list used to memoize loaded analysis data. Cleared by
+  [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
+  on every structural change, since it holds state that can always be
+  recomputed. Defaults to an empty list.
+
+- qc:
+
+  A tibble recording every
+  [`cohort_qc()`](https://www.samuelbharti.com/biocohort/reference/cohort_qc.md)
+  call (columns `scope`, `id`, `action`, `reason`, `previous_status`,
+  `timestamp`). Unlike `cache`, this is a durable record and is not
+  cleared by
+  [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md).
+  Defaults to an empty table.
 
 ## Value
 
@@ -92,6 +106,7 @@ Access properties with the `@` operator:
     cohort@analyses      # Stored analysis results
     cohort@registry      # Named list of AnalysisSpec objects
     cohort@cache         # Memoization cache
+    cohort@qc            # QC audit log
 
 ## See also
 

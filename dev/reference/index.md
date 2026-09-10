@@ -51,6 +51,15 @@ Read parts of a cohort
 - [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
   : Keep a subset of a cohort's subjects or assays
 
+## Quality control
+
+Flag or drop subjects or samples, with an audit trail
+
+- [`cohort_qc()`](https://www.samuelbharti.com/biocohort/reference/cohort_qc.md)
+  : Flag or drop subjects or samples for quality control
+- [`qc_log()`](https://www.samuelbharti.com/biocohort/reference/qc_log.md)
+  : Read a cohort's QC log
+
 ## IO Functions
 
 Read and write data
