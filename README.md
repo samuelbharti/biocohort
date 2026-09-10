@@ -2,6 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml)
+[![r-universe](https://samuelbharti.r-universe.dev/badges/biocohort)](https://samuelbharti.r-universe.dev/biocohort)
 [![DOI](https://zenodo.org/badge/1150207650.svg)](https://doi.org/10.5281/zenodo.22685057)
 <!-- badges: end -->
 
@@ -20,6 +21,12 @@ this out fails without saying why:
 
 ```r
 pak::pak("samuelbharti/biocohort/pkg-r")
+```
+
+r-universe works too:
+
+```r
+install.packages("biocohort", repos = "https://samuelbharti.r-universe.dev")
 ```
 
 ## Motivation
