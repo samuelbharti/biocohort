@@ -136,6 +136,9 @@ derive_log <- function(cohort) {
   if (anyDuplicated(cutoffs) > 0) {
     cli::cli_abort("`cutoffs` must not have duplicate values.")
   }
+  if (any(cutoffs == -Inf)) {
+    cli::cli_abort("`cutoffs` must be finite; -Inf is not a usable cutoff.")
+  }
 }
 
 # Coerce `raw` to numeric and bin it, erroring when a non-missing value
@@ -155,7 +158,7 @@ derive_log <- function(cohort) {
     cli::cli_abort(
       c(
         "`from` column {.field {from}} has a value that is not numeric.",
-        "i" = "Offending id{?s}: {.val {offender_hint}}."
+        "i" = "Offending {cli::qty(length(offenders))}id{?s}: {.val {offender_hint}}."
       )
     )
   }

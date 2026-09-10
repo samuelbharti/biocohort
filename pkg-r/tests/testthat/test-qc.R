@@ -74,6 +74,53 @@ test_that("cohort_qc() errors on an unknown subject id, listing known ids", {
   )
 })
 
+test_that("cohort_qc() pluralizes the unknown-id error for more than one id", {
+  cohort <- make_cohort(n = 2)
+  expect_error(
+    cohort_qc(
+      cohort,
+      c("nope1", "nope2"),
+      scope = "sample",
+      action = "flag",
+      reason = "r"
+    ),
+    "Unknown sample ids"
+  )
+})
+
+test_that("cohort_qc() flag records a new reason even if it repeats a fragment", {
+  cohort <- make_cohort(n = 2)
+
+  step1 <- cohort_qc(
+    cohort,
+    "S1_wes_tumor",
+    scope = "sample",
+    action = "flag",
+    reason = "issue A; still investigating"
+  )
+  step2 <- cohort_qc(
+    step1,
+    "S1_wes_tumor",
+    scope = "sample",
+    action = "flag",
+    reason = "issue B"
+  )
+  step3 <- cohort_qc(
+    step2,
+    "S1_wes_tumor",
+    scope = "sample",
+    action = "flag",
+    reason = "still investigating"
+  )
+
+  row <- step3@sample_map[step3@sample_map$sample_id == "S1_wes_tumor", ]
+  expect_equal(
+    row$qc_reason,
+    "issue A; still investigating; issue B; still investigating"
+  )
+  expect_equal(nrow(qc_log(step3)), 3)
+})
+
 test_that("cohort_qc() flag/sample sets qc_status/qc_reason only on matched rows", {
   cohort <- make_cohort(n = 2)
 

@@ -30,6 +30,51 @@ test_that("cohort_derive() checks its input", {
   expect_error(
     cohort_derive(cohort, "y", "onset_days", c(a = 1, b = 1), level = "subject")
   )
+  expect_error(
+    cohort_derive(
+      cohort,
+      "y",
+      "onset_days",
+      c(a = -Inf, b = 100),
+      level = "subject"
+    ),
+    "-Inf"
+  )
+})
+
+test_that("cohort_derive() sorts cutoffs by value regardless of argument order", {
+  cohort <- onset_cohort(c(90, 250))
+
+  out <- cohort_derive(
+    cohort,
+    "grp",
+    from = "onset_days",
+    cutoffs = c(late = Inf, early = 120),
+    level = "subject"
+  )
+
+  grp <- setNames(out@subject_tbl$grp, out@subject_tbl$subject_id)
+  expect_equal(unname(grp["S1"]), "early")
+  expect_equal(unname(grp["S2"]), "late")
+})
+
+test_that("cohort_derive() pluralizes the non-numeric-value error for more than one id", {
+  manifest <- data.frame(
+    subject_id = c("S1", "S2"),
+    species = "rat",
+    onset_days = c("oops1", "oops2"),
+    assay = "wes",
+    sample_id = c("a", "b"),
+    role = "tumor",
+    stringsAsFactors = FALSE
+  )
+  parsed <- validate_manifest(manifest)
+  cohort <- cohort_new(parsed$subject_tbl, parsed$sample_map)
+
+  expect_error(
+    cohort_derive(cohort, "y", "onset_days", c(a = 1), level = "subject"),
+    "Offending ids"
+  )
 })
 
 test_that("cohort_derive() errors when `from` is missing, at both levels", {
