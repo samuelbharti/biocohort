@@ -3,7 +3,7 @@
 ``` r
 
 library(biocohort)
-#> biocohort version 0.1.0.9000
+#> biocohort version 0.1.0
 #> Cohort Objects for Subjects and Samples in Omics Studies
 #> Documentation: https://www.samuelbharti.com/biocohort/
 ```

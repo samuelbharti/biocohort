@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">biocohort</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,10 +33,10 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9000" id="biocohort-0109000">biocohort 0.1.0.9000<a class="anchor" aria-label="anchor" href="#biocohort-0109000"></a></h2>
-<p>The package is not released. Earlier drafts carried the numbers 0.1.0 to 0.3.0 and were never tagged. The version restarts at 0.1.0.9000 while the API settles.</p>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="biocohort-010">biocohort 0.1.0<a class="anchor" aria-label="anchor" href="#biocohort-010"></a></h2>
+<p>First release. Earlier drafts carried the numbers 0.1.0 to 0.3.0 and were never tagged.</p>
 <div class="section level3">
-<h3 id="data-model-0-1-0-9000">Data model<a class="anchor" aria-label="anchor" href="#data-model-0-1-0-9000"></a></h3>
+<h3 id="data-model-0-1-0">Data model<a class="anchor" aria-label="anchor" href="#data-model-0-1-0"></a></h3>
 <ul><li>S7 classes <code>Study</code>, <code>Subject</code>, <code>Cohort</code>, and <code>AnalysisSpec</code>, built with <code><a href="../reference/study_new.html">study_new()</a></code>, <code><a href="../reference/subject_new.html">subject_new()</a></code>, <code><a href="../reference/cohort_new.html">cohort_new()</a></code>, and <code><a href="../reference/analysis_spec_new.html">analysis_spec_new()</a></code>. Each class validates on construction, including the raw <code><a href="../reference/Study.html">Study()</a></code>, <code><a href="../reference/Subject.html">Subject()</a></code>, and <code><a href="../reference/Cohort.html">Cohort()</a></code> constructors.</li>
 <li>
 <code><a href="../reference/validate_manifest.html">validate_manifest()</a></code> takes one long-format manifest (one row per sample, required columns <code>subject_id</code>, <code>assay</code>, <code>sample_id</code>, optional <code>role</code> plus subject-level columns) and returns <code>subject_tbl</code>, <code>sample_map</code>, and <code>completeness_tbl</code>. Species and assays are free-form values, never a fixed list and never columns. Every column is coerced to character, so a factor or a numeric column never breaks a downstream join.</li>
@@ -52,7 +52,7 @@
 <code>example_cohort</code> ships as a small demonstration dataset.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="accessors-and-cohort-tools-0-1-0-9000">Accessors and cohort tools<a class="anchor" aria-label="anchor" href="#accessors-and-cohort-tools-0-1-0-9000"></a></h3>
+<h3 id="accessors-and-cohort-tools-0-1-0">Accessors and cohort tools<a class="anchor" aria-label="anchor" href="#accessors-and-cohort-tools-0-1-0"></a></h3>
 <ul><li>
 <code><a href="../reference/subjects.html">subjects()</a></code>, <code><a href="../reference/samples.html">samples()</a></code>, and <code><a href="../reference/completeness.html">completeness()</a></code> return plain tibbles read from a cohort. <code>completeness(wide = TRUE)</code> gives one row per subject and one column per assay.</li>
 <li>
@@ -63,22 +63,22 @@
 <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> for <code>Cohort</code>, <code>Subject</code>, and <code>AnalysisSpec</code> shows subject and sample counts, extra sample columns, a QC summary, and registered analyses.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="quality-control-0-1-0-9000">Quality control<a class="anchor" aria-label="anchor" href="#quality-control-0-1-0-9000"></a></h3>
+<h3 id="quality-control-0-1-0">Quality control<a class="anchor" aria-label="anchor" href="#quality-control-0-1-0"></a></h3>
 <ul><li>
 <code><a href="../reference/cohort_qc.html">cohort_qc()</a></code> flags or drops subjects or samples, recording the reason in <code>qc_status</code>/<code>qc_reason</code> columns (flag) or by removing the matching rows (drop). <code><a href="../reference/qc_log.html">qc_log()</a></code> reads the audit trail every call appends to <code>cohort@qc</code>, which is not cleared by <code><a href="../reference/cohort_filter.html">cohort_filter()</a></code>, so the record survives later structural changes to the cohort.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="groups-and-contrasts-0-1-0-9000">Groups and contrasts<a class="anchor" aria-label="anchor" href="#groups-and-contrasts-0-1-0-9000"></a></h3>
+<h3 id="groups-and-contrasts-0-1-0">Groups and contrasts<a class="anchor" aria-label="anchor" href="#groups-and-contrasts-0-1-0"></a></h3>
 <ul><li>
 <code><a href="../reference/cohort_groups.html">cohort_groups()</a></code> groups a cohort’s subjects by one or more <code>subject_tbl</code> columns and returns one row per combination that actually occurs, with the matching subject ids. <code><a href="../reference/cohort_contrasts.html">cohort_contrasts()</a></code> enumerates every pairwise contrast between those groups, ready to pipe into <code><a href="../reference/cohort_filter.html">cohort_filter()</a></code> for each side.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="derived-columns-0-1-0-9000">Derived columns<a class="anchor" aria-label="anchor" href="#derived-columns-0-1-0-9000"></a></h3>
+<h3 id="derived-columns-0-1-0">Derived columns<a class="anchor" aria-label="anchor" href="#derived-columns-0-1-0"></a></h3>
 <ul><li>
 <code><a href="../reference/cohort_derive.html">cohort_derive()</a></code> bins an existing numeric column at one or more named cutoffs and writes the result as a new column on <code>subject_tbl</code> or <code>sample_map</code>, so a cutoff like “early onset is 120 days or under” is a value passed in, not code. <code><a href="../reference/derive_log.html">derive_log()</a></code> reads the provenance every call appends to <code>cohort@derived</code>, which, like <code>cohort@qc</code>, is not cleared by <code><a href="../reference/cohort_filter.html">cohort_filter()</a></code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="reading-and-writing-files-0-1-0-9000">Reading and writing files<a class="anchor" aria-label="anchor" href="#reading-and-writing-files-0-1-0-9000"></a></h3>
+<h3 id="reading-and-writing-files-0-1-0">Reading and writing files<a class="anchor" aria-label="anchor" href="#reading-and-writing-files-0-1-0"></a></h3>
 <ul><li>
 <code><a href="../reference/read_manifest.html">read_manifest()</a></code> reads a manifest from CSV, TSV, or Excel, always as text, and validates it in one call.</li>
 <li>
@@ -91,7 +91,7 @@
 <code><a href="../reference/apply_corrections.html">apply_corrections()</a></code> applies a table of documented overrides (<code>level</code>, <code>id</code>, <code>column</code>, <code>value</code>, <code>reason</code>) to a manifest before it is validated, and keeps an audit trail. <code><a href="../reference/read_corrections.html">read_corrections()</a></code> reads that table from a file.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="pipeline-integration-0-1-0-9000">Pipeline integration<a class="anchor" aria-label="anchor" href="#pipeline-integration-0-1-0-9000"></a></h3>
+<h3 id="pipeline-integration-0-1-0">Pipeline integration<a class="anchor" aria-label="anchor" href="#pipeline-integration-0-1-0"></a></h3>
 <ul><li>
 <code><a href="../reference/sample_sheet.html">sample_sheet()</a></code> writes the sample list a pipeline expects, with built-in templates for <code>nf-core/rnaseq</code>, <code>nf-core/rnavar</code>, <code>nf-core/atacseq</code>, and <code>nf-core/sarek</code>. <code><a href="../reference/sample_sheet_templates.html">sample_sheet_templates()</a></code> lists the built-in names.</li>
 <li>
@@ -102,7 +102,7 @@
 <code><a href="../reference/project_root.html">project_root()</a></code>, <code><a href="../reference/project_path.html">project_path()</a></code>, <code><a href="../reference/ensure_dir.html">ensure_dir()</a></code>, and <code><a href="../reference/read_dotenv.html">read_dotenv()</a></code> find a project’s root folder, build paths under it, and read a <code>.env</code> file.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="analysis-registry-and-loading-0-1-0-9000">Analysis registry and loading<a class="anchor" aria-label="anchor" href="#analysis-registry-and-loading-0-1-0-9000"></a></h3>
+<h3 id="analysis-registry-and-loading-0-1-0">Analysis registry and loading<a class="anchor" aria-label="anchor" href="#analysis-registry-and-loading-0-1-0"></a></h3>
 <ul><li>
 <code><a href="../reference/analysis_register.html">analysis_register()</a></code>, <code><a href="../reference/analysis_list.html">analysis_list()</a></code>, and <code><a href="../reference/analysis_spec.html">analysis_spec()</a></code> manage <code>AnalysisSpec</code> entries in a cohort. <code>format</code>, <code>reader</code>, and <code>key_cols</code> default from the spec’s <code>path_template</code> and <code>level</code> when not given.</li>
 <li>
@@ -110,7 +110,7 @@
 <li>A <code>path_template</code> ending in <code>.parquet</code> now gets <code><a href="https://arrow.apache.org/docs/r/reference/read_parquet.html" class="external-link">arrow::read_parquet</a></code> as its default reader, the same way <code>.csv</code>, <code>.tsv</code>, <code>.txt</code>, and <code>.rds</code> already do.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="cross-species-translation-experimental-0-1-0-9000">Cross-species translation (experimental)<a class="anchor" aria-label="anchor" href="#cross-species-translation-experimental-0-1-0-9000"></a></h3>
+<h3 id="cross-species-translation-experimental-0-1-0">Cross-species translation (experimental)<a class="anchor" aria-label="anchor" href="#cross-species-translation-experimental-0-1-0"></a></h3>
 <ul><li>
 <code><a href="../reference/translate.html">translate()</a></code> moves a feature table across genome builds or species. Coordinate features go through a liftover backend; gene features go through an ortholog backend. <code><a href="../reference/orthologize.html">orthologize()</a></code> still works as an alias and warns once per session. <code><a href="../reference/translation_report.html">translation_report()</a></code> returns the per-analysis results.</li>
 <li>For a whole cohort, the source species is inferred from <code>subject_tbl</code> when every subject shares one species. A cohort with more than one species is split by species, translated, and recombined, as long as the analysis table carries a <code>subject_id</code> column.</li>
@@ -122,7 +122,7 @@
 <code>TranslationResult</code> keeps mapped and unmapped features under one <code>.feature_id</code> key, for both coordinate and gene features. <code><a href="../reference/translation_stats.html">translation_stats()</a></code> summarizes them.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="internal-0-1-0-9000">Internal<a class="anchor" aria-label="anchor" href="#internal-0-1-0-9000"></a></h3>
+<h3 id="internal-0-1-0">Internal<a class="anchor" aria-label="anchor" href="#internal-0-1-0"></a></h3>
 <ul><li>Formatting with air, hooks with prek, lintr config, and CI on pull requests into <code>dev</code> and <code>main</code>.</li>
 </ul></div>
 </div>

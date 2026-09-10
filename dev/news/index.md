@@ -1,10 +1,9 @@
 # Changelog
 
-## biocohort 0.1.0.9000
+## biocohort 0.1.0
 
-The package is not released. Earlier drafts carried the numbers 0.1.0 to
-0.3.0 and were never tagged. The version restarts at 0.1.0.9000 while
-the API settles.
+First release. Earlier drafts carried the numbers 0.1.0 to 0.3.0 and
+were never tagged.
 
 ### Data model
 
