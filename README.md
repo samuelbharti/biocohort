@@ -2,6 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml)
+[![DOI](https://zenodo.org/badge/1150207650.svg)](https://doi.org/10.5281/zenodo.22685057)
 <!-- badges: end -->
 
 biocohort keeps the subjects, samples, and analysis outputs of a study in
@@ -68,6 +69,20 @@ list of what the package does. The docs site has three articles:
 - **[Get started](https://www.samuelbharti.com/biocohort/articles/biocohort.html)**: a manifest, a cohort, and a sample sheet, end to end.
 - **[Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.html)**: key terms and definitions.
 - **[Naming conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.html)**: standard column, object, and file names.
+
+## Citing biocohort
+
+Each release is archived on Zenodo. Use the concept DOI, which always
+resolves to the newest release:
+
+> Bharti, S. (2026). *biocohort: Cohort Objects for Subjects and Samples in
+> Omics Studies*. Zenodo. <https://doi.org/10.5281/zenodo.22685057>
+
+To pin the exact version you used, cite its own DOI instead. Version 0.1.0 is
+[10.5281/zenodo.22685058](https://doi.org/10.5281/zenodo.22685058).
+
+`CITATION.cff` carries the same metadata, so `citation("biocohort")` in R and
+the "Cite this repository" button on GitHub both work.
 
 ## Contributing
 
