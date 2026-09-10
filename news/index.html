@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">biocohort</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,20 @@
       <small>Source: <a href="https://github.com/samuelbharti/biocohort/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.1" id="biocohort-011">biocohort 0.1.1<a class="anchor" aria-label="anchor" href="#biocohort-011"></a></h2>
+<p>Resubmission to CRAN. The package code is unchanged from 0.1.0; every change is in the documentation and the repository.</p>
+<ul><li>
+<code><a href="../reference/biocohort-package.html">?biocohort</a></code> names the three articles as <code><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette()</a></code> calls instead of linking to them by a relative path that only exists on the website, and the package README links to the contributing guide by its full URL. CRAN’s pretest rejected 0.1.0 for both links.</li>
+<li>The <code><a href="../reference/liftover_rtracklayer.html">liftover_rtracklayer()</a></code> example is wrapped in <code>\donttest{}</code>. Loading <code>rtracklayer</code> alone takes longer than the five seconds CRAN allows an example.</li>
+<li>The <code>Description</code> field is rewritten in plainer sentences.</li>
+<li>New examples for <code><a href="../reference/translate.html">translate()</a></code> on a cohort, <code><a href="../reference/translation_report.html">translation_report()</a></code>, <code><a href="../reference/load_analyses.html">load_analyses()</a></code>, <code><a href="../reference/cohort_read.html">cohort_read()</a></code>, <code><a href="../reference/register_liftover_backend.html">register_liftover_backend()</a></code>, <code><a href="../reference/register_ortholog_backend.html">register_ortholog_backend()</a></code>, <code><a href="../reference/liftover_vcf.html">liftover_vcf()</a></code>, and the <code>Study</code>, <code>Subject</code>, <code>Cohort</code>, <code>AnalysisSpec</code>, and <code>TranslationResult</code> constructors. The <code><a href="../reference/translation_report.html">translation_report()</a></code> example was a comment before, not code.</li>
+<li>Help pages that still pointed to <code><a href="../reference/orthologize.html">orthologize()</a></code> now point to <code><a href="../reference/translate.html">translate()</a></code>.</li>
+<li>
+<code>citation("biocohort")</code> includes the Zenodo DOI.</li>
+<li>README: install from r-universe as well as GitHub.</li>
+<li>CI: a <code>cran</code> workflow runs the check the way CRAN’s pretest does.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="biocohort-010">biocohort 0.1.0<a class="anchor" aria-label="anchor" href="#biocohort-010"></a></h2>
 <p>First release. Earlier drafts carried the numbers 0.1.0 to 0.3.0 and were never tagged.</p>

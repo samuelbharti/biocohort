@@ -1,5 +1,42 @@
 # Changelog
 
+## biocohort 0.1.1
+
+Resubmission to CRAN. The package code is unchanged from 0.1.0; every
+change is in the documentation and the repository.
+
+- [`?biocohort`](https://www.samuelbharti.com/biocohort/reference/biocohort-package.md)
+  names the three articles as
+  [`vignette()`](https://rdrr.io/r/utils/vignette.html) calls instead of
+  linking to them by a relative path that only exists on the website,
+  and the package README links to the contributing guide by its full
+  URL. CRAN’s pretest rejected 0.1.0 for both links.
+- The
+  [`liftover_rtracklayer()`](https://www.samuelbharti.com/biocohort/reference/liftover_rtracklayer.md)
+  example is wrapped in `\donttest{}`. Loading `rtracklayer` alone takes
+  longer than the five seconds CRAN allows an example.
+- The `Description` field is rewritten in plainer sentences.
+- New examples for
+  [`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
+  on a cohort,
+  [`translation_report()`](https://www.samuelbharti.com/biocohort/reference/translation_report.md),
+  [`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md),
+  [`cohort_read()`](https://www.samuelbharti.com/biocohort/reference/cohort_read.md),
+  [`register_liftover_backend()`](https://www.samuelbharti.com/biocohort/reference/register_liftover_backend.md),
+  [`register_ortholog_backend()`](https://www.samuelbharti.com/biocohort/reference/register_ortholog_backend.md),
+  [`liftover_vcf()`](https://www.samuelbharti.com/biocohort/reference/liftover_vcf.md),
+  and the `Study`, `Subject`, `Cohort`, `AnalysisSpec`, and
+  `TranslationResult` constructors. The
+  [`translation_report()`](https://www.samuelbharti.com/biocohort/reference/translation_report.md)
+  example was a comment before, not code.
+- Help pages that still pointed to
+  [`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md)
+  now point to
+  [`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md).
+- `citation("biocohort")` includes the Zenodo DOI.
+- README: install from r-universe as well as GitHub.
+- CI: a `cran` workflow runs the check the way CRAN’s pretest does.
+
 ## biocohort 0.1.0
 
 First release. Earlier drafts carried the numbers 0.1.0 to 0.3.0 and
