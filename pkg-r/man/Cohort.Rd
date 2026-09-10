@@ -14,7 +14,10 @@ Cohort(
   registry = list(),
   cache = list(),
   qc = tibble::tibble(scope = character(), id = character(), action = character(), reason
-    = character(), previous_status = character(), timestamp = as.POSIXct(character()))
+    = character(), previous_status = character(), timestamp = as.POSIXct(character())),
+  derived = tibble::tibble(name = character(), from = character(), level = character(),
+    cutoffs = list(), n_derived = integer(), n_na = integer(), timestamp =
+    as.POSIXct(character()))
 )
 }
 \arguments{
@@ -49,6 +52,10 @@ can always be recomputed. Defaults to an empty list.}
 \code{id}, \code{action}, \code{reason}, \code{previous_status}, \code{timestamp}). Unlike
 \code{cache}, this is a durable record and is not cleared by
 \code{\link[=cohort_filter]{cohort_filter()}}. Defaults to an empty table.}
+
+\item{derived}{A tibble recording every \code{\link[=cohort_derive]{cohort_derive()}} call (columns
+\code{name}, \code{from}, \code{level}, \code{cutoffs}, \code{n_derived}, \code{n_na}, \code{timestamp}).
+Durable in the same way as \code{qc}. Defaults to an empty table.}
 }
 \value{
 A \code{Cohort} object with the given properties.
@@ -77,6 +84,7 @@ cohort@analyses      # Stored analysis results
 cohort@registry      # Named list of AnalysisSpec objects
 cohort@cache         # Memoization cache
 cohort@qc            # QC audit log
+cohort@derived       # Derived-column provenance
 }\if{html}{\out{</div>}}
 }
 \seealso{

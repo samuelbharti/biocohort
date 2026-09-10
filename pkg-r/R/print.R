@@ -105,6 +105,13 @@ S7::method(print, Cohort) <- function(x, ...) {
       "i" = sprintf("Loaded analyses: %s", toString(names(x@analyses)))
     )
   }
+  derived <- x@derived
+  if (nrow(derived) > 0) {
+    bullets <- c(
+      bullets,
+      "i" = sprintf("Derived columns: %s", toString(unique(derived$name)))
+    )
+  }
   translation <- x@cache$translation
   if (!is.null(translation)) {
     bullets <- c(
