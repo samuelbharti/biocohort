@@ -9,6 +9,7 @@ cohort_filter(
   ...,
   subject_ids = NULL,
   assays = NULL,
+  drop_sample_ids = NULL,
   drop_empty = TRUE
 )
 }
@@ -23,9 +24,15 @@ cohort_filter(
 \item{assays}{Optional character vector. Keep only sample rows with these
 assays.}
 
+\item{drop_sample_ids}{Optional character vector. Remove sample rows with
+these sample ids. Unlike \code{subject_ids} and \code{assays}, which both keep a
+match, this one drops a match: it is the only way to remove specific
+samples without also naming every sample to keep.}
+
 \item{drop_empty}{Logical. When \code{TRUE} (default), a subject left with no
-sample after the \code{assays} filter is also removed from \code{subject_tbl}.
-When \code{FALSE}, such a subject is kept with no rows in \code{sample_map}.}
+sample after the \code{assays}/\code{drop_sample_ids} filters is also removed from
+\code{subject_tbl}. When \code{FALSE}, such a subject is kept with no rows in
+\code{sample_map}.}
 }
 \value{
 A new \link{Cohort}. The \code{cache} is reset, since it can hold loaded
@@ -37,10 +44,10 @@ stays a valid \link{Cohort}. Any loaded analysis table that has a \code{subject_
 column is filtered to match; the registry and paths are kept as they are.
 }
 \details{
-The four ways to narrow a cohort combine: \code{...} and \code{subject_ids} both
-narrow \code{subject_tbl}, and \code{assays} narrows \code{sample_map}. \code{sample_map} is
-always restricted to the subjects that remain in \code{subject_tbl} after
-\code{...} and \code{subject_ids}, regardless of \code{drop_empty}.
+The five ways to narrow a cohort combine: \code{...} and \code{subject_ids} both
+narrow \code{subject_tbl}, and \code{assays}/\code{drop_sample_ids} narrow \code{sample_map}.
+\code{sample_map} is always restricted to the subjects that remain in
+\code{subject_tbl} after \code{...} and \code{subject_ids}, regardless of \code{drop_empty}.
 }
 \examples{
 data(example_cohort)
@@ -53,6 +60,10 @@ cohort_filter(example_cohort, subject_ids = c("RAT001", "MOUSE001"))
 
 # By assay, dropping subjects left with no sample
 cohort_filter(example_cohort, assays = "scrna")
+
+# By excluding specific sample ids (e.g. samples that failed QC)
+bad_id <- samples(example_cohort)$sample_id[[1]]
+cohort_filter(example_cohort, drop_sample_ids = bad_id)
 
 }
 \seealso{
