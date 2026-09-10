@@ -10,18 +10,23 @@
 #' @param subject_ids Optional character vector. Keep only these subject ids.
 #' @param assays Optional character vector. Keep only sample rows with these
 #'   assays.
+#' @param drop_sample_ids Optional character vector. Remove sample rows with
+#'   these sample ids. Unlike `subject_ids` and `assays`, which both keep a
+#'   match, this one drops a match: it is the only way to remove specific
+#'   samples without also naming every sample to keep.
 #' @param drop_empty Logical. When `TRUE` (default), a subject left with no
-#'   sample after the `assays` filter is also removed from `subject_tbl`.
-#'   When `FALSE`, such a subject is kept with no rows in `sample_map`.
+#'   sample after the `assays`/`drop_sample_ids` filters is also removed from
+#'   `subject_tbl`. When `FALSE`, such a subject is kept with no rows in
+#'   `sample_map`.
 #'
 #' @return A new [Cohort]. The `cache` is reset, since it can hold loaded
 #'   data or a translation result computed for the full set of subjects.
 #'
 #' @details
-#' The four ways to narrow a cohort combine: `...` and `subject_ids` both
-#' narrow `subject_tbl`, and `assays` narrows `sample_map`. `sample_map` is
-#' always restricted to the subjects that remain in `subject_tbl` after
-#' `...` and `subject_ids`, regardless of `drop_empty`.
+#' The five ways to narrow a cohort combine: `...` and `subject_ids` both
+#' narrow `subject_tbl`, and `assays`/`drop_sample_ids` narrow `sample_map`.
+#' `sample_map` is always restricted to the subjects that remain in
+#' `subject_tbl` after `...` and `subject_ids`, regardless of `drop_empty`.
 #'
 #' @examples
 #' data(example_cohort)
@@ -35,6 +40,10 @@
 #' # By assay, dropping subjects left with no sample
 #' cohort_filter(example_cohort, assays = "scrna")
 #'
+#' # By excluding specific sample ids (e.g. samples that failed QC)
+#' bad_id <- samples(example_cohort)$sample_id[[1]]
+#' cohort_filter(example_cohort, drop_sample_ids = bad_id)
+#'
 #' @seealso [subjects()], [samples()], [cohort_new()]
 #' @export
 cohort_filter <- function(
@@ -42,6 +51,7 @@ cohort_filter <- function(
   ...,
   subject_ids = NULL,
   assays = NULL,
+  drop_sample_ids = NULL,
   drop_empty = TRUE
 ) {
   if (!S7::S7_inherits(cohort, Cohort)) {
@@ -53,7 +63,8 @@ cohort_filter <- function(
   sample_map <- .filter_sample_map(
     cohort@sample_map,
     subject_tbl$subject_id,
-    assays
+    assays,
+    drop_sample_ids
   )
 
   if (isTRUE(drop_empty)) {
@@ -109,7 +120,12 @@ cohort_filter <- function(
   subject_tbl
 }
 
-.filter_sample_map <- function(sample_map, kept_subject_ids, assays) {
+.filter_sample_map <- function(
+  sample_map,
+  kept_subject_ids,
+  assays,
+  drop_sample_ids = NULL
+) {
   sample_map <- sample_map[
     sample_map$subject_id %in% kept_subject_ids,
     ,
@@ -118,6 +134,14 @@ cohort_filter <- function(
   if (!is.null(assays)) {
     checkmate::assert_character(assays, any.missing = FALSE)
     sample_map <- sample_map[sample_map$assay %in% assays, , drop = FALSE]
+  }
+  if (!is.null(drop_sample_ids)) {
+    checkmate::assert_character(drop_sample_ids, any.missing = FALSE)
+    sample_map <- sample_map[
+      !sample_map$sample_id %in% drop_sample_ids,
+      ,
+      drop = FALSE
+    ]
   }
   sample_map
 }

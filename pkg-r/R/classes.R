@@ -179,8 +179,16 @@ Subject <- S7::new_class(
 #'   Defaults to an empty list.
 #' @param registry Named list of AnalysisSpec objects. Names match
 #'   `spec@name`. Defaults to an empty list.
-#' @param cache Named list used to memoize loaded analysis data. Defaults to
-#'   an empty list.
+#' @param cache Named list used to memoize loaded analysis data. Cleared by
+#'   [cohort_filter()] on every structural change, since it holds state that
+#'   can always be recomputed. Defaults to an empty list.
+#' @param qc A tibble recording every [cohort_qc()] call (columns `scope`,
+#'   `id`, `action`, `reason`, `previous_status`, `timestamp`). Unlike
+#'   `cache`, this is a durable record and is not cleared by
+#'   [cohort_filter()]. Defaults to an empty table.
+#' @param derived A tibble recording every [cohort_derive()] call (columns
+#'   `name`, `from`, `level`, `cutoffs`, `n_derived`, `n_na`, `timestamp`).
+#'   Durable in the same way as `qc`. Defaults to an empty table.
 #'
 #' @return A `Cohort` object with the given properties.
 #'
@@ -202,6 +210,8 @@ Subject <- S7::new_class(
 #' cohort@analyses      # Stored analysis results
 #' cohort@registry      # Named list of AnalysisSpec objects
 #' cohort@cache         # Memoization cache
+#' cohort@qc            # QC audit log
+#' cohort@derived       # Derived-column provenance
 #' ```
 #'
 #' @seealso [cohort_new()] for object construction,
@@ -235,7 +245,30 @@ Cohort <- S7::new_class(
     paths = S7::new_property(S7::class_list, default = list()),
     analyses = S7::new_property(S7::class_list, default = list()),
     registry = S7::new_property(S7::class_list, default = list()),
-    cache = S7::new_property(S7::class_list, default = list())
+    cache = S7::new_property(S7::class_list, default = list()),
+    qc = S7::new_property(
+      S7::class_data.frame,
+      default = quote(tibble::tibble(
+        scope = character(),
+        id = character(),
+        action = character(),
+        reason = character(),
+        previous_status = character(),
+        timestamp = as.POSIXct(character())
+      ))
+    ),
+    derived = S7::new_property(
+      S7::class_data.frame,
+      default = quote(tibble::tibble(
+        name = character(),
+        from = character(),
+        level = character(),
+        cutoffs = list(),
+        n_derived = integer(),
+        n_na = integer(),
+        timestamp = as.POSIXct(character())
+      ))
+    )
   ),
   validator = function(self) {
     problems <- .check_cohort_tables(self@subject_tbl, self@sample_map)

@@ -203,6 +203,31 @@ liftover_intervals <- function(
 #'
 #' @return A list with `mapped` and `unmapped` tibbles.
 #'
+#' @examples
+#' if (
+#'   requireNamespace("rtracklayer", quietly = TRUE) &&
+#'     requireNamespace("GenomicRanges", quietly = TRUE)
+#' ) {
+#'   chain <- tempfile(fileext = ".chain")
+#'   writeLines(
+#'     c(
+#'       "chain 1000 chr1 100000 + 0 1000 chrT 200000 + 10000 11000 1",
+#'       "1000",
+#'       ""
+#'     ),
+#'     chain
+#'   )
+#'   ints <- tibble::tibble(
+#'     seqnames = c("chr1", "chr1"),
+#'     start = c(100, 5000),
+#'     end = c(200, 5100),
+#'     .feature_id = 1:2
+#'   )
+#'   out <- liftover_rtracklayer(ints, chain)
+#'   out$mapped
+#'   unlink(chain)
+#' }
+#'
 #' @seealso [liftover_intervals()], [liftover_crossmap()]
 #' @export
 liftover_rtracklayer <- function(intervals, chain, ...) {
@@ -272,6 +297,28 @@ liftover_rtracklayer <- function(intervals, chain, ...) {
 #' @param ... Unused.
 #'
 #' @return A list with `mapped` and `unmapped` tibbles.
+#'
+#' @examples
+#' if (nzchar(Sys.which("CrossMap")) || nzchar(Sys.which("CrossMap.py"))) {
+#'   chain <- tempfile(fileext = ".chain")
+#'   writeLines(
+#'     c(
+#'       "chain 1000 chr1 100000 + 0 1000 chrT 200000 + 10000 11000 1",
+#'       "1000",
+#'       ""
+#'     ),
+#'     chain
+#'   )
+#'   ints <- tibble::tibble(
+#'     seqnames = c("chr1", "chr1"),
+#'     start = c(100, 5000),
+#'     end = c(200, 5100),
+#'     .feature_id = 1:2
+#'   )
+#'   out <- liftover_crossmap(ints, chain)
+#'   out$mapped
+#'   unlink(chain)
+#' }
 #'
 #' @seealso [liftover_intervals()], [liftover_rtracklayer()], [liftover_vcf()]
 #' @export

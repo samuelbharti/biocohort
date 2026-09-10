@@ -53,8 +53,9 @@ Optional, defaults to NA.}
 \item{reader}{Character scalar for reader function name (e.g.,
 "readr::read_tsv", "read.csv"). Optional. Defaults by \code{format}: "csv" to
 "readr::read_csv", "tsv" and "txt" to "readr::read_tsv", "rds" to
-"readRDS". NA for any other format. \code{\link[=load_analysis]{load_analysis()}} errors when neither
-the spec nor its \code{reader} argument names a reader.}
+"readRDS", "parquet" to "arrow::read_parquet". NA for any other format.
+\code{\link[=load_analysis]{load_analysis()}} errors when neither the spec nor its \code{reader} argument
+names a reader.}
 
 \item{key_cols}{Character vector of column names that must be present in
 the loaded table. Optional. Defaults by \code{level}: \code{"subject_id"} for

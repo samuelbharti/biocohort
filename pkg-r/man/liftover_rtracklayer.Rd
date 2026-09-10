@@ -24,6 +24,32 @@ file. This is the default backend for \code{\link[=liftover_intervals]{liftover_
 external tools but needs the Bioconductor packages \code{rtracklayer},
 \code{GenomicRanges}, \code{IRanges}, and \code{S4Vectors}.
 }
+\examples{
+if (
+  requireNamespace("rtracklayer", quietly = TRUE) &&
+    requireNamespace("GenomicRanges", quietly = TRUE)
+) {
+  chain <- tempfile(fileext = ".chain")
+  writeLines(
+    c(
+      "chain 1000 chr1 100000 + 0 1000 chrT 200000 + 10000 11000 1",
+      "1000",
+      ""
+    ),
+    chain
+  )
+  ints <- tibble::tibble(
+    seqnames = c("chr1", "chr1"),
+    start = c(100, 5000),
+    end = c(200, 5100),
+    .feature_id = 1:2
+  )
+  out <- liftover_rtracklayer(ints, chain)
+  out$mapped
+  unlink(chain)
+}
+
+}
 \seealso{
 \code{\link[=liftover_intervals]{liftover_intervals()}}, \code{\link[=liftover_crossmap]{liftover_crossmap()}}
 }

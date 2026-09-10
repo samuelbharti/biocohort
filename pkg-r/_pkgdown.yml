@@ -78,6 +78,21 @@ reference:
   - samples
   - completeness
   - cohort_filter
+- title: Quality control
+  desc: Flag or drop subjects or samples, with an audit trail
+  contents:
+  - cohort_qc
+  - qc_log
+- title: Groups and contrasts
+  desc: Group subjects and enumerate pairwise comparisons
+  contents:
+  - cohort_groups
+  - cohort_contrasts
+- title: Derived columns
+  desc: Bin a numeric column at named cutoffs, with provenance
+  contents:
+  - cohort_derive
+  - derive_log
 - title: IO Functions
   desc: Read and write data
   contents:

@@ -1,8 +1,7 @@
-# biocohort 0.1.0.9000
+# biocohort 0.1.0
 
-The package is not released. Earlier drafts carried the numbers 0.1.0 to
-0.3.0 and were never tagged. The version restarts at 0.1.0.9000 while the API
-settles.
+First release. Earlier drafts carried the numbers 0.1.0 to 0.3.0 and were
+never tagged.
 
 ## Data model
 
@@ -36,9 +35,36 @@ settles.
   one column per assay.
 - `subject()` reads one subject from `subject_tbl` as a `Subject` object.
 - `cohort_filter()` keeps a subset of subjects or assays and returns a
-  cohort that is still valid.
+  cohort that is still valid. `drop_sample_ids` removes specific sample
+  ids instead of naming every sample to keep.
 - `print()` for `Cohort`, `Subject`, and `AnalysisSpec` shows subject and
-  sample counts, extra sample columns, and registered analyses.
+  sample counts, extra sample columns, a QC summary, and registered
+  analyses.
+
+## Quality control
+
+- `cohort_qc()` flags or drops subjects or samples, recording the reason in
+  `qc_status`/`qc_reason` columns (flag) or by removing the matching rows
+  (drop). `qc_log()` reads the audit trail every call appends to `cohort@qc`,
+  which is not cleared by `cohort_filter()`, so the record survives later
+  structural changes to the cohort.
+
+## Groups and contrasts
+
+- `cohort_groups()` groups a cohort's subjects by one or more `subject_tbl`
+  columns and returns one row per combination that actually occurs, with
+  the matching subject ids. `cohort_contrasts()` enumerates every pairwise
+  contrast between those groups, ready to pipe into `cohort_filter()` for
+  each side.
+
+## Derived columns
+
+- `cohort_derive()` bins an existing numeric column at one or more named
+  cutoffs and writes the result as a new column on `subject_tbl` or
+  `sample_map`, so a cutoff like "early onset is 120 days or under" is a
+  value passed in, not code. `derive_log()` reads the provenance every call
+  appends to `cohort@derived`, which, like `cohort@qc`, is not cleared by
+  `cohort_filter()`.
 
 ## Reading and writing files
 
@@ -83,6 +109,9 @@ settles.
   reader, and record which files were found. Subject and pair units are
   enumerated only for the spec's own assay. `analysis_files()` returns that
   record.
+- A `path_template` ending in `.parquet` now gets `arrow::read_parquet` as
+  its default reader, the same way `.csv`, `.tsv`, `.txt`, and `.rds`
+  already do.
 
 ## Cross-species translation (experimental)
 

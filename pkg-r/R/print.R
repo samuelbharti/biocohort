@@ -82,6 +82,17 @@ S7::method(print, Cohort) <- function(x, ...) {
       "i" = sprintf("Extra sample columns: %s", toString(extra_cols))
     )
   }
+  qc <- x@qc
+  if (nrow(qc) > 0) {
+    bullets <- c(
+      bullets,
+      "i" = sprintf(
+        "QC log: %d flagged, %d dropped",
+        sum(qc$action == "flag"),
+        sum(qc$action == "drop")
+      )
+    )
+  }
   if (length(x@registry) > 0) {
     bullets <- c(
       bullets,
@@ -92,6 +103,13 @@ S7::method(print, Cohort) <- function(x, ...) {
     bullets <- c(
       bullets,
       "i" = sprintf("Loaded analyses: %s", toString(names(x@analyses)))
+    )
+  }
+  derived <- x@derived
+  if (nrow(derived) > 0) {
+    bullets <- c(
+      bullets,
+      "i" = sprintf("Derived columns: %s", toString(unique(derived$name)))
     )
   }
   translation <- x@cache$translation

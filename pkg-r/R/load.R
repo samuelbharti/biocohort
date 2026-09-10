@@ -40,7 +40,7 @@ NULL
       c(
         "No reader for analysis {.val {spec@name}}.",
         "i" = "Set {.field reader} on the spec or pass {.arg reader}.",
-        "i" = "Formats csv, tsv, txt, and rds get a default reader."
+        "i" = "Formats csv, tsv, txt, rds, and parquet get a default reader."
       )
     )
   }

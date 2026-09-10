@@ -9,10 +9,8 @@ one validated object. Species and assays are values in the data, not
 columns or classes, so the same functions work for any organism and any
 omics assay.
 
-**Documentation**: <https://www.samuelbharti.com/biocohort/>
-
 See the [repository root README](https://github.com/samuelbharti/biocohort#readme)
-for why this package exists.
+for the motivation behind this package.
 
 ## Installation
 
@@ -72,6 +70,15 @@ long <- manifest_from_wide(wide_table, id_cols)
 - **Read it back.** `subjects()`, `samples()`, `completeness()`, and
   `sample_pairs()` return plain tibbles. `cohort_filter()` keeps a subset
   and stays valid.
+- **Flag or drop for QC.** `cohort_qc()` flags or drops subjects or samples
+  with a required reason. `qc_log()` reads the audit trail, which survives
+  later `cohort_filter()` calls.
+- **Group and contrast.** `cohort_groups()` groups subjects by one or more
+  columns. `cohort_contrasts()` enumerates every pairwise contrast between
+  those groups.
+- **Derive a column from cutoffs.** `cohort_derive()` bins an existing
+  numeric column at named cutoffs, so a cutoff is a value passed in, not
+  code. `derive_log()` reads its provenance.
 - **Write files for other tools.** `sample_sheet()` writes the sample list
   a pipeline expects. `as_coldata()` and `join_metadata()` carry cohort
   metadata into a `SummarizedExperiment`, a Seurat object, or a data frame.

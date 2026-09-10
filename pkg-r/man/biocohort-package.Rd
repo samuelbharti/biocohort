@@ -38,6 +38,21 @@ demand, with configurable role labels.
 }
 }
 
+\section{Quality control, groups, and derived columns}{
+
+\itemize{
+\item \code{\link[=cohort_qc]{cohort_qc()}} flags or drops subjects or samples, with a required
+reason. \code{\link[=qc_log]{qc_log()}} reads the audit trail every call appends to the
+cohort, which survives later \code{\link[=cohort_filter]{cohort_filter()}} calls.
+\item \code{\link[=cohort_groups]{cohort_groups()}} groups a cohort's subjects by one or more columns.
+\code{\link[=cohort_contrasts]{cohort_contrasts()}} enumerates every pairwise contrast between those
+groups, ready to filter one side against the other.
+\item \code{\link[=cohort_derive]{cohort_derive()}} bins an existing numeric column at named cutoffs and
+writes the result as a new column, so a cutoff is a value passed in,
+not code. \code{\link[=derive_log]{derive_log()}} reads its provenance.
+}
+}
+
 \section{Writing files for other tools}{
 
 \itemize{

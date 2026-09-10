@@ -33,6 +33,20 @@ Gene-ortholog backend using the offline \pkg{babelgene} package, which ships
 precomputed orthologs between human and a range of model organisms. This is
 the default backend for \code{\link[=ortholog_genes]{ortholog_genes()}}.
 }
+\examples{
+if (requireNamespace("babelgene", quietly = TRUE)) {
+  feats <- tibble::tibble(gene = c("TP53", "MYC"), .feature_id = 1:2)
+  out <- ortholog_babelgene(
+    feats,
+    from = "human",
+    to = "mouse",
+    gene_col = "gene",
+    id_type = "symbol"
+  )
+  out$mapped
+}
+
+}
 \seealso{
 \code{\link[=ortholog_genes]{ortholog_genes()}}
 }

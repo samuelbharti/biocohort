@@ -7,7 +7,7 @@ abstract: >-
   a long-format sample manifest, pipeline sample sheets, an analysis
   registry, and pluggable cross-species translation backends.
 type: software
-version: 0.1.0.9000
+version: 0.1.0
 authors:
   - family-names: Bharti
     given-names: Samuel
