@@ -296,6 +296,38 @@ test_that("load_analysis uses the default reader from the format", {
   expect_equal(res$data$subject_id, "S1")
 })
 
+test_that("load_analysis uses the default parquet reader from the format", {
+  skip_if_not_installed("arrow")
+  root <- tempfile()
+  dir.create(root)
+  on.exit(unlink(root, recursive = TRUE), add = TRUE)
+
+  manifest <- data.frame(
+    subject_id = "S1",
+    species = "human",
+    assay = "rna",
+    sample_id = "x1",
+    stringsAsFactors = FALSE
+  )
+  coh <- make_cohort(manifest, root, "rna_root")
+  spec <- analysis_spec_new(
+    name = "expr",
+    assay = "rna",
+    level = "subject",
+    path_template = "{root}/{subject_id}.parquet",
+    root_key = "rna_root"
+  )
+  expect_equal(spec@reader, "arrow::read_parquet")
+  arrow::write_parquet(
+    data.frame(gene = "TP53", value = 1),
+    file.path(root, "S1.parquet")
+  )
+
+  res <- load_analysis(coh, spec)
+  expect_equal(res$data$gene, "TP53")
+  expect_equal(res$data$subject_id, "S1")
+})
+
 test_that("load_analysis errors when no reader can be resolved", {
   root <- tempfile()
   dir.create(root)
@@ -305,7 +337,7 @@ test_that("load_analysis errors when no reader can be resolved", {
     name = "expr",
     assay = "rna",
     level = "subject",
-    path_template = "{root}/{subject_id}.parquet",
+    path_template = "{root}/{subject_id}.foo",
     root_key = "rna_root"
   )
   expect_true(is.na(spec@reader))

@@ -159,6 +159,7 @@ AnalysisSpec <- S7::new_class(
     tsv = "readr::read_tsv",
     txt = "readr::read_tsv",
     rds = "readRDS",
+    parquet = "arrow::read_parquet",
     NA_character_
   )
 }
@@ -249,8 +250,9 @@ AnalysisSpec <- S7::new_class(
 #' @param reader Character scalar for reader function name (e.g.,
 #'   "readr::read_tsv", "read.csv"). Optional. Defaults by `format`: "csv" to
 #'   "readr::read_csv", "tsv" and "txt" to "readr::read_tsv", "rds" to
-#'   "readRDS". NA for any other format. [load_analysis()] errors when neither
-#'   the spec nor its `reader` argument names a reader.
+#'   "readRDS", "parquet" to "arrow::read_parquet". NA for any other format.
+#'   [load_analysis()] errors when neither the spec nor its `reader` argument
+#'   names a reader.
 #' @param key_cols Character vector of column names that must be present in
 #'   the loaded table. Optional. Defaults by `level`: `"subject_id"` for
 #'   subject, `c("subject_id", "pair_id")` for pair, and none for cohort.

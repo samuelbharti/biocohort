@@ -41,7 +41,7 @@ test_that("analysis_spec_new fills reader from the format", {
   expect_equal(reader_for("tsv"), "readr::read_tsv")
   expect_equal(reader_for("txt"), "readr::read_tsv")
   expect_equal(reader_for("rds"), "readRDS")
-  expect_true(is.na(reader_for("parquet")))
+  expect_equal(reader_for("parquet"), "arrow::read_parquet")
   expect_true(is.na(reader_for(NA_character_)))
 
   explicit <- analysis_spec_new(
