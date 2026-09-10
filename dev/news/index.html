@@ -92,6 +92,7 @@
 <code><a href="../reference/analysis_register.html">analysis_register()</a></code>, <code><a href="../reference/analysis_list.html">analysis_list()</a></code>, and <code><a href="../reference/analysis_spec.html">analysis_spec()</a></code> manage <code>AnalysisSpec</code> entries in a cohort. <code>format</code>, <code>reader</code>, and <code>key_cols</code> default from the spec’s <code>path_template</code> and <code>level</code> when not given.</li>
 <li>
 <code><a href="../reference/load_analysis.html">load_analysis()</a></code> and <code><a href="../reference/load_analyses.html">load_analyses()</a></code> resolve a spec’s <code>path_template</code> per subject, per pair, or per cohort, read the files with the spec’s reader, and record which files were found. Subject and pair units are enumerated only for the spec’s own assay. <code><a href="../reference/analysis_files.html">analysis_files()</a></code> returns that record.</li>
+<li>A <code>path_template</code> ending in <code>.parquet</code> now gets <code><a href="https://arrow.apache.org/docs/r/reference/read_parquet.html" class="external-link">arrow::read_parquet</a></code> as its default reader, the same way <code>.csv</code>, <code>.tsv</code>, <code>.txt</code>, and <code>.rds</code> already do.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="cross-species-translation-experimental-0-1-0-9000">Cross-species translation (experimental)<a class="anchor" aria-label="anchor" href="#cross-species-translation-experimental-0-1-0-9000"></a></h3>

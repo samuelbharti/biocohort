@@ -77,7 +77,8 @@ analysis_spec_new(
   Character scalar for reader function name (e.g., "readr::read_tsv",
   "read.csv"). Optional. Defaults by `format`: "csv" to
   "readr::read_csv", "tsv" and "txt" to "readr::read_tsv", "rds" to
-  "readRDS". NA for any other format.
+  "readRDS", "parquet" to "arrow::read_parquet". NA for any other
+  format.
   [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
   errors when neither the spec nor its `reader` argument names a reader.
 

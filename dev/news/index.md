@@ -131,6 +131,10 @@ the API settles.
   assay.
   [`analysis_files()`](https://www.samuelbharti.com/biocohort/reference/analysis_files.md)
   returns that record.
+- A `path_template` ending in `.parquet` now gets
+  [`arrow::read_parquet`](https://arrow.apache.org/docs/r/reference/read_parquet.html)
+  as its default reader, the same way `.csv`, `.tsv`, `.txt`, and `.rds`
+  already do.
 
 ### Cross-species translation (experimental)
 
