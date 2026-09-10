@@ -41,6 +41,12 @@
 #' study@tags
 #' ```
 #'
+#' @examples
+#' # The raw constructor; study_new() is the usual way in.
+#' study <- Study(study_id = "PILOT", title = "Pilot study")
+#' study@study_id
+#' study@assays # empty until set
+#'
 #' @seealso [study_new()] for object construction,
 #'   [Cohort] for combining studies with subject data
 #'
@@ -126,6 +132,12 @@ Study <- S7::new_class(
 #' subject@timepoint
 #' subject@notes
 #' ```
+#'
+#' @examples
+#' # The raw constructor; subject_new() is the usual way in.
+#' rat <- Subject(subject_id = "R1", species = "rat", sex = "F")
+#' rat@species
+#' rat@genotype # NA until set
 #'
 #' @seealso [subject_new()] for object construction,
 #'   [Cohort] for managing groups of subjects
@@ -213,6 +225,21 @@ Subject <- S7::new_class(
 #' cohort@qc            # QC audit log
 #' cohort@derived       # Derived-column provenance
 #' ```
+#'
+#' @examples
+#' # An empty cohort has the required columns and nothing else.
+#' empty <- Cohort()
+#' empty@subject_tbl
+#' empty@sample_map
+#'
+#' # The raw constructor runs the same checks as cohort_new().
+#' cohort <- Cohort(
+#'   subject_tbl = data.frame(subject_id = "R1", species = "rat"),
+#'   sample_map = data.frame(
+#'     subject_id = "R1", assay = "wes", sample_id = "T1", role = "tumor"
+#'   )
+#' )
+#' cohort
 #'
 #' @seealso [cohort_new()] for object construction,
 #'   [subject()] for reading one subject,

@@ -33,6 +33,27 @@ to be swapped in.
 \code{start}, \code{end}, an optional \code{strand}, and a \code{.feature_id} integer key added
 by \code{\link[=liftover_intervals]{liftover_intervals()}}.
 }
+\examples{
+# A backend that maps every interval onto itself, then use it by name.
+passthrough <- function(intervals, chain, ...) {
+  list(
+    mapped = tibble::tibble(
+      .feature_id = intervals$.feature_id,
+      seqnames = intervals$seqnames,
+      start = intervals$start,
+      end = intervals$end,
+      strand = "*"
+    ),
+    unmapped = intervals[0, , drop = FALSE]
+  )
+}
+register_liftover_backend("passthrough", passthrough)
+"passthrough" \%in\% liftover_backends()
+
+ints <- data.frame(seqnames = "chr1", start = 100, end = 200)
+liftover_intervals(ints, chain = "none", to = "human", backend = "passthrough")
+
+}
 \seealso{
 \code{\link[=liftover_backends]{liftover_backends()}}, \code{\link[=liftover_intervals]{liftover_intervals()}},
 \code{\link[=liftover_rtracklayer]{liftover_rtracklayer()}}, \code{\link[=liftover_crossmap]{liftover_crossmap()}}

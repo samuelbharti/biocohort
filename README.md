@@ -88,8 +88,8 @@ resolves to the newest release:
 To pin the exact version you used, cite its own DOI instead. Version 0.1.0 is
 [10.5281/zenodo.22685058](https://doi.org/10.5281/zenodo.22685058).
 
-`CITATION.cff` carries the same metadata, so `citation("biocohort")` in R and
-the "Cite this repository" button on GitHub both work.
+In R, `citation("biocohort")` prints the same reference. `CITATION.cff`
+carries the same metadata for the "Cite this repository" button on GitHub.
 
 ## Contributing
 

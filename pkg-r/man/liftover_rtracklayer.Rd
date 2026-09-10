@@ -25,6 +25,8 @@ external tools but needs the Bioconductor packages \code{rtracklayer},
 \code{GenomicRanges}, \code{IRanges}, and \code{S4Vectors}.
 }
 \examples{
+\donttest{
+# rtracklayer and the packages it depends on take a few seconds to load.
 if (
   requireNamespace("rtracklayer", quietly = TRUE) &&
     requireNamespace("GenomicRanges", quietly = TRUE)
@@ -47,6 +49,7 @@ if (
   out <- liftover_rtracklayer(ints, chain)
   out$mapped
   unlink(chain)
+}
 }
 
 }

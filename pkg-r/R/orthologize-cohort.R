@@ -306,9 +306,34 @@ NULL
 #'   cohort has not been translated.
 #'
 #' @examples
-#' # See ?translate for a cohort-translation example; then:
-#' # report <- translation_report(translated_cohort)
-#' # report$results[["somatic_vars"]]
+#' # A cohort with one gene-level analysis, translated by an in-memory backend.
+#' manifest <- data.frame(
+#'   subject_id = "S1", species = "rat", assay = "rna", sample_id = "R1"
+#' )
+#' parsed <- validate_manifest(manifest)
+#' cohort <- cohort_new(
+#'   parsed$subject_tbl, parsed$sample_map,
+#'   analyses = list(expr = data.frame(gene = c("Tp53", "Myc")))
+#' )
+#' spec <- analysis_spec_new(
+#'   name = "expr", assay = "rna", level = "subject",
+#'   feature_type = "gene", gene_col = "gene", id_type = "symbol"
+#' )
+#' cohort <- analysis_register(cohort, spec)
+#' to_upper <- function(features, from, to, gene_col, id_type, ...) {
+#'   mapped <- features
+#'   mapped$ortholog <- toupper(mapped[[gene_col]])
+#'   list(mapped = mapped, unmapped = features[0, , drop = FALSE])
+#' }
+#' human <- translate(cohort, to = "human", ortholog_backend = to_upper)
+#'
+#' report <- translation_report(human)
+#' report$from
+#' report$to
+#' translation_stats(report$results$expr)
+#'
+#' # NULL for a cohort that has not been translated
+#' translation_report(cohort)
 #'
 #' @seealso [translate()], [TranslationResult]
 #' @export

@@ -27,6 +27,26 @@ NULL
 #' `start`, `end`, an optional `strand`, and a `.feature_id` integer key added
 #' by [liftover_intervals()].
 #'
+#' @examples
+#' # A backend that maps every interval onto itself, then use it by name.
+#' passthrough <- function(intervals, chain, ...) {
+#'   list(
+#'     mapped = tibble::tibble(
+#'       .feature_id = intervals$.feature_id,
+#'       seqnames = intervals$seqnames,
+#'       start = intervals$start,
+#'       end = intervals$end,
+#'       strand = "*"
+#'     ),
+#'     unmapped = intervals[0, , drop = FALSE]
+#'   )
+#' }
+#' register_liftover_backend("passthrough", passthrough)
+#' "passthrough" %in% liftover_backends()
+#'
+#' ints <- data.frame(seqnames = "chr1", start = 100, end = 200)
+#' liftover_intervals(ints, chain = "none", to = "human", backend = "passthrough")
+#'
 #' @seealso [liftover_backends()], [liftover_intervals()],
 #'   [liftover_rtracklayer()], [liftover_crossmap()]
 #' @export
@@ -113,7 +133,7 @@ liftover_backends <- function() {
 #' res <- liftover_intervals(ints, chain = "none", to = "human", backend = backend)
 #' translation_stats(res)
 #'
-#' @seealso [liftover_rtracklayer()], [liftover_crossmap()], [orthologize()]
+#' @seealso [liftover_rtracklayer()], [liftover_crossmap()], [translate()]
 #' @export
 liftover_intervals <- function(
   intervals,
@@ -204,6 +224,8 @@ liftover_intervals <- function(
 #' @return A list with `mapped` and `unmapped` tibbles.
 #'
 #' @examples
+#' \donttest{
+#' # rtracklayer and the packages it depends on take a few seconds to load.
 #' if (
 #'   requireNamespace("rtracklayer", quietly = TRUE) &&
 #'     requireNamespace("GenomicRanges", quietly = TRUE)
@@ -226,6 +248,7 @@ liftover_intervals <- function(
 #'   out <- liftover_rtracklayer(ints, chain)
 #'   out$mapped
 #'   unlink(chain)
+#' }
 #' }
 #'
 #' @seealso [liftover_intervals()], [liftover_crossmap()]
@@ -413,6 +436,22 @@ liftover_crossmap <- function(intervals, chain, crossmap = NULL, ...) {
 #' reports the produced paths and unmapped count rather than parsing variants
 #' into R. Parse the output VCF with your tool of choice (e.g.
 #' `VariantAnnotation`).
+#'
+#' @examples
+#' \dontrun{
+#' # Not run: needs CrossMap on the PATH, a chain file, and the target
+#' # genome as a FASTA file, none of which ship with the package.
+#' res <- liftover_vcf(
+#'   vcf = "calls.rn7.vcf",
+#'   chain = "rn7ToHg38.over.chain",
+#'   ref_fasta = "hg38.fa",
+#'   from = "rn7",
+#'   to = "hg38"
+#' )
+#' res@mapped$path # the lifted VCF
+#' res@unmapped$path # the records CrossMap could not place
+#' res@stats$n_unmapped
+#' }
 #'
 #' @seealso [liftover_intervals()], [liftover_crossmap()]
 #' @export

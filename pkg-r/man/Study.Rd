@@ -68,6 +68,13 @@ study@created_at
 study@tags
 }\if{html}{\out{</div>}}
 }
+\examples{
+# The raw constructor; study_new() is the usual way in.
+study <- Study(study_id = "PILOT", title = "Pilot study")
+study@study_id
+study@assays # empty until set
+
+}
 \seealso{
 \code{\link[=study_new]{study_new()}} for object construction,
 \link{Cohort} for combining studies with subject data

@@ -87,6 +87,22 @@ cohort@qc            # QC audit log
 cohort@derived       # Derived-column provenance
 }\if{html}{\out{</div>}}
 }
+\examples{
+# An empty cohort has the required columns and nothing else.
+empty <- Cohort()
+empty@subject_tbl
+empty@sample_map
+
+# The raw constructor runs the same checks as cohort_new().
+cohort <- Cohort(
+  subject_tbl = data.frame(subject_id = "R1", species = "rat"),
+  sample_map = data.frame(
+    subject_id = "R1", assay = "wes", sample_id = "T1", role = "tumor"
+  )
+)
+cohort
+
+}
 \seealso{
 \code{\link[=cohort_new]{cohort_new()}} for object construction,
 \code{\link[=subject]{subject()}} for reading one subject,

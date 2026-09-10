@@ -23,6 +23,7 @@ data(example_cohort)
 path <- tempfile(fileext = ".rds")
 cohort_save(example_cohort, path)
 cohort_read(path)
+unlink(path)
 
 }
 \seealso{
