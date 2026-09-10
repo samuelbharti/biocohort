@@ -37,3 +37,31 @@ A list with `mapped` and `unmapped` tibbles.
 
 [`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md),
 [`liftover_crossmap()`](https://www.samuelbharti.com/biocohort/reference/liftover_crossmap.md)
+
+## Examples
+
+``` r
+if (
+  requireNamespace("rtracklayer", quietly = TRUE) &&
+    requireNamespace("GenomicRanges", quietly = TRUE)
+) {
+  chain <- tempfile(fileext = ".chain")
+  writeLines(
+    c(
+      "chain 1000 chr1 100000 + 0 1000 chrT 200000 + 10000 11000 1",
+      "1000",
+      ""
+    ),
+    chain
+  )
+  ints <- tibble::tibble(
+    seqnames = c("chr1", "chr1"),
+    start = c(100, 5000),
+    end = c(200, 5100),
+    .feature_id = 1:2
+  )
+  out <- liftover_rtracklayer(ints, chain)
+  out$mapped
+  unlink(chain)
+}
+```

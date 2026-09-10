@@ -5,11 +5,9 @@ in one validated object. Species and assays are values in the data, not
 columns or classes, so the same functions work for any organism and any
 omics assay.
 
-**Documentation**: <https://www.samuelbharti.com/biocohort/>
-
 See the [repository root
-README](https://github.com/samuelbharti/biocohort#readme) for why this
-package exists.
+README](https://github.com/samuelbharti/biocohort#readme) for the
+motivation behind this package.
 
 ## Installation
 
