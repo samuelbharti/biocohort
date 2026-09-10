@@ -83,6 +83,11 @@ reference:
   contents:
   - cohort_qc
   - qc_log
+- title: Groups and contrasts
+  desc: Group subjects and enumerate pairwise comparisons
+  contents:
+  - cohort_groups
+  - cohort_contrasts
 - title: IO Functions
   desc: Read and write data
   contents:

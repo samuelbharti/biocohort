@@ -50,6 +50,14 @@ settles.
   which is not cleared by `cohort_filter()`, so the record survives later
   structural changes to the cohort.
 
+## Groups and contrasts
+
+- `cohort_groups()` groups a cohort's subjects by one or more `subject_tbl`
+  columns and returns one row per combination that actually occurs, with
+  the matching subject ids. `cohort_contrasts()` enumerates every pairwise
+  contrast between those groups, ready to pipe into `cohort_filter()` for
+  each side.
+
 ## Reading and writing files
 
 - `read_manifest()` reads a manifest from CSV, TSV, or Excel, always as
