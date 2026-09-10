@@ -16,6 +16,13 @@ motivation behind this package.
 pak::pak("samuelbharti/biocohort/pkg-r")
 ```
 
+r-universe works too:
+
+``` r
+
+install.packages("biocohort", repos = "https://samuelbharti.r-universe.dev")
+```
+
 ## Quick start
 
 A manifest is one long-format table, one row per sample. Four columns

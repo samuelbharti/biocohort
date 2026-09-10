@@ -69,6 +69,9 @@
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"samuelbharti/biocohort/pkg-r"</span><span class="op">)</span></span></code></pre></div>
+<p>r-universe works too:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"biocohort"</span>, repos <span class="op">=</span> <span class="st">"https://samuelbharti.r-universe.dev"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
@@ -79,7 +82,7 @@ R1,rat,WT,wes,T1,tumor
 R1,rat,WT,wes,N1,normal
 R2,rat,KO,wes,T2,tumor
 R2,rat,KO,wes,N2,normal</code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.samuelbharti.com/biocohort/">biocohort</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">parsed</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_manifest.html">read_manifest</a></span><span class="op">(</span><span class="st">"manifest.csv"</span><span class="op">)</span></span>
@@ -93,7 +96,7 @@ R2,rat,KO,wes,N2,normal</code></pre>
 <span><span class="fu"><a href="reference/samples.html">samples</a></span><span class="op">(</span><span class="va">cohort</span>, assay <span class="op">=</span> <span class="st">"wes"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/completeness.html">completeness</a></span><span class="op">(</span><span class="va">cohort</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Some studies keep one row per subject, with one id column per assay. <code><a href="reference/manifest_from_wide.html">manifest_from_wide()</a></code> turns that into the long form first:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">id_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  column <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wes_tumor_id"</span>, <span class="st">"wes_normal_id"</span><span class="op">)</span>,</span>
 <span>  assay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wes"</span>, <span class="st">"wes"</span><span class="op">)</span>,</span>
@@ -142,7 +145,7 @@ R2,rat,KO,wes,N2,normal</code></pre>
 <strong><a href="https://www.samuelbharti.com/biocohort/articles/naming-conventions.html">Naming conventions</a></strong>: standard column, object, and file names.</li>
 </ul>
 <p>To build the site locally, run from the repository root:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="st">"pkg-r"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -194,6 +197,8 @@ R2,rat,KO,wes,N2,normal</code></pre>
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/samuelbharti/biocohort/actions/workflows/r.yml" class="external-link"><img src="https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://samuelbharti.r-universe.dev/biocohort" class="external-link"><img src="https://samuelbharti.r-universe.dev/badges/biocohort" alt="r-universe"></a></li>
+<li><a href="https://doi.org/10.5281/zenodo.22685057" class="external-link"><img src="https://zenodo.org/badge/1150207650.svg" alt="DOI"></a></li>
 </ul>
 </div>
 
