@@ -85,10 +85,12 @@
 #'
 #' @section Further reading:
 #'
-#' The [Get started](articles/biocohort.html) article walks through a
-#' manifest, a cohort, and a sample sheet end to end. The
-#' [Glossary](articles/glossary.html) defines the terms used across the
-#' package, and [Naming conventions](articles/naming-conventions.html)
-#' lists the standard names for columns, objects, and files.
+#' Three articles ship with the package.
+#' `vignette("biocohort", package = "biocohort")` walks through a manifest,
+#' a cohort, and a sample sheet end to end.
+#' `vignette("glossary", package = "biocohort")` defines the terms used
+#' across the package.
+#' `vignette("naming-conventions", package = "biocohort")` lists the
+#' standard names for columns, objects, and files.
 #'
 "_PACKAGE"

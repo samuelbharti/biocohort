@@ -234,7 +234,7 @@ NULL
 #' loaded$data
 #' loaded$files
 #'
-#' @seealso [load_analyses()], [orthologize()]
+#' @seealso [load_analyses()], [translate()]
 #' @export
 load_analysis <- function(cohort, spec, reader = NULL) {
   if (!S7::S7_inherits(cohort, Cohort)) {
@@ -305,7 +305,7 @@ load_analysis <- function(cohort, spec, reader = NULL) {
 #' [load_analysis()]) and returns a new [Cohort] with `analyses` populated. The
 #' per-analysis file manifests are stored in the cohort cache and retrievable
 #' with [analysis_files()]. This is the step that takes a cohort from *paths* to
-#' *loaded feature tables*, ready for [orthologize()].
+#' *loaded feature tables*, ready for [translate()].
 #'
 #' @param cohort A [Cohort] with registered specs (see [analysis_register()]).
 #' @param analyses Optional character vector restricting which registered
@@ -319,7 +319,33 @@ load_analysis <- function(cohort, spec, reader = NULL) {
 #' Specs without a `path_template` are skipped with a warning. Use
 #' [analysis_files()] to inspect which files were found or missing.
 #'
-#' @seealso [load_analysis()], [analysis_files()], [orthologize()]
+#' @examples
+#' # One per-subject CSV on disk, one registered spec that points at it.
+#' dir <- tempfile()
+#' dir.create(dir)
+#' write.csv(
+#'   data.frame(gene = "TP53", value = 1), file.path(dir, "S1.csv"),
+#'   row.names = FALSE
+#' )
+#' manifest <- data.frame(
+#'   subject_id = "S1", species = "human", assay = "rna", sample_id = "x"
+#' )
+#' parsed <- validate_manifest(manifest)
+#' cohort <- cohort_new(
+#'   parsed$subject_tbl, parsed$sample_map, paths = list(rna_root = dir)
+#' )
+#' spec <- analysis_spec_new(
+#'   name = "expr", assay = "rna", level = "subject",
+#'   path_template = "{root}/{subject_id}.csv", root_key = "rna_root"
+#' )
+#' cohort <- analysis_register(cohort, spec)
+#'
+#' loaded <- load_analyses(cohort)
+#' loaded@analyses$expr
+#' analysis_files(loaded)
+#' unlink(dir, recursive = TRUE)
+#'
+#' @seealso [load_analysis()], [analysis_files()], [translate()]
 #' @export
 load_analyses <- function(cohort, analyses = NULL, readers = NULL) {
   if (!S7::S7_inherits(cohort, Cohort)) {

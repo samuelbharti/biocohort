@@ -78,5 +78,5 @@ loaded$files
 
 }
 \seealso{
-\code{\link[=load_analyses]{load_analyses()}}, \code{\link[=orthologize]{orthologize()}}
+\code{\link[=load_analyses]{load_analyses()}}, \code{\link[=translate]{translate()}}
 }

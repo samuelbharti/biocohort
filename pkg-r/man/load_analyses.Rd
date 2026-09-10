@@ -23,12 +23,39 @@ Loads the feature table for each registered \link{AnalysisSpec} (via
 \code{\link[=load_analysis]{load_analysis()}}) and returns a new \link{Cohort} with \code{analyses} populated. The
 per-analysis file manifests are stored in the cohort cache and retrievable
 with \code{\link[=analysis_files]{analysis_files()}}. This is the step that takes a cohort from \emph{paths} to
-\emph{loaded feature tables}, ready for \code{\link[=orthologize]{orthologize()}}.
+\emph{loaded feature tables}, ready for \code{\link[=translate]{translate()}}.
 }
 \details{
 Specs without a \code{path_template} are skipped with a warning. Use
 \code{\link[=analysis_files]{analysis_files()}} to inspect which files were found or missing.
 }
+\examples{
+# One per-subject CSV on disk, one registered spec that points at it.
+dir <- tempfile()
+dir.create(dir)
+write.csv(
+  data.frame(gene = "TP53", value = 1), file.path(dir, "S1.csv"),
+  row.names = FALSE
+)
+manifest <- data.frame(
+  subject_id = "S1", species = "human", assay = "rna", sample_id = "x"
+)
+parsed <- validate_manifest(manifest)
+cohort <- cohort_new(
+  parsed$subject_tbl, parsed$sample_map, paths = list(rna_root = dir)
+)
+spec <- analysis_spec_new(
+  name = "expr", assay = "rna", level = "subject",
+  path_template = "{root}/{subject_id}.csv", root_key = "rna_root"
+)
+cohort <- analysis_register(cohort, spec)
+
+loaded <- load_analyses(cohort)
+loaded@analyses$expr
+analysis_files(loaded)
+unlink(dir, recursive = TRUE)
+
+}
 \seealso{
-\code{\link[=load_analysis]{load_analysis()}}, \code{\link[=analysis_files]{analysis_files()}}, \code{\link[=orthologize]{orthologize()}}
+\code{\link[=load_analysis]{load_analysis()}}, \code{\link[=analysis_files]{analysis_files()}}, \code{\link[=translate]{translate()}}
 }

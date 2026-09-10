@@ -16,6 +16,16 @@ The \link{Cohort} object.
 Reads the RDS file, checks it is a cohort file, and re-validates the
 cohort before returning it.
 }
+\examples{
+data(example_cohort)
+path <- tempfile(fileext = ".rds")
+cohort_save(example_cohort, path)
+
+restored <- cohort_read(path)
+identical(subjects(restored), subjects(example_cohort))
+unlink(path)
+
+}
 \seealso{
 \code{\link[=cohort_save]{cohort_save()}}
 }

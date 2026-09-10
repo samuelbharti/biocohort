@@ -43,6 +43,20 @@ Construct these via \code{\link[=liftover_intervals]{liftover_intervals()}} or \
 directly. Access the pieces with \code{result@mapped}, \code{result@unmapped}, and
 \code{\link[=translation_stats]{translation_stats()}}.
 }
+\examples{
+# Built by hand here to show the shape; translate() builds them for you.
+res <- TranslationResult(
+  mapped = tibble::tibble(.feature_id = 1L, gene = "Tp53", ortholog = "TP53"),
+  unmapped = tibble::tibble(.feature_id = 2L, gene = "Gm12345"),
+  from = "rat",
+  to = "human",
+  backend = "by_hand",
+  stats = list(n_input = 2L, n_mapped = 1L, n_unmapped = 1L, n_multi = 0L)
+)
+res@unmapped
+translation_stats(res)
+
+}
 \seealso{
 \code{\link[=liftover_intervals]{liftover_intervals()}}, \code{\link[=translate]{translate()}}, \code{\link[=translation_stats]{translation_stats()}}
 }

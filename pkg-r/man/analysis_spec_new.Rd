@@ -63,7 +63,7 @@ subject, \code{c("subject_id", "pair_id")} for pair, and none for cohort.
 Subject and pair specs need at least one key column.}
 
 \item{feature_type}{Optional character scalar declaring how this analysis's
-features are translated across species by \code{\link[=orthologize]{orthologize()}}. One of
+features are translated across species by \code{\link[=translate]{translate()}}. One of
 \code{"interval"} (coordinate features, translated by liftover) or \code{"gene"}
 (gene-level features, translated by ortholog mapping). Defaults to NA
 (analysis is skipped by cohort-level translation).}

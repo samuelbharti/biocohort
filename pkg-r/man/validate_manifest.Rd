@@ -53,7 +53,7 @@ subject-level metadata columns, all character.
 \code{assay}, \code{sample_id}, \code{role}, and any recognized or declared extra
 sample-level columns, all character.
 \item \code{completeness_tbl}: Tibble with one row per \code{subject_id} x \code{assay}
-summarising the number of samples (\code{n_samples}).
+summarizing the number of samples (\code{n_samples}).
 }
 }
 \description{

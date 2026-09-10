@@ -44,7 +44,7 @@ NULL
 #'     `assay`, `sample_id`, `role`, and any recognized or declared extra
 #'     sample-level columns, all character.
 #'   - `completeness_tbl`: Tibble with one row per `subject_id` x `assay`
-#'     summarising the number of samples (`n_samples`).
+#'     summarizing the number of samples (`n_samples`).
 #'
 #' @details
 #' Every column is coerced to character, so a numeric, logical, or factor

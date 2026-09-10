@@ -26,6 +26,20 @@ Adds a named ortholog backend so it can be selected by name in
 \code{\link[=ortholog_genes]{ortholog_genes()}}. A backend performs gene-level cross-species mapping; this
 pluggable design mirrors the liftover backends used for coordinate features.
 }
+\examples{
+# A backend that upper-cases rodent symbols into human ones, used by name.
+to_upper <- function(features, from, to, gene_col, id_type, ...) {
+  mapped <- features
+  mapped$ortholog <- toupper(mapped[[gene_col]])
+  list(mapped = mapped, unmapped = features[0, , drop = FALSE])
+}
+register_ortholog_backend("to_upper", to_upper)
+"to_upper" \%in\% ortholog_backends()
+
+genes <- data.frame(gene = c("Tp53", "Myc"))
+ortholog_genes(genes, from = "rat", to = "human", backend = "to_upper")
+
+}
 \seealso{
 \code{\link[=ortholog_backends]{ortholog_backends()}}, \code{\link[=ortholog_genes]{ortholog_genes()}}, \code{\link[=ortholog_babelgene]{ortholog_babelgene()}}
 }

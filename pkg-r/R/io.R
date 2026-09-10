@@ -344,6 +344,7 @@ write_manifest <- function(x, path, delim = NULL) {
 #' path <- tempfile(fileext = ".rds")
 #' cohort_save(example_cohort, path)
 #' cohort_read(path)
+#' unlink(path)
 #'
 #' @seealso [cohort_read()], [write_manifest()]
 #' @export
@@ -370,6 +371,15 @@ cohort_save <- function(cohort, path) {
 #' @param path Path to a file written by [cohort_save()].
 #'
 #' @return The [Cohort] object.
+#'
+#' @examples
+#' data(example_cohort)
+#' path <- tempfile(fileext = ".rds")
+#' cohort_save(example_cohort, path)
+#'
+#' restored <- cohort_read(path)
+#' identical(subjects(restored), subjects(example_cohort))
+#' unlink(path)
 #'
 #' @seealso [cohort_save()]
 #' @export

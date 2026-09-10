@@ -113,6 +113,18 @@ spec@normal_role
 spec@pair_sep
 }\if{html}{\out{</div>}}
 }
+\examples{
+# The raw constructor. analysis_spec_new() fills format, reader, and
+# key_cols in from the path template and the level; this does not.
+spec <- AnalysisSpec(
+  name = "somatic_vars", assay = "wes", level = "pair",
+  format = "tsv", reader = "readr::read_tsv",
+  key_cols = c("subject_id", "pair_id")
+)
+spec@level
+spec@key_cols
+
+}
 \seealso{
 \code{\link[=analysis_spec_new]{analysis_spec_new()}} for object construction,
 \code{\link[=analysis_register]{analysis_register()}} for registering specs in a Cohort

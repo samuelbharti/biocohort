@@ -3,9 +3,16 @@ message: If you use biocohort in your work, please cite it as below.
 title: "biocohort: Cohort Objects for Subjects and Samples in Omics Studies"
 abstract: >-
   An R package that keeps the subjects, samples, and analysis outputs of a
-  study in one validated object, for any organism and any omics assay, with
-  a long-format sample manifest, pipeline sample sheets, an analysis
-  registry, and pluggable cross-species translation backends.
+  study in one validated object. It starts from a sample manifest with one
+  row per sample, which is read, checked, and split into a subject table and
+  a sample map. Species and assay are plain values in those tables rather
+  than fixed types, so the same object serves any organism and any omics
+  assay. From that object the package writes the sample sheet a pipeline
+  expects, pairs tumor and normal samples on demand, and records where each
+  analysis writes its output so the files can be loaded back in by subject
+  or by pair. Manual corrections are kept in an audit trail. Results can
+  also be translated across genome builds or species, with liftover for
+  coordinates and ortholog mapping for genes.
 type: software
 # This describes the newest release, which is what somebody citing the package
 # should get.

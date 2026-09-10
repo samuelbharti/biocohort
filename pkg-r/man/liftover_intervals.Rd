@@ -67,5 +67,5 @@ translation_stats(res)
 
 }
 \seealso{
-\code{\link[=liftover_rtracklayer]{liftover_rtracklayer()}}, \code{\link[=liftover_crossmap]{liftover_crossmap()}}, \code{\link[=orthologize]{orthologize()}}
+\code{\link[=liftover_rtracklayer]{liftover_rtracklayer()}}, \code{\link[=liftover_crossmap]{liftover_crossmap()}}, \code{\link[=translate]{translate()}}
 }

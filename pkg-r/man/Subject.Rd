@@ -62,6 +62,13 @@ subject@timepoint
 subject@notes
 }\if{html}{\out{</div>}}
 }
+\examples{
+# The raw constructor; subject_new() is the usual way in.
+rat <- Subject(subject_id = "R1", species = "rat", sex = "F")
+rat@species
+rat@genotype # NA until set
+
+}
 \seealso{
 \code{\link[=subject_new]{subject_new()}} for object construction,
 \link{Cohort} for managing groups of subjects

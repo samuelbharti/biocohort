@@ -52,6 +52,13 @@ The full matrix (every supported R version, three operating systems) runs
 only on demand, from the Actions tab: trigger it before a release or a CRAN
 submission.
 
+A second workflow, `cran`, runs the check the way CRAN's incoming pretest
+does, with the incoming checks, the URL check, the relative-link check, and
+the spell check of `DESCRIPTION` turned on. It runs on every pull request on
+R-release, and every Monday on R-devel. It fails on any NOTE the pretest
+would not accept, so a green `R-CMD-check` and a red `cran` means the package
+would bounce at submission.
+
 CI is a backstop, not the first line of defence. Run the checks locally before
 you push:
 
@@ -68,6 +75,26 @@ Install the hooks once:
 prek install --install-hooks
 prek install --hook-type commit-msg
 ```
+
+Before a CRAN submission, run the check the way the CRAN pretest does. The
+plain check above does not turn on the incoming checks, which is where the
+spell check of `DESCRIPTION`, the URL check, and the check for relative links
+in help pages and the README live:
+
+```sh
+Rscript -e "rcmdcheck::rcmdcheck('pkg-r',
+  args = c('--as-cran', '--no-manual'),
+  env = c('_R_CHECK_CRAN_INCOMING_' = 'TRUE',
+          '_R_CHECK_CRAN_INCOMING_REMOTE_' = 'TRUE',
+          '_R_CHECK_CRAN_INCOMING_CHECK_FILE_URIS_' = 'TRUE'))"
+Rscript -e "devtools::check_win_devel('pkg-r')"
+```
+
+The second command uploads the package to win-builder and emails the result
+to the maintainer. It is the only way to see the spell check before CRAN
+does, because that check needs aspell, which Windows does not have. An
+example that takes more than five seconds goes in `\donttest{}`, not
+`\dontrun{}`.
 
 ## Code style
 

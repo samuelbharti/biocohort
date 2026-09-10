@@ -72,6 +72,17 @@
 #' spec@pair_sep
 #' ```
 #'
+#' @examples
+#' # The raw constructor. analysis_spec_new() fills format, reader, and
+#' # key_cols in from the path template and the level; this does not.
+#' spec <- AnalysisSpec(
+#'   name = "somatic_vars", assay = "wes", level = "pair",
+#'   format = "tsv", reader = "readr::read_tsv",
+#'   key_cols = c("subject_id", "pair_id")
+#' )
+#' spec@level
+#' spec@key_cols
+#'
 #' @seealso [analysis_spec_new()] for object construction,
 #'   [analysis_register()] for registering specs in a Cohort
 #'
@@ -258,7 +269,7 @@ AnalysisSpec <- S7::new_class(
 #'   subject, `c("subject_id", "pair_id")` for pair, and none for cohort.
 #'   Subject and pair specs need at least one key column.
 #' @param feature_type Optional character scalar declaring how this analysis's
-#'   features are translated across species by [orthologize()]. One of
+#'   features are translated across species by [translate()]. One of
 #'   `"interval"` (coordinate features, translated by liftover) or `"gene"`
 #'   (gene-level features, translated by ortholog mapping). Defaults to NA
 #'   (analysis is skipped by cohort-level translation).

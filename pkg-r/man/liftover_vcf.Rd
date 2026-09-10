@@ -44,6 +44,23 @@ reports the produced paths and unmapped count rather than parsing variants
 into R. Parse the output VCF with your tool of choice (e.g.
 \code{VariantAnnotation}).
 }
+\examples{
+\dontrun{
+# Not run: needs CrossMap on the PATH, a chain file, and the target
+# genome as a FASTA file, none of which ship with the package.
+res <- liftover_vcf(
+  vcf = "calls.rn7.vcf",
+  chain = "rn7ToHg38.over.chain",
+  ref_fasta = "hg38.fa",
+  from = "rn7",
+  to = "hg38"
+)
+res@mapped$path # the lifted VCF
+res@unmapped$path # the records CrossMap could not place
+res@stats$n_unmapped
+}
+
+}
 \seealso{
 \code{\link[=liftover_intervals]{liftover_intervals()}}, \code{\link[=liftover_crossmap]{liftover_crossmap()}}
 }

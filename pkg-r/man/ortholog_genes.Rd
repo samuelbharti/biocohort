@@ -64,5 +64,5 @@ ortholog_genes(features, from = "human", to = "mouse", backend = backend)
 
 }
 \seealso{
-\code{\link[=orthologize]{orthologize()}}, \code{\link[=ortholog_babelgene]{ortholog_babelgene()}}, \link{TranslationResult}
+\code{\link[=translate]{translate()}}, \code{\link[=ortholog_babelgene]{ortholog_babelgene()}}, \link{TranslationResult}
 }
