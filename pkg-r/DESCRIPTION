@@ -1,6 +1,6 @@
 Package: biocohort
 Title: Cohort Objects for Subjects and Samples in Omics Studies
-Version: 0.1.0.9000
+Version: 0.1.0
 Authors@R: c(
     person("Samuel", "Bharti", , "samuelbharti.io@gmail.com",
            role = c("aut", "cre", "cph"),
