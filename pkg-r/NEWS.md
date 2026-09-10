@@ -36,9 +36,19 @@ settles.
   one column per assay.
 - `subject()` reads one subject from `subject_tbl` as a `Subject` object.
 - `cohort_filter()` keeps a subset of subjects or assays and returns a
-  cohort that is still valid.
+  cohort that is still valid. `drop_sample_ids` removes specific sample
+  ids instead of naming every sample to keep.
 - `print()` for `Cohort`, `Subject`, and `AnalysisSpec` shows subject and
-  sample counts, extra sample columns, and registered analyses.
+  sample counts, extra sample columns, a QC summary, and registered
+  analyses.
+
+## Quality control
+
+- `cohort_qc()` flags or drops subjects or samples, recording the reason in
+  `qc_status`/`qc_reason` columns (flag) or by removing the matching rows
+  (drop). `qc_log()` reads the audit trail every call appends to `cohort@qc`,
+  which is not cleared by `cohort_filter()`, so the record survives later
+  structural changes to the cohort.
 
 ## Reading and writing files
 
