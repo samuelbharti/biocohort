@@ -68,6 +68,11 @@
 <code><a href="../reference/cohort_qc.html">cohort_qc()</a></code> flags or drops subjects or samples, recording the reason in <code>qc_status</code>/<code>qc_reason</code> columns (flag) or by removing the matching rows (drop). <code><a href="../reference/qc_log.html">qc_log()</a></code> reads the audit trail every call appends to <code>cohort@qc</code>, which is not cleared by <code><a href="../reference/cohort_filter.html">cohort_filter()</a></code>, so the record survives later structural changes to the cohort.</li>
 </ul></div>
 <div class="section level3">
+<h3 id="groups-and-contrasts-0-1-0-9000">Groups and contrasts<a class="anchor" aria-label="anchor" href="#groups-and-contrasts-0-1-0-9000"></a></h3>
+<ul><li>
+<code><a href="../reference/cohort_groups.html">cohort_groups()</a></code> groups a cohort’s subjects by one or more <code>subject_tbl</code> columns and returns one row per combination that actually occurs, with the matching subject ids. <code><a href="../reference/cohort_contrasts.html">cohort_contrasts()</a></code> enumerates every pairwise contrast between those groups, ready to pipe into <code><a href="../reference/cohort_filter.html">cohort_filter()</a></code> for each side.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="reading-and-writing-files-0-1-0-9000">Reading and writing files<a class="anchor" aria-label="anchor" href="#reading-and-writing-files-0-1-0-9000"></a></h3>
 <ul><li>
 <code><a href="../reference/read_manifest.html">read_manifest()</a></code> reads a manifest from CSV, TSV, or Excel, always as text, and validates it in one call.</li>

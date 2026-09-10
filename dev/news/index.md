@@ -72,6 +72,18 @@ the API settles.
   [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md),
   so the record survives later structural changes to the cohort.
 
+### Groups and contrasts
+
+- [`cohort_groups()`](https://www.samuelbharti.com/biocohort/reference/cohort_groups.md)
+  groups a cohort’s subjects by one or more `subject_tbl` columns and
+  returns one row per combination that actually occurs, with the
+  matching subject ids.
+  [`cohort_contrasts()`](https://www.samuelbharti.com/biocohort/reference/cohort_contrasts.md)
+  enumerates every pairwise contrast between those groups, ready to pipe
+  into
+  [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
+  for each side.
+
 ### Reading and writing files
 
 - [`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md)

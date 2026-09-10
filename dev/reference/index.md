@@ -60,6 +60,15 @@ Flag or drop subjects or samples, with an audit trail
 - [`qc_log()`](https://www.samuelbharti.com/biocohort/reference/qc_log.md)
   : Read a cohort's QC log
 
+## Groups and contrasts
+
+Group subjects and enumerate pairwise comparisons
+
+- [`cohort_groups()`](https://www.samuelbharti.com/biocohort/reference/cohort_groups.md)
+  : Group a cohort's subjects by one or more columns
+- [`cohort_contrasts()`](https://www.samuelbharti.com/biocohort/reference/cohort_contrasts.md)
+  : Every pairwise contrast between a cohort's groups
+
 ## IO Functions
 
 Read and write data
