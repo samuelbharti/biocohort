@@ -18,7 +18,10 @@ Cohort(
   registry = list(),
   cache = list(),
   qc = tibble::tibble(scope = character(), id = character(), action = character(), reason
-    = character(), previous_status = character(), timestamp = as.POSIXct(character()))
+    = character(), previous_status = character(), timestamp = as.POSIXct(character())),
+  derived = tibble::tibble(name = character(), from = character(), level = character(),
+    cutoffs = list(), n_derived = integer(), n_na = integer(), timestamp =
+    as.POSIXct(character()))
 )
 ```
 
@@ -76,6 +79,14 @@ Cohort(
   [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md).
   Defaults to an empty table.
 
+- derived:
+
+  A tibble recording every
+  [`cohort_derive()`](https://www.samuelbharti.com/biocohort/reference/cohort_derive.md)
+  call (columns `name`, `from`, `level`, `cutoffs`, `n_derived`, `n_na`,
+  `timestamp`). Durable in the same way as `qc`. Defaults to an empty
+  table.
+
 ## Value
 
 A `Cohort` object with the given properties.
@@ -107,6 +118,7 @@ Access properties with the `@` operator:
     cohort@registry      # Named list of AnalysisSpec objects
     cohort@cache         # Memoization cache
     cohort@qc            # QC audit log
+    cohort@derived       # Derived-column provenance
 
 ## See also
 

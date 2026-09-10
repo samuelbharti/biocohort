@@ -73,6 +73,11 @@
 <code><a href="../reference/cohort_groups.html">cohort_groups()</a></code> groups a cohort’s subjects by one or more <code>subject_tbl</code> columns and returns one row per combination that actually occurs, with the matching subject ids. <code><a href="../reference/cohort_contrasts.html">cohort_contrasts()</a></code> enumerates every pairwise contrast between those groups, ready to pipe into <code><a href="../reference/cohort_filter.html">cohort_filter()</a></code> for each side.</li>
 </ul></div>
 <div class="section level3">
+<h3 id="derived-columns-0-1-0-9000">Derived columns<a class="anchor" aria-label="anchor" href="#derived-columns-0-1-0-9000"></a></h3>
+<ul><li>
+<code><a href="../reference/cohort_derive.html">cohort_derive()</a></code> bins an existing numeric column at one or more named cutoffs and writes the result as a new column on <code>subject_tbl</code> or <code>sample_map</code>, so a cutoff like “early onset is 120 days or under” is a value passed in, not code. <code><a href="../reference/derive_log.html">derive_log()</a></code> reads the provenance every call appends to <code>cohort@derived</code>, which, like <code>cohort@qc</code>, is not cleared by <code><a href="../reference/cohort_filter.html">cohort_filter()</a></code>.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="reading-and-writing-files-0-1-0-9000">Reading and writing files<a class="anchor" aria-label="anchor" href="#reading-and-writing-files-0-1-0-9000"></a></h3>
 <ul><li>
 <code><a href="../reference/read_manifest.html">read_manifest()</a></code> reads a manifest from CSV, TSV, or Excel, always as text, and validates it in one call.</li>

@@ -69,6 +69,15 @@ Group subjects and enumerate pairwise comparisons
 - [`cohort_contrasts()`](https://www.samuelbharti.com/biocohort/reference/cohort_contrasts.md)
   : Every pairwise contrast between a cohort's groups
 
+## Derived columns
+
+Bin a numeric column at named cutoffs, with provenance
+
+- [`cohort_derive()`](https://www.samuelbharti.com/biocohort/reference/cohort_derive.md)
+  : Derive a column from cutoffs on an existing numeric column
+- [`derive_log()`](https://www.samuelbharti.com/biocohort/reference/derive_log.md)
+  : Read a cohort's derived-column log
+
 ## IO Functions
 
 Read and write data

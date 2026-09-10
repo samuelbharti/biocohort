@@ -107,7 +107,7 @@ qc_log(flagged)
 #> # A tibble: 1 × 6
 #>   scope  id         action reason           previous_status timestamp          
 #>   <chr>  <chr>      <chr>  <chr>            <chr>           <dttm>             
-#> 1 sample WES_R001_T flag   failed QC review NA              2026-09-10 03:20:49
+#> 1 sample WES_R001_T flag   failed QC review NA              2026-09-10 03:33:51
 
 # Drop the same sample instead
 dropped <- cohort_qc(

@@ -84,6 +84,18 @@ the API settles.
   [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
   for each side.
 
+### Derived columns
+
+- [`cohort_derive()`](https://www.samuelbharti.com/biocohort/reference/cohort_derive.md)
+  bins an existing numeric column at one or more named cutoffs and
+  writes the result as a new column on `subject_tbl` or `sample_map`, so
+  a cutoff like “early onset is 120 days or under” is a value passed in,
+  not code.
+  [`derive_log()`](https://www.samuelbharti.com/biocohort/reference/derive_log.md)
+  reads the provenance every call appends to `cohort@derived`, which,
+  like `cohort@qc`, is not cleared by
+  [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md).
+
 ### Reading and writing files
 
 - [`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md)
