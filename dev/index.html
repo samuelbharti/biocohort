@@ -112,6 +112,12 @@ R2,rat,KO,wes,N2,normal</code></pre>
 <li>
 <strong>Read it back.</strong> <code><a href="reference/subjects.html">subjects()</a></code>, <code><a href="reference/samples.html">samples()</a></code>, <code><a href="reference/completeness.html">completeness()</a></code>, and <code><a href="reference/sample_pairs.html">sample_pairs()</a></code> return plain tibbles. <code><a href="reference/cohort_filter.html">cohort_filter()</a></code> keeps a subset and stays valid.</li>
 <li>
+<strong>Flag or drop for QC.</strong> <code><a href="reference/cohort_qc.html">cohort_qc()</a></code> flags or drops subjects or samples with a required reason. <code><a href="reference/qc_log.html">qc_log()</a></code> reads the audit trail, which survives later <code><a href="reference/cohort_filter.html">cohort_filter()</a></code> calls.</li>
+<li>
+<strong>Group and contrast.</strong> <code><a href="reference/cohort_groups.html">cohort_groups()</a></code> groups subjects by one or more columns. <code><a href="reference/cohort_contrasts.html">cohort_contrasts()</a></code> enumerates every pairwise contrast between those groups.</li>
+<li>
+<strong>Derive a column from cutoffs.</strong> <code><a href="reference/cohort_derive.html">cohort_derive()</a></code> bins an existing numeric column at named cutoffs, so a cutoff is a value passed in, not code. <code><a href="reference/derive_log.html">derive_log()</a></code> reads its provenance.</li>
+<li>
 <strong>Write files for other tools.</strong> <code><a href="reference/sample_sheet.html">sample_sheet()</a></code> writes the sample list a pipeline expects. <code><a href="reference/as_coldata.html">as_coldata()</a></code> and <code><a href="reference/join_metadata.html">join_metadata()</a></code> carry cohort metadata into a <code>SummarizedExperiment</code>, a Seurat object, or a data frame.</li>
 <li>
 <strong>Track analysis outputs.</strong> <code><a href="reference/analysis_spec_new.html">analysis_spec_new()</a></code> and <code><a href="reference/load_analysis.html">load_analysis()</a></code> resolve a path template per subject or pair, read the files, and record which ones were found.</li>

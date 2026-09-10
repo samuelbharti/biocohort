@@ -103,6 +103,11 @@ left with no samples is not also removed; <code>scope = "subject"</code> uses it
 <code>subject_ids</code> argument to keep every other subject. Either way, the
 resulting cache reset is the same one a direct <code><a href="cohort_filter.html">cohort_filter()</a></code> call
 would produce.</p>
+<p><code>sample_id</code> is normally unique, so <code><a href="qc_log.html">qc_log()</a></code>'s <code>previous_status</code> reflects
+the one matching row. If <code>sample_map</code> holds duplicate <code>sample_id</code>s (built
+with <code>allow_duplicates = TRUE</code>), every matching row is still flagged or
+dropped correctly, but the logged <code>previous_status</code> reflects only one of
+them.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -139,7 +144,7 @@ would produce.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   scope  id         action reason           previous_status timestamp          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> sample WES_R001_T flag   failed QC review <span style="color: #BB0000;">NA</span>              2026-09-10 <span style="color: #949494;">03:44:57</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> sample WES_R001_T flag   failed QC review <span style="color: #BB0000;">NA</span>              2026-09-10 <span style="color: #949494;">04:01:13</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Drop the same sample instead</span></span></span>
 <span class="r-in"><span><span class="va">dropped</span> <span class="op">&lt;-</span> <span class="fu">cohort_qc</span><span class="op">(</span></span></span>

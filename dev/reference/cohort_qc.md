@@ -71,6 +71,13 @@ one a direct
 [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
 call would produce.
 
+`sample_id` is normally unique, so
+[`qc_log()`](https://www.samuelbharti.com/biocohort/reference/qc_log.md)'s
+`previous_status` reflects the one matching row. If `sample_map` holds
+duplicate `sample_id`s (built with `allow_duplicates = TRUE`), every
+matching row is still flagged or dropped correctly, but the logged
+`previous_status` reflects only one of them.
+
 ## See also
 
 [`qc_log()`](https://www.samuelbharti.com/biocohort/reference/qc_log.md),
@@ -107,7 +114,7 @@ qc_log(flagged)
 #> # A tibble: 1 × 6
 #>   scope  id         action reason           previous_status timestamp          
 #>   <chr>  <chr>      <chr>  <chr>            <chr>           <dttm>             
-#> 1 sample WES_R001_T flag   failed QC review NA              2026-09-10 03:44:57
+#> 1 sample WES_R001_T flag   failed QC review NA              2026-09-10 04:01:13
 
 # Drop the same sample instead
 dropped <- cohort_qc(
