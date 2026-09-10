@@ -4,11 +4,12 @@ name: R-CMD-check
 # proposed, and the same commits do not need checking twice. See
 # CONTRIBUTING.md.
 #
-# The repository is private, so Actions minutes are metered (macOS counts ten
-# times, Windows twice). A pull request runs one Ubuntu check. The full
-# platform matrix (every supported R version, three operating systems) is
-# manual only: run it from the Actions tab before a release or a CRAN
-# submission.
+# A pull request runs one Ubuntu check on R-release, which takes a few
+# minutes because the Bioconductor packages in Suggests install as binaries.
+# On R-devel and R-oldrel they build from source and the job takes twenty to
+# thirty minutes, so the full platform matrix (every supported R version,
+# three operating systems) is manual only: run it from the Actions tab before
+# a release or a CRAN submission. cran.yml is the other check to run then.
 on:
   pull_request:
     branches: [main]

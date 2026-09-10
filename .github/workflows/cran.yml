@@ -1,0 +1,134 @@
+name: cran
+
+# The check as CRAN's incoming pretest runs it, which r.yml does not.
+#
+# r-lib/actions/check-r-package sets _R_CHECK_CRAN_INCOMING_=false, so the
+# checks that only CRAN performs never run there: incoming feasibility, the
+# URL check, the check for relative links in help pages and the README, and
+# the spell check of DESCRIPTION. That is a sensible default for a per-commit
+# gate and a bad one for a package headed to CRAN, because the first time
+# those checks run is then the submission itself. The 0.1.0 submission was
+# bounced on exactly those, after a green r.yml.
+#
+# The job fails on any NOTE the pretest would not accept, so a green
+# R-CMD-check and a red cran means the package would bounce at submission.
+#
+# A pull request runs on R-release, where the Bioconductor packages in
+# Suggests install as binaries and the job takes a few minutes. The weekly run
+# and a manual run use R-devel, which is what the pretest uses; there the
+# Bioconductor packages build from source and the job takes twenty to thirty
+# minutes. The weekly run is also what catches a URL going stale on its own.
+on:
+  pull_request:
+    branches: [main]
+  schedule:
+    # Mondays, 06:00 UTC. Nothing depends on the exact time.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cran-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  cran:
+    runs-on: ubuntu-latest
+    name: cran
+    timeout-minutes: 90
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      # The whole reason this job exists. The pretest sets all four.
+      _R_CHECK_CRAN_INCOMING_: true
+      _R_CHECK_CRAN_INCOMING_REMOTE_: true
+      _R_CHECK_CRAN_INCOMING_CHECK_FILE_URIS_: true
+      _R_CHECK_CRAN_INCOMING_USE_ASPELL_: true
+      # Bioconductor and babelgene are optional. The check must pass without
+      # them, so the suggested packages are not forced.
+      _R_CHECK_FORCE_SUGGESTS_: false
+    steps:
+      - uses: actions/checkout@v7
+
+      # The spell check of DESCRIPTION runs only when aspell is on the PATH,
+      # with the en_US and en_GB dictionaries. Windows machines never have it,
+      # which is why this NOTE is first seen at submission unless a job like
+      # this one runs.
+      - name: Install aspell
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq aspell aspell-en
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ github.event_name == 'pull_request' && 'release' || 'devel' }}
+          http-user-agent: release
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+          working-directory: pkg-r
+
+      # error_on = "warning" leaves NOTEs to the filter below. The pretest
+      # accepts an incoming feasibility NOTE that only says the package is new
+      # (or, after a release, how many days since the last update), and a
+      # spelling NOTE whose words are all known. Anything else fails, the same
+      # way the pretest fails it.
+      - name: Check as CRAN
+        run: |
+          res <- rcmdcheck::rcmdcheck(
+            args = c("--no-manual", "--as-cran"),
+            build_args = "--no-manual",
+            error_on = "warning",
+            check_dir = "check"
+          )
+          print(res)
+
+          # Words the spell check flags that are spelled as intended. They are
+          # explained in cran-comments.md; keep the two lists in step.
+          known_words <- c("omics", "Omics", "liftover", "ortholog")
+
+          allowed <- c(
+            "^checking CRAN incoming feasibility",
+            "^Maintainer: ",
+            "^New submission$",
+            "^Days since last update: ",
+            "^Possibly misspelled words in DESCRIPTION:$",
+            sprintf("^(%s) \\([0-9]+:[0-9]+\\)$", paste(known_words, collapse = "|")),
+            "^$"
+          )
+
+          unexpected <- character()
+          for (note in res$notes) {
+            lines <- trimws(strsplit(note, "\n", fixed = TRUE)[[1]])
+            if (!grepl("^checking CRAN incoming feasibility", lines[[1]])) {
+              unexpected <- c(unexpected, note)
+              next
+            }
+            ok <- Reduce(`|`, lapply(allowed, grepl, x = lines))
+            if (!all(ok)) {
+              unexpected <- c(unexpected, paste(lines[!ok], collapse = "\n"))
+            }
+          }
+          if (length(unexpected)) {
+            cat(
+              "\nNOTEs the CRAN pretest would not accept:\n\n",
+              paste(unexpected, collapse = "\n\n"), "\n"
+            )
+            quit(status = 1)
+          }
+        shell: Rscript {0}
+        working-directory: pkg-r
+
+      - name: Upload check results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cran-check-results
+          path: pkg-r/check
+          retention-days: 14
