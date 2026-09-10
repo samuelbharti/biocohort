@@ -6,9 +6,6 @@ This is a new submission.
 
 ## Notes for the reviewer
 
-* **Version.** The `DESCRIPTION` version is not yet bumped to a release
-  number; that is the one open item before upload, see below.
-
 * **Heavy dependencies stay in `Suggests`, behind a guard.** `rtracklayer`,
   `GenomicRanges`, `IRanges`, `S4Vectors` (Bioconductor), `babelgene`,
   `readxl`, `writexl`, `SummarizedExperiment`, `SeuratObject`, and `yaml` are
@@ -44,10 +41,9 @@ This is a new submission.
 
 ```
 New submission
-Version contains large components (0.1.0.9000)
 ```
 
-Expected for a first submission with the version not yet bumped.
+Expected for a first submission.
 
 ```
 Found the following files/directories:
