@@ -8,7 +8,8 @@ make_manifest <- function(
   n = 2,
   assays = "wes",
   species = "rat",
-  roles = c("tumor", "normal")
+  roles = c("tumor", "normal"),
+  subject_cols = NULL
 ) {
   grid <- expand.grid(
     role = roles,
@@ -16,7 +17,7 @@ make_manifest <- function(
     subject_id = sprintf("S%d", seq_len(n)),
     stringsAsFactors = FALSE
   )
-  data.frame(
+  df <- data.frame(
     subject_id = grid$subject_id,
     species = species,
     assay = grid$assay,
@@ -24,6 +25,17 @@ make_manifest <- function(
     role = grid$role,
     stringsAsFactors = FALSE
   )
+  if (!is.null(subject_cols)) {
+    subject_ids <- sprintf("S%d", seq_len(n))
+    for (col in names(subject_cols)) {
+      values <- subject_cols[[col]]
+      if (length(values) != n) {
+        stop(sprintf("subject_cols$%s must have length n (%d).", col, n))
+      }
+      df[[col]] <- values[match(df$subject_id, subject_ids)]
+    }
+  }
+  df
 }
 
 make_cohort <- function(..., study = NULL, paths = list(), analyses = list()) {
