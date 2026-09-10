@@ -1,3 +1,27 @@
+# biocohort 0.1.1
+
+Resubmission to CRAN. The package code is unchanged from 0.1.0; every change
+is in the documentation and the repository.
+
+- `?biocohort` names the three articles as `vignette()` calls instead of
+  linking to them by a relative path that only exists on the website, and the
+  package README links to the contributing guide by its full URL. CRAN's
+  pretest rejected 0.1.0 for both links.
+- The `liftover_rtracklayer()` example is wrapped in `\donttest{}`. Loading
+  `rtracklayer` alone takes longer than the five seconds CRAN allows an
+  example.
+- The `Description` field is rewritten in plainer sentences.
+- New examples for `translate()` on a cohort, `translation_report()`,
+  `load_analyses()`, `cohort_read()`, `register_liftover_backend()`,
+  `register_ortholog_backend()`, `liftover_vcf()`, and the `Study`,
+  `Subject`, `Cohort`, `AnalysisSpec`, and `TranslationResult` constructors.
+  The `translation_report()` example was a comment before, not code.
+- Help pages that still pointed to `orthologize()` now point to
+  `translate()`.
+- `citation("biocohort")` includes the Zenodo DOI.
+- README: install from r-universe as well as GitHub.
+- CI: a `cran` workflow runs the check the way CRAN's pretest does.
+
 # biocohort 0.1.0
 
 First release. Earlier drafts carried the numbers 0.1.0 to 0.3.0 and were

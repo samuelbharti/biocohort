@@ -16,7 +16,7 @@ abstract: >-
 type: software
 # This describes the newest release, which is what somebody citing the package
 # should get.
-version: 0.1.0
+version: 0.1.1
 date-released: "2026-09-10"
 # The concept DOI, which always resolves to the newest release. Cite this one
 # unless you specifically need to pin the version you used.
