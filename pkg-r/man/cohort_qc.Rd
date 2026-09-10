@@ -49,6 +49,12 @@ left with no samples is not also removed; \code{scope = "subject"} uses its
 \code{subject_ids} argument to keep every other subject. Either way, the
 resulting cache reset is the same one a direct \code{\link[=cohort_filter]{cohort_filter()}} call
 would produce.
+
+\code{sample_id} is normally unique, so \code{qc_log()}'s \code{previous_status} reflects
+the one matching row. If \code{sample_map} holds duplicate \code{sample_id}s (built
+with \code{allow_duplicates = TRUE}), every matching row is still flagged or
+dropped correctly, but the logged \code{previous_status} reflects only one of
+them.
 }
 \examples{
 data(example_cohort)

@@ -27,6 +27,18 @@
 #' - [sample_pairs()] derives tumor and normal pairs from `sample_map` on
 #'   demand, with configurable role labels.
 #'
+#' @section Quality control, groups, and derived columns:
+#'
+#' - [cohort_qc()] flags or drops subjects or samples, with a required
+#'   reason. [qc_log()] reads the audit trail every call appends to the
+#'   cohort, which survives later [cohort_filter()] calls.
+#' - [cohort_groups()] groups a cohort's subjects by one or more columns.
+#'   [cohort_contrasts()] enumerates every pairwise contrast between those
+#'   groups, ready to filter one side against the other.
+#' - [cohort_derive()] bins an existing numeric column at named cutoffs and
+#'   writes the result as a new column, so a cutoff is a value passed in,
+#'   not code. [derive_log()] reads its provenance.
+#'
 #' @section Writing files for other tools:
 #'
 #' - [sample_sheet()] writes the sample list a pipeline expects, with

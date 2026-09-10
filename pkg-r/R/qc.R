@@ -37,6 +37,12 @@
 #' resulting cache reset is the same one a direct [cohort_filter()] call
 #' would produce.
 #'
+#' `sample_id` is normally unique, so `qc_log()`'s `previous_status` reflects
+#' the one matching row. If `sample_map` holds duplicate `sample_id`s (built
+#' with `allow_duplicates = TRUE`), every matching row is still flagged or
+#' dropped correctly, but the logged `previous_status` reflects only one of
+#' them.
+#'
 #' @examples
 #' data(example_cohort)
 #'
@@ -169,15 +175,13 @@ qc_log <- function(cohort) {
   }
 }
 
-# Combine an existing qc_reason with a new one, skipping the append when the
-# new reason is already recorded.
+# Combine an existing qc_reason with a new one. Skips the append only when
+# `new` repeats the entire current reason verbatim (the same call run
+# again), since a reason can itself contain "; " and splitting on it would
+# misread a fragment of one reason as a distinct, already-recorded one.
 .append_reason <- function(old, new) {
-  if (is.na(old) || !nzchar(old)) {
+  if (is.na(old) || !nzchar(old) || identical(old, new)) {
     return(new)
-  }
-  parts <- trimws(strsplit(old, ";", fixed = TRUE)[[1]])
-  if (new %in% parts) {
-    return(old)
   }
   paste(old, new, sep = "; ")
 }
@@ -206,7 +210,7 @@ qc_log <- function(cohort) {
   }
   cli::cli_abort(
     c(
-      "Unknown {scope} id{?s}: {.val {unknown}}.",
+      "Unknown {scope} {cli::qty(length(unknown))}id{?s}: {.val {unknown}}.",
       "i" = "{hint}"
     ),
     call = call
