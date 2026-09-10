@@ -65,3 +65,22 @@ parsing variants into R. Parse the output VCF with your tool of choice
 
 [`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md),
 [`liftover_crossmap()`](https://www.samuelbharti.com/biocohort/reference/liftover_crossmap.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+# Not run: needs CrossMap on the PATH, a chain file, and the target
+# genome as a FASTA file, none of which ship with the package.
+res <- liftover_vcf(
+  vcf = "calls.rn7.vcf",
+  chain = "rn7ToHg38.over.chain",
+  ref_fasta = "hg38.fa",
+  from = "rn7",
+  to = "hg38"
+)
+res@mapped$path # the lifted VCF
+res@unmapped$path # the records CrossMap could not place
+res@stats$n_unmapped
+} # }
+```

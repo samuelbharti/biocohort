@@ -68,7 +68,7 @@ allele-aware variant (VCF) translation, see
 
 [`liftover_rtracklayer()`](https://www.samuelbharti.com/biocohort/reference/liftover_rtracklayer.md),
 [`liftover_crossmap()`](https://www.samuelbharti.com/biocohort/reference/liftover_crossmap.md),
-[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md)
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
 
 ## Examples
 

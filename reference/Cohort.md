@@ -134,3 +134,29 @@ for manifest preparation,
 for loading manifest from file,
 [`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md)
 for registering analyses
+
+## Examples
+
+``` r
+# An empty cohort has the required columns and nothing else.
+empty <- Cohort()
+empty@subject_tbl
+#> # A tibble: 0 × 2
+#> # ℹ 2 variables: subject_id <chr>, species <chr>
+empty@sample_map
+#> # A tibble: 0 × 4
+#> # ℹ 4 variables: subject_id <chr>, assay <chr>, sample_id <chr>, role <chr>
+
+# The raw constructor runs the same checks as cohort_new().
+cohort <- Cohort(
+  subject_tbl = data.frame(subject_id = "R1", species = "rat"),
+  sample_map = data.frame(
+    subject_id = "R1", assay = "wes", sample_id = "T1", role = "tumor"
+  )
+)
+cohort
+#> 
+#> ── Cohort 
+#> • 1 subject (1 rat)
+#> • 1 sample (1 wes)
+```

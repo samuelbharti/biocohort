@@ -11,7 +11,7 @@ the cohort cache and retrievable with
 [`analysis_files()`](https://www.samuelbharti.com/biocohort/reference/analysis_files.md).
 This is the step that takes a cohort from *paths* to *loaded feature
 tables*, ready for
-[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md).
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md).
 
 ## Usage
 
@@ -53,4 +53,51 @@ to inspect which files were found or missing.
 
 [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md),
 [`analysis_files()`](https://www.samuelbharti.com/biocohort/reference/analysis_files.md),
-[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md)
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
+
+## Examples
+
+``` r
+# One per-subject CSV on disk, one registered spec that points at it.
+dir <- tempfile()
+dir.create(dir)
+write.csv(
+  data.frame(gene = "TP53", value = 1), file.path(dir, "S1.csv"),
+  row.names = FALSE
+)
+manifest <- data.frame(
+  subject_id = "S1", species = "human", assay = "rna", sample_id = "x"
+)
+parsed <- validate_manifest(manifest)
+cohort <- cohort_new(
+  parsed$subject_tbl, parsed$sample_map, paths = list(rna_root = dir)
+)
+spec <- analysis_spec_new(
+  name = "expr", assay = "rna", level = "subject",
+  path_template = "{root}/{subject_id}.csv", root_key = "rna_root"
+)
+cohort <- analysis_register(cohort, spec)
+
+loaded <- load_analyses(cohort)
+#> Rows: 1 Columns: 2
+#> ── Column specification ────────────────────────────────────────────────────────
+#> Delimiter: ","
+#> chr (1): gene
+#> dbl (1): value
+#> 
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+loaded@analyses$expr
+#> # A tibble: 1 × 3
+#>   gene  value subject_id
+#>   <chr> <dbl> <chr>     
+#> 1 TP53      1 S1        
+analysis_files(loaded)
+#> $expr
+#> # A tibble: 1 × 3
+#>   subject_id path                                    exists
+#>   <chr>      <chr>                                   <lgl> 
+#> 1 S1         /tmp/RtmpRw0YCt/file1972225529ba/S1.csv TRUE  
+#> 
+unlink(dir, recursive = TRUE)
+```

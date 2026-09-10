@@ -153,6 +153,32 @@ a <code>Cohort</code> any other way still enforces the required columns.</p>
 <code><a href="analysis_register.html">analysis_register()</a></code> for registering analyses</p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># An empty cohort has the required columns and nothing else.</span></span></span>
+<span class="r-in"><span><span class="va">empty</span> <span class="op">&lt;-</span> <span class="fu">Cohort</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">empty</span><span class="op">@</span><span class="va">subject_tbl</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 0 × 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 variables: subject_id &lt;chr&gt;, species &lt;chr&gt;</span></span>
+<span class="r-in"><span><span class="va">empty</span><span class="op">@</span><span class="va">sample_map</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 0 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 variables: subject_id &lt;chr&gt;, assay &lt;chr&gt;, sample_id &lt;chr&gt;, role &lt;chr&gt;</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The raw constructor runs the same checks as cohort_new().</span></span></span>
+<span class="r-in"><span><span class="va">cohort</span> <span class="op">&lt;-</span> <span class="fu">Cohort</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  subject_tbl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>subject_id <span class="op">=</span> <span class="st">"R1"</span>, species <span class="op">=</span> <span class="st">"rat"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  sample_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    subject_id <span class="op">=</span> <span class="st">"R1"</span>, assay <span class="op">=</span> <span class="st">"wes"</span>, sample_id <span class="op">=</span> <span class="st">"T1"</span>, role <span class="op">=</span> <span class="st">"tumor"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cohort</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Cohort </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> 1 subject (1 rat)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> 1 sample (1 wes)</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

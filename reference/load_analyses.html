@@ -3,11 +3,11 @@
 load_analysis()) and returns a new Cohort with analyses populated. The
 per-analysis file manifests are stored in the cohort cache and retrievable
 with analysis_files(). This is the step that takes a cohort from paths to
-loaded feature tables, ready for orthologize()."><meta property="og:description" content="Loads the feature table for each registered AnalysisSpec (via
+loaded feature tables, ready for translate()."><meta property="og:description" content="Loads the feature table for each registered AnalysisSpec (via
 load_analysis()) and returns a new Cohort with analyses populated. The
 per-analysis file manifests are stored in the cohort cache and retrievable
 with analysis_files(). This is the step that takes a cohort from paths to
-loaded feature tables, ready for orthologize()."><meta property="og:image" content="https://www.samuelbharti.com/biocohort/logo.svg"></head><body>
+loaded feature tables, ready for translate()."><meta property="og:image" content="https://www.samuelbharti.com/biocohort/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -46,7 +46,7 @@ loaded feature tables, ready for orthologize()."><meta property="og:image" conte
 <code><a href="load_analysis.html">load_analysis()</a></code>) and returns a new <a href="Cohort.html">Cohort</a> with <code>analyses</code> populated. The
 per-analysis file manifests are stored in the cohort cache and retrievable
 with <code><a href="analysis_files.html">analysis_files()</a></code>. This is the step that takes a cohort from <em>paths</em> to
-<em>loaded feature tables</em>, ready for <code><a href="orthologize.html">orthologize()</a></code>.</p>
+<em>loaded feature tables</em>, ready for <code><a href="translate.html">translate()</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -83,9 +83,56 @@ name (each a function or <code>"pkg::fun"</code> name).</p></dd>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="load_analysis.html">load_analysis()</a></code>, <code><a href="analysis_files.html">analysis_files()</a></code>, <code><a href="orthologize.html">orthologize()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="load_analysis.html">load_analysis()</a></code>, <code><a href="analysis_files.html">analysis_files()</a></code>, <code><a href="translate.html">translate()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># One per-subject CSV on disk, one registered spec that points at it.</span></span></span>
+<span class="r-in"><span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>gene <span class="op">=</span> <span class="st">"TP53"</span>, value <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"S1.csv"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  row.names <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  subject_id <span class="op">=</span> <span class="st">"S1"</span>, species <span class="op">=</span> <span class="st">"human"</span>, assay <span class="op">=</span> <span class="st">"rna"</span>, sample_id <span class="op">=</span> <span class="st">"x"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">parsed</span> <span class="op">&lt;-</span> <span class="fu"><a href="validate_manifest.html">validate_manifest</a></span><span class="op">(</span><span class="va">manifest</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cohort</span> <span class="op">&lt;-</span> <span class="fu"><a href="cohort_new.html">cohort_new</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">parsed</span><span class="op">$</span><span class="va">subject_tbl</span>, <span class="va">parsed</span><span class="op">$</span><span class="va">sample_map</span>, paths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rna_root <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="analysis_spec_new.html">analysis_spec_new</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">"expr"</span>, assay <span class="op">=</span> <span class="st">"rna"</span>, level <span class="op">=</span> <span class="st">"subject"</span>,</span></span>
+<span class="r-in"><span>  path_template <span class="op">=</span> <span class="st">"{root}/{subject_id}.csv"</span>, root_key <span class="op">=</span> <span class="st">"rna_root"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cohort</span> <span class="op">&lt;-</span> <span class="fu"><a href="analysis_register.html">analysis_register</a></span><span class="op">(</span><span class="va">cohort</span>, <span class="va">spec</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">loaded</span> <span class="op">&lt;-</span> <span class="fu">load_analyses</span><span class="op">(</span><span class="va">cohort</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">1</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">2</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Delimiter:</span> ","</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">chr</span> (1): gene</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">dbl</span> (1): value</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.</span>
+<span class="r-in"><span><span class="va">loaded</span><span class="op">@</span><span class="va">analyses</span><span class="op">$</span><span class="va">expr</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   gene  value subject_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> TP53      1 S1        </span>
+<span class="r-in"><span><span class="fu"><a href="analysis_files.html">analysis_files</a></span><span class="op">(</span><span class="va">loaded</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $expr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id path                                    exists</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> S1         /tmp/RtmpRw0YCt/file1972225529ba/S1.csv TRUE  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

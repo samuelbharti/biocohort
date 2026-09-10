@@ -68,7 +68,7 @@ and the `unmapped` table rather than assuming one-to-one correspondence.
 
 ## See also
 
-[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md),
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md),
 [`ortholog_babelgene()`](https://www.samuelbharti.com/biocohort/reference/ortholog_babelgene.md),
 [TranslationResult](https://www.samuelbharti.com/biocohort/reference/TranslationResult.md)
 

@@ -141,13 +141,12 @@ any other organism and assay.
 
 ## Further reading
 
-The [Get
-started](https://www.samuelbharti.com/biocohort/reference/articles/biocohort.md)
-article walks through a manifest, a cohort, and a sample sheet end to
-end. The
-[Glossary](https://www.samuelbharti.com/biocohort/reference/articles/glossary.md)
-defines the terms used across the package, and [Naming
-conventions](https://www.samuelbharti.com/biocohort/reference/articles/naming-conventions.md)
+Three articles ship with the package.
+[`vignette("biocohort", package = "biocohort")`](https://www.samuelbharti.com/biocohort/articles/biocohort.md)
+walks through a manifest, a cohort, and a sample sheet end to end.
+[`vignette("glossary", package = "biocohort")`](https://www.samuelbharti.com/biocohort/articles/glossary.md)
+defines the terms used across the package.
+[`vignette("naming-conventions", package = "biocohort")`](https://www.samuelbharti.com/biocohort/articles/naming-conventions.md)
 lists the standard names for columns, objects, and files.
 
 ## See also

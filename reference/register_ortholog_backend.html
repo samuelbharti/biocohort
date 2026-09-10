@@ -74,6 +74,29 @@ with two tibbles:</p><ul><li><p><code>mapped</code>: input rows that had at leas
     <div class="dont-index"><p><code><a href="ortholog_backends.html">ortholog_backends()</a></code>, <code><a href="ortholog_genes.html">ortholog_genes()</a></code>, <code><a href="ortholog_babelgene.html">ortholog_babelgene()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># A backend that upper-cases rodent symbols into human ones, used by name.</span></span></span>
+<span class="r-in"><span><span class="va">to_upper</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">features</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">gene_col</span>, <span class="va">id_type</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">mapped</span> <span class="op">&lt;-</span> <span class="va">features</span></span></span>
+<span class="r-in"><span>  <span class="va">mapped</span><span class="op">$</span><span class="va">ortholog</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">mapped</span><span class="op">[[</span><span class="va">gene_col</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mapped <span class="op">=</span> <span class="va">mapped</span>, unmapped <span class="op">=</span> <span class="va">features</span><span class="op">[</span><span class="fl">0</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="fu">register_ortholog_backend</span><span class="op">(</span><span class="st">"to_upper"</span>, <span class="va">to_upper</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="st">"to_upper"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="ortholog_backends.html">ortholog_backends</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>gene <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Tp53"</span>, <span class="st">"Myc"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="ortholog_genes.html">ortholog_genes</a></span><span class="op">(</span><span class="va">genes</span>, from <span class="op">=</span> <span class="st">"rat"</span>, to <span class="op">=</span> <span class="st">"human"</span>, backend <span class="op">=</span> <span class="st">"to_upper"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── TranslationResult (rat -&gt; human, backend: to_upper) </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> input: 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> mapped: 2 (100%)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> unmapped: 0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> multi: 0</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

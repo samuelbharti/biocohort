@@ -87,6 +87,36 @@ by <code><a href="liftover_intervals.html">liftover_intervals()</a></code>.</p>
 <code><a href="liftover_rtracklayer.html">liftover_rtracklayer()</a></code>, <code><a href="liftover_crossmap.html">liftover_crossmap()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># A backend that maps every interval onto itself, then use it by name.</span></span></span>
+<span class="r-in"><span><span class="va">passthrough</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">intervals</span>, <span class="va">chain</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    mapped <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      .feature_id <span class="op">=</span> <span class="va">intervals</span><span class="op">$</span><span class="va">.feature_id</span>,</span></span>
+<span class="r-in"><span>      seqnames <span class="op">=</span> <span class="va">intervals</span><span class="op">$</span><span class="va">seqnames</span>,</span></span>
+<span class="r-in"><span>      start <span class="op">=</span> <span class="va">intervals</span><span class="op">$</span><span class="va">start</span>,</span></span>
+<span class="r-in"><span>      end <span class="op">=</span> <span class="va">intervals</span><span class="op">$</span><span class="va">end</span>,</span></span>
+<span class="r-in"><span>      strand <span class="op">=</span> <span class="st">"*"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    unmapped <span class="op">=</span> <span class="va">intervals</span><span class="op">[</span><span class="fl">0</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="fu">register_liftover_backend</span><span class="op">(</span><span class="st">"passthrough"</span>, <span class="va">passthrough</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="st">"passthrough"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="liftover_backends.html">liftover_backends</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ints</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>seqnames <span class="op">=</span> <span class="st">"chr1"</span>, start <span class="op">=</span> <span class="fl">100</span>, end <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="liftover_intervals.html">liftover_intervals</a></span><span class="op">(</span><span class="va">ints</span>, chain <span class="op">=</span> <span class="st">"none"</span>, to <span class="op">=</span> <span class="st">"human"</span>, backend <span class="op">=</span> <span class="st">"passthrough"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── TranslationResult (? -&gt; human, backend: passthrough) </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> input: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> mapped: 1 (100%)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> unmapped: 0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> multi: 0</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

@@ -94,3 +94,14 @@ Access properties via the `@` operator:
 for object construction,
 [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md) for
 combining studies with subject data
+
+## Examples
+
+``` r
+# The raw constructor; study_new() is the usual way in.
+study <- Study(study_id = "PILOT", title = "Pilot study")
+study@study_id
+#> [1] "PILOT"
+study@assays # empty until set
+#> character(0)
+```

@@ -24,3 +24,16 @@ object.
 ## See also
 
 [`cohort_save()`](https://www.samuelbharti.com/biocohort/reference/cohort_save.md)
+
+## Examples
+
+``` r
+data(example_cohort)
+path <- tempfile(fileext = ".rds")
+cohort_save(example_cohort, path)
+
+restored <- cohort_read(path)
+identical(subjects(restored), subjects(example_cohort))
+#> [1] TRUE
+unlink(path)
+```

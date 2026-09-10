@@ -155,8 +155,9 @@ pkgdown::build_site("pkg-r")
 
 ## Contributing
 
-See [CONTRIBUTING.md](https://www.samuelbharti.com/CONTRIBUTING.md) for
-the development workflow.
+See
+[CONTRIBUTING.md](https://github.com/samuelbharti/biocohort/blob/main/CONTRIBUTING.md)
+for the development workflow.
 
 ## License
 

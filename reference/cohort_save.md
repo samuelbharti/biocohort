@@ -44,4 +44,5 @@ cohort_read(path)
 #> • 4 subjects (2 mouse, 2 rat)
 #> • 12 samples (8 wes, 4 scrna)
 #> ℹ Extra sample columns: fastq_1, fastq_2
+unlink(path)
 ```

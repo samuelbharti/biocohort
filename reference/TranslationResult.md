@@ -66,3 +66,27 @@ rather than directly. Access the pieces with `result@mapped`,
 [`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md),
 [`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md),
 [`translation_stats()`](https://www.samuelbharti.com/biocohort/reference/translation_stats.md)
+
+## Examples
+
+``` r
+# Built by hand here to show the shape; translate() builds them for you.
+res <- TranslationResult(
+  mapped = tibble::tibble(.feature_id = 1L, gene = "Tp53", ortholog = "TP53"),
+  unmapped = tibble::tibble(.feature_id = 2L, gene = "Gm12345"),
+  from = "rat",
+  to = "human",
+  backend = "by_hand",
+  stats = list(n_input = 2L, n_mapped = 1L, n_unmapped = 1L, n_multi = 0L)
+)
+res@unmapped
+#> # A tibble: 1 × 2
+#>   .feature_id gene   
+#>         <int> <chr>  
+#> 1           2 Gm12345
+translation_stats(res)
+#> # A tibble: 1 × 8
+#>   from  to    backend n_input n_mapped n_unmapped n_multi prop_mapped
+#>   <chr> <chr> <chr>     <int>    <int>      <int>   <int>       <dbl>
+#> 1 rat   human by_hand       2        1          1       0         0.5
+```

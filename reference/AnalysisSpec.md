@@ -163,3 +163,19 @@ Access properties via the `@` operator:
 for object construction,
 [`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md)
 for registering specs in a Cohort
+
+## Examples
+
+``` r
+# The raw constructor. analysis_spec_new() fills format, reader, and
+# key_cols in from the path template and the level; this does not.
+spec <- AnalysisSpec(
+  name = "somatic_vars", assay = "wes", level = "pair",
+  format = "tsv", reader = "readr::read_tsv",
+  key_cols = c("subject_id", "pair_id")
+)
+spec@level
+#> [1] "pair"
+spec@key_cols
+#> [1] "subject_id" "pair_id"   
+```

@@ -67,7 +67,7 @@ count), or the function errors and names the missing columns.
 ## See also
 
 [`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md),
-[`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md)
+[`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
 
 ## Examples
 
@@ -111,7 +111,7 @@ loaded$data
 #> 1 TP53      1 S1        
 loaded$files
 #> # A tibble: 1 × 3
-#>   subject_id path                                    exists
-#>   <chr>      <chr>                                   <lgl> 
-#> 1 S1         /tmp/RtmpCj9eT4/file19802d93c758/S1.csv TRUE  
+#>   subject_id path                                   exists
+#>   <chr>      <chr>                                  <lgl> 
+#> 1 S1         /tmp/RtmpRw0YCt/file19728fffb02/S1.csv TRUE  
 ```

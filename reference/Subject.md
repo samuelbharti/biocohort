@@ -88,3 +88,14 @@ Access properties via the `@` operator:
 for object construction,
 [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md) for
 managing groups of subjects
+
+## Examples
+
+``` r
+# The raw constructor; subject_new() is the usual way in.
+rat <- Subject(subject_id = "R1", species = "rat", sex = "F")
+rat@species
+#> [1] "rat"
+rat@genotype # NA until set
+#> [1] NA
+```

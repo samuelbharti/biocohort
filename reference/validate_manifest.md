@@ -74,7 +74,7 @@ A list with three elements:
   sample-level columns, all character.
 
 - `completeness_tbl`: Tibble with one row per `subject_id` x `assay`
-  summarising the number of samples (`n_samples`).
+  summarizing the number of samples (`n_samples`).
 
 ## Details
 

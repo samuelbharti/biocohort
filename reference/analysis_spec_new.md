@@ -93,7 +93,7 @@ analysis_spec_new(
 
   Optional character scalar declaring how this analysis's features are
   translated across species by
-  [`orthologize()`](https://www.samuelbharti.com/biocohort/reference/orthologize.md).
+  [`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md).
   One of `"interval"` (coordinate features, translated by liftover) or
   `"gene"` (gene-level features, translated by ortholog mapping).
   Defaults to NA (analysis is skipped by cohort-level translation).

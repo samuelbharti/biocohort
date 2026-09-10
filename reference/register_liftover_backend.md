@@ -47,3 +47,33 @@ integer key added by
 [`liftover_intervals()`](https://www.samuelbharti.com/biocohort/reference/liftover_intervals.md),
 [`liftover_rtracklayer()`](https://www.samuelbharti.com/biocohort/reference/liftover_rtracklayer.md),
 [`liftover_crossmap()`](https://www.samuelbharti.com/biocohort/reference/liftover_crossmap.md)
+
+## Examples
+
+``` r
+# A backend that maps every interval onto itself, then use it by name.
+passthrough <- function(intervals, chain, ...) {
+  list(
+    mapped = tibble::tibble(
+      .feature_id = intervals$.feature_id,
+      seqnames = intervals$seqnames,
+      start = intervals$start,
+      end = intervals$end,
+      strand = "*"
+    ),
+    unmapped = intervals[0, , drop = FALSE]
+  )
+}
+register_liftover_backend("passthrough", passthrough)
+"passthrough" %in% liftover_backends()
+#> [1] TRUE
+
+ints <- data.frame(seqnames = "chr1", start = 100, end = 200)
+liftover_intervals(ints, chain = "none", to = "human", backend = "passthrough")
+#> 
+#> ── TranslationResult (? -> human, backend: passthrough) 
+#> • input: 1
+#> ✔ mapped: 1 (100%)
+#> ✖ unmapped: 0
+#> ! multi: 0
+```

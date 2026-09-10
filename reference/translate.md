@@ -132,4 +132,35 @@ translate(
 #> ✔ mapped: 1 (100%)
 #> ✖ unmapped: 0
 #> ! multi: 0
+
+# Cohort input ------------------------------------------------------------
+# One registered gene-level analysis, translated by an in-memory backend.
+# The source species is inferred from the cohort's subjects.
+manifest <- data.frame(
+  subject_id = c("S1", "S2"), species = "rat", assay = "rna",
+  sample_id = c("R1", "R2"), role = "tumor"
+)
+parsed <- validate_manifest(manifest)
+cohort <- cohort_new(
+  parsed$subject_tbl, parsed$sample_map,
+  analyses = list(expr = data.frame(gene = c("Tp53", "Myc"), value = c(1, 2)))
+)
+spec <- analysis_spec_new(
+  name = "expr", assay = "rna", level = "subject",
+  feature_type = "gene", gene_col = "gene", id_type = "symbol"
+)
+cohort <- analysis_register(cohort, spec)
+to_upper <- function(features, from, to, gene_col, id_type, ...) {
+  mapped <- features
+  mapped$ortholog <- toupper(mapped[[gene_col]])
+  list(mapped = mapped, unmapped = features[0, , drop = FALSE])
+}
+human <- translate(cohort, to = "human", ortholog_backend = to_upper)
+#> ✔ Translated 1 analysis: "expr".
+human@analyses$expr
+#> # A tibble: 2 × 4
+#>   gene  value .feature_id ortholog
+#>   <chr> <dbl>       <int> <chr>   
+#> 1 Tp53      1           1 TP53    
+#> 2 Myc       2           2 MYC     
 ```

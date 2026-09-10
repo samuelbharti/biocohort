@@ -41,6 +41,8 @@ A list with `mapped` and `unmapped` tibbles.
 ## Examples
 
 ``` r
+# \donttest{
+# rtracklayer and the packages it depends on take a few seconds to load.
 if (
   requireNamespace("rtracklayer", quietly = TRUE) &&
     requireNamespace("GenomicRanges", quietly = TRUE)
@@ -64,4 +66,5 @@ if (
   out$mapped
   unlink(chain)
 }
+# }
 ```
