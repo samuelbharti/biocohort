@@ -1,9 +1,10 @@
 # biocohort <img src="man/figures/logo.png" align="right" height="139" alt="biocohort hex logo" />
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml)
 [![r-universe](https://samuelbharti.r-universe.dev/badges/biocohort)](https://samuelbharti.r-universe.dev/biocohort)
-[![DOI](https://zenodo.org/badge/1150207650.svg)](https://doi.org/10.5281/zenodo.22685057)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22685057-1682D4)](https://doi.org/10.5281/zenodo.22685057)
 <!-- badges: end -->
 
 biocohort keeps the subjects, samples, and analysis outputs of a study in
