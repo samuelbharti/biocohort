@@ -63,7 +63,7 @@
 <!-- badges: start -->
 
 <p>biocohort keeps the subjects, samples, and analysis outputs of a study in one validated object. Species and assays are values in the data, not columns or classes, so the same functions work for any organism and any omics assay.</p>
-<p>See the <a href="https://github.com/samuelbharti/biocohort#readme" class="external-link">repository root README</a> for the motivation behind this package.</p>
+<p>Bioconductor already has <code>MultiAssayExperiment</code> for lining up data that is already loaded. biocohort sits one step earlier, before anything is loaded: the manifest, the file paths, the sample sheet, and the record of every manual fix.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -144,9 +144,6 @@ R2,rat,KO,wes,N2,normal</code></pre>
 <li>
 <strong><a href="https://www.samuelbharti.com/biocohort/articles/naming-conventions.html">Naming conventions</a></strong>: standard column, object, and file names.</li>
 </ul>
-<p>To build the site locally, run from the repository root:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="st">"pkg-r"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
@@ -156,7 +153,7 @@ R2,rat,KO,wes,N2,normal</code></pre>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
-<p>MIT</p>
+<p>MIT. See <a href="https://github.com/samuelbharti/biocohort/blob/main/LICENSE" class="external-link">LICENSE</a>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -200,6 +197,7 @@ R2,rat,KO,wes,N2,normal</code></pre>
 <li><a href="https://github.com/samuelbharti/biocohort/actions/workflows/r.yml" class="external-link"><img src="https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://samuelbharti.r-universe.dev/biocohort" class="external-link"><img src="https://samuelbharti.r-universe.dev/badges/biocohort" alt="r-universe"></a></li>
 <li><a href="https://doi.org/10.5281/zenodo.22685057" class="external-link"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22685057-1682D4" alt="DOI"></a></li>
+<li><a href="https://github.com/samuelbharti/biocohort/blob/main/LICENSE" class="external-link"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a></li>
 </ul>
 </div>
 
