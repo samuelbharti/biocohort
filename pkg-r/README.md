@@ -5,6 +5,7 @@
 [![R-CMD-check](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml)
 [![r-universe](https://samuelbharti.r-universe.dev/badges/biocohort)](https://samuelbharti.r-universe.dev/biocohort)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22685057-1682D4)](https://doi.org/10.5281/zenodo.22685057)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/samuelbharti/biocohort/blob/main/LICENSE)
 <!-- badges: end -->
 
 biocohort keeps the subjects, samples, and analysis outputs of a study in
@@ -12,8 +13,9 @@ one validated object. Species and assays are values in the data, not
 columns or classes, so the same functions work for any organism and any
 omics assay.
 
-See the [repository root README](https://github.com/samuelbharti/biocohort#readme)
-for the motivation behind this package.
+Bioconductor already has `MultiAssayExperiment` for lining up data that is
+already loaded. biocohort sits one step earlier, before anything is loaded: the
+manifest, the file paths, the sample sheet, and the record of every manual fix.
 
 ## Installation
 
@@ -111,12 +113,6 @@ The package website includes:
 - **[Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.html)**: key terms and definitions.
 - **[Naming conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.html)**: standard column, object, and file names.
 
-To build the site locally, run from the repository root:
-
-```r
-pkgdown::build_site("pkg-r")
-```
-
 ## Contributing
 
 See [CONTRIBUTING.md](https://github.com/samuelbharti/biocohort/blob/main/CONTRIBUTING.md)
@@ -124,4 +120,4 @@ for the development workflow.
 
 ## License
 
-MIT
+MIT. See [LICENSE](https://github.com/samuelbharti/biocohort/blob/main/LICENSE).
