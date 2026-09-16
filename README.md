@@ -29,7 +29,7 @@ r-universe works too:
 install.packages("biocohort", repos = "https://samuelbharti.r-universe.dev")
 ```
 
-## A first cohort
+## Usage
 
 A manifest is one long-format table, one row per sample. Four columns carry the
 shape of the study: `subject_id`, `assay`, `sample_id`, `role`. Everything else
@@ -76,7 +76,7 @@ paperwork step before `MultiAssayExperiment` rather than a replacement for it.
 The R package lives in `pkg-r/`, not at the repository root, so package commands
 run against that path. See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow.
 
-## Learn more
+## Documentation
 
 [pkg-r/README.md](pkg-r/README.md) has a runnable quick start and the full
 list of what the package does. The docs site has three articles:
@@ -85,7 +85,7 @@ list of what the package does. The docs site has three articles:
 - **[Glossary](https://www.samuelbharti.com/biocohort/articles/glossary.html)**: key terms and definitions.
 - **[Naming conventions](https://www.samuelbharti.com/biocohort/articles/naming-conventions.html)**: standard column, object, and file names.
 
-## Citing biocohort
+## Citation
 
 The package is archived on Zenodo. Use the concept DOI, which always resolves to
 the newest archived release:
