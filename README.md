@@ -5,6 +5,7 @@
 [![R-CMD-check](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml)
 [![r-universe](https://samuelbharti.r-universe.dev/badges/biocohort)](https://samuelbharti.r-universe.dev/biocohort)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22685057-1682D4)](https://doi.org/10.5281/zenodo.22685057)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/samuelbharti/biocohort/blob/main/LICENSE)
 <!-- badges: end -->
 
 biocohort keeps the subjects, samples, and analysis outputs of a study in
@@ -16,9 +17,7 @@ omics assay.
 
 ## Installation
 
-The package is not on CRAN. From GitHub, note the `subdir`. The package sits
-in `pkg-r/` rather than at the repository root, and an install that leaves
-this out fails without saying why:
+The package is not on CRAN yet. From GitHub:
 
 ```r
 pak::pak("samuelbharti/biocohort/pkg-r")
@@ -30,44 +29,52 @@ r-universe works too:
 install.packages("biocohort", repos = "https://samuelbharti.r-universe.dev")
 ```
 
+## A first cohort
+
+A manifest is one long-format table, one row per sample. Four columns carry the
+shape of the study: `subject_id`, `assay`, `sample_id`, `role`. Everything else
+is metadata.
+
+```csv
+subject_id,species,genotype,assay,sample_id,role
+R1,rat,WT,wes,T1,tumor
+R1,rat,WT,wes,N1,normal
+R2,rat,KO,wes,T2,tumor
+R2,rat,KO,wes,N2,normal
+```
+
+```r
+library(biocohort)
+
+parsed <- read_manifest("manifest.csv")
+cohort <- cohort_new(parsed$subject_tbl, parsed$sample_map)
+```
+
+[pkg-r/README.md](pkg-r/README.md) carries the rest, including the sample sheet
+a pipeline reads and the record of every manual fix.
+
 ## Motivation
 
-Every study I run starts the same way. A spreadsheet of subjects. A folder
-of sample IDs that do not quite match the spreadsheet. A script that fixes
-the mismatch by hand, and gets rewritten from scratch for the next study.
-I built biocohort so I only solve that problem once, not once per study.
+Every study starts the same way. A spreadsheet of subjects, a folder of sample
+IDs that do not quite match it, and a script that fixes the mismatch by hand and
+then gets rewritten for the next study. biocohort solves that once instead of
+once per study: one manifest becomes one checked object, it writes the sample
+sheet the pipeline wants, and it records every manual fix so the reason survives
+six months.
 
-It is not just for genomics, even though early drafts of the docs read that
-way. Species and assay are plain values in the data, not something the
-code checks against a list. Rat, mouse, human, or something else.
-Sequencing, proteomics, whatever the lab runs that week, the same manifest
-and the same cohort object hold it.
-
-What it actually saves me, day to day:
-
-- One manifest becomes one checked object. Subjects on one side, samples on
-  the other, always in sync, never two files that quietly drift apart.
-- It writes the sample sheet my pipeline wants, so I stop hand-editing CSVs
-  before every run.
-- Every manual fix I make gets written down, so six months later I still
-  know why a value changed.
-- Gene and coordinate results can move from a rat study to a mouse study
-  without a one-off script.
-- A whole study, its subjects, its file paths, its analyses, can live in
-  one YAML file, so a new study starts from a short setup, not a blank one.
+Species and assay are plain values in the data rather than something the code
+checks against a list, so rat, mouse or human all work, and so does whatever the
+lab runs that week.
 
 Bioconductor already has `MultiAssayExperiment` for lining up data that is
-already loaded. biocohort sits one step earlier, before anything is
-loaded: the manifest, the file paths, the pipeline sample sheet, the record
-of every fix. Think of it as the paperwork step before `MultiAssayExperiment`,
-not a replacement for it.
+already loaded. biocohort sits one step earlier, before anything is loaded: the
+manifest, the file paths, the sample sheet, the record of every fix. It is the
+paperwork step before `MultiAssayExperiment` rather than a replacement for it.
 
 ## Repository layout
 
-The R package lives in `pkg-r/`, not at the repository root. Run package
-commands from there, for example `devtools::test("pkg-r")` or
-`rcmdcheck::rcmdcheck("pkg-r")`. See [CONTRIBUTING.md](CONTRIBUTING.md) for the
-full workflow.
+The R package lives in `pkg-r/`, not at the repository root, so package commands
+run against that path. See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow.
 
 ## Learn more
 
@@ -80,16 +87,16 @@ list of what the package does. The docs site has three articles:
 
 ## Citing biocohort
 
-Each release is archived on Zenodo. Use the concept DOI, which always
-resolves to the newest release:
+The package is archived on Zenodo. Use the concept DOI, which always resolves to
+the newest archived release:
 
 > Bharti, S. (2026). *biocohort: Cohort Objects for Subjects and Samples in
 > Omics Studies*. Zenodo. <https://doi.org/10.5281/zenodo.22685057>
 
-To pin the exact version you used, cite its own DOI instead. Version 0.1.0 is
-[10.5281/zenodo.22685058](https://doi.org/10.5281/zenodo.22685058).
+To pin the exact version you used, take its DOI from `CITATION.cff`, which
+carries one identifier per archived release.
 
-In R, `citation("biocohort")` prints the same reference. `CITATION.cff`
+In R, `citation("biocohort")` prints the same reference, and `CITATION.cff`
 carries the same metadata for the "Cite this repository" button on GitHub.
 
 ## Contributing
@@ -98,4 +105,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow.
 
 ## License
 
-MIT
+MIT. See [LICENSE](https://github.com/samuelbharti/biocohort/blob/main/LICENSE).
