@@ -8,7 +8,8 @@ validate_manifest(
   manifest,
   sample_cols = NULL,
   species = NULL,
-  allow_duplicates = FALSE
+  allow_duplicates = FALSE,
+  missing_is_conflict = FALSE
 )
 }
 \arguments{
@@ -30,7 +31,8 @@ Optional sample-level columns:
 
 Any remaining columns (e.g. \code{species}, \code{sex}, \code{strain}, \code{genotype},
 \code{cohort}, \code{timepoint}, \code{notes}) are treated as \strong{subject-level metadata},
-coerced to character, and must be constant within a \code{subject_id}.}
+coerced to character, and must agree within a \code{subject_id} (see
+\code{missing_is_conflict}).}
 
 \item{sample_cols}{Optional character vector naming additional columns to
 keep at the sample level (in \code{sample_map}) rather than treat as
@@ -43,6 +45,11 @@ column, this value fills one. Ignored when \code{manifest} already has a
 
 \item{allow_duplicates}{Logical. If \code{FALSE} (default), a repeated
 \code{sample_id} raises an error. If \code{TRUE}, duplicates are kept.}
+
+\item{missing_is_conflict}{Logical. If \code{FALSE} (default), a subject whose
+rows hold a value in one row and a missing value in another is not a
+conflict: the given value fills the subject row. If \code{TRUE}, that is a
+conflict, as it was in biocohort 0.1.1.}
 }
 \value{
 A list with three elements:
@@ -81,6 +88,11 @@ recognized or declared raises the conflicting-metadata error below.
 argument), is lower-cased so that \code{"Rat"} and \code{"rat"} are the same
 subject-level value. Any species value is allowed; the manifest layer
 does not restrict it to a fixed list of organisms.
+
+A subject-level column may be missing in some rows of a subject, for
+example when the manifest was stacked from sheets that do not all carry
+\code{sex}. The one given value then fills the subject row. Two different given
+values are always a conflict.
 
 \code{sample_id} must be unique across the whole manifest, not only within a
 subject or assay, unless \code{allow_duplicates = TRUE}.

@@ -15,7 +15,7 @@
 #'   a delimited text file. Ignored for Excel files.
 #' @param sheet Optional sheet name or number, passed to
 #'   [readxl::read_excel()]. Ignored for a delimited text file.
-#' @param sample_cols,species,allow_duplicates Passed to
+#' @param sample_cols,species,allow_duplicates,missing_is_conflict Passed to
 #'   [validate_manifest()].
 #'
 #' @return The list returned by [validate_manifest()]: `subject_tbl`,
@@ -53,7 +53,8 @@ read_manifest <- function(
   sheet = NULL,
   sample_cols = NULL,
   species = NULL,
-  allow_duplicates = FALSE
+  allow_duplicates = FALSE,
+  missing_is_conflict = FALSE
 ) {
   checkmate::assert_string(path, min.chars = 1)
   if (!fs::file_exists(path)) {
@@ -66,7 +67,8 @@ read_manifest <- function(
     manifest,
     sample_cols = sample_cols,
     species = species,
-    allow_duplicates = allow_duplicates
+    allow_duplicates = allow_duplicates,
+    missing_is_conflict = missing_is_conflict
   )
 }
 
