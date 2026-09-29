@@ -40,7 +40,7 @@ NULL
       c(
         "No reader for analysis {.val {spec@name}}.",
         "i" = "Set {.field reader} on the spec or pass {.arg reader}.",
-        "i" = "Formats csv, tsv, txt, rds, and parquet get a default reader."
+        "i" = "Formats csv, tsv, txt, rds, parquet, and parquet_dataset get a default reader."
       )
     )
   }
@@ -243,10 +243,15 @@ NULL
 #' @param checksum Logical. When `TRUE`, the `sha256` column of `files` holds
 #'   the SHA-256 checksum of each file. Default `FALSE`, since a checksum
 #'   reads every byte.
+#' @param lazy Logical. When `TRUE`, the reader's object is returned as it
+#'   is, for example an arrow Dataset from `arrow::open_dataset()`, and no
+#'   row is read. Only a spec with `level = "cohort"` can load lazily.
+#'   Default `FALSE`.
 #'
 #' @return A list with:
 #'   - `data`: a tibble of all loaded rows (empty if no files were found),
-#'     with provenance key columns added.
+#'     with provenance key columns added. With `lazy = TRUE`, the reader's
+#'     object, or `NULL` when the path does not exist.
 #'   - `files`: a tibble with one row per unit: its keys, the resolved `path`,
 #'     whether it `exists`, its `size` in bytes, its `modified` time, and its
 #'     `sha256` checksum (`NA` unless `checksum = TRUE`). A missing file has
@@ -275,6 +280,15 @@ NULL
 #' function errors when neither names one. After each file is read, the spec's
 #' `key_cols` must be present in the table (the provenance keys count), or the
 #' function errors and names the missing columns.
+#'
+#' A table larger than memory, such as variant calls kept as a parquet folder,
+#' can load lazily. With `lazy = TRUE` and `format = "parquet_dataset"`, the
+#' data is an arrow Dataset: `key_cols` are checked against its column names
+#' and nothing is read until `dplyr::collect()`. [cohort_filter()] filters a
+#' lazy arrow table by `subject_id` and it stays lazy. A lazy table holds a
+#' handle to files on disk, so it does not survive [cohort_save()]. Files per
+#' subject, sample, or pair cannot load lazily, because each file would need
+#' its key columns added without a read.
 #'
 #' @examples
 #' # Write a per-subject CSV, then load it.
@@ -306,7 +320,13 @@ NULL
 #'
 #' @seealso [load_analyses()], [translate()]
 #' @export
-load_analysis <- function(cohort, spec, reader = NULL, checksum = FALSE) {
+load_analysis <- function(
+  cohort,
+  spec,
+  reader = NULL,
+  checksum = FALSE,
+  lazy = FALSE
+) {
   if (!S7::S7_inherits(cohort, Cohort)) {
     cli::cli_abort("`cohort` must be a Cohort object.")
   }
@@ -322,9 +342,21 @@ load_analysis <- function(cohort, spec, reader = NULL, checksum = FALSE) {
     cli::cli_abort("Analysis {.val {spec@name}} has no {.field path_template}.")
   }
   checkmate::assert_flag(checksum)
+  checkmate::assert_flag(lazy)
+  if (lazy && spec@level != "cohort") {
+    cli::cli_abort(
+      c(
+        "Analysis {.val {spec@name}} cannot load lazily.",
+        "i" = "Only a spec with {.code level = \"cohort\"} loads lazily; this one is {.val {spec@level}}."
+      )
+    )
+  }
 
   read_fn <- .spec_reader(spec, reader)
   units <- .analysis_units(cohort, spec)
+  if (lazy) {
+    return(.load_lazy(spec, units[[1]], read_fn, checksum))
+  }
   paths <- vapply(
     units,
     function(u) .render_path(spec@path_template, u$tokens, spec@name),
@@ -373,6 +405,24 @@ load_analysis <- function(cohort, spec, reader = NULL, checksum = FALSE) {
     )
   }
 
+  list(data = data, files = files)
+}
+
+# Load the one cohort-level unit without reading its rows. The reader's
+# object is kept as it is, and the key columns are checked against its
+# column names.
+.load_lazy <- function(spec, unit, read_fn, checksum) {
+  path <- .render_path(spec@path_template, unit$tokens, analysis = spec@name)
+  exists <- file.exists(path)
+  files <- tibble::as_tibble(
+    c(list(path = path, exists = exists), .file_details(path, exists, checksum))
+  )
+  if (!exists) {
+    cli::cli_warn("1 file missing for analysis {.val {spec@name}}; skipped.")
+    return(list(data = NULL, files = files))
+  }
+  data <- read_fn(path)
+  .check_key_cols(data, spec, path)
   list(data = data, files = files)
 }
 
@@ -433,6 +483,8 @@ load_analysis <- function(cohort, spec, reader = NULL, checksum = FALSE) {
 #' @param checksum Logical. Passed to [load_analysis()]. When `TRUE`, the
 #'   file tables that [analysis_files()] returns hold a SHA-256 checksum per
 #'   file.
+#' @param lazy Logical. Passed to [load_analysis()] for every analysis
+#'   loaded. Use `analyses` to load only the cohort-level ones lazily.
 #'
 #' @return A new [Cohort] with `analyses` populated for the loaded specs.
 #'
@@ -472,7 +524,8 @@ load_analyses <- function(
   cohort,
   analyses = NULL,
   readers = NULL,
-  checksum = FALSE
+  checksum = FALSE,
+  lazy = FALSE
 ) {
   if (!S7::S7_inherits(cohort, Cohort)) {
     cli::cli_abort("`cohort` must be a Cohort object.")
@@ -502,7 +555,13 @@ load_analyses <- function(
       next
     }
     reader <- if (!is.null(readers)) readers[[nm]] else NULL
-    res <- load_analysis(cohort, spec, reader = reader, checksum = checksum)
+    res <- load_analysis(
+      cohort,
+      spec,
+      reader = reader,
+      checksum = checksum,
+      lazy = lazy
+    )
     new_analyses[[nm]] <- res$data
     manifests[[nm]] <- res$files
   }

@@ -440,6 +440,11 @@ write_manifest <- function(x, path, delim = NULL) {
 #'
 #' @return `path`, invisibly.
 #'
+#' @details
+#' A lazy table from `load_analysis(lazy = TRUE)` holds a handle to files on
+#' disk, not the rows, so it does not survive a save. Load it again after
+#' [cohort_read()].
+#'
 #' @examples
 #' data(example_cohort)
 #' path <- tempfile(fileext = ".rds")

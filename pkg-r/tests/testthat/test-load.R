@@ -730,3 +730,134 @@ test_that("load_analyses keeps the file tables of earlier loads", {
     c("gene_counts", "per_subject")
   )
 })
+
+# A cohort with a parquet folder of variant calls, split by chromosome.
+make_dataset_cohort <- function(root) {
+  skip_if_not_installed("arrow")
+  folder <- file.path(root, "variants")
+  dir.create(folder)
+  arrow::write_dataset(
+    data.frame(
+      subject_id = c("S1", "S2", "S1"),
+      chrom = c("chr1", "chr1", "chr2"),
+      pos = c(10L, 20L, 30L)
+    ),
+    folder,
+    partitioning = "chrom"
+  )
+  manifest <- data.frame(
+    subject_id = c("S1", "S2"),
+    species = "human",
+    assay = "wgs",
+    sample_id = c("W1", "W2")
+  )
+  cohort <- make_cohort(manifest, root, "wgs_root")
+  spec <- analysis_spec_new(
+    name = "variants",
+    assay = "wgs",
+    level = "cohort",
+    path_template = "{root}/variants",
+    root_key = "wgs_root",
+    format = "parquet_dataset",
+    key_cols = "subject_id"
+  )
+  analysis_register(cohort, spec)
+}
+
+test_that("parquet_dataset gets arrow::open_dataset as its reader", {
+  spec <- analysis_spec_new(
+    name = "v",
+    assay = "wgs",
+    level = "cohort",
+    format = "parquet_dataset"
+  )
+  expect_equal(spec@reader, "arrow::open_dataset")
+})
+
+test_that("lazy = TRUE returns the arrow Dataset without reading rows", {
+  root <- withr::local_tempdir()
+  cohort <- make_dataset_cohort(root)
+
+  loaded <- load_analysis(cohort, "variants", lazy = TRUE)
+
+  expect_s3_class(loaded$data, "Dataset")
+  expect_true(loaded$files$exists)
+  expect_gt(loaded$files$size, 0)
+  expect_equal(nrow(dplyr::collect(loaded$data)), 3)
+})
+
+test_that("lazy loading checks key_cols against the column names", {
+  root <- withr::local_tempdir()
+  cohort <- make_dataset_cohort(root)
+  spec <- analysis_spec(cohort, "variants")
+  spec@key_cols <- "sample_id"
+
+  expect_error(load_analysis(cohort, spec, lazy = TRUE), "sample_id")
+})
+
+test_that("lazy loading is only for the cohort level", {
+  root <- withr::local_tempdir()
+  cohort <- make_sample_cohort(root)
+
+  expect_error(
+    load_analysis(cohort, "gene_counts", lazy = TRUE),
+    "cannot load lazily"
+  )
+})
+
+test_that("a missing folder gives NULL data and a warning", {
+  root <- withr::local_tempdir()
+  cohort <- make_dataset_cohort(root)
+  unlink(file.path(root, "variants"), recursive = TRUE)
+
+  expect_warning(
+    loaded <- load_analysis(cohort, "variants", lazy = TRUE),
+    "missing"
+  )
+  expect_null(loaded$data)
+})
+
+test_that("cohort_filter narrows a lazy table and it stays lazy", {
+  root <- withr::local_tempdir()
+  cohort <- load_analyses(make_dataset_cohort(root), lazy = TRUE)
+
+  out <- suppressMessages(cohort_filter(cohort, subject_ids = "S1"))
+
+  expect_false(is.data.frame(out@analyses$variants))
+  kept <- dplyr::collect(out@analyses$variants)
+  expect_equal(sort(kept$pos), c(10L, 30L))
+})
+
+test_that("translate skips a lazy table with a warning", {
+  root <- withr::local_tempdir()
+  cohort <- load_analyses(make_dataset_cohort(root), lazy = TRUE)
+  spec <- analysis_spec(cohort, "variants")
+  spec@feature_type <- "interval"
+  cohort <- analysis_register(cohort, spec)
+
+  expect_warning(
+    expect_warning(translate(cohort, to = "mouse"), "not a data frame"),
+    "No analyses were translated"
+  )
+})
+
+test_that("cohort_filter narrows a lazy table whose ids are integers", {
+  skip_if_not_installed("arrow")
+  root <- withr::local_tempdir()
+  arrow::write_parquet(
+    data.frame(subject_id = c(1001L, 1002L), pos = c(10L, 20L)),
+    file.path(root, "calls.parquet")
+  )
+  manifest <- data.frame(
+    subject_id = c("1001", "1002"),
+    species = "human",
+    assay = "wgs",
+    sample_id = c("W1", "W2")
+  )
+  cohort <- make_cohort(manifest, root, "wgs_root")
+  cohort@analyses$calls <- arrow::open_dataset(file.path(root, "calls.parquet"))
+
+  out <- cohort_filter(cohort, subject_ids = "1001")
+
+  expect_equal(dplyr::collect(out@analyses$calls)$pos, 10L)
+})

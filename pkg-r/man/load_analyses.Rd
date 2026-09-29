@@ -4,7 +4,13 @@
 \alias{load_analyses}
 \title{Load registered analyses into a cohort from disk}
 \usage{
-load_analyses(cohort, analyses = NULL, readers = NULL, checksum = FALSE)
+load_analyses(
+  cohort,
+  analyses = NULL,
+  readers = NULL,
+  checksum = FALSE,
+  lazy = FALSE
+)
 }
 \arguments{
 \item{cohort}{A \link{Cohort} with registered specs (see \code{\link[=analysis_register]{analysis_register()}}).}
@@ -18,6 +24,9 @@ name (each a function or \code{"pkg::fun"} name).}
 \item{checksum}{Logical. Passed to \code{\link[=load_analysis]{load_analysis()}}. When \code{TRUE}, the
 file tables that \code{\link[=analysis_files]{analysis_files()}} returns hold a SHA-256 checksum per
 file.}
+
+\item{lazy}{Logical. Passed to \code{\link[=load_analysis]{load_analysis()}} for every analysis
+loaded. Use \code{analyses} to load only the cohort-level ones lazily.}
 }
 \value{
 A new \link{Cohort} with \code{analyses} populated for the loaded specs.

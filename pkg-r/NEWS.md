@@ -48,6 +48,12 @@
   argument of `cohort_new()` or a `dictionary:` file in the study YAML, and
   read it with `cohort_dictionary()`. The tables stay text; `subjects()`,
   `samples()` and `as_coldata()` apply the types with `typed = TRUE` (#77).
+- `load_analysis()` and `load_analyses()` take `lazy = TRUE` for a
+  cohort-level table larger than memory. With the new format
+  `parquet_dataset`, whose default reader is `arrow::open_dataset`, the
+  cohort holds an arrow Dataset and no row is read. `cohort_filter()`
+  filters it by `subject_id` and it stays lazy. `translate()` skips a table
+  that is not a data frame, with a warning (#74).
 
 # biocohort 0.1.1
 
