@@ -67,7 +67,8 @@ numeric-coercible) column to bin.</p></dd>
 
 <dt id="arg-cutoffs">cutoffs<a class="anchor" aria-label="anchor" href="#arg-cutoffs"></a></dt>
 <dd><p>A named numeric vector. Sorted internally, so the order
-given does not matter. See Details for how names become bins.</p></dd>
+given does not matter. See Details for how names become bins. A name
+must not contain <code>|</code>, which the saved derive log uses between cutoffs.</p></dd>
 
 
 <dt id="arg-level">level<a class="anchor" aria-label="anchor" href="#arg-level"></a></dt>
@@ -93,6 +94,9 @@ cutoff works the same way, at no extra cost.</p>
 <p>A value in <code>from</code> that is not already missing but fails to parse as
 numeric is an error naming the offending ids, never a silent <code>NA</code>. A
 value that was already missing stays <code>NA</code> in the derived column.</p>
+<p><code>name</code> must not be a column of the other level's table, since the two
+tables are joined into one manifest by <code><a href="write_manifest.html">write_manifest()</a></code> and
+<code><a href="samples.html">samples()</a></code>.</p>
 <p>Re-deriving with the same <code>name</code> overwrites the column, the same way
 <code><a href="analysis_register.html">analysis_register()</a></code> replaces a spec of the same name. Every call is
 recorded in <code><a href="derive_log.html">derive_log()</a></code>, which, like <code><a href="qc_log.html">qc_log()</a></code>, is not cleared by
@@ -144,7 +148,7 @@ recorded in <code><a href="derive_log.html">derive_log()</a></code>, which, like
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   name        from       level   cutoffs   n_derived  n_na timestamp          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> onset_group onset_days subject <span style="color: #949494;">&lt;dbl [2]&gt;</span>         3     0 2026-09-29 <span style="color: #949494;">22:53:12</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> onset_group onset_days subject <span style="color: #949494;">&lt;dbl [2]&gt;</span>         3     0 2026-09-29 <span style="color: #949494;">22:55:23</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

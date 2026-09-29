@@ -58,7 +58,9 @@ Study, file paths, analysis tables, and a registry of analysis specs.</p>
 <span>    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, previous_status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, timestamp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  derived <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    cutoffs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, n_derived <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, n_na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, timestamp <span class="op">=</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  corrections <span class="op">=</span> <span class="fu">empty_corrections_log</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  dictionary <span class="op">=</span> <span class="fu">.empty_dictionary</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -119,6 +121,18 @@ can always be recomputed. Defaults to an empty list.</p></dd>
 <code>name</code>, <code>from</code>, <code>level</code>, <code>cutoffs</code>, <code>n_derived</code>, <code>n_na</code>, <code>timestamp</code>).
 Durable in the same way as <code>qc</code>. Defaults to an empty table.</p></dd>
 
+
+<dt id="arg-corrections">corrections<a class="anchor" aria-label="anchor" href="#arg-corrections"></a></dt>
+<dd><p>A tibble with the audit of the manifest corrections the
+cohort was built from, in the shape <code><a href="corrections_log.html">corrections_log()</a></code> returns. Durable
+in the same way as <code>qc</code>. Defaults to an empty table.</p></dd>
+
+
+<dt id="arg-dictionary">dictionary<a class="anchor" aria-label="anchor" href="#arg-dictionary"></a></dt>
+<dd><p>A tibble describing columns of <code>subject_tbl</code> and
+<code>sample_map</code>: <code>column</code>, <code>type</code>, <code>label</code>, <code>unit</code>, and <code>values</code>. See
+<code><a href="cohort_dictionary.html">cohort_dictionary()</a></code>. Defaults to an empty table.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -141,7 +155,9 @@ a <code>Cohort</code> any other way still enforces the required columns.</p>
 <span><span class="va">cohort</span><span class="op">@</span><span class="va">registry</span>      <span class="co"># Named list of AnalysisSpec objects</span></span>
 <span><span class="va">cohort</span><span class="op">@</span><span class="va">cache</span>         <span class="co"># Memoization cache</span></span>
 <span><span class="va">cohort</span><span class="op">@</span><span class="va">qc</span>            <span class="co"># QC audit log</span></span>
-<span><span class="va">cohort</span><span class="op">@</span><span class="va">derived</span>       <span class="co"># Derived-column provenance</span></span></code></pre><p></p></div>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">derived</span>       <span class="co"># Derived-column provenance</span></span>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">corrections</span>   <span class="co"># Manifest corrections audit</span></span>
+<span><span class="va">cohort</span><span class="op">@</span><span class="va">dictionary</span>    <span class="co"># Column types, labels, units, and allowed values</span></span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

@@ -77,7 +77,9 @@ configuration file that has other keys of its own.</p></dd>
     <p>The file has these top-level keys, all optional except <code>manifest</code>:</p><ul><li><p><code>study</code>: fields for <code><a href="study_new.html">study_new()</a></code> (<code>study_id</code>, <code>title</code>, <code>description</code>,
 <code>hypotheses</code>, <code>aims</code>, <code>assays</code>, <code>genome_builds</code>, <code>tags</code>).</p></li>
 <li><p><code>manifest</code>: path to the manifest file, read with <code><a href="read_manifest.html">read_manifest()</a></code>.
-Required.</p></li>
+Required. For several files, a list of entries, each with a <code>path</code> and
+an optional <code>assay</code> that fills the <code>assay</code> column of a file that has
+none. The files are stacked as <code><a href="read_manifest.html">read_manifest()</a></code> stacks them.</p></li>
 <li><p><code>sample_cols</code>: extra sample-level columns, passed to
 <code><a href="validate_manifest.html">validate_manifest()</a></code>.</p></li>
 <li><p><code>species</code>: fills a <code>species</code> column when the manifest has none.</p></li>
@@ -86,8 +88,17 @@ Required.</p></li>
 <code><a href="apply_corrections.html">apply_corrections()</a></code> before it is validated.</p></li>
 <li><p><code>analyses</code>: a list of <code><a href="analysis_spec_new.html">analysis_spec_new()</a></code> field sets, one per
 registered analysis.</p></li>
-</ul><p>Every path (<code>manifest</code>, an entry of <code>paths</code>, <code>corrections</code>) is resolved
-relative to the YAML file's own directory unless it is already absolute.</p>
+<li><p><code>dictionary</code>: path to a CSV file with the column dictionary, with the
+columns <code>column</code>, <code>type</code>, <code>label</code>, <code>unit</code>, and <code>values</code> (see
+<code><a href="cohort_dictionary.html">cohort_dictionary()</a></code>).</p></li>
+<li><p><code>logs</code>: a map with up to three keys, <code>qc</code>, <code>derive</code>, and <code>corrections</code>,
+each the path of a CSV file that <code><a href="write_study_yaml.html">write_study_yaml()</a></code> wrote. They fill
+<code><a href="qc_log.html">qc_log()</a></code>, <code><a href="derive_log.html">derive_log()</a></code>, and <code><a href="corrections_log.html">corrections_log()</a></code>.</p></li>
+</ul><p>Every path (<code>manifest</code>, an entry of <code>paths</code>, <code>corrections</code>, <code>dictionary</code>,
+an entry of <code>logs</code>) is resolved relative to the YAML file's own directory unless it is
+already absolute.</p>
+<p>The audit of a <code>corrections</code> file is kept in the cohort, after the audit
+read from <code>logs</code>, so <code><a href="corrections_log.html">corrections_log()</a></code> shows both.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

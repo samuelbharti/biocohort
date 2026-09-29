@@ -74,7 +74,9 @@ unless <code>delim</code> is given.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Columns are ordered <code>subject_id</code>, then the other subject-level columns,
 then the sample-level columns (<code>assay</code>, <code>sample_id</code>, <code>role</code>, and any
-extra ones). A missing value is written as an empty field.</p>
+extra ones). A missing value is written as an empty field. A column other
+than <code>subject_id</code> that is in both tables is an error, since one flat
+manifest cannot hold two columns of the same name.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

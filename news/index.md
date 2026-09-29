@@ -3,6 +3,112 @@
 ## biocohort (development version)
 
 - README: a CRAN badge, and installation from CRAN first.
+- Breaking change: `cohort_qc(scope = "subject", action = "flag")` now
+  writes `subject_qc_status` and `subject_qc_reason` to `subject_tbl`.
+  It used the same names as the sample scope, `qc_status` and
+  `qc_reason`. With both scopes flagged,
+  [`write_manifest()`](https://www.samuelbharti.com/biocohort/reference/write_manifest.md)
+  and
+  [`write_study_yaml()`](https://www.samuelbharti.com/biocohort/reference/write_study_yaml.md)
+  failed, and a subject flag alone moved to the samples after a write
+  and a read. Code that reads the subject flag by its old name needs the
+  new one.
+  [`cohort_read()`](https://www.samuelbharti.com/biocohort/reference/cohort_read.md)
+  renames the old columns in a cohort saved by 0.1.x.
+- [`write_manifest()`](https://www.samuelbharti.com/biocohort/reference/write_manifest.md)
+  and `samples(with_subjects = TRUE)` (and so
+  [`as_coldata()`](https://www.samuelbharti.com/biocohort/reference/as_coldata.md),
+  [`join_metadata()`](https://www.samuelbharti.com/biocohort/reference/join_metadata.md)
+  and
+  [`sample_sheet()`](https://www.samuelbharti.com/biocohort/reference/sample_sheet.md))
+  now stop with a clear error when a column other than `subject_id` is
+  in both tables. Before, the join renamed the pair to `.x` and `.y`,
+  and
+  [`write_manifest()`](https://www.samuelbharti.com/biocohort/reference/write_manifest.md)
+  failed with an internal error.
+  [`cohort_derive()`](https://www.samuelbharti.com/biocohort/reference/cohort_derive.md)
+  no longer creates a column whose name is used at the other level.
+- [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md)
+  and
+  [`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md)
+  no longer treat a missing subject value as a conflict when another row
+  of the same subject gives the value. The given value fills the subject
+  row. Two different given values are still a conflict.
+  `missing_is_conflict = TRUE` keeps the old check
+  ([\#75](https://github.com/samuelbharti/biocohort/issues/75)).
+- `AnalysisSpec` has a fourth level, `"sample"`, for pipelines that
+  write one file per sample. Its path template takes `{sample_id}` and
+  `{role}`, its default `key_cols` are `subject_id` and `sample_id`, and
+  [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
+  trims a loaded sample-level table to the kept samples
+  ([\#73](https://github.com/samuelbharti/biocohort/issues/73)).
+- [`analysis_files()`](https://www.samuelbharti.com/biocohort/reference/analysis_files.md)
+  now records the `size`, `modified` time and `sha256` checksum of each
+  file, so a report can show which inputs changed since the last run.
+  The checksum is filled with `checksum = TRUE` in
+  [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
+  and
+  [`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md)
+  ([\#79](https://github.com/samuelbharti/biocohort/issues/79)).
+  [`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md)
+  now keeps the file tables of earlier loads when it loads one analysis
+  at a time.
+  [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
+  and
+  [`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md)
+  ([\#79](https://github.com/samuelbharti/biocohort/issues/79)).
+- [`write_study_yaml()`](https://www.samuelbharti.com/biocohort/reference/write_study_yaml.md)
+  writes the QC, derive and corrections logs as CSV files next to the
+  manifest and lists them under a new `logs:` key.
+  [`read_study_yaml()`](https://www.samuelbharti.com/biocohort/reference/read_study_yaml.md)
+  reads them back, so a study folder in git keeps the reason for each QC
+  flag ([\#78](https://github.com/samuelbharti/biocohort/issues/78)).
+- `Cohort` has a `corrections` property, set with the new `corrections`
+  argument of
+  [`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md).
+  [`corrections_log()`](https://www.samuelbharti.com/biocohort/reference/corrections_log.md)
+  accepts a cohort, and
+  [`read_study_yaml()`](https://www.samuelbharti.com/biocohort/reference/read_study_yaml.md)
+  keeps the audit of the corrections it applies.
+  [`cohort_read()`](https://www.samuelbharti.com/biocohort/reference/cohort_read.md)
+  gives a cohort saved by 0.1.x the new property.
+- [`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md)
+  takes several files and stacks them into one manifest, for example one
+  sample sheet per assay. A name on a path fills the `assay` column of a
+  file that has none, and a conflict across files names the files. The
+  study YAML `manifest:` key accepts a list of `path` and `assay`
+  entries ([\#75](https://github.com/samuelbharti/biocohort/issues/75)).
+- A cohort can hold a column dictionary with a type, a label, a unit,
+  and the allowed values of each column. Set it with the new
+  `dictionary` argument of
+  [`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
+  or a `dictionary:` file in the study YAML, and read it with
+  [`cohort_dictionary()`](https://www.samuelbharti.com/biocohort/reference/cohort_dictionary.md).
+  The tables stay text;
+  [`subjects()`](https://www.samuelbharti.com/biocohort/reference/subjects.md),
+  [`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md)
+  and
+  [`as_coldata()`](https://www.samuelbharti.com/biocohort/reference/as_coldata.md)
+  apply the types with `typed = TRUE`
+  ([\#77](https://github.com/samuelbharti/biocohort/issues/77)).
+- [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
+  and
+  [`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md)
+  take `lazy = TRUE` for a cohort-level table larger than memory. With
+  the new format `parquet_dataset`, whose default reader is
+  [`arrow::open_dataset`](https://arrow.apache.org/docs/r/reference/open_dataset.html),
+  the cohort holds an arrow Dataset and no row is read.
+  [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
+  filters it by `subject_id` and it stays lazy.
+  [`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
+  skips a table that is not a data frame, with a warning
+  ([\#74](https://github.com/samuelbharti/biocohort/issues/74)).
+- [`cohort_bind()`](https://www.samuelbharti.com/biocohort/reference/cohort_bind.md)
+  combines two or more cohorts. A `links` table maps the subject ids of
+  each cohort to one id per person, and `separate = TRUE` marks cohorts
+  of different people by putting the cohort name in front of each id.
+  The sample map and the logs get a `source` column
+  ([\#76](https://github.com/samuelbharti/biocohort/issues/76)).
 
 ## biocohort 0.1.1
 

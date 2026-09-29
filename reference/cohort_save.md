@@ -27,6 +27,13 @@ cohort_save(cohort, path)
 
 `path`, invisibly.
 
+## Details
+
+A lazy table from `load_analysis(lazy = TRUE)` holds a handle to files
+on disk, not the rows, so it does not survive a save. Load it again
+after
+[`cohort_read()`](https://www.samuelbharti.com/biocohort/reference/cohort_read.md).
+
 ## See also
 
 [`cohort_read()`](https://www.samuelbharti.com/biocohort/reference/cohort_read.md),

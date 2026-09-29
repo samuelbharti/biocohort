@@ -2,9 +2,9 @@
 
 The inverse of
 [`read_study_yaml()`](https://www.samuelbharti.com/biocohort/reference/read_study_yaml.md):
-writes the cohort's study metadata, its manifest, its paths, and its
-registered analysis specs to a study YAML file and a manifest file
-alongside it.
+writes the cohort's study metadata, its manifest, its paths, its
+registered analysis specs, and its logs to a study YAML file, with the
+manifest and the logs as CSV files.
 
 ## Usage
 
@@ -37,6 +37,16 @@ write_study_yaml(cohort, path, manifest = "manifest.csv")
 A cohort has no stored corrections file, so a `corrections:` key is
 never written; the manifest written out already reflects any correction
 that was applied before the cohort was built.
+
+Each log that has rows is written next to the manifest, as `qc_log.csv`,
+`derive_log.csv`, and `corrections_log.csv`, and listed under a `logs:`
+key. A time is written in UTC, such as `2026-09-29T21:19:07Z`, and the
+cutoffs of a derived column as `young=0|old=40`. A column dictionary
+with rows is written the same way, as `dictionary.csv` under a
+`dictionary:` key. Text files keep the record readable in a diff and
+from other languages.
+[`cohort_save()`](https://www.samuelbharti.com/biocohort/reference/cohort_save.md)
+keeps the same logs in a binary file.
 
 ## See also
 

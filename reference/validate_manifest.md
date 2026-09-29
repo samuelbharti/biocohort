@@ -13,7 +13,8 @@ validate_manifest(
   manifest,
   sample_cols = NULL,
   species = NULL,
-  allow_duplicates = FALSE
+  allow_duplicates = FALSE,
+  missing_is_conflict = FALSE
 )
 ```
 
@@ -41,8 +42,8 @@ validate_manifest(
 
   Any remaining columns (e.g. `species`, `sex`, `strain`, `genotype`,
   `cohort`, `timepoint`, `notes`) are treated as **subject-level
-  metadata**, coerced to character, and must be constant within a
-  `subject_id`.
+  metadata**, coerced to character, and must agree within a `subject_id`
+  (see `missing_is_conflict`).
 
 - sample_cols:
 
@@ -61,6 +62,13 @@ validate_manifest(
 
   Logical. If `FALSE` (default), a repeated `sample_id` raises an error.
   If `TRUE`, duplicates are kept.
+
+- missing_is_conflict:
+
+  Logical. If `FALSE` (default), a subject whose rows hold a value in
+  one row and a missing value in another is not a conflict: the given
+  value fills the subject row. If `TRUE`, that is a conflict, as it was
+  in biocohort 0.1.1.
 
 ## Value
 
@@ -97,6 +105,11 @@ recognized or declared raises the conflicting-metadata error below.
 argument), is lower-cased so that `"Rat"` and `"rat"` are the same
 subject-level value. Any species value is allowed; the manifest layer
 does not restrict it to a fixed list of organisms.
+
+A subject-level column may be missing in some rows of a subject, for
+example when the manifest was stacked from sheets that do not all carry
+`sex`. The one given value then fills the subject row. Two different
+given values are always a conflict.
 
 `sample_id` must be unique across the whole manifest, not only within a
 subject or assay, unless `allow_duplicates = TRUE`.

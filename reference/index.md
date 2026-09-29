@@ -48,8 +48,12 @@ Read parts of a cohort
   : Read the sample map of a cohort
 - [`completeness()`](https://www.samuelbharti.com/biocohort/reference/completeness.md)
   : Per-assay sample counts for a cohort
+- [`cohort_dictionary()`](https://www.samuelbharti.com/biocohort/reference/cohort_dictionary.md)
+  : Read the column dictionary of a cohort
 - [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
   : Keep a subset of a cohort's subjects or assays
+- [`cohort_bind()`](https://www.samuelbharti.com/biocohort/reference/cohort_bind.md)
+  : Combine cohorts into one
 
 ## Quality control
 
@@ -208,7 +212,7 @@ Apply documented overrides to a manifest and keep an audit trail
 - [`apply_corrections()`](https://www.samuelbharti.com/biocohort/reference/apply_corrections.md)
   : Apply documented corrections to a manifest
 - [`corrections_log()`](https://www.samuelbharti.com/biocohort/reference/corrections_log.md)
-  : Return the audit table of a corrected manifest
+  : Return the audit table of a corrected manifest or a cohort
 - [`read_corrections()`](https://www.samuelbharti.com/biocohort/reference/read_corrections.md)
   : Read a corrections table from a file
 

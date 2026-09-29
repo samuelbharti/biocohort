@@ -35,9 +35,9 @@ cohort_qc(cohort, ids, scope, action, reason)
 
 - action:
 
-  One of `"flag"` or `"drop"`. `"flag"` sets `qc_status`/ `qc_reason` on
-  the matching rows and keeps them. `"drop"` removes the matching rows
-  entirely. No default.
+  One of `"flag"` or `"drop"`. `"flag"` sets a status and a reason on
+  the matching rows and keeps them (see Details). `"drop"` removes the
+  matching rows entirely. No default.
 
 - reason:
 
@@ -55,11 +55,11 @@ is never silently ignored.
 
 `action = "flag"`, `scope = "sample"` sets `qc_status`/`qc_reason` on
 `sample_map`, creating the columns if they are absent.
-`scope = "subject"` sets the same two column names on `subject_tbl`
-instead; these are a separate pair of columns from the sample-level
-ones, and both can be set on the same cohort for different reasons.
-Flagging an id that already has a `qc_reason` appends the new reason
-rather than replacing it.
+`scope = "subject"` sets `subject_qc_status`/`subject_qc_reason` on
+`subject_tbl` instead. The two pairs have different names, so both can
+be set on the same cohort for different reasons, and a written manifest
+keeps each pair at its own level. Flagging an id that already has a
+reason appends the new reason and keeps the old one.
 
 `action = "drop"` delegates to
 [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md):
@@ -114,7 +114,7 @@ qc_log(flagged)
 #> # A tibble: 1 × 6
 #>   scope  id         action reason           previous_status timestamp          
 #>   <chr>  <chr>      <chr>  <chr>            <chr>           <dttm>             
-#> 1 sample WES_R001_T flag   failed QC review NA              2026-09-29 22:53:12
+#> 1 sample WES_R001_T flag   failed QC review NA              2026-09-29 22:55:25
 
 # Drop the same sample instead
 dropped <- cohort_qc(

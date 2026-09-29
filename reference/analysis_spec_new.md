@@ -37,14 +37,15 @@ analysis_spec_new(
 - assay:
 
   Character scalar for the assay label, spelled as in the cohort's
-  `sample_map` (e.g., "wes", "wgs", "scrna"). Required. Subject and pair
-  units are enumerated from the samples with this assay.
+  `sample_map` (e.g., "wes", "wgs", "scrna"). Required. Subject, sample,
+  and pair units are enumerated from the samples with this assay.
 
 - level:
 
   Character scalar for the granularity at which the analysis produces
-  results. Must be one of `"subject"` (one result per subject), `"pair"`
-  (one result per tumor/normal pair, see
+  results. Must be one of `"subject"` (one result per subject),
+  `"sample"` (one result per sample of `assay`), `"pair"` (one result
+  per tumor/normal pair, see
   [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)),
   or `"cohort"` (a single result for the whole cohort). Required.
 
@@ -62,8 +63,9 @@ analysis_spec_new(
 - path_template:
 
   Character scalar for templated file path. Supports tokens: `{root}`
-  (from `root_key`), `{subject_id}`, and the pair tokens
-  `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}` (from
+  (from `root_key`), `{subject_id}`, the sample tokens `{sample_id}` and
+  `{role}`, and the pair tokens `{tumor_sample_id}`,
+  `{normal_sample_id}`, `{pair_id}` (from
   [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)).
   Optional, defaults to NA.
 
@@ -77,8 +79,10 @@ analysis_spec_new(
   Character scalar for reader function name (e.g., "readr::read_tsv",
   "read.csv"). Optional. Defaults by `format`: "csv" to
   "readr::read_csv", "tsv" and "txt" to "readr::read_tsv", "rds" to
-  "readRDS", "parquet" to "arrow::read_parquet". NA for any other
-  format.
+  "readRDS", "parquet" to "arrow::read_parquet", and "parquet_dataset"
+  (a folder of parquet files) to "arrow::open_dataset". NA for any other
+  format. A template with no file extension gets no format, so set
+  `format = "parquet_dataset"` for a folder.
   [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
   errors when neither the spec nor its `reader` argument names a reader.
 
@@ -86,8 +90,9 @@ analysis_spec_new(
 
   Character vector of column names that must be present in the loaded
   table. Optional. Defaults by `level`: `"subject_id"` for subject,
-  `c("subject_id", "pair_id")` for pair, and none for cohort. Subject
-  and pair specs need at least one key column.
+  `c("subject_id", "sample_id")` for sample,
+  `c("subject_id", "pair_id")` for pair, and none for cohort. Subject,
+  sample, and pair specs need at least one key column.
 
 - feature_type:
 
@@ -140,11 +145,12 @@ This constructor validates that:
 
 - `name` and `assay` are non-empty strings
 
-- `level` is one of: "subject", "pair", "cohort"
+- `level` is one of: "subject", "sample", "pair", "cohort"
 
 - `format` and `reader`, if given, are non-empty strings
 
-- `key_cols` is a character vector, non-empty for subject and pair specs
+- `key_cols` is a character vector, non-empty for subject, sample, and
+  pair specs
 
 - `feature_type`, if given, is one of "interval" or "gene"
 

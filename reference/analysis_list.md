@@ -23,7 +23,7 @@ A tibble with the following columns:
 
 - `assay`: Assay type (chr)
 
-- `level`: Data level - "subject", "pair", or "cohort" (chr)
+- `level`: Data level: "subject", "sample", "pair", or "cohort" (chr)
 
 - `format`: File format (chr)
 

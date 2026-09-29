@@ -45,7 +45,11 @@ The file has these top-level keys, all optional except `manifest`:
 
 - `manifest`: path to the manifest file, read with
   [`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md).
-  Required.
+  Required. For several files, a list of entries, each with a `path` and
+  an optional `assay` that fills the `assay` column of a file that has
+  none. The files are stacked as
+  [`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md)
+  stacks them.
 
 - `sample_cols`: extra sample-level columns, passed to
   [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md).
@@ -63,8 +67,27 @@ The file has these top-level keys, all optional except `manifest`:
   [`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
   field sets, one per registered analysis.
 
-Every path (`manifest`, an entry of `paths`, `corrections`) is resolved
-relative to the YAML file's own directory unless it is already absolute.
+- `dictionary`: path to a CSV file with the column dictionary, with the
+  columns `column`, `type`, `label`, `unit`, and `values` (see
+  [`cohort_dictionary()`](https://www.samuelbharti.com/biocohort/reference/cohort_dictionary.md)).
+
+- `logs`: a map with up to three keys, `qc`, `derive`, and
+  `corrections`, each the path of a CSV file that
+  [`write_study_yaml()`](https://www.samuelbharti.com/biocohort/reference/write_study_yaml.md)
+  wrote. They fill
+  [`qc_log()`](https://www.samuelbharti.com/biocohort/reference/qc_log.md),
+  [`derive_log()`](https://www.samuelbharti.com/biocohort/reference/derive_log.md),
+  and
+  [`corrections_log()`](https://www.samuelbharti.com/biocohort/reference/corrections_log.md).
+
+Every path (`manifest`, an entry of `paths`, `corrections`,
+`dictionary`, an entry of `logs`) is resolved relative to the YAML
+file's own directory unless it is already absolute.
+
+The audit of a `corrections` file is kept in the cohort, after the audit
+read from `logs`, so
+[`corrections_log()`](https://www.samuelbharti.com/biocohort/reference/corrections_log.md)
+shows both.
 
 ## See also
 

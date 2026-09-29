@@ -16,7 +16,13 @@ tables*, ready for
 ## Usage
 
 ``` r
-load_analyses(cohort, analyses = NULL, readers = NULL)
+load_analyses(
+  cohort,
+  analyses = NULL,
+  readers = NULL,
+  checksum = FALSE,
+  lazy = FALSE
+)
 ```
 
 ## Arguments
@@ -36,6 +42,21 @@ load_analyses(cohort, analyses = NULL, readers = NULL)
 
   Optional named list of reader overrides, keyed by analysis name (each
   a function or `"pkg::fun"` name).
+
+- checksum:
+
+  Logical. Passed to
+  [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md).
+  When `TRUE`, the file tables that
+  [`analysis_files()`](https://www.samuelbharti.com/biocohort/reference/analysis_files.md)
+  returns hold a SHA-256 checksum per file.
+
+- lazy:
+
+  Logical. Passed to
+  [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
+  for every analysis loaded. Use `analyses` to load only the
+  cohort-level ones lazily.
 
 ## Value
 
@@ -94,10 +115,10 @@ loaded@analyses$expr
 #> 1 TP53      1 S1        
 analysis_files(loaded)
 #> $expr
-#> # A tibble: 1 × 3
-#>   subject_id path                                    exists
-#>   <chr>      <chr>                                   <lgl> 
-#> 1 S1         /tmp/RtmpnONq65/file19653aaf0a5d/S1.csv TRUE  
+#> # A tibble: 1 × 6
+#>   subject_id path                        exists  size modified            sha256
+#>   <chr>      <chr>                       <lgl>  <dbl> <dttm>              <chr> 
+#> 1 S1         /tmp/RtmpGvxTKn/file1aeb28… TRUE      24 2026-09-29 22:55:35 NA    
 #> 
 unlink(dir, recursive = TRUE)
 ```

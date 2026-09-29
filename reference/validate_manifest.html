@@ -55,7 +55,8 @@ values, never as bespoke columns or per-assay tables.</p>
 <span>  <span class="va">manifest</span>,</span>
 <span>  sample_cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  species <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  allow_duplicates <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  allow_duplicates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  missing_is_conflict <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -74,7 +75,8 @@ sample. Required columns:</p><ul><li><p><code>subject_id</code> (character; coer
 <li><p>A column named in <code>sample_cols</code>, or recognized by name (see Details).</p></li>
 </ul><p>Any remaining columns (e.g. <code>species</code>, <code>sex</code>, <code>strain</code>, <code>genotype</code>,
 <code>cohort</code>, <code>timepoint</code>, <code>notes</code>) are treated as <strong>subject-level metadata</strong>,
-coerced to character, and must be constant within a <code>subject_id</code>.</p></dd>
+coerced to character, and must agree within a <code>subject_id</code> (see
+<code>missing_is_conflict</code>).</p></dd>
 
 
 <dt id="arg-sample-cols">sample_cols<a class="anchor" aria-label="anchor" href="#arg-sample-cols"></a></dt>
@@ -93,6 +95,13 @@ column, this value fills one. Ignored when <code>manifest</code> already has a
 <dt id="arg-allow-duplicates">allow_duplicates<a class="anchor" aria-label="anchor" href="#arg-allow-duplicates"></a></dt>
 <dd><p>Logical. If <code>FALSE</code> (default), a repeated
 <code>sample_id</code> raises an error. If <code>TRUE</code>, duplicates are kept.</p></dd>
+
+
+<dt id="arg-missing-is-conflict">missing_is_conflict<a class="anchor" aria-label="anchor" href="#arg-missing-is-conflict"></a></dt>
+<dd><p>Logical. If <code>FALSE</code> (default), a subject whose
+rows hold a value in one row and a missing value in another is not a
+conflict: the given value fills the subject row. If <code>TRUE</code>, that is a
+conflict, as it was in biocohort 0.1.1.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -122,6 +131,10 @@ recognized or declared raises the conflicting-metadata error below.</p>
 argument), is lower-cased so that <code>"Rat"</code> and <code>"rat"</code> are the same
 subject-level value. Any species value is allowed; the manifest layer
 does not restrict it to a fixed list of organisms.</p>
+<p>A subject-level column may be missing in some rows of a subject, for
+example when the manifest was stacked from sheets that do not all carry
+<code>sex</code>. The one given value then fills the subject row. Two different given
+values are always a conflict.</p>
 <p><code>sample_id</code> must be unique across the whole manifest, not only within a
 subject or assay, unless <code>allow_duplicates = TRUE</code>.</p>
 <p>Per-assay wide views (e.g. tumor/normal pairs) are not part of the core

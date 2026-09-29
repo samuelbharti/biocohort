@@ -45,7 +45,7 @@ and code.
 | Term | Definition |
 |----|----|
 | **Manifest** | A CSV, or other tabular file, with the metadata and sample IDs for a study. [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md) and [`read_manifest()`](https://www.samuelbharti.com/biocohort/reference/read_manifest.md) turn it into `subject_tbl` and `sample_map`. |
-| **Manifest CSV** | A long-format, comma-separated file, one row per sample. Required columns: `subject_id`, `assay`, `sample_id`. Optional: `role`, plus any subject-level metadata (species, sex, genotype, cohort), which must stay constant within a subject. |
+| **Manifest CSV** | A long-format, comma-separated file, one row per sample. Required columns: `subject_id`, `assay`, `sample_id`. Optional: `role`, plus any subject-level metadata (species, sex, genotype, cohort), which must not hold two different values for one subject. A value missing in some of a subject’s rows is filled from the others. |
 
 ## Genotype and phenotype
 

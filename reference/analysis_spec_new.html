@@ -78,13 +78,14 @@ given.</p>
 
 <dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
 <dd><p>Character scalar for the assay label, spelled as in the
-cohort's <code>sample_map</code> (e.g., "wes", "wgs", "scrna"). Required. Subject
-and pair units are enumerated from the samples with this assay.</p></dd>
+cohort's <code>sample_map</code> (e.g., "wes", "wgs", "scrna"). Required. Subject,
+sample, and pair units are enumerated from the samples with this assay.</p></dd>
 
 
 <dt id="arg-level">level<a class="anchor" aria-label="anchor" href="#arg-level"></a></dt>
 <dd><p>Character scalar for the granularity at which the analysis
 produces results. Must be one of <code>"subject"</code> (one result per subject),
+<code>"sample"</code> (one result per sample of <code>assay</code>),
 <code>"pair"</code> (one result per tumor/normal pair, see <code><a href="sample_pairs.html">sample_pairs()</a></code>), or
 <code>"cohort"</code> (a single result for the whole cohort). Required.</p></dd>
 
@@ -102,9 +103,10 @@ Optional, defaults to NA.</p></dd>
 
 <dt id="arg-path-template">path_template<a class="anchor" aria-label="anchor" href="#arg-path-template"></a></dt>
 <dd><p>Character scalar for templated file path. Supports
-tokens: <code>{root}</code> (from <code>root_key</code>), <code>{subject_id}</code>, and the pair tokens
-<code>{tumor_sample_id}</code>, <code>{normal_sample_id}</code>, <code>{pair_id}</code> (from
-<code><a href="sample_pairs.html">sample_pairs()</a></code>). Optional, defaults to NA.</p></dd>
+tokens: <code>{root}</code> (from <code>root_key</code>), <code>{subject_id}</code>, the sample tokens
+<code>{sample_id}</code> and <code>{role}</code>, and the pair tokens <code>{tumor_sample_id}</code>,
+<code>{normal_sample_id}</code>, <code>{pair_id}</code> (from <code><a href="sample_pairs.html">sample_pairs()</a></code>). Optional,
+defaults to NA.</p></dd>
 
 
 <dt id="arg-root-key">root_key<a class="anchor" aria-label="anchor" href="#arg-root-key"></a></dt>
@@ -116,7 +118,10 @@ Optional, defaults to NA.</p></dd>
 <dd><p>Character scalar for reader function name (e.g.,
 "readr::read_tsv", "read.csv"). Optional. Defaults by <code>format</code>: "csv" to
 "readr::read_csv", "tsv" and "txt" to "readr::read_tsv", "rds" to
-"readRDS", "parquet" to "arrow::read_parquet". NA for any other format.
+"readRDS", "parquet" to "arrow::read_parquet", and "parquet_dataset" (a
+folder of parquet files) to "arrow::open_dataset". NA for any other
+format. A template with no file extension gets no format, so set
+<code>format = "parquet_dataset"</code> for a folder.
 <code><a href="load_analysis.html">load_analysis()</a></code> errors when neither the spec nor its <code>reader</code> argument
 names a reader.</p></dd>
 
@@ -124,8 +129,9 @@ names a reader.</p></dd>
 <dt id="arg-key-cols">key_cols<a class="anchor" aria-label="anchor" href="#arg-key-cols"></a></dt>
 <dd><p>Character vector of column names that must be present in
 the loaded table. Optional. Defaults by <code>level</code>: <code>"subject_id"</code> for
-subject, <code>c("subject_id", "pair_id")</code> for pair, and none for cohort.
-Subject and pair specs need at least one key column.</p></dd>
+subject, <code>c("subject_id", "sample_id")</code> for sample,
+<code>c("subject_id", "pair_id")</code> for pair, and none for cohort. Subject,
+sample, and pair specs need at least one key column.</p></dd>
 
 
 <dt id="arg-feature-type">feature_type<a class="anchor" aria-label="anchor" href="#arg-feature-type"></a></dt>
@@ -172,9 +178,10 @@ Default <code>"normal"</code>.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This constructor validates that:</p><ul><li><p><code>name</code> and <code>assay</code> are non-empty strings</p></li>
-<li><p><code>level</code> is one of: "subject", "pair", "cohort"</p></li>
+<li><p><code>level</code> is one of: "subject", "sample", "pair", "cohort"</p></li>
 <li><p><code>format</code> and <code>reader</code>, if given, are non-empty strings</p></li>
-<li><p><code>key_cols</code> is a character vector, non-empty for subject and pair specs</p></li>
+<li><p><code>key_cols</code> is a character vector, non-empty for subject, sample, and
+pair specs</p></li>
 <li><p><code>feature_type</code>, if given, is one of "interval" or "gene"</p></li>
 <li><p><code>id_type</code>, if given, is one of "symbol", "entrez", "ensembl"</p></li>
 <li><p><code>tumor_role</code>, <code>normal_role</code>, and <code>pair_sep</code> are non-empty strings</p></li>

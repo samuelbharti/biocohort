@@ -4,7 +4,10 @@ Filters a cohort's subject table and sample map together, so the result
 stays a valid
 [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md).
 Any loaded analysis table that has a `subject_id` column is filtered to
-match; the registry and paths are kept as they are.
+match. A table whose registered spec has `level = "sample"` is also
+filtered to the kept samples by `sample_id`. A lazy arrow table from
+`load_analysis(lazy = TRUE)` is filtered by `subject_id` without a read.
+The registry and paths are kept as they are.
 
 ## Usage
 

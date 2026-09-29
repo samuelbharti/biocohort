@@ -74,9 +74,9 @@ ids (matched against <code>cohort@sample_map$sample_id</code>) or subject ids
 
 
 <dt id="arg-action">action<a class="anchor" aria-label="anchor" href="#arg-action"></a></dt>
-<dd><p>One of <code>"flag"</code> or <code>"drop"</code>. <code>"flag"</code> sets <code>qc_status</code>/
-<code>qc_reason</code> on the matching rows and keeps them. <code>"drop"</code> removes the
-matching rows entirely. No default.</p></dd>
+<dd><p>One of <code>"flag"</code> or <code>"drop"</code>. <code>"flag"</code> sets a status and a
+reason on the matching rows and keeps them (see Details). <code>"drop"</code>
+removes the matching rows entirely. No default.</p></dd>
 
 
 <dt id="arg-reason">reason<a class="anchor" aria-label="anchor" href="#arg-reason"></a></dt>
@@ -93,10 +93,11 @@ matching rows entirely. No default.</p></dd>
 is never silently ignored.</p>
 <p><code>action = "flag"</code>, <code>scope = "sample"</code> sets <code>qc_status</code>/<code>qc_reason</code> on
 <code>sample_map</code>, creating the columns if they are absent. <code>scope = "subject"</code>
-sets the same two column names on <code>subject_tbl</code> instead; these are a
-separate pair of columns from the sample-level ones, and both can be set
-on the same cohort for different reasons. Flagging an id that already has
-a <code>qc_reason</code> appends the new reason rather than replacing it.</p>
+sets <code>subject_qc_status</code>/<code>subject_qc_reason</code> on <code>subject_tbl</code> instead.
+The two pairs have different names, so both can be set on the same cohort
+for different reasons, and a written manifest keeps each pair at its own
+level. Flagging an id that already has a reason appends the new reason
+and keeps the old one.</p>
 <p><code>action = "drop"</code> delegates to <code><a href="cohort_filter.html">cohort_filter()</a></code>: <code>scope = "sample"</code> uses
 its <code>drop_sample_ids</code> argument, with <code>drop_empty = FALSE</code> so a subject
 left with no samples is not also removed; <code>scope = "subject"</code> uses its
@@ -144,7 +145,7 @@ them.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   scope  id         action reason           previous_status timestamp          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> sample WES_R001_T flag   failed QC review <span style="color: #BB0000;">NA</span>              2026-09-29 <span style="color: #949494;">22:53:12</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> sample WES_R001_T flag   failed QC review <span style="color: #BB0000;">NA</span>              2026-09-29 <span style="color: #949494;">22:55:25</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Drop the same sample instead</span></span></span>
 <span class="r-in"><span><span class="va">dropped</span> <span class="op">&lt;-</span> <span class="fu">cohort_qc</span><span class="op">(</span></span></span>

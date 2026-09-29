@@ -44,6 +44,8 @@ AnalysisSpec(
 
   - `"subject"`: one result per subject.
 
+  - `"sample"`: one result per sample of the spec's assay.
+
   - `"pair"`: one result per tumor/normal (case/control) pair, as
     derived by
     [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)
@@ -68,7 +70,8 @@ AnalysisSpec(
 - path_template:
 
   Character scalar for templated path to analysis output. Supports
-  substitution tokens: `{root}` (from `root_key`), `{subject_id}`, and
+  substitution tokens: `{root}` (from `root_key`), `{subject_id}`, the
+  sample tokens `{sample_id}` and `{role}` (for `level = "sample"`), and
   the pair tokens `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}`
   (the latter three supplied by
   [`sample_pairs()`](https://www.samuelbharti.com/biocohort/reference/sample_pairs.md)

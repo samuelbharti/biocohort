@@ -7,7 +7,7 @@ would change if the underlying property ever did.
 ## Usage
 
 ``` r
-subjects(cohort)
+subjects(cohort, typed = FALSE)
 ```
 
 ## Arguments
@@ -16,6 +16,13 @@ subjects(cohort)
 
   A [Cohort](https://www.samuelbharti.com/biocohort/reference/Cohort.md)
   object.
+
+- typed:
+
+  Logical. When `TRUE`, applies the cohort's column dictionary (see
+  [`cohort_dictionary()`](https://www.samuelbharti.com/biocohort/reference/cohort_dictionary.md)):
+  a number column becomes numeric and a string column with allowed
+  values becomes a factor. Default `FALSE`.
 
 ## Value
 

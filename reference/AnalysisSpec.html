@@ -80,6 +80,7 @@ cohort's <code>sample_map</code> (e.g., "wes", "wgs", "scrna"). Required.</p></d
 <dt id="arg-level">level<a class="anchor" aria-label="anchor" href="#arg-level"></a></dt>
 <dd><p>Character scalar for the granularity at which the analysis
 produces results. Must be one of:</p><ul><li><p><code>"subject"</code>: one result per subject.</p></li>
+<li><p><code>"sample"</code>: one result per sample of the spec's assay.</p></li>
 <li><p><code>"pair"</code>: one result per tumor/normal (case/control) pair, as derived by
 <code><a href="sample_pairs.html">sample_pairs()</a></code> from the cohort's <code>sample_map</code>.</p></li>
 <li><p><code>"cohort"</code>: a single result for the whole cohort.</p></li>
@@ -100,6 +101,7 @@ analysis. Optional, defaults to NA.</p></dd>
 <dt id="arg-path-template">path_template<a class="anchor" aria-label="anchor" href="#arg-path-template"></a></dt>
 <dd><p>Character scalar for templated path to analysis output.
 Supports substitution tokens: <code>{root}</code> (from <code>root_key</code>), <code>{subject_id}</code>,
+the sample tokens <code>{sample_id}</code> and <code>{role}</code> (for <code>level = "sample"</code>),
 and the pair tokens <code>{tumor_sample_id}</code>, <code>{normal_sample_id}</code>, <code>{pair_id}</code>
 (the latter three supplied by <code><a href="sample_pairs.html">sample_pairs()</a></code> for <code>level = "pair"</code>).
 Optional, defaults to NA.</p></dd>

@@ -2,8 +2,10 @@
 
 After
 [`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md),
-returns the per-analysis file manifests (resolved paths and whether each
-existed) recorded during loading.
+returns the per-analysis file manifests recorded during loading: the
+resolved paths, whether each existed, and its size, modified time, and
+checksum. A report can keep this table to show which inputs changed
+between two runs.
 
 ## Usage
 
@@ -22,8 +24,10 @@ analysis_files(cohort)
 ## Value
 
 A named list of tibbles, one per loaded analysis. Each has the unit
-keys, `path`, and `exists`. When the cohort has not been loaded, an
-empty tibble with columns `path` and `exists`.
+keys, `path`, `exists`, `size`, `modified`, and `sha256` (see
+[`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)).
+When the cohort has not been loaded, an empty tibble with those five
+columns.
 
 ## See also
 
@@ -33,6 +37,7 @@ empty tibble with columns `path` and `exists`.
 
 ``` r
 analysis_files(example_cohort)
-#> # A tibble: 0 × 2
-#> # ℹ 2 variables: path <chr>, exists <lgl>
+#> # A tibble: 0 × 5
+#> # ℹ 5 variables: path <chr>, exists <lgl>, size <dbl>, modified <dttm>,
+#> #   sha256 <chr>
 ```

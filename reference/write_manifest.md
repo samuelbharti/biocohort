@@ -39,7 +39,9 @@ The written manifest tibble, invisibly.
 
 Columns are ordered `subject_id`, then the other subject-level columns,
 then the sample-level columns (`assay`, `sample_id`, `role`, and any
-extra ones). A missing value is written as an empty field.
+extra ones). A missing value is written as an empty field. A column
+other than `subject_id` that is in both tables is an error, since one
+flat manifest cannot hold two columns of the same name.
 
 ## See also
 

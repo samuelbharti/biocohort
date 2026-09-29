@@ -13,7 +13,9 @@ cohort_new(
   sample_map,
   study = NULL,
   paths = list(),
-  analyses = list()
+  analyses = list(),
+  corrections = NULL,
+  dictionary = NULL
 )
 ```
 
@@ -42,6 +44,22 @@ cohort_new(
 
   Named list of analysis tables or other data objects. Defaults to an
   empty list.
+
+- corrections:
+
+  Optional audit table of the corrections applied to the manifest, as
+  [`corrections_log()`](https://www.samuelbharti.com/biocohort/reference/corrections_log.md)
+  returns it for a corrected manifest. Stored in the cohort, so the
+  audit survives
+  [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md).
+  Defaults to `NULL`, an empty audit.
+
+- dictionary:
+
+  Optional data frame describing columns of the two tables, with
+  `column` and `type` and optionally `label`, `unit`, and `values`. See
+  [`cohort_dictionary()`](https://www.samuelbharti.com/biocohort/reference/cohort_dictionary.md).
+  Defaults to `NULL`, no dictionary.
 
 ## Value
 

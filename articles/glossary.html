@@ -274,8 +274,9 @@ turn it into <code>subject_tbl</code> and <code>sample_map</code>.</td>
 <td>A long-format, comma-separated file, one row per sample. Required
 columns: <code>subject_id</code>, <code>assay</code>,
 <code>sample_id</code>. Optional: <code>role</code>, plus any
-subject-level metadata (species, sex, genotype, cohort), which must stay
-constant within a subject.</td>
+subject-level metadata (species, sex, genotype, cohort), which must not
+hold two different values for one subject. A value missing in some of a
+subject’s rows is filled from the others.</td>
 </tr>
 </tbody>
 </table>

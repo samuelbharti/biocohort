@@ -29,7 +29,8 @@ cohort_derive(cohort, name, from, cutoffs, level)
 - cutoffs:
 
   A named numeric vector. Sorted internally, so the order given does not
-  matter. See Details for how names become bins.
+  matter. See Details for how names become bins. A name must not contain
+  `|`, which the saved derive log uses between cutoffs.
 
 - level:
 
@@ -57,6 +58,12 @@ real cutoff works the same way, at no extra cost.
 A value in `from` that is not already missing but fails to parse as
 numeric is an error naming the offending ids, never a silent `NA`. A
 value that was already missing stays `NA` in the derived column.
+
+`name` must not be a column of the other level's table, since the two
+tables are joined into one manifest by
+[`write_manifest()`](https://www.samuelbharti.com/biocohort/reference/write_manifest.md)
+and
+[`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md).
 
 Re-deriving with the same `name` overwrites the column, the same way
 [`analysis_register()`](https://www.samuelbharti.com/biocohort/reference/analysis_register.md)
@@ -114,5 +121,5 @@ derive_log(covered)
 #> # A tibble: 1 × 7
 #>   name        from       level   cutoffs   n_derived  n_na timestamp          
 #>   <chr>       <chr>      <chr>   <list>        <int> <int> <dttm>             
-#> 1 onset_group onset_days subject <dbl [2]>         3     0 2026-09-29 22:53:12
+#> 1 onset_group onset_days subject <dbl [2]>         3     0 2026-09-29 22:55:23
 ```
