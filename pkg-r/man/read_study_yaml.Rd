@@ -29,7 +29,9 @@ The file has these top-level keys, all optional except \code{manifest}:
 \item \code{study}: fields for \code{\link[=study_new]{study_new()}} (\code{study_id}, \code{title}, \code{description},
 \code{hypotheses}, \code{aims}, \code{assays}, \code{genome_builds}, \code{tags}).
 \item \code{manifest}: path to the manifest file, read with \code{\link[=read_manifest]{read_manifest()}}.
-Required.
+Required. For several files, a list of entries, each with a \code{path} and
+an optional \code{assay} that fills the \code{assay} column of a file that has
+none. The files are stacked as \code{\link[=read_manifest]{read_manifest()}} stacks them.
 \item \code{sample_cols}: extra sample-level columns, passed to
 \code{\link[=validate_manifest]{validate_manifest()}}.
 \item \code{species}: fills a \code{species} column when the manifest has none.

@@ -16,19 +16,23 @@ read_manifest(
 )
 }
 \arguments{
-\item{path}{Character scalar with the file path. The format is chosen
-from the file extension (\code{.csv}, \code{.tsv}/\code{.tab}, \code{.xlsx}/\code{.xls}), or by
-counting commas and tabs in the first line for any other extension.}
+\item{path}{Character vector of file paths, one or more. The format of
+each file is chosen from its extension (\code{.csv}, \code{.tsv}/\code{.tab},
+\code{.xlsx}/\code{.xls}), or by counting commas and tabs in the first line for
+any other extension. A name on an element, as in
+\code{c(bulk_rna = "rna_samples.csv")}, fills the \code{assay} column of a file
+that has none.}
 
 \item{...}{Additional named arguments passed to the underlying reader:
 \code{\link[readr:read_delim]{readr::read_delim()}} for a delimited text file, or
 \code{\link[readxl:read_excel]{readxl::read_excel()}} for an Excel file.}
 
 \item{delim}{Optional character scalar overriding delimiter detection for
-a delimited text file. Ignored for Excel files.}
+a delimited text file. Ignored for Excel files. Applies to every file.}
 
 \item{sheet}{Optional sheet name or number, passed to
-\code{\link[readxl:read_excel]{readxl::read_excel()}}. Ignored for a delimited text file.}
+\code{\link[readxl:read_excel]{readxl::read_excel()}}. Ignored for a delimited text file. Applies to
+every file.}
 
 \item{sample_cols, species, allow_duplicates, missing_is_conflict}{Passed to
 \code{\link[=validate_manifest]{validate_manifest()}}.}
@@ -41,12 +45,20 @@ The list returned by \code{\link[=validate_manifest]{validate_manifest()}}: \cod
 Reads a manifest from CSV, TSV, or Excel and delegates to
 \code{\link[=validate_manifest]{validate_manifest()}} for validation and structuring. Every column is
 read as character, so an id like \code{"007"} or \code{"1.10"} is never silently
-turned into a number.
+turned into a number. Several files, such as one sample sheet per assay,
+are stacked into one manifest first.
 }
 \details{
 The file must be in long format with one row per sample. See
 \code{\link[=validate_manifest]{validate_manifest()}} for the required columns and the full validation
 rules. Reading an Excel file needs the \pkg{readxl} package.
+
+Several files are stacked by column name, so a column that one file does
+not have is \code{NA} for the rows of that file. The subject-level columns are
+then checked across all files. A missing value is no conflict (see
+\code{missing_is_conflict}). Two different values for one subject are an
+error that names the subject, the column, and the file each value came
+from.
 }
 \examples{
 manifest_file <- tempfile(fileext = ".csv")
@@ -61,6 +73,16 @@ writeLines(
 )
 
 parsed <- read_manifest(manifest_file)
+parsed$subject_tbl
+parsed$sample_map
+
+# One sheet per assay, with no assay column in either.
+rna_file <- tempfile(fileext = ".csv")
+writeLines(c("subject_id,species,sample_id", "P1,human,R1"), rna_file)
+protein_file <- tempfile(fileext = ".csv")
+writeLines(c("subject_id,sex,sample_id", "P1,F,PR1"), protein_file)
+
+parsed <- read_manifest(c(bulk_rna = rna_file, proteomics = protein_file))
 parsed$subject_tbl
 parsed$sample_map
 
