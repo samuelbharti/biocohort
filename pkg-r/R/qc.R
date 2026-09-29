@@ -12,8 +12,8 @@
 #' @param scope One of `"sample"` or `"subject"`: whether `ids` are sample
 #'   ids (matched against `cohort@sample_map$sample_id`) or subject ids
 #'   (matched against `cohort@subject_tbl$subject_id`). No default.
-#' @param action One of `"flag"` or `"drop"`. `"flag"` sets `qc_status`/
-#'   `qc_reason` on the matching rows and keeps them. `"drop"` removes the
+#' @param action One of `"flag"` or `"drop"`. `"flag"` sets a status and a
+#'   reason on the matching rows and keeps them (see Details). `"drop"` removes the
 #'   matching rows entirely. No default.
 #' @param reason A single, non-empty string explaining the decision.
 #'
@@ -25,10 +25,11 @@
 #'
 #' `action = "flag"`, `scope = "sample"` sets `qc_status`/`qc_reason` on
 #' `sample_map`, creating the columns if they are absent. `scope = "subject"`
-#' sets the same two column names on `subject_tbl` instead; these are a
-#' separate pair of columns from the sample-level ones, and both can be set
-#' on the same cohort for different reasons. Flagging an id that already has
-#' a `qc_reason` appends the new reason rather than replacing it.
+#' sets `subject_qc_status`/`subject_qc_reason` on `subject_tbl` instead.
+#' The two pairs have different names, so both can be set on the same cohort
+#' for different reasons, and a written manifest keeps each pair at its own
+#' level. Flagging an id that already has a reason appends the new reason
+#' and keeps the old one.
 #'
 #' `action = "drop"` delegates to [cohort_filter()]: `scope = "sample"` uses
 #' its `drop_sample_ids` argument, with `drop_empty = FALSE` so a subject
@@ -128,41 +129,49 @@ qc_log <- function(cohort) {
 # Existing qc_status per id, before this call. NA when the column, or the
 # id itself, has no value yet.
 .qc_previous_status <- function(cohort, ids, scope) {
-  if (scope == "sample") {
-    tbl <- cohort@sample_map
-    id_col <- "sample_id"
-  } else {
-    tbl <- cohort@subject_tbl
-    id_col <- "subject_id"
-  }
-  if (!"qc_status" %in% names(tbl)) {
+  cols <- .qc_cols(scope)
+  tbl <- .qc_table(cohort, scope)
+  if (!cols$status %in% names(tbl)) {
     return(rep(NA_character_, length(ids)))
   }
-  unname(tbl$qc_status[match(ids, tbl[[id_col]])])
+  unname(tbl[[cols$status]][match(ids, tbl[[cols$id]])])
 }
 
-# Set qc_status/qc_reason on the matching rows of subject_tbl or sample_map,
-# creating the two columns if either is absent. An existing qc_reason gets
-# the new reason appended, not replaced.
-.qc_flag <- function(cohort, ids, scope, reason) {
+# The id, status, and reason column names for a QC scope. The subject scope
+# has its own names, so a manifest that joins both tables keeps both pairs.
+.qc_cols <- function(scope) {
   if (scope == "sample") {
-    tbl <- cohort@sample_map
-    id_col <- "sample_id"
+    list(id = "sample_id", status = "qc_status", reason = "qc_reason")
   } else {
-    tbl <- cohort@subject_tbl
-    id_col <- "subject_id"
+    list(
+      id = "subject_id",
+      status = "subject_qc_status",
+      reason = "subject_qc_reason"
+    )
   }
-  if (!"qc_status" %in% names(tbl)) {
-    tbl$qc_status <- NA_character_
+}
+
+.qc_table <- function(cohort, scope) {
+  if (scope == "sample") cohort@sample_map else cohort@subject_tbl
+}
+
+# Set the status and reason columns on the matching rows of subject_tbl or
+# sample_map, creating the two columns if either is absent. An existing
+# reason gets the new reason appended, not replaced.
+.qc_flag <- function(cohort, ids, scope, reason) {
+  cols <- .qc_cols(scope)
+  tbl <- .qc_table(cohort, scope)
+  if (!cols$status %in% names(tbl)) {
+    tbl[[cols$status]] <- NA_character_
   }
-  if (!"qc_reason" %in% names(tbl)) {
-    tbl$qc_reason <- NA_character_
+  if (!cols$reason %in% names(tbl)) {
+    tbl[[cols$reason]] <- NA_character_
   }
 
-  matched <- tbl[[id_col]] %in% ids
-  tbl$qc_status[matched] <- "flagged"
-  tbl$qc_reason[matched] <- vapply(
-    tbl$qc_reason[matched],
+  matched <- tbl[[cols$id]] %in% ids
+  tbl[[cols$status]][matched] <- "flagged"
+  tbl[[cols$reason]][matched] <- vapply(
+    tbl[[cols$reason]][matched],
     .append_reason,
     character(1),
     new = reason

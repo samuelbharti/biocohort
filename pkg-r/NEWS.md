@@ -1,6 +1,12 @@
 # biocohort (development version)
 
 - README: a CRAN badge, and installation from CRAN first.
+- `cohort_qc(scope = "subject", action = "flag")` now writes
+  `subject_qc_status` and `subject_qc_reason` to `subject_tbl`. It used the
+  same names as the sample scope, `qc_status` and `qc_reason`. With both
+  scopes flagged, `write_manifest()` and `write_study_yaml()` failed, and a
+  subject flag alone moved to the samples after a write and a read. Code
+  that reads the subject flag by its old name needs the new one.
 
 # biocohort 0.1.1
 
