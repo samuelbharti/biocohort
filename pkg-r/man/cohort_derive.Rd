@@ -15,7 +15,8 @@ cohort_derive(cohort, name, from, cutoffs, level)
 numeric-coercible) column to bin.}
 
 \item{cutoffs}{A named numeric vector. Sorted internally, so the order
-given does not matter. See Details for how names become bins.}
+given does not matter. See Details for how names become bins. A name
+must not contain \code{|}, which the saved derive log uses between cutoffs.}
 
 \item{level}{One of \code{"subject"} or \code{"sample"}: whether \code{from} and \code{name}
 act on \code{subject_tbl} or \code{sample_map}. No default.}

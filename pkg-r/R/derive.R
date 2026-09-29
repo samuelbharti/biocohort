@@ -9,7 +9,8 @@
 #' @param from Character scalar naming an existing numeric (or
 #'   numeric-coercible) column to bin.
 #' @param cutoffs A named numeric vector. Sorted internally, so the order
-#'   given does not matter. See Details for how names become bins.
+#'   given does not matter. See Details for how names become bins. A name
+#'   must not contain `|`, which the saved derive log uses between cutoffs.
 #' @param level One of `"subject"` or `"sample"`: whether `from` and `name`
 #'   act on `subject_tbl` or `sample_map`. No default.
 #'
@@ -152,6 +153,12 @@ derive_log <- function(cohort) {
   }
   if (any(cutoffs == -Inf)) {
     cli::cli_abort("`cutoffs` must be finite; -Inf is not a usable cutoff.")
+  }
+  # The derive log is written as text with "|" between cutoffs, so a name
+  # with "|" would not read back.
+  bad <- grep("|", names(cutoffs), fixed = TRUE, value = TRUE)
+  if (length(bad) > 0) {
+    cli::cli_abort("`cutoffs` names must not contain {.val |}: {.val {bad}}.")
   }
 }
 

@@ -347,3 +347,19 @@ test_that("read_study_yaml rejects an unknown log", {
 
   expect_error(read_study_yaml(path), "audit")
 })
+
+test_that("read_study_yaml names a log file that is missing", {
+  skip_if_not_installed("yaml")
+  dir <- withr::local_tempdir()
+  writeLines(
+    c("subject_id,species,assay,sample_id", "R1,rat,wes,T1"),
+    file.path(dir, "manifest.csv")
+  )
+  path <- file.path(dir, "study.yaml")
+  yaml::write_yaml(
+    list(manifest = "manifest.csv", logs = list(qc = "qc_log.csv")),
+    path
+  )
+
+  expect_error(read_study_yaml(path), "qc log file was not found")
+})
