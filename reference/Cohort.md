@@ -22,8 +22,7 @@ Cohort(
   derived = tibble::tibble(name = character(), from = character(), level = character(),
     cutoffs = list(), n_derived = integer(), n_na = integer(), timestamp =
     as.POSIXct(character())),
-  corrections = empty_corrections_log(),
-  dictionary = .empty_dictionary()
+  corrections = empty_corrections_log()
 )
 ```
 
@@ -96,13 +95,6 @@ Cohort(
   [`corrections_log()`](https://www.samuelbharti.com/biocohort/reference/corrections_log.md)
   returns. Durable in the same way as `qc`. Defaults to an empty table.
 
-- dictionary:
-
-  A tibble describing columns of `subject_tbl` and `sample_map`:
-  `column`, `type`, `label`, `unit`, and `values`. See
-  [`cohort_dictionary()`](https://www.samuelbharti.com/biocohort/reference/cohort_dictionary.md).
-  Defaults to an empty table.
-
 ## Value
 
 A `Cohort` object with the given properties.
@@ -136,7 +128,6 @@ Access properties with the `@` operator:
     cohort@qc            # QC audit log
     cohort@derived       # Derived-column provenance
     cohort@corrections   # Manifest corrections audit
-    cohort@dictionary    # Column types, labels, units, and allowed values
 
 ## See also
 

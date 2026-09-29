@@ -51,13 +51,7 @@ with <code><a href="analysis_files.html">analysis_files()</a></code>. This is th
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_analyses</span><span class="op">(</span></span>
-<span>  <span class="va">cohort</span>,</span>
-<span>  analyses <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  readers <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  checksum <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  lazy <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_analyses</span><span class="op">(</span><span class="va">cohort</span>, analyses <span class="op">=</span> <span class="cn">NULL</span>, readers <span class="op">=</span> <span class="cn">NULL</span>, checksum <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -82,11 +76,6 @@ name (each a function or <code>"pkg::fun"</code> name).</p></dd>
 <dd><p>Logical. Passed to <code><a href="load_analysis.html">load_analysis()</a></code>. When <code>TRUE</code>, the
 file tables that <code><a href="analysis_files.html">analysis_files()</a></code> returns hold a SHA-256 checksum per
 file.</p></dd>
-
-
-<dt id="arg-lazy">lazy<a class="anchor" aria-label="anchor" href="#arg-lazy"></a></dt>
-<dd><p>Logical. Passed to <code><a href="load_analysis.html">load_analysis()</a></code> for every analysis
-loaded. Use <code>analyses</code> to load only the cohort-level ones lazily.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -144,7 +133,7 @@ loaded. Use <code>analyses</code> to load only the cohort-level ones lazily.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id path                        exists  size modified            sha256</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> S1         /tmp/RtmpGvxTKn/file1aeb28… TRUE      24 2026-09-29 <span style="color: #949494;">22:55:35</span> <span style="color: #BB0000;">NA</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> S1         /tmp/RtmpURSal0/file1a4681… TRUE      24 2026-09-29 <span style="color: #949494;">22:57:57</span> <span style="color: #BB0000;">NA</span>    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

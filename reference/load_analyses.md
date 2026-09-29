@@ -16,13 +16,7 @@ tables*, ready for
 ## Usage
 
 ``` r
-load_analyses(
-  cohort,
-  analyses = NULL,
-  readers = NULL,
-  checksum = FALSE,
-  lazy = FALSE
-)
+load_analyses(cohort, analyses = NULL, readers = NULL, checksum = FALSE)
 ```
 
 ## Arguments
@@ -50,13 +44,6 @@ load_analyses(
   When `TRUE`, the file tables that
   [`analysis_files()`](https://www.samuelbharti.com/biocohort/reference/analysis_files.md)
   returns hold a SHA-256 checksum per file.
-
-- lazy:
-
-  Logical. Passed to
-  [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
-  for every analysis loaded. Use `analyses` to load only the
-  cohort-level ones lazily.
 
 ## Value
 
@@ -118,7 +105,7 @@ analysis_files(loaded)
 #> # A tibble: 1 × 6
 #>   subject_id path                        exists  size modified            sha256
 #>   <chr>      <chr>                       <lgl>  <dbl> <dttm>              <chr> 
-#> 1 S1         /tmp/RtmpGvxTKn/file1aeb28… TRUE      24 2026-09-29 22:55:35 NA    
+#> 1 S1         /tmp/RtmpURSal0/file1a4681… TRUE      24 2026-09-29 22:57:57 NA    
 #> 
 unlink(dir, recursive = TRUE)
 ```

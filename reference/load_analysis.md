@@ -11,7 +11,7 @@ single feature table annotated with provenance keys (`subject_id`, and
 ## Usage
 
 ``` r
-load_analysis(cohort, spec, reader = NULL, checksum = FALSE, lazy = FALSE)
+load_analysis(cohort, spec, reader = NULL, checksum = FALSE)
 ```
 
 ## Arguments
@@ -39,21 +39,12 @@ load_analysis(cohort, spec, reader = NULL, checksum = FALSE, lazy = FALSE)
   checksum of each file. Default `FALSE`, since a checksum reads every
   byte.
 
-- lazy:
-
-  Logical. When `TRUE`, the reader's object is returned as it is, for
-  example an arrow Dataset from
-  [`arrow::open_dataset()`](https://arrow.apache.org/docs/r/reference/open_dataset.html),
-  and no row is read. Only a spec with `level = "cohort"` can load
-  lazily. Default `FALSE`.
-
 ## Value
 
 A list with:
 
 - `data`: a tibble of all loaded rows (empty if no files were found),
-  with provenance key columns added. With `lazy = TRUE`, the reader's
-  object, or `NULL` when the path does not exist.
+  with provenance key columns added.
 
 - `files`: a tibble with one row per unit: its keys, the resolved
   `path`, whether it `exists`, its `size` in bytes, its `modified` time,
@@ -87,18 +78,6 @@ The reader comes from the `reader` argument, else from the spec. The
 function errors when neither names one. After each file is read, the
 spec's `key_cols` must be present in the table (the provenance keys
 count), or the function errors and names the missing columns.
-
-A table larger than memory, such as variant calls kept as a parquet
-folder, can load lazily. With `lazy = TRUE` and
-`format = "parquet_dataset"`, the data is an arrow Dataset: `key_cols`
-are checked against its column names and nothing is read until
-[`dplyr::collect()`](https://dplyr.tidyverse.org/reference/compute.html).
-[`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
-filters a lazy arrow table by `subject_id` and it stays lazy. A lazy
-table holds a handle to files on disk, so it does not survive
-[`cohort_save()`](https://www.samuelbharti.com/biocohort/reference/cohort_save.md).
-Files per subject, sample, or pair cannot load lazily, because each file
-would need its key columns added without a read.
 
 ## See also
 
@@ -149,5 +128,5 @@ loaded$files
 #> # A tibble: 1 × 6
 #>   subject_id path                        exists  size modified            sha256
 #>   <chr>      <chr>                       <lgl>  <dbl> <dttm>              <chr> 
-#> 1 S1         /tmp/RtmpGvxTKn/file1aeb14… TRUE      24 2026-09-29 22:55:36 NA    
+#> 1 S1         /tmp/RtmpURSal0/file1a4610… TRUE      24 2026-09-29 22:57:58 NA    
 ```

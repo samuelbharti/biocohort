@@ -14,8 +14,7 @@ cohort_new(
   study = NULL,
   paths = list(),
   analyses = list(),
-  corrections = NULL,
-  dictionary = NULL
+  corrections = NULL
 )
 ```
 
@@ -53,13 +52,6 @@ cohort_new(
   audit survives
   [`validate_manifest()`](https://www.samuelbharti.com/biocohort/reference/validate_manifest.md).
   Defaults to `NULL`, an empty audit.
-
-- dictionary:
-
-  Optional data frame describing columns of the two tables, with
-  `column` and `type` and optionally `label`, `unit`, and `values`. See
-  [`cohort_dictionary()`](https://www.samuelbharti.com/biocohort/reference/cohort_dictionary.md).
-  Defaults to `NULL`, no dictionary.
 
 ## Value
 

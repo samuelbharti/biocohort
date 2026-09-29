@@ -78,37 +78,6 @@
   file that has none, and a conflict across files names the files. The
   study YAML `manifest:` key accepts a list of `path` and `assay`
   entries ([\#75](https://github.com/samuelbharti/biocohort/issues/75)).
-- A cohort can hold a column dictionary with a type, a label, a unit,
-  and the allowed values of each column. Set it with the new
-  `dictionary` argument of
-  [`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)
-  or a `dictionary:` file in the study YAML, and read it with
-  [`cohort_dictionary()`](https://www.samuelbharti.com/biocohort/reference/cohort_dictionary.md).
-  The tables stay text;
-  [`subjects()`](https://www.samuelbharti.com/biocohort/reference/subjects.md),
-  [`samples()`](https://www.samuelbharti.com/biocohort/reference/samples.md)
-  and
-  [`as_coldata()`](https://www.samuelbharti.com/biocohort/reference/as_coldata.md)
-  apply the types with `typed = TRUE`
-  ([\#77](https://github.com/samuelbharti/biocohort/issues/77)).
-- [`load_analysis()`](https://www.samuelbharti.com/biocohort/reference/load_analysis.md)
-  and
-  [`load_analyses()`](https://www.samuelbharti.com/biocohort/reference/load_analyses.md)
-  take `lazy = TRUE` for a cohort-level table larger than memory. With
-  the new format `parquet_dataset`, whose default reader is
-  [`arrow::open_dataset`](https://arrow.apache.org/docs/r/reference/open_dataset.html),
-  the cohort holds an arrow Dataset and no row is read.
-  [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
-  filters it by `subject_id` and it stays lazy.
-  [`translate()`](https://www.samuelbharti.com/biocohort/reference/translate.md)
-  skips a table that is not a data frame, with a warning
-  ([\#74](https://github.com/samuelbharti/biocohort/issues/74)).
-- [`cohort_bind()`](https://www.samuelbharti.com/biocohort/reference/cohort_bind.md)
-  combines two or more cohorts. A `links` table maps the subject ids of
-  each cohort to one id per person, and `separate = TRUE` marks cohorts
-  of different people by putting the cohort name in front of each id.
-  The sample map and the logs get a `source` column
-  ([\#76](https://github.com/samuelbharti/biocohort/issues/76)).
 
 ## biocohort 0.1.1
 

@@ -217,12 +217,8 @@ Read parts of a cohort
   : Read the sample map of a cohort
 - [`completeness()`](https://www.samuelbharti.com/biocohort/reference/completeness.md)
   : Per-assay sample counts for a cohort
-- [`cohort_dictionary()`](https://www.samuelbharti.com/biocohort/reference/cohort_dictionary.md)
-  : Read the column dictionary of a cohort
 - [`cohort_filter()`](https://www.samuelbharti.com/biocohort/reference/cohort_filter.md)
   : Keep a subset of a cohort's subjects or assays
-- [`cohort_bind()`](https://www.samuelbharti.com/biocohort/reference/cohort_bind.md)
-  : Combine cohorts into one
 
 ## Quality control
 

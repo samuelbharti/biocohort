@@ -6,13 +6,7 @@ and an optional join to the subject table.
 ## Usage
 
 ``` r
-samples(
-  cohort,
-  assay = NULL,
-  role = NULL,
-  with_subjects = FALSE,
-  typed = FALSE
-)
+samples(cohort, assay = NULL, role = NULL, with_subjects = FALSE)
 ```
 
 ## Arguments
@@ -36,12 +30,6 @@ samples(
   subject-level columns (species, genotype, ...) sit alongside each
   sample row. Default `FALSE`. A column other than `subject_id` that is
   in both tables is an error, so no column is renamed in silence.
-
-- typed:
-
-  Logical. When `TRUE`, applies the cohort's column dictionary, as
-  [`subjects()`](https://www.samuelbharti.com/biocohort/reference/subjects.md)
-  does. Default `FALSE`.
 
 ## Value
 

@@ -121,5 +121,5 @@ derive_log(covered)
 #> # A tibble: 1 × 7
 #>   name        from       level   cutoffs   n_derived  n_na timestamp          
 #>   <chr>       <chr>      <chr>   <list>        <int> <int> <dttm>             
-#> 1 onset_group onset_days subject <dbl [2]>         3     0 2026-09-29 22:55:23
+#> 1 onset_group onset_days subject <dbl [2]>         3     0 2026-09-29 22:57:45
 ```

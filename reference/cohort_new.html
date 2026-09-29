@@ -51,8 +51,7 @@ output of <code><a href="validate_manifest.html">validate_manifest()</a></code>.
 <span>  study <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  paths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  analyses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  corrections <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  dictionary <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  corrections <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -91,12 +90,6 @@ Defaults to an empty list.</p></dd>
 manifest, as <code><a href="corrections_log.html">corrections_log()</a></code> returns it for a corrected manifest.
 Stored in the cohort, so the audit survives <code><a href="validate_manifest.html">validate_manifest()</a></code>.
 Defaults to <code>NULL</code>, an empty audit.</p></dd>
-
-
-<dt id="arg-dictionary">dictionary<a class="anchor" aria-label="anchor" href="#arg-dictionary"></a></dt>
-<dd><p>Optional data frame describing columns of the two
-tables, with <code>column</code> and <code>type</code> and optionally <code>label</code>, <code>unit</code>, and
-<code>values</code>. See <code><a href="cohort_dictionary.html">cohort_dictionary()</a></code>. Defaults to <code>NULL</code>, no dictionary.</p></dd>
 
 </dl></div>
     <div class="section level2">

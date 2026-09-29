@@ -67,10 +67,6 @@ The file has these top-level keys, all optional except `manifest`:
   [`analysis_spec_new()`](https://www.samuelbharti.com/biocohort/reference/analysis_spec_new.md)
   field sets, one per registered analysis.
 
-- `dictionary`: path to a CSV file with the column dictionary, with the
-  columns `column`, `type`, `label`, `unit`, and `values` (see
-  [`cohort_dictionary()`](https://www.samuelbharti.com/biocohort/reference/cohort_dictionary.md)).
-
 - `logs`: a map with up to three keys, `qc`, `derive`, and
   `corrections`, each the path of a CSV file that
   [`write_study_yaml()`](https://www.samuelbharti.com/biocohort/reference/write_study_yaml.md)
@@ -80,9 +76,9 @@ The file has these top-level keys, all optional except `manifest`:
   and
   [`corrections_log()`](https://www.samuelbharti.com/biocohort/reference/corrections_log.md).
 
-Every path (`manifest`, an entry of `paths`, `corrections`,
-`dictionary`, an entry of `logs`) is resolved relative to the YAML
-file's own directory unless it is already absolute.
+Every path (`manifest`, an entry of `paths`, `corrections`, an entry of
+`logs`) is resolved relative to the YAML file's own directory unless it
+is already absolute.
 
 The audit of a `corrections` file is kept in the cohort, after the audit
 read from `logs`, so

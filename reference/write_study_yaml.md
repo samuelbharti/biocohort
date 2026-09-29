@@ -41,10 +41,8 @@ that was applied before the cohort was built.
 Each log that has rows is written next to the manifest, as `qc_log.csv`,
 `derive_log.csv`, and `corrections_log.csv`, and listed under a `logs:`
 key. A time is written in UTC, such as `2026-09-29T21:19:07Z`, and the
-cutoffs of a derived column as `young=0|old=40`. A column dictionary
-with rows is written the same way, as `dictionary.csv` under a
-`dictionary:` key. Text files keep the record readable in a diff and
-from other languages.
+cutoffs of a derived column as `young=0|old=40`. Text files keep the
+record readable in a diff and from other languages.
 [`cohort_save()`](https://www.samuelbharti.com/biocohort/reference/cohort_save.md)
 keeps the same logs in a binary file.
 

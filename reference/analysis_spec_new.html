@@ -118,10 +118,7 @@ Optional, defaults to NA.</p></dd>
 <dd><p>Character scalar for reader function name (e.g.,
 "readr::read_tsv", "read.csv"). Optional. Defaults by <code>format</code>: "csv" to
 "readr::read_csv", "tsv" and "txt" to "readr::read_tsv", "rds" to
-"readRDS", "parquet" to "arrow::read_parquet", and "parquet_dataset" (a
-folder of parquet files) to "arrow::open_dataset". NA for any other
-format. A template with no file extension gets no format, so set
-<code>format = "parquet_dataset"</code> for a folder.
+"readRDS", "parquet" to "arrow::read_parquet". NA for any other format.
 <code><a href="load_analysis.html">load_analysis()</a></code> errors when neither the spec nor its <code>reader</code> argument
 names a reader.</p></dd>
 

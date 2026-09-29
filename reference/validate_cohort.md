@@ -42,10 +42,6 @@ The checks are:
 
 - Every `sample_map$subject_id` exists in `subject_tbl`.
 
-- Every column in the dictionary exists and holds only the values its
-  entry allows (see
-  [`cohort_dictionary()`](https://www.samuelbharti.com/biocohort/reference/cohort_dictionary.md)).
-
 ## See also
 
 [`cohort_new()`](https://www.samuelbharti.com/biocohort/reference/cohort_new.md)

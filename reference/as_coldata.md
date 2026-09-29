@@ -8,14 +8,7 @@ similar analysis objects expect.
 ## Usage
 
 ``` r
-as_coldata(
-  cohort,
-  assay,
-  samples = NULL,
-  rownames = "sample_id",
-  ref = NULL,
-  typed = FALSE
-)
+as_coldata(cohort, assay, samples = NULL, rownames = "sample_id", ref = NULL)
 ```
 
 ## Arguments
@@ -48,15 +41,6 @@ as_coldata(
   [`stats::relevel()`](https://rdrr.io/r/stats/relevel.html). Use it to
   set a control or wild-type group as the baseline before a differential
   analysis.
-
-- typed:
-
-  Logical. When `TRUE`, applies the cohort's column dictionary first
-  (see
-  [`cohort_dictionary()`](https://www.samuelbharti.com/biocohort/reference/cohort_dictionary.md)),
-  so a number column is numeric and a string column with allowed values
-  is a factor in that order. `ref` then moves one level to the front.
-  Default `FALSE`.
 
 ## Value
 
