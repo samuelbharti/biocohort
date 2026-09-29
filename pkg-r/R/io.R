@@ -3,18 +3,23 @@
 #' Reads a manifest from CSV, TSV, or Excel and delegates to
 #' [validate_manifest()] for validation and structuring. Every column is
 #' read as character, so an id like `"007"` or `"1.10"` is never silently
-#' turned into a number.
+#' turned into a number. Several files, such as one sample sheet per assay,
+#' are stacked into one manifest first.
 #'
-#' @param path Character scalar with the file path. The format is chosen
-#'   from the file extension (`.csv`, `.tsv`/`.tab`, `.xlsx`/`.xls`), or by
-#'   counting commas and tabs in the first line for any other extension.
+#' @param path Character vector of file paths, one or more. The format of
+#'   each file is chosen from its extension (`.csv`, `.tsv`/`.tab`,
+#'   `.xlsx`/`.xls`), or by counting commas and tabs in the first line for
+#'   any other extension. A name on an element, as in
+#'   `c(bulk_rna = "rna_samples.csv")`, fills the `assay` column of a file
+#'   that has none.
 #' @param ... Additional named arguments passed to the underlying reader:
 #'   [readr::read_delim()] for a delimited text file, or
 #'   [readxl::read_excel()] for an Excel file.
 #' @param delim Optional character scalar overriding delimiter detection for
-#'   a delimited text file. Ignored for Excel files.
+#'   a delimited text file. Ignored for Excel files. Applies to every file.
 #' @param sheet Optional sheet name or number, passed to
-#'   [readxl::read_excel()]. Ignored for a delimited text file.
+#'   [readxl::read_excel()]. Ignored for a delimited text file. Applies to
+#'   every file.
 #' @param sample_cols,species,allow_duplicates,missing_is_conflict Passed to
 #'   [validate_manifest()].
 #'
@@ -25,6 +30,13 @@
 #' The file must be in long format with one row per sample. See
 #' [validate_manifest()] for the required columns and the full validation
 #' rules. Reading an Excel file needs the \pkg{readxl} package.
+#'
+#' Several files are stacked by column name, so a column that one file does
+#' not have is `NA` for the rows of that file. The subject-level columns are
+#' then checked across all files. A missing value is no conflict (see
+#' `missing_is_conflict`). Two different values for one subject are an
+#' error that names the subject, the column, and the file each value came
+#' from.
 #'
 #' @examples
 #' manifest_file <- tempfile(fileext = ".csv")
@@ -42,6 +54,16 @@
 #' parsed$subject_tbl
 #' parsed$sample_map
 #'
+#' # One sheet per assay, with no assay column in either.
+#' rna_file <- tempfile(fileext = ".csv")
+#' writeLines(c("subject_id,species,sample_id", "P1,human,R1"), rna_file)
+#' protein_file <- tempfile(fileext = ".csv")
+#' writeLines(c("subject_id,sex,sample_id", "P1,F,PR1"), protein_file)
+#'
+#' parsed <- read_manifest(c(bulk_rna = rna_file, proteomics = protein_file))
+#' parsed$subject_tbl
+#' parsed$sample_map
+#'
 #' @seealso [validate_manifest()] for the validation rules,
 #'   [manifest_from_wide()] for reshaping a wide table first,
 #'   [cohort_new()] for creating a Cohort from manifest data
@@ -56,12 +78,11 @@ read_manifest <- function(
   allow_duplicates = FALSE,
   missing_is_conflict = FALSE
 ) {
-  checkmate::assert_string(path, min.chars = 1)
-  if (!fs::file_exists(path)) {
-    cli::cli_abort("Manifest file not found: {.path {path}}.")
+  manifest <- .read_manifest_files(path, delim = delim, sheet = sheet, ...)
+  if (length(path) > 1) {
+    .check_file_conflicts(manifest, sample_cols, species)
+    manifest$.manifest_file <- NULL
   }
-
-  manifest <- .read_manifest_file(path, delim = delim, sheet = sheet, ...)
 
   validate_manifest(
     manifest,
@@ -70,6 +91,71 @@ read_manifest <- function(
     allow_duplicates = allow_duplicates,
     missing_is_conflict = missing_is_conflict
   )
+}
+
+# Read one or more manifest files. A name on a path fills the assay column
+# of a file that has none. More than one file is stacked by column name,
+# with the path of each row in a .manifest_file column, which the caller
+# drops after .check_file_conflicts().
+.read_manifest_files <- function(path, delim = NULL, sheet = NULL, ...) {
+  checkmate::assert_character(
+    path,
+    min.len = 1,
+    min.chars = 1,
+    any.missing = FALSE
+  )
+  missing <- path[!fs::file_exists(path)]
+  if (length(missing) > 0) {
+    cli::cli_abort("Manifest file{?s} not found: {.path {missing}}.")
+  }
+
+  assays <- names(path) %||% rep("", length(path))
+  tables <- lapply(seq_along(path), function(i) {
+    tbl <- .read_manifest_file(path[[i]], delim = delim, sheet = sheet, ...)
+    if (nzchar(assays[[i]]) && !"assay" %in% names(tbl)) {
+      tbl$assay <- assays[[i]]
+    }
+    tbl
+  })
+  if (length(tables) == 1) {
+    return(tables[[1]])
+  }
+  names(tables) <- unname(path)
+  dplyr::bind_rows(tables, .id = ".manifest_file")
+}
+
+# Error when the files of a stacked manifest give different values of a
+# subject-level column for one subject, naming each value and its file, for
+# example "R1 (sex: F in rna.csv, M in prot.csv)". validate_manifest() would
+# name only the subject and the column.
+.check_file_conflicts <- function(stacked, sample_cols, species) {
+  manifest <- .coerce_manifest(stacked, species)
+  subject_cols <- setdiff(
+    names(manifest),
+    c(.sample_level_cols(manifest, sample_cols), "subject_id", ".manifest_file")
+  )
+  msgs <- character()
+  for (col in subject_cols) {
+    given <- manifest[!is.na(manifest[[col]]), , drop = FALSE]
+    values <- unique(given[c("subject_id", col, ".manifest_file")])
+    per_subject <- table(unique(values[c("subject_id", col)])$subject_id)
+    for (id in names(per_subject)[per_subject > 1]) {
+      rows <- values[values$subject_id == id, , drop = FALSE]
+      where <- paste(rows[[col]], "in", fs::path_file(rows$.manifest_file))
+      msgs <- c(msgs, sprintf("%s (%s: %s)", id, col, toString(where)))
+    }
+  }
+  if (length(msgs) > 0) {
+    msgs <- toString(.head_ids_verbatim(msgs))
+    cli::cli_abort(
+      c(
+        "The manifest files disagree on subject-level metadata.",
+        "i" = "Subject, column, and values: {msgs}.",
+        "i" = "If a column varies per sample, pass it in `sample_cols`."
+      )
+    )
+  }
+  invisible(stacked)
 }
 
 # The file-reading half of read_manifest(), without the validation step.

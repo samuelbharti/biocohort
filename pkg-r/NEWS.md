@@ -38,6 +38,11 @@
   argument of `cohort_new()`. `corrections_log()` accepts a cohort, and
   `read_study_yaml()` keeps the audit of the corrections it applies.
   `cohort_read()` gives a cohort saved by 0.1.x the new property.
+- `read_manifest()` takes several files and stacks them into one manifest,
+  for example one sample sheet per assay. A name on a path fills the
+  `assay` column of a file that has none, and a conflict across files names
+  the files. The study YAML `manifest:` key accepts a list of `path` and
+  `assay` entries (#75).
 
 # biocohort 0.1.1
 

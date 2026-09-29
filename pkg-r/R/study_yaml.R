@@ -30,7 +30,9 @@
 #' - `study`: fields for [study_new()] (`study_id`, `title`, `description`,
 #'   `hypotheses`, `aims`, `assays`, `genome_builds`, `tags`).
 #' - `manifest`: path to the manifest file, read with [read_manifest()].
-#'   Required.
+#'   Required. For several files, a list of entries, each with a `path` and
+#'   an optional `assay` that fills the `assay` column of a file that has
+#'   none. The files are stacked as [read_manifest()] stacks them.
 #' - `sample_cols`: extra sample-level columns, passed to
 #'   [validate_manifest()].
 #' - `species`: fills a `species` column when the manifest has none.
@@ -129,18 +131,20 @@ read_study_yaml <- function(path, strict = TRUE) {
   cohort
 }
 
-# Read the manifest, apply corrections if named, and validate. Returns the
-# validate_manifest() result and the audit of the corrections applied.
+# Read the manifest files, apply corrections if named, and validate.
+# Returns the validate_manifest() result and the audit of the corrections
+# applied.
 .read_study_manifest <- function(doc, base_dir) {
-  manifest_path <- .study_path(doc$manifest, base_dir)
-  if (!fs::file_exists(manifest_path)) {
-    cli::cli_abort("Manifest file not found: {.path {manifest_path}}.")
-  }
-  raw <- .read_manifest_file(manifest_path)
+  paths <- .study_manifest_paths(doc$manifest, base_dir)
+  raw <- .read_manifest_files(paths)
 
   if (!is.null(doc$corrections)) {
     corrections_path <- .study_path(doc$corrections, base_dir)
     raw <- apply_corrections(raw, read_corrections(corrections_path))
+  }
+  if (length(paths) > 1) {
+    .check_file_conflicts(raw, doc$sample_cols, doc$species)
+    raw$.manifest_file <- NULL
   }
 
   list(
@@ -179,6 +183,25 @@ read_study_yaml <- function(path, strict = TRUE) {
     derived = read_kind("derive"),
     corrections = dplyr::bind_rows(read_kind("corrections"), applied)
   )
+}
+
+# The manifest paths from the `manifest` key: one path, or a list of entries
+# with a `path` and an optional `assay`. Named by assay, "" when none.
+.study_manifest_paths <- function(manifest, base_dir) {
+  entries <- if (is.character(manifest)) as.list(manifest) else manifest
+  entries <- lapply(entries, function(e) {
+    if (is.character(e)) list(path = e) else e
+  })
+  if (any(vapply(entries, function(e) is.null(e$path), logical(1)))) {
+    cli::cli_abort("Each {.field manifest} entry needs a {.field path}.")
+  }
+  paths <- vapply(
+    entries,
+    function(e) as.character(.study_path(e$path, base_dir)),
+    character(1)
+  )
+  names(paths) <- vapply(entries, function(e) e$assay %||% "", character(1))
+  paths
 }
 
 # A path from the YAML file, resolved relative to its directory unless it is
