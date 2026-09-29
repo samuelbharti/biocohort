@@ -54,6 +54,11 @@
   cohort holds an arrow Dataset and no row is read. `cohort_filter()`
   filters it by `subject_id` and it stays lazy. `translate()` skips a table
   that is not a data frame, with a warning (#74).
+- `cohort_bind()` combines two or more cohorts. A `links` table maps the
+  subject ids of each cohort to one id per person, and `separate = TRUE`
+  marks cohorts of different people by putting the cohort name in front
+  of each id.
+  The sample map and the logs get a `source` column (#76).
 
 # biocohort 0.1.1
 
