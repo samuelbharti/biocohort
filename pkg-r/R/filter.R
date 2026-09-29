@@ -2,7 +2,9 @@
 #'
 #' Filters a cohort's subject table and sample map together, so the result
 #' stays a valid [Cohort]. Any loaded analysis table that has a `subject_id`
-#' column is filtered to match; the registry and paths are kept as they are.
+#' column is filtered to match. A table whose registered spec has
+#' `level = "sample"` is also filtered to the kept samples by `sample_id`.
+#' The registry and paths are kept as they are.
 #'
 #' @param cohort A [Cohort] object.
 #' @param ... Data-masked filter expressions evaluated against
@@ -80,14 +82,7 @@ cohort_filter <- function(
     ]
   }
 
-  kept_ids <- subject_tbl$subject_id
-  analyses <- lapply(cohort@analyses, function(tbl) {
-    if (is.data.frame(tbl) && "subject_id" %in% names(tbl)) {
-      tbl[tbl$subject_id %in% kept_ids, , drop = FALSE]
-    } else {
-      tbl
-    }
-  })
+  analyses <- .filter_analyses(cohort, subject_tbl, sample_map)
 
   if (length(cohort@cache) > 0) {
     cli::cli_inform(
@@ -102,6 +97,29 @@ cohort_filter <- function(
     analyses = analyses,
     cache = list()
   )
+}
+
+# Filter each loaded analysis table to the kept subjects. A table whose
+# registered spec has level "sample" is filtered to the kept samples too.
+# The registry decides, so a sample_id column in any other table is left
+# alone.
+.filter_analyses <- function(cohort, subject_tbl, sample_map) {
+  out <- cohort@analyses
+  for (nm in names(out)) {
+    tbl <- out[[nm]]
+    if (!is.data.frame(tbl) || !"subject_id" %in% names(tbl)) {
+      next
+    }
+    keep <- tbl$subject_id %in% subject_tbl$subject_id
+    spec <- cohort@registry[[nm]]
+    if (
+      !is.null(spec) && spec@level == "sample" && "sample_id" %in% names(tbl)
+    ) {
+      keep <- keep & tbl$sample_id %in% sample_map$sample_id
+    }
+    out[[nm]] <- tbl[keep, , drop = FALSE]
+  }
+  out
 }
 
 .filter_subject_tbl <- function(subject_tbl, subject_ids, ...) {

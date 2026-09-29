@@ -10,6 +10,7 @@
 #' @param level Character scalar for the granularity at which the analysis
 #'   produces results. Must be one of:
 #'   - `"subject"`: one result per subject.
+#'   - `"sample"`: one result per sample of the spec's assay.
 #'   - `"pair"`: one result per tumor/normal (case/control) pair, as derived by
 #'     [sample_pairs()] from the cohort's `sample_map`.
 #'   - `"cohort"`: a single result for the whole cohort.
@@ -22,6 +23,7 @@
 #'   analysis. Optional, defaults to NA.
 #' @param path_template Character scalar for templated path to analysis output.
 #'   Supports substitution tokens: `{root}` (from `root_key`), `{subject_id}`,
+#'   the sample tokens `{sample_id}` and `{role}` (for `level = "sample"`),
 #'   and the pair tokens `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}`
 #'   (the latter three supplied by [sample_pairs()] for `level = "pair"`).
 #'   Optional, defaults to NA.
@@ -137,11 +139,14 @@ AnalysisSpec <- S7::new_class(
   character()
 }
 
+# The levels an analysis can have, one file per unit of that level.
+.analysis_levels <- c("subject", "sample", "pair", "cohort")
+
 .check_analysis_spec <- function(self) {
   c(
     .check_enum(
       self@level,
-      c("subject", "pair", "cohort"),
+      .analysis_levels,
       "level",
       na_ok = FALSE
     ),
@@ -180,6 +185,7 @@ AnalysisSpec <- S7::new_class(
   switch(
     level,
     subject = "subject_id",
+    sample = c("subject_id", "sample_id"),
     pair = c("subject_id", "pair_id"),
     cohort = character()
   )
@@ -187,10 +193,11 @@ AnalysisSpec <- S7::new_class(
 
 .assert_level <- function(level) {
   checkmate::assert_string(level, min.chars = 1)
-  if (!(level %in% c("subject", "pair", "cohort"))) {
+  if (!(level %in% .analysis_levels)) {
+    levels <- toString(sprintf("'%s'", .analysis_levels))
     cli::cli_abort(
       c(
-        "`level` must be one of: 'subject', 'pair', 'cohort'.",
+        "`level` must be one of: {levels}.",
         "i" = "Received: {level}."
       )
     )
@@ -245,6 +252,7 @@ AnalysisSpec <- S7::new_class(
 #'   and pair units are enumerated from the samples with this assay.
 #' @param level Character scalar for the granularity at which the analysis
 #'   produces results. Must be one of `"subject"` (one result per subject),
+#'   `"sample"` (one result per sample of `assay`),
 #'   `"pair"` (one result per tumor/normal pair, see [sample_pairs()]), or
 #'   `"cohort"` (a single result for the whole cohort). Required.
 #' @param format Character scalar for file format (e.g., "rds", "tsv", "txt").
@@ -253,9 +261,10 @@ AnalysisSpec <- S7::new_class(
 #' @param description Character scalar for human-readable description.
 #'   Optional, defaults to NA.
 #' @param path_template Character scalar for templated file path. Supports
-#'   tokens: `{root}` (from `root_key`), `{subject_id}`, and the pair tokens
-#'   `{tumor_sample_id}`, `{normal_sample_id}`, `{pair_id}` (from
-#'   [sample_pairs()]). Optional, defaults to NA.
+#'   tokens: `{root}` (from `root_key`), `{subject_id}`, the sample tokens
+#'   `{sample_id}` and `{role}`, and the pair tokens `{tumor_sample_id}`,
+#'   `{normal_sample_id}`, `{pair_id}` (from [sample_pairs()]). Optional,
+#'   defaults to NA.
 #' @param root_key Character scalar for key in cohort@paths to use as `{root}`.
 #'   Optional, defaults to NA.
 #' @param reader Character scalar for reader function name (e.g.,
@@ -266,8 +275,9 @@ AnalysisSpec <- S7::new_class(
 #'   names a reader.
 #' @param key_cols Character vector of column names that must be present in
 #'   the loaded table. Optional. Defaults by `level`: `"subject_id"` for
-#'   subject, `c("subject_id", "pair_id")` for pair, and none for cohort.
-#'   Subject and pair specs need at least one key column.
+#'   subject, `c("subject_id", "sample_id")` for sample,
+#'   `c("subject_id", "pair_id")` for pair, and none for cohort. Subject,
+#'   sample, and pair specs need at least one key column.
 #' @param feature_type Optional character scalar declaring how this analysis's
 #'   features are translated across species by [translate()]. One of
 #'   `"interval"` (coordinate features, translated by liftover) or `"gene"`
@@ -293,7 +303,7 @@ AnalysisSpec <- S7::new_class(
 #' @details
 #' This constructor validates that:
 #' - `name` and `assay` are non-empty strings
-#' - `level` is one of: "subject", "pair", "cohort"
+#' - `level` is one of: "subject", "sample", "pair", "cohort"
 #' - `format` and `reader`, if given, are non-empty strings
 #' - `key_cols` is a character vector, non-empty for subject and pair specs
 #' - `feature_type`, if given, is one of "interval" or "gene"

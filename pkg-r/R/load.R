@@ -105,6 +105,32 @@ NULL
   })
 }
 
+# One unit per sample of the spec's assay, in sample_map order. A sample with
+# no role gives no {role} token, so a template that needs one stops with the
+# unresolved-token error.
+.sample_units <- function(cohort, spec, base_tokens) {
+  sample_map <- cohort@sample_map
+  rows <- sample_map[sample_map$assay == spec@assay, , drop = FALSE]
+  if (nrow(rows) == 0) {
+    cli::cli_warn(
+      c(
+        "No sample for assay {.val {spec@assay}}.",
+        "i" = "Analysis {.val {spec@name}} has no units to load."
+      )
+    )
+    return(list())
+  }
+  lapply(seq_len(nrow(rows)), function(i) {
+    keys <- list(
+      subject_id = rows$subject_id[[i]],
+      sample_id = rows$sample_id[[i]]
+    )
+    role <- rows$role[[i]]
+    role_token <- if (is.na(role)) list() else list(role = role)
+    list(keys = keys, tokens = c(base_tokens, keys, role_token))
+  })
+}
+
 .pair_units <- function(cohort, spec, base_tokens) {
   pairs <- sample_pairs(
     cohort@sample_map,
@@ -141,7 +167,7 @@ NULL
 
 # Enumerate the per-file "units" for a spec, given its level. Each unit carries
 # `keys` (provenance columns added to loaded rows) and `tokens` (for the path).
-# Subject and pair units come only from samples of the spec's assay.
+# Subject, sample, and pair units come only from samples of the spec's assay.
 .analysis_units <- function(cohort, spec) {
   root <- if (!is.na(spec@root_key)) cohort@paths[[spec@root_key]] else NULL
   base_tokens <- if (!is.null(root)) list(root = root) else list()
@@ -150,6 +176,7 @@ NULL
     spec@level,
     cohort = list(list(keys = list(), tokens = base_tokens)),
     subject = .subject_units(cohort, spec, base_tokens),
+    sample = .sample_units(cohort, spec, base_tokens),
     pair = .pair_units(cohort, spec, base_tokens)
   )
 }
@@ -172,9 +199,10 @@ NULL
 #' Load an analysis's feature table from disk
 #'
 #' Resolves an [AnalysisSpec]'s `path_template` for each unit implied by its
-#' `level` (one file per subject, per pair, or one for the whole cohort), reads
-#' the existing files with the spec's `reader`, and row-binds them into a single
-#' feature table annotated with provenance keys (`subject_id` and/or `pair_id`).
+#' `level` (one file per subject, per sample, per pair, or one for the whole
+#' cohort), reads the existing files with the spec's `reader`, and row-binds
+#' them into a single feature table annotated with provenance keys
+#' (`subject_id`, and `sample_id` or `pair_id`).
 #'
 #' @param cohort A [Cohort] providing `paths` (for `{root}`), subjects, and the
 #'   sample map (for subject and pair enumeration).
@@ -190,13 +218,17 @@ NULL
 #'
 #' @details
 #' Units follow the spec's `assay`. A subject-level spec enumerates only the
-#' subjects with at least one sample of that assay. A pair-level spec calls
+#' subjects with at least one sample of that assay. A sample-level spec
+#' enumerates every sample of that assay in `sample_map`, so a sample removed
+#' by [cohort_qc()] gives no unit and a flagged sample still does. A
+#' pair-level spec calls
 #' [sample_pairs()] with the spec's `assay`, `tumor_role`, `normal_role`, and
 #' `pair_sep`. When no subject or pair matches, the function warns and returns
 #' empty tables.
 #'
 #' Path tokens supported: `{root}` (from `cohort@paths[[root_key]]`),
-#' `{subject_id}`, and for pair-level specs `{tumor_sample_id}`,
+#' `{subject_id}`, for sample-level specs `{sample_id}` and `{role}` (only
+#' when the sample has a role), and for pair-level specs `{tumor_sample_id}`,
 #' `{normal_sample_id}`, `{pair_id}` (derived via [sample_pairs()]). Missing
 #' files are skipped (with a warning) and recorded in `files`, so loading is
 #' never silently partial.

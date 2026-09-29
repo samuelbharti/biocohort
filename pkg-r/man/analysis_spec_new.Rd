@@ -32,6 +32,7 @@ and pair units are enumerated from the samples with this assay.}
 
 \item{level}{Character scalar for the granularity at which the analysis
 produces results. Must be one of \code{"subject"} (one result per subject),
+\code{"sample"} (one result per sample of \code{assay}),
 \code{"pair"} (one result per tumor/normal pair, see \code{\link[=sample_pairs]{sample_pairs()}}), or
 \code{"cohort"} (a single result for the whole cohort). Required.}
 
@@ -43,9 +44,10 @@ is no template.}
 Optional, defaults to NA.}
 
 \item{path_template}{Character scalar for templated file path. Supports
-tokens: \code{{root}} (from \code{root_key}), \code{{subject_id}}, and the pair tokens
-\code{{tumor_sample_id}}, \code{{normal_sample_id}}, \code{{pair_id}} (from
-\code{\link[=sample_pairs]{sample_pairs()}}). Optional, defaults to NA.}
+tokens: \code{{root}} (from \code{root_key}), \code{{subject_id}}, the sample tokens
+\code{{sample_id}} and \code{{role}}, and the pair tokens \code{{tumor_sample_id}},
+\code{{normal_sample_id}}, \code{{pair_id}} (from \code{\link[=sample_pairs]{sample_pairs()}}). Optional,
+defaults to NA.}
 
 \item{root_key}{Character scalar for key in cohort@paths to use as \code{{root}}.
 Optional, defaults to NA.}
@@ -59,8 +61,9 @@ names a reader.}
 
 \item{key_cols}{Character vector of column names that must be present in
 the loaded table. Optional. Defaults by \code{level}: \code{"subject_id"} for
-subject, \code{c("subject_id", "pair_id")} for pair, and none for cohort.
-Subject and pair specs need at least one key column.}
+subject, \code{c("subject_id", "sample_id")} for sample,
+\code{c("subject_id", "pair_id")} for pair, and none for cohort. Subject,
+sample, and pair specs need at least one key column.}
 
 \item{feature_type}{Optional character scalar declaring how this analysis's
 features are translated across species by \code{\link[=translate]{translate()}}. One of
@@ -100,7 +103,7 @@ given.
 This constructor validates that:
 \itemize{
 \item \code{name} and \code{assay} are non-empty strings
-\item \code{level} is one of: "subject", "pair", "cohort"
+\item \code{level} is one of: "subject", "sample", "pair", "cohort"
 \item \code{format} and \code{reader}, if given, are non-empty strings
 \item \code{key_cols} is a character vector, non-empty for subject and pair specs
 \item \code{feature_type}, if given, is one of "interval" or "gene"

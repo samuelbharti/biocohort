@@ -32,6 +32,7 @@ cohort's \code{sample_map} (e.g., "wes", "wgs", "scrna"). Required.}
 produces results. Must be one of:
 \itemize{
 \item \code{"subject"}: one result per subject.
+\item \code{"sample"}: one result per sample of the spec's assay.
 \item \code{"pair"}: one result per tumor/normal (case/control) pair, as derived by
 \code{\link[=sample_pairs]{sample_pairs()}} from the cohort's \code{sample_map}.
 \item \code{"cohort"}: a single result for the whole cohort.
@@ -48,6 +49,7 @@ analysis. Optional, defaults to NA.}
 
 \item{path_template}{Character scalar for templated path to analysis output.
 Supports substitution tokens: \code{{root}} (from \code{root_key}), \code{{subject_id}},
+the sample tokens \code{{sample_id}} and \code{{role}} (for \code{level = "sample"}),
 and the pair tokens \code{{tumor_sample_id}}, \code{{normal_sample_id}}, \code{{pair_id}}
 (the latter three supplied by \code{\link[=sample_pairs]{sample_pairs()}} for \code{level = "pair"}).
 Optional, defaults to NA.}

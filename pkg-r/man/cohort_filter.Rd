@@ -41,7 +41,9 @@ data or a translation result computed for the full set of subjects.
 \description{
 Filters a cohort's subject table and sample map together, so the result
 stays a valid \link{Cohort}. Any loaded analysis table that has a \code{subject_id}
-column is filtered to match; the registry and paths are kept as they are.
+column is filtered to match. A table whose registered spec has
+\code{level = "sample"} is also filtered to the kept samples by \code{sample_id}.
+The registry and paths are kept as they are.
 }
 \details{
 The five ways to narrow a cohort combine: \code{...} and \code{subject_ids} both

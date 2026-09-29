@@ -8,7 +8,7 @@ test_that("analysis_spec_new validates level enum", {
       reader = "read_tsv",
       key_cols = c("subject_id")
     ),
-    "must be one of: 'subject', 'pair', 'cohort'"
+    "must be one of: 'subject', 'sample', 'pair', 'cohort'"
   )
 })
 

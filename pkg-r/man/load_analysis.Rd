@@ -26,19 +26,24 @@ and whether it \code{exists}.
 }
 \description{
 Resolves an \link{AnalysisSpec}'s \code{path_template} for each unit implied by its
-\code{level} (one file per subject, per pair, or one for the whole cohort), reads
-the existing files with the spec's \code{reader}, and row-binds them into a single
-feature table annotated with provenance keys (\code{subject_id} and/or \code{pair_id}).
+\code{level} (one file per subject, per sample, per pair, or one for the whole
+cohort), reads the existing files with the spec's \code{reader}, and row-binds
+them into a single feature table annotated with provenance keys
+(\code{subject_id}, and \code{sample_id} or \code{pair_id}).
 }
 \details{
 Units follow the spec's \code{assay}. A subject-level spec enumerates only the
-subjects with at least one sample of that assay. A pair-level spec calls
+subjects with at least one sample of that assay. A sample-level spec
+enumerates every sample of that assay in \code{sample_map}, so a sample removed
+by \code{\link[=cohort_qc]{cohort_qc()}} gives no unit and a flagged sample still does. A
+pair-level spec calls
 \code{\link[=sample_pairs]{sample_pairs()}} with the spec's \code{assay}, \code{tumor_role}, \code{normal_role}, and
 \code{pair_sep}. When no subject or pair matches, the function warns and returns
 empty tables.
 
 Path tokens supported: \code{{root}} (from \code{cohort@paths[[root_key]]}),
-\code{{subject_id}}, and for pair-level specs \code{{tumor_sample_id}},
+\code{{subject_id}}, for sample-level specs \code{{sample_id}} and \code{{role}} (only
+when the sample has a role), and for pair-level specs \code{{tumor_sample_id}},
 \code{{normal_sample_id}}, \code{{pair_id}} (derived via \code{\link[=sample_pairs]{sample_pairs()}}). Missing
 files are skipped (with a warning) and recorded in \code{files}, so loading is
 never silently partial.
