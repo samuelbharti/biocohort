@@ -10,7 +10,8 @@ cohort_new(
   study = NULL,
   paths = list(),
   analyses = list(),
-  corrections = NULL
+  corrections = NULL,
+  dictionary = NULL
 )
 }
 \arguments{
@@ -34,6 +35,10 @@ Defaults to an empty list.}
 manifest, as \code{\link[=corrections_log]{corrections_log()}} returns it for a corrected manifest.
 Stored in the cohort, so the audit survives \code{\link[=validate_manifest]{validate_manifest()}}.
 Defaults to \code{NULL}, an empty audit.}
+
+\item{dictionary}{Optional data frame describing columns of the two
+tables, with \code{column} and \code{type} and optionally \code{label}, \code{unit}, and
+\code{values}. See \code{\link[=cohort_dictionary]{cohort_dictionary()}}. Defaults to \code{NULL}, no dictionary.}
 }
 \value{
 A Cohort object. An error when the tables fail

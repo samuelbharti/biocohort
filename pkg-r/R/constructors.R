@@ -223,6 +223,9 @@ subject_new <- function(
 #'   manifest, as [corrections_log()] returns it for a corrected manifest.
 #'   Stored in the cohort, so the audit survives [validate_manifest()].
 #'   Defaults to `NULL`, an empty audit.
+#' @param dictionary Optional data frame describing columns of the two
+#'   tables, with `column` and `type` and optionally `label`, `unit`, and
+#'   `values`. See [cohort_dictionary()]. Defaults to `NULL`, no dictionary.
 #'
 #' @return A Cohort object. An error when the tables fail
 #'   [validate_cohort()].
@@ -276,7 +279,8 @@ cohort_new <- function(
   study = NULL,
   paths = list(),
   analyses = list(),
-  corrections = NULL
+  corrections = NULL,
+  dictionary = NULL
 ) {
   if (!is.data.frame(subject_tbl)) {
     cli::cli_abort(
@@ -311,7 +315,8 @@ cohort_new <- function(
     sample_map = tibble::as_tibble(sample_map),
     paths = paths,
     analyses = analyses,
-    corrections = corrections
+    corrections = corrections,
+    dictionary = .as_dictionary(dictionary)
   )
 
   validate_cohort(cohort)

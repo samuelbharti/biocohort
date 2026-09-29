@@ -40,13 +40,16 @@ none. The files are stacked as \code{\link[=read_manifest]{read_manifest()}} sta
 \code{\link[=apply_corrections]{apply_corrections()}} before it is validated.
 \item \code{analyses}: a list of \code{\link[=analysis_spec_new]{analysis_spec_new()}} field sets, one per
 registered analysis.
+\item \code{dictionary}: path to a CSV file with the column dictionary, with the
+columns \code{column}, \code{type}, \code{label}, \code{unit}, and \code{values} (see
+\code{\link[=cohort_dictionary]{cohort_dictionary()}}).
 \item \code{logs}: a map with up to three keys, \code{qc}, \code{derive}, and \code{corrections},
 each the path of a CSV file that \code{\link[=write_study_yaml]{write_study_yaml()}} wrote. They fill
 \code{\link[=qc_log]{qc_log()}}, \code{\link[=derive_log]{derive_log()}}, and \code{\link[=corrections_log]{corrections_log()}}.
 }
 
-Every path (\code{manifest}, an entry of \code{paths}, \code{corrections}, an entry of
-\code{logs}) is resolved relative to the YAML file's own directory unless it is
+Every path (\code{manifest}, an entry of \code{paths}, \code{corrections}, \code{dictionary},
+an entry of \code{logs}) is resolved relative to the YAML file's own directory unless it is
 already absolute.
 
 The audit of a \code{corrections} file is kept in the cohort, after the audit

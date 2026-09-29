@@ -30,6 +30,8 @@ character, with no missing value. An empty string counts as missing.
 \item \code{sample_map} has the columns \code{subject_id}, \code{assay}, \code{sample_id}, and
 \code{role}, all character. The first three have no missing value.
 \item Every \code{sample_map$subject_id} exists in \code{subject_tbl}.
+\item Every column in the dictionary exists and holds only the values its
+entry allows (see \code{\link[=cohort_dictionary]{cohort_dictionary()}}).
 }
 }
 \examples{

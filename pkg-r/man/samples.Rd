@@ -4,7 +4,13 @@
 \alias{samples}
 \title{Read the sample map of a cohort}
 \usage{
-samples(cohort, assay = NULL, role = NULL, with_subjects = FALSE)
+samples(
+  cohort,
+  assay = NULL,
+  role = NULL,
+  with_subjects = FALSE,
+  typed = FALSE
+)
 }
 \arguments{
 \item{cohort}{A \link{Cohort} object.}
@@ -18,6 +24,9 @@ samples(cohort, assay = NULL, role = NULL, with_subjects = FALSE)
 alongside each sample row. Default \code{FALSE}. A column other than
 \code{subject_id} that is in both tables is an error, so no column is
 renamed in silence.}
+
+\item{typed}{Logical. When \code{TRUE}, applies the cohort's column dictionary,
+as \code{\link[=subjects]{subjects()}} does. Default \code{FALSE}.}
 }
 \value{
 A tibble with the sample map, filtered and optionally joined.

@@ -43,6 +43,11 @@
   `assay` column of a file that has none, and a conflict across files names
   the files. The study YAML `manifest:` key accepts a list of `path` and
   `assay` entries (#75).
+- A cohort can hold a column dictionary with a type, a label, a unit, and
+  the allowed values of each column. Set it with the new `dictionary`
+  argument of `cohort_new()` or a `dictionary:` file in the study YAML, and
+  read it with `cohort_dictionary()`. The tables stay text; `subjects()`,
+  `samples()` and `as_coldata()` apply the types with `typed = TRUE` (#77).
 
 # biocohort 0.1.1
 

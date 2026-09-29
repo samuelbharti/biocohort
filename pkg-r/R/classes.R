@@ -204,6 +204,9 @@ Subject <- S7::new_class(
 #' @param corrections A tibble with the audit of the manifest corrections the
 #'   cohort was built from, in the shape [corrections_log()] returns. Durable
 #'   in the same way as `qc`. Defaults to an empty table.
+#' @param dictionary A tibble describing columns of `subject_tbl` and
+#'   `sample_map`: `column`, `type`, `label`, `unit`, and `values`. See
+#'   [cohort_dictionary()]. Defaults to an empty table.
 #'
 #' @return A `Cohort` object with the given properties.
 #'
@@ -228,6 +231,7 @@ Subject <- S7::new_class(
 #' cohort@qc            # QC audit log
 #' cohort@derived       # Derived-column provenance
 #' cohort@corrections   # Manifest corrections audit
+#' cohort@dictionary    # Column types, labels, units, and allowed values
 #' ```
 #'
 #' @examples
@@ -303,10 +307,17 @@ Cohort <- S7::new_class(
     corrections = S7::new_property(
       S7::class_data.frame,
       default = quote(empty_corrections_log())
+    ),
+    dictionary = S7::new_property(
+      S7::class_data.frame,
+      default = quote(.empty_dictionary())
     )
   ),
   validator = function(self) {
-    problems <- .check_cohort_tables(self@subject_tbl, self@sample_map)
+    problems <- c(
+      .check_cohort_tables(self@subject_tbl, self@sample_map),
+      .check_dictionary(self@dictionary, self@subject_tbl, self@sample_map)
+    )
     if (length(problems) == 0) NULL else problems
   }
 )

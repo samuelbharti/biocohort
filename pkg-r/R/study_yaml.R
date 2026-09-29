@@ -6,7 +6,8 @@
   "paths",
   "corrections",
   "analyses",
-  "logs"
+  "logs",
+  "dictionary"
 )
 
 #' Build a cohort from a study YAML file
@@ -41,12 +42,15 @@
 #'   [apply_corrections()] before it is validated.
 #' - `analyses`: a list of [analysis_spec_new()] field sets, one per
 #'   registered analysis.
+#' - `dictionary`: path to a CSV file with the column dictionary, with the
+#'   columns `column`, `type`, `label`, `unit`, and `values` (see
+#'   [cohort_dictionary()]).
 #' - `logs`: a map with up to three keys, `qc`, `derive`, and `corrections`,
 #'   each the path of a CSV file that [write_study_yaml()] wrote. They fill
 #'   [qc_log()], [derive_log()], and [corrections_log()].
 #'
-#' Every path (`manifest`, an entry of `paths`, `corrections`, an entry of
-#' `logs`) is resolved relative to the YAML file's own directory unless it is
+#' Every path (`manifest`, an entry of `paths`, `corrections`, `dictionary`,
+#' an entry of `logs`) is resolved relative to the YAML file's own directory unless it is
 #' already absolute.
 #'
 #' The audit of a `corrections` file is kept in the cohort, after the audit
@@ -121,7 +125,8 @@ read_study_yaml <- function(path, strict = TRUE) {
     subject_tbl = parsed$subject_tbl,
     sample_map = parsed$sample_map,
     study = study,
-    paths = cohort_paths
+    paths = cohort_paths,
+    dictionary = .read_study_dictionary(doc$dictionary, base_dir)
   )
   cohort <- .read_study_logs(cohort, doc$logs, base_dir, manifest$corrections)
 
@@ -154,6 +159,24 @@ read_study_yaml <- function(path, strict = TRUE) {
       species = doc$species
     ),
     corrections = corrections_log(raw)
+  )
+}
+
+# The dictionary file named by the `dictionary` key, or NULL.
+.read_study_dictionary <- function(dictionary, base_dir) {
+  if (is.null(dictionary)) {
+    return(NULL)
+  }
+  path <- .study_path(dictionary, base_dir)
+  if (!fs::file_exists(path)) {
+    cli::cli_abort("Dictionary file not found: {.path {path}}.")
+  }
+  readr::read_csv(
+    path,
+    col_types = readr::cols(.default = readr::col_character()),
+    na = "",
+    show_col_types = FALSE,
+    progress = FALSE
   )
 }
 
@@ -252,7 +275,8 @@ read_study_yaml <- function(path, strict = TRUE) {
 #' `qc_log.csv`, `derive_log.csv`, and `corrections_log.csv`, and listed
 #' under a `logs:` key. A time is written in UTC, such as
 #' `2026-09-29T21:19:07Z`, and the cutoffs of a derived column as
-#' `young=0|old=40`. Text files keep the record readable in a diff and from
+#' `young=0|old=40`. A column dictionary with rows is written the same way,
+#' as `dictionary.csv` under a `dictionary:` key. Text files keep the record readable in a diff and from
 #' other languages. [cohort_save()] keeps the same logs in a binary file.
 #'
 #' @examples
@@ -294,6 +318,14 @@ write_study_yaml <- function(cohort, path, manifest = "manifest.csv") {
   }
   if (length(cohort@registry) > 0) {
     doc$analyses <- unname(lapply(cohort@registry, .analysis_spec_to_list))
+  }
+  if (nrow(cohort@dictionary) > 0) {
+    doc$dictionary <- .beside(manifest, "dictionary.csv")
+    readr::write_csv(
+      cohort@dictionary,
+      .study_path(doc$dictionary, base_dir),
+      na = ""
+    )
   }
   logs <- .write_study_logs(cohort, manifest, base_dir)
   if (length(logs) > 0) {

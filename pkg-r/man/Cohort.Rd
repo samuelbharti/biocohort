@@ -18,7 +18,8 @@ Cohort(
   derived = tibble::tibble(name = character(), from = character(), level = character(),
     cutoffs = list(), n_derived = integer(), n_na = integer(), timestamp =
     as.POSIXct(character())),
-  corrections = empty_corrections_log()
+  corrections = empty_corrections_log(),
+  dictionary = .empty_dictionary()
 )
 }
 \arguments{
@@ -61,6 +62,10 @@ Durable in the same way as \code{qc}. Defaults to an empty table.}
 \item{corrections}{A tibble with the audit of the manifest corrections the
 cohort was built from, in the shape \code{\link[=corrections_log]{corrections_log()}} returns. Durable
 in the same way as \code{qc}. Defaults to an empty table.}
+
+\item{dictionary}{A tibble describing columns of \code{subject_tbl} and
+\code{sample_map}: \code{column}, \code{type}, \code{label}, \code{unit}, and \code{values}. See
+\code{\link[=cohort_dictionary]{cohort_dictionary()}}. Defaults to an empty table.}
 }
 \value{
 A \code{Cohort} object with the given properties.
@@ -91,6 +96,7 @@ cohort@cache         # Memoization cache
 cohort@qc            # QC audit log
 cohort@derived       # Derived-column provenance
 cohort@corrections   # Manifest corrections audit
+cohort@dictionary    # Column types, labels, units, and allowed values
 }\if{html}{\out{</div>}}
 }
 \examples{
