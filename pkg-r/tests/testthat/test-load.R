@@ -840,3 +840,24 @@ test_that("translate skips a lazy table with a warning", {
     "No analyses were translated"
   )
 })
+
+test_that("cohort_filter narrows a lazy table whose ids are integers", {
+  skip_if_not_installed("arrow")
+  root <- withr::local_tempdir()
+  arrow::write_parquet(
+    data.frame(subject_id = c(1001L, 1002L), pos = c(10L, 20L)),
+    file.path(root, "calls.parquet")
+  )
+  manifest <- data.frame(
+    subject_id = c("1001", "1002"),
+    species = "human",
+    assay = "wgs",
+    sample_id = c("W1", "W2")
+  )
+  cohort <- make_cohort(manifest, root, "wgs_root")
+  cohort@analyses$calls <- arrow::open_dataset(file.path(root, "calls.parquet"))
+
+  out <- cohort_filter(cohort, subject_ids = "1001")
+
+  expect_equal(dplyr::collect(out@analyses$calls)$pos, 10L)
+})

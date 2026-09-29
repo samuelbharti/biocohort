@@ -103,14 +103,16 @@ cohort_filter <- function(
 # Filter each loaded analysis table to the kept subjects. A table whose
 # registered spec has level "sample" is filtered to the kept samples too.
 # The registry decides, so a sample_id column in any other table is left
-# alone. A lazy arrow table is filtered by subject_id and stays lazy.
+# alone. A lazy arrow table is filtered by subject_id and stays lazy. Its
+# ids are compared as text, since a parquet file often stores ids such as
+# 1001 as integers, and arrow will not compare integers with text.
 .filter_analyses <- function(cohort, subject_tbl, sample_map) {
   out <- cohort@analyses
   for (nm in names(out)) {
     tbl <- out[[nm]]
     if (.is_lazy_arrow(tbl) && "subject_id" %in% names(tbl)) {
       kept <- subject_tbl$subject_id
-      out[[nm]] <- dplyr::filter(tbl, .data$subject_id %in% kept)
+      out[[nm]] <- dplyr::filter(tbl, as.character(.data$subject_id) %in% kept)
       next
     }
     if (!is.data.frame(tbl) || !"subject_id" %in% names(tbl)) {
@@ -128,9 +130,10 @@ cohort_filter <- function(
   out
 }
 
-# An arrow Dataset, or a query built on one, that has not been collected.
+# An arrow Dataset or Table, or a query built on one, that has not been
+# collected into a data frame.
 .is_lazy_arrow <- function(x) {
-  inherits(x, c("Dataset", "arrow_dplyr_query"))
+  inherits(x, c("Dataset", "ArrowTabular", "arrow_dplyr_query"))
 }
 
 .filter_subject_tbl <- function(subject_tbl, subject_ids, ...) {
