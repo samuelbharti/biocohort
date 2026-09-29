@@ -248,8 +248,8 @@ AnalysisSpec <- S7::new_class(
 #' @param name Character scalar for unique analysis name. Must be at least
 #'   1 character long. Serves as key in the cohort registry.
 #' @param assay Character scalar for the assay label, spelled as in the
-#'   cohort's `sample_map` (e.g., "wes", "wgs", "scrna"). Required. Subject
-#'   and pair units are enumerated from the samples with this assay.
+#'   cohort's `sample_map` (e.g., "wes", "wgs", "scrna"). Required. Subject,
+#'   sample, and pair units are enumerated from the samples with this assay.
 #' @param level Character scalar for the granularity at which the analysis
 #'   produces results. Must be one of `"subject"` (one result per subject),
 #'   `"sample"` (one result per sample of `assay`),
@@ -305,7 +305,8 @@ AnalysisSpec <- S7::new_class(
 #' - `name` and `assay` are non-empty strings
 #' - `level` is one of: "subject", "sample", "pair", "cohort"
 #' - `format` and `reader`, if given, are non-empty strings
-#' - `key_cols` is a character vector, non-empty for subject and pair specs
+#' - `key_cols` is a character vector, non-empty for subject, sample, and
+#'   pair specs
 #' - `feature_type`, if given, is one of "interval" or "gene"
 #' - `id_type`, if given, is one of "symbol", "entrez", "ensembl"
 #' - `tumor_role`, `normal_role`, and `pair_sep` are non-empty strings

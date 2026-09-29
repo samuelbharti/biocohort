@@ -27,8 +27,8 @@ analysis_spec_new(
 1 character long. Serves as key in the cohort registry.}
 
 \item{assay}{Character scalar for the assay label, spelled as in the
-cohort's \code{sample_map} (e.g., "wes", "wgs", "scrna"). Required. Subject
-and pair units are enumerated from the samples with this assay.}
+cohort's \code{sample_map} (e.g., "wes", "wgs", "scrna"). Required. Subject,
+sample, and pair units are enumerated from the samples with this assay.}
 
 \item{level}{Character scalar for the granularity at which the analysis
 produces results. Must be one of \code{"subject"} (one result per subject),
@@ -105,7 +105,8 @@ This constructor validates that:
 \item \code{name} and \code{assay} are non-empty strings
 \item \code{level} is one of: "subject", "sample", "pair", "cohort"
 \item \code{format} and \code{reader}, if given, are non-empty strings
-\item \code{key_cols} is a character vector, non-empty for subject and pair specs
+\item \code{key_cols} is a character vector, non-empty for subject, sample, and
+pair specs
 \item \code{feature_type}, if given, is one of "interval" or "gene"
 \item \code{id_type}, if given, is one of "symbol", "entrez", "ensembl"
 \item \code{tumor_role}, \code{normal_role}, and \code{pair_sep} are non-empty strings

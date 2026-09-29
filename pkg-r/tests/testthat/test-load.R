@@ -617,3 +617,19 @@ test_that("a study YAML accepts level: sample", {
 
   expect_equal(analysis_spec(cohort, "gene_counts")@level, "sample")
 })
+
+test_that("two units that resolve to one file are an error", {
+  root <- withr::local_tempdir()
+  cohort <- make_sample_cohort(root)
+  per_subject <- analysis_spec_new(
+    name = "counts",
+    assay = "bulk_rna",
+    level = "sample",
+    path_template = "{root}/{subject_id}.csv",
+    root_key = "rna_root"
+  )
+
+  err <- expect_error(load_analysis(cohort, per_subject), "2 units to one file")
+  expect_match(conditionMessage(err), "sample_id = A1", fixed = TRUE)
+  expect_match(conditionMessage(err), "{sample_id}", fixed = TRUE)
+})

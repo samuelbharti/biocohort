@@ -181,6 +181,37 @@ NULL
   )
 }
 
+# Error when two units resolve to the same file. The file would be read once
+# per unit and each copy stamped with different keys, which duplicates rows
+# under wrong ids. It happens when the template lacks the level's own token.
+.check_unique_paths <- function(paths, units, spec) {
+  dup <- unique(paths[duplicated(paths)])
+  if (length(dup) == 0) {
+    return(invisible(NULL))
+  }
+  first <- dup[[1]]
+  shared <- vapply(
+    units[paths == first],
+    function(u) {
+      paste(names(u$keys), unlist(u$keys), sep = " = ", collapse = ", ")
+    },
+    character(1)
+  )
+  token <- switch(
+    spec@level,
+    subject = "{subject_id}",
+    sample = "{sample_id}",
+    pair = "{pair_id}"
+  )
+  cli::cli_abort(
+    c(
+      "Analysis {.val {spec@name}} resolves {length(shared)} units to one file: {.path {first}}.",
+      "i" = "Units: {toString(.head_ids_verbatim(shared))}.",
+      "i" = "A {spec@level}-level template needs a token that differs per unit, such as {.code {token}}."
+    )
+  )
+}
+
 # Error when a loaded table lacks one of the spec's key columns.
 .check_key_cols <- function(data, spec, path) {
   missing <- setdiff(spec@key_cols, names(data))
@@ -205,7 +236,7 @@ NULL
 #' (`subject_id`, and `sample_id` or `pair_id`).
 #'
 #' @param cohort A [Cohort] providing `paths` (for `{root}`), subjects, and the
-#'   sample map (for subject and pair enumeration).
+#'   sample map (for subject, sample, and pair enumeration).
 #' @param spec An [AnalysisSpec] or the name of one registered in `cohort`.
 #' @param reader Optional reader override: a function, or a `"fun"`/`"pkg::fun"`
 #'   name. Defaults to the spec's `reader`.
@@ -223,8 +254,9 @@ NULL
 #' by [cohort_qc()] gives no unit and a flagged sample still does. A
 #' pair-level spec calls
 #' [sample_pairs()] with the spec's `assay`, `tumor_role`, `normal_role`, and
-#' `pair_sep`. When no subject or pair matches, the function warns and returns
-#' empty tables.
+#' `pair_sep`. When no subject, sample, or pair matches, the function warns
+#' and returns empty tables. Two units that resolve to the same file are an
+#' error, since the file would be read once per unit under different keys.
 #'
 #' Path tokens supported: `{root}` (from `cohort@paths[[root_key]]`),
 #' `{subject_id}`, for sample-level specs `{sample_id}` and `{role}` (only
@@ -286,11 +318,18 @@ load_analysis <- function(cohort, spec, reader = NULL) {
 
   read_fn <- .spec_reader(spec, reader)
   units <- .analysis_units(cohort, spec)
+  paths <- vapply(
+    units,
+    function(u) .render_path(spec@path_template, u$tokens, spec@name),
+    character(1)
+  )
+  .check_unique_paths(paths, units, spec)
 
   file_rows <- list()
   data_list <- list()
-  for (u in units) {
-    path <- .render_path(spec@path_template, u$tokens, analysis = spec@name)
+  for (i in seq_along(units)) {
+    u <- units[[i]]
+    path <- paths[[i]]
     exists <- file.exists(path)
     file_rows[[length(file_rows) + 1]] <- tibble::as_tibble(
       c(u$keys, list(path = path, exists = exists))

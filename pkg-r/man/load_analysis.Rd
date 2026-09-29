@@ -8,7 +8,7 @@ load_analysis(cohort, spec, reader = NULL)
 }
 \arguments{
 \item{cohort}{A \link{Cohort} providing \code{paths} (for \code{{root}}), subjects, and the
-sample map (for subject and pair enumeration).}
+sample map (for subject, sample, and pair enumeration).}
 
 \item{spec}{An \link{AnalysisSpec} or the name of one registered in \code{cohort}.}
 
@@ -38,8 +38,9 @@ enumerates every sample of that assay in \code{sample_map}, so a sample removed
 by \code{\link[=cohort_qc]{cohort_qc()}} gives no unit and a flagged sample still does. A
 pair-level spec calls
 \code{\link[=sample_pairs]{sample_pairs()}} with the spec's \code{assay}, \code{tumor_role}, \code{normal_role}, and
-\code{pair_sep}. When no subject or pair matches, the function warns and returns
-empty tables.
+\code{pair_sep}. When no subject, sample, or pair matches, the function warns
+and returns empty tables. Two units that resolve to the same file are an
+error, since the file would be read once per unit under different keys.
 
 Path tokens supported: \code{{root}} (from \code{cohort@paths[[root_key]]}),
 \code{{subject_id}}, for sample-level specs \code{{sample_id}} and \code{{role}} (only
