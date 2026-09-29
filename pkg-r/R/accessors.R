@@ -83,6 +83,9 @@ subject <- function(cohort, id) {
 #' would change if the underlying property ever did.
 #'
 #' @param cohort A [Cohort] object.
+#' @param typed Logical. When `TRUE`, applies the cohort's column dictionary
+#'   (see [cohort_dictionary()]): a number column becomes numeric and a
+#'   string column with allowed values becomes a factor. Default `FALSE`.
 #'
 #' @return `cohort@subject_tbl` as a tibble.
 #'
@@ -92,11 +95,13 @@ subject <- function(cohort, id) {
 #'
 #' @seealso [samples()], [completeness()], [subject()]
 #' @export
-subjects <- function(cohort) {
+subjects <- function(cohort, typed = FALSE) {
   if (!S7::S7_inherits(cohort, Cohort)) {
     cli::cli_abort("`cohort` must be a Cohort object.")
   }
-  tibble::as_tibble(cohort@subject_tbl)
+  checkmate::assert_flag(typed)
+  out <- tibble::as_tibble(cohort@subject_tbl)
+  if (typed) .apply_dictionary(out, cohort@dictionary) else out
 }
 
 #' Read the sample map of a cohort
@@ -112,6 +117,8 @@ subjects <- function(cohort) {
 #'   alongside each sample row. Default `FALSE`. A column other than
 #'   `subject_id` that is in both tables is an error, so no column is
 #'   renamed in silence.
+#' @param typed Logical. When `TRUE`, applies the cohort's column dictionary,
+#'   as [subjects()] does. Default `FALSE`.
 #'
 #' @return A tibble with the sample map, filtered and optionally joined.
 #'
@@ -122,11 +129,18 @@ subjects <- function(cohort) {
 #'
 #' @seealso [subjects()], [completeness()], [sample_pairs()]
 #' @export
-samples <- function(cohort, assay = NULL, role = NULL, with_subjects = FALSE) {
+samples <- function(
+  cohort,
+  assay = NULL,
+  role = NULL,
+  with_subjects = FALSE,
+  typed = FALSE
+) {
   if (!S7::S7_inherits(cohort, Cohort)) {
     cli::cli_abort("`cohort` must be a Cohort object.")
   }
   checkmate::assert_flag(with_subjects)
+  checkmate::assert_flag(typed)
 
   sample_map <- tibble::as_tibble(cohort@sample_map)
   if (!is.null(assay)) {
@@ -146,7 +160,7 @@ samples <- function(cohort, assay = NULL, role = NULL, with_subjects = FALSE) {
       by = "subject_id"
     )
   }
-  sample_map
+  if (typed) .apply_dictionary(sample_map, cohort@dictionary) else sample_map
 }
 
 #' Per-assay sample counts for a cohort

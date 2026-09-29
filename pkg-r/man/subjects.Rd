@@ -4,10 +4,14 @@
 \alias{subjects}
 \title{Read the subject table of a cohort}
 \usage{
-subjects(cohort)
+subjects(cohort, typed = FALSE)
 }
 \arguments{
 \item{cohort}{A \link{Cohort} object.}
+
+\item{typed}{Logical. When \code{TRUE}, applies the cohort's column dictionary
+(see \code{\link[=cohort_dictionary]{cohort_dictionary()}}): a number column becomes numeric and a
+string column with allowed values becomes a factor. Default \code{FALSE}.}
 }
 \value{
 \code{cohort@subject_tbl} as a tibble.

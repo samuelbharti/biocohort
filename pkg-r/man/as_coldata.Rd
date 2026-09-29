@@ -4,7 +4,14 @@
 \alias{as_coldata}
 \title{Build sample metadata for a count matrix}
 \usage{
-as_coldata(cohort, assay, samples = NULL, rownames = "sample_id", ref = NULL)
+as_coldata(
+  cohort,
+  assay,
+  samples = NULL,
+  rownames = "sample_id",
+  ref = NULL,
+  typed = FALSE
+)
 }
 \arguments{
 \item{cohort}{A \link{Cohort} object.}
@@ -23,6 +30,11 @@ Default \code{"sample_id"}.}
 factor, and each value the level to use as the reference (first) level,
 as in \code{\link[stats:relevel]{stats::relevel()}}. Use it to set a control or wild-type group as
 the baseline before a differential analysis.}
+
+\item{typed}{Logical. When \code{TRUE}, applies the cohort's column dictionary
+first (see \code{\link[=cohort_dictionary]{cohort_dictionary()}}), so a number column is numeric and a
+string column with allowed values is a factor in that order. \code{ref} then
+moves one level to the front. Default \code{FALSE}.}
 }
 \value{
 A data.frame with one row per sample, row names set to

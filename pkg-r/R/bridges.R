@@ -17,6 +17,10 @@
 #'   factor, and each value the level to use as the reference (first) level,
 #'   as in [stats::relevel()]. Use it to set a control or wild-type group as
 #'   the baseline before a differential analysis.
+#' @param typed Logical. When `TRUE`, applies the cohort's column dictionary
+#'   first (see [cohort_dictionary()]), so a number column is numeric and a
+#'   string column with allowed values is a factor in that order. `ref` then
+#'   moves one level to the front. Default `FALSE`.
 #'
 #' @return A data.frame with one row per sample, row names set to
 #'   `rownames`, ordered to match `samples` when given.
@@ -35,7 +39,8 @@ as_coldata <- function(
   assay,
   samples = NULL,
   rownames = "sample_id",
-  ref = NULL
+  ref = NULL,
+  typed = FALSE
 ) {
   if (!S7::S7_inherits(cohort, Cohort)) {
     cli::cli_abort("`cohort` must be a Cohort object.")
@@ -48,8 +53,12 @@ as_coldata <- function(
   if (!is.null(ref)) {
     checkmate::assert_list(ref, names = "unique")
   }
+  checkmate::assert_flag(typed)
 
   joined <- .bridge_samples(cohort, assay, rownames)
+  if (typed) {
+    joined <- .apply_dictionary(joined, cohort@dictionary)
+  }
 
   if (!is.null(samples)) {
     missing <- setdiff(samples, joined[[rownames]])

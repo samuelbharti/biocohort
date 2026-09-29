@@ -31,7 +31,8 @@ Each log that has rows is written next to the manifest, as
 \code{qc_log.csv}, \code{derive_log.csv}, and \code{corrections_log.csv}, and listed
 under a \verb{logs:} key. A time is written in UTC, such as
 \verb{2026-09-29T21:19:07Z}, and the cutoffs of a derived column as
-\code{young=0|old=40}. Text files keep the record readable in a diff and from
+\code{young=0|old=40}. A column dictionary with rows is written the same way,
+as \code{dictionary.csv} under a \verb{dictionary:} key. Text files keep the record readable in a diff and from
 other languages. \code{\link[=cohort_save]{cohort_save()}} keeps the same logs in a binary file.
 }
 \examples{

@@ -23,6 +23,8 @@ NULL
 #' - `sample_map` has the columns `subject_id`, `assay`, `sample_id`, and
 #'   `role`, all character. The first three have no missing value.
 #' - Every `sample_map$subject_id` exists in `subject_tbl`.
+#' - Every column in the dictionary exists and holds only the values its
+#'   entry allows (see [cohort_dictionary()]).
 #'
 #' @examples
 #' subjects <- data.frame(
@@ -52,7 +54,10 @@ validate_cohort <- function(x) {
     cli::cli_abort("`x` must be a Cohort object.")
   }
 
-  problems <- .check_cohort_tables(x@subject_tbl, x@sample_map)
+  problems <- c(
+    .check_cohort_tables(x@subject_tbl, x@sample_map),
+    .check_dictionary(x@dictionary, x@subject_tbl, x@sample_map)
+  )
   if (length(problems) > 0) {
     .abort_cohort_problems(problems)
   }
