@@ -11,7 +11,8 @@ read_manifest(
   sheet = NULL,
   sample_cols = NULL,
   species = NULL,
-  allow_duplicates = FALSE
+  allow_duplicates = FALSE,
+  missing_is_conflict = FALSE
 )
 }
 \arguments{
@@ -29,7 +30,7 @@ a delimited text file. Ignored for Excel files.}
 \item{sheet}{Optional sheet name or number, passed to
 \code{\link[readxl:read_excel]{readxl::read_excel()}}. Ignored for a delimited text file.}
 
-\item{sample_cols, species, allow_duplicates}{Passed to
+\item{sample_cols, species, allow_duplicates, missing_is_conflict}{Passed to
 \code{\link[=validate_manifest]{validate_manifest()}}.}
 }
 \value{

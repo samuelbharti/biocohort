@@ -14,6 +14,11 @@
   the join renamed the pair to `.x` and `.y`, and `write_manifest()` failed
   with an internal error. `cohort_derive()` no longer creates a column whose
   name is used at the other level.
+- `validate_manifest()` and `read_manifest()` no longer treat a missing
+  subject value as a conflict when another row of the same subject gives
+  the value. The given value fills the subject row. Two different given
+  values are still a conflict. `missing_is_conflict = TRUE` keeps the old
+  check (#75).
 
 # biocohort 0.1.1
 

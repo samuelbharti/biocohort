@@ -23,7 +23,8 @@ NULL
 #'
 #'   Any remaining columns (e.g. `species`, `sex`, `strain`, `genotype`,
 #'   `cohort`, `timepoint`, `notes`) are treated as **subject-level metadata**,
-#'   coerced to character, and must be constant within a `subject_id`.
+#'   coerced to character, and must agree within a `subject_id` (see
+#'   `missing_is_conflict`).
 #'
 #' @param sample_cols Optional character vector naming additional columns to
 #'   keep at the sample level (in `sample_map`) rather than treat as
@@ -36,6 +37,11 @@ NULL
 #'
 #' @param allow_duplicates Logical. If `FALSE` (default), a repeated
 #'   `sample_id` raises an error. If `TRUE`, duplicates are kept.
+#'
+#' @param missing_is_conflict Logical. If `FALSE` (default), a subject whose
+#'   rows hold a value in one row and a missing value in another is not a
+#'   conflict: the given value fills the subject row. If `TRUE`, that is a
+#'   conflict, as it was in biocohort 0.1.1.
 #'
 #' @return A list with three elements:
 #'   - `subject_tbl`: Tibble with one row per `subject_id` containing the
@@ -64,6 +70,11 @@ NULL
 #' argument), is lower-cased so that `"Rat"` and `"rat"` are the same
 #' subject-level value. Any species value is allowed; the manifest layer
 #' does not restrict it to a fixed list of organisms.
+#'
+#' A subject-level column may be missing in some rows of a subject, for
+#' example when the manifest was stacked from sheets that do not all carry
+#' `sex`. The one given value then fills the subject row. Two different given
+#' values are always a conflict.
 #'
 #' `sample_id` must be unique across the whole manifest, not only within a
 #' subject or assay, unless `allow_duplicates = TRUE`.
@@ -94,17 +105,23 @@ validate_manifest <- function(
   manifest,
   sample_cols = NULL,
   species = NULL,
-  allow_duplicates = FALSE
+  allow_duplicates = FALSE,
+  missing_is_conflict = FALSE
 ) {
   if (!is.null(sample_cols)) {
     checkmate::assert_character(sample_cols, min.chars = 1, any.missing = FALSE)
   }
+  checkmate::assert_flag(missing_is_conflict)
 
   manifest <- .coerce_manifest(manifest, species)
   .check_manifest_keys(manifest)
   sample_level_cols <- .sample_level_cols(manifest, sample_cols)
 
-  subject_tbl <- .split_subject_tbl(manifest, sample_level_cols)
+  subject_tbl <- .split_subject_tbl(
+    manifest,
+    sample_level_cols,
+    missing_is_conflict
+  )
   sample_map <- .build_sample_map(manifest, sample_level_cols)
   .check_sample_duplicates(sample_map, allow_duplicates)
   completeness_tbl <- .manifest_completeness_tbl(sample_map)
@@ -190,11 +207,18 @@ validate_manifest <- function(
 # One row per subject, from every subject-level column (everything not
 # classified as sample-level). Errors when a subject's rows disagree, naming
 # the subject and the columns that differ.
-.split_subject_tbl <- function(manifest, sample_level_cols) {
+.split_subject_tbl <- function(
+  manifest,
+  sample_level_cols,
+  missing_is_conflict = FALSE
+) {
   subject_meta_cols <- setdiff(names(manifest), sample_level_cols)
   subject_wide <- dplyr::select(manifest, dplyr::all_of(subject_meta_cols))
 
-  conflicts <- .check_subject_conflicts(subject_wide)
+  conflicts <- .check_subject_conflicts(
+    subject_wide,
+    na_rm = !missing_is_conflict
+  )
   if (length(conflicts) > 0) {
     cli::cli_abort(
       c(
@@ -206,12 +230,35 @@ validate_manifest <- function(
     )
   }
 
-  dplyr::relocate(dplyr::distinct(subject_wide), "subject_id")
+  dplyr::relocate(.collapse_subjects(subject_wide), "subject_id")
+}
+
+# One row per subject, in first-seen order. Each column takes the subject's
+# first value that is not missing, or NA when every row is missing. Run it
+# after the conflict check, so the given values of a subject already agree.
+# Indexing keeps each column's type.
+.collapse_subjects <- function(subject_wide) {
+  ids <- subject_wide$subject_id
+  rows <- unname(split(seq_along(ids), factor(ids, levels = unique(ids))))
+  out <- subject_wide[vapply(rows, `[[`, integer(1), 1L), , drop = FALSE]
+  for (col in setdiff(names(subject_wide), "subject_id")) {
+    x <- subject_wide[[col]]
+    pick <- vapply(rows, .first_given, integer(1), x = x)
+    out[[col]] <- x[pick]
+  }
+  out
+}
+
+# The first row of `rows` where `x` is not missing, else the first row.
+.first_given <- function(rows, x) {
+  given <- rows[!is.na(x[rows])]
+  if (length(given) > 0) given[[1]] else rows[[1]]
 }
 
 # One message per subject_id naming the columns (other than subject_id) that
 # hold more than one distinct value for that subject. character() when none.
-.check_subject_conflicts <- function(subject_wide) {
+# With na_rm = TRUE a missing value does not count as a value.
+.check_subject_conflicts <- function(subject_wide, na_rm = FALSE) {
   other_cols <- setdiff(names(subject_wide), "subject_id")
   if (length(other_cols) == 0) {
     return(character())
@@ -220,7 +267,10 @@ validate_manifest <- function(
   by_subject <- subject_wide |>
     dplyr::group_by(.data$subject_id) |>
     dplyr::summarise(
-      dplyr::across(dplyr::all_of(other_cols), dplyr::n_distinct),
+      dplyr::across(
+        dplyr::all_of(other_cols),
+        function(x) dplyr::n_distinct(x, na.rm = na_rm)
+      ),
       .groups = "drop"
     )
   n_distinct_mat <- as.matrix(by_subject[other_cols])

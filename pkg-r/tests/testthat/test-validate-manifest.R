@@ -389,3 +389,79 @@ test_that("validate_manifest puts sample_map key columns before extra ones", {
     c("subject_id", "assay", "sample_id", "role", "fastq_1")
   )
 })
+
+test_that("a missing subject value next to a given one is no conflict", {
+  manifest <- data.frame(
+    subject_id = c("R1", "R1", "R2"),
+    species = "human",
+    sex = c(NA, "F", "M"),
+    assay = c("bulk_rna", "proteomics", "bulk_rna"),
+    sample_id = c("A1", "P1", "A2")
+  )
+
+  result <- validate_manifest(manifest)
+
+  expect_equal(result$subject_tbl$subject_id, c("R1", "R2"))
+  expect_equal(result$subject_tbl$sex, c("F", "M"))
+})
+
+test_that("missing_is_conflict = TRUE keeps the strict check", {
+  manifest <- data.frame(
+    subject_id = c("R1", "R1"),
+    species = "human",
+    sex = c("F", NA),
+    assay = c("bulk_rna", "proteomics"),
+    sample_id = c("A1", "P1")
+  )
+
+  err <- expect_error(
+    validate_manifest(manifest, missing_is_conflict = TRUE),
+    "conflicting subject-level metadata"
+  )
+  expect_match(conditionMessage(err), "R1 (sex)", fixed = TRUE)
+})
+
+test_that("two given subject values are still a conflict", {
+  manifest <- data.frame(
+    subject_id = c("R1", "R1", "R1"),
+    species = "human",
+    sex = c("F", NA, "M"),
+    assay = "wes",
+    sample_id = c("A1", "A2", "A3")
+  )
+
+  expect_error(validate_manifest(manifest), "R1 (sex)", fixed = TRUE)
+})
+
+test_that("a subject with every value missing keeps NA", {
+  manifest <- data.frame(
+    subject_id = c("R1", "R1"),
+    species = "human",
+    sex = NA,
+    assay = "wes",
+    sample_id = c("A1", "A2")
+  )
+
+  result <- validate_manifest(manifest)
+
+  expect_equal(nrow(result$subject_tbl), 1)
+  expect_true(is.na(result$subject_tbl$sex))
+})
+
+test_that("read_manifest passes missing_is_conflict on", {
+  path <- withr::local_tempfile(fileext = ".csv")
+  writeLines(
+    c(
+      "subject_id,species,sex,assay,sample_id",
+      "R1,rat,F,wes,T1",
+      "R1,rat,,wes,N1"
+    ),
+    path
+  )
+
+  expect_equal(read_manifest(path)$subject_tbl$sex, "F")
+  expect_error(
+    read_manifest(path, missing_is_conflict = TRUE),
+    "conflicting"
+  )
+})
