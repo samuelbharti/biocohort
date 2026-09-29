@@ -33,7 +33,7 @@ Depends:
     R (>= 4.1)
 Imports:
     S7,
-    cli,
+    cli (>= 3.2.0),
     rlang,
     checkmate,
     fs,

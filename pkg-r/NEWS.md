@@ -24,6 +24,11 @@
   default `key_cols` are `subject_id` and `sample_id`, and
   `cohort_filter()` trims a loaded sample-level table to the kept samples
   (#73).
+- `analysis_files()` now records the `size`, `modified` time and `sha256`
+  checksum of each file, so a report can show which inputs changed since
+  the last run. The checksum is filled with `checksum = TRUE` in
+  `load_analysis()` and `load_analyses()` (#79). `load_analyses()` now keeps
+  the file tables of earlier loads when it loads one analysis at a time.
 
 # biocohort 0.1.1
 

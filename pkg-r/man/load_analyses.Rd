@@ -4,7 +4,7 @@
 \alias{load_analyses}
 \title{Load registered analyses into a cohort from disk}
 \usage{
-load_analyses(cohort, analyses = NULL, readers = NULL)
+load_analyses(cohort, analyses = NULL, readers = NULL, checksum = FALSE)
 }
 \arguments{
 \item{cohort}{A \link{Cohort} with registered specs (see \code{\link[=analysis_register]{analysis_register()}}).}
@@ -14,6 +14,10 @@ analyses to load. Defaults to all that have a \code{path_template}.}
 
 \item{readers}{Optional named list of reader overrides, keyed by analysis
 name (each a function or \code{"pkg::fun"} name).}
+
+\item{checksum}{Logical. Passed to \code{\link[=load_analysis]{load_analysis()}}. When \code{TRUE}, the
+file tables that \code{\link[=analysis_files]{analysis_files()}} returns hold a SHA-256 checksum per
+file.}
 }
 \value{
 A new \link{Cohort} with \code{analyses} populated for the loaded specs.

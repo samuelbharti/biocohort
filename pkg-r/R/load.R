@@ -240,12 +240,18 @@ NULL
 #' @param spec An [AnalysisSpec] or the name of one registered in `cohort`.
 #' @param reader Optional reader override: a function, or a `"fun"`/`"pkg::fun"`
 #'   name. Defaults to the spec's `reader`.
+#' @param checksum Logical. When `TRUE`, the `sha256` column of `files` holds
+#'   the SHA-256 checksum of each file. Default `FALSE`, since a checksum
+#'   reads every byte.
 #'
 #' @return A list with:
 #'   - `data`: a tibble of all loaded rows (empty if no files were found),
 #'     with provenance key columns added.
 #'   - `files`: a tibble with one row per unit: its keys, the resolved `path`,
-#'     and whether it `exists`.
+#'     whether it `exists`, its `size` in bytes, its `modified` time, and its
+#'     `sha256` checksum (`NA` unless `checksum = TRUE`). A missing file has
+#'     `NA` in the last three. A folder has the total size and the latest
+#'     modified time of the files in it, and no checksum.
 #'
 #' @details
 #' Units follow the spec's `assay`. A subject-level spec enumerates only the
@@ -300,7 +306,7 @@ NULL
 #'
 #' @seealso [load_analyses()], [translate()]
 #' @export
-load_analysis <- function(cohort, spec, reader = NULL) {
+load_analysis <- function(cohort, spec, reader = NULL, checksum = FALSE) {
   if (!S7::S7_inherits(cohort, Cohort)) {
     cli::cli_abort("`cohort` must be a Cohort object.")
   }
@@ -315,6 +321,7 @@ load_analysis <- function(cohort, spec, reader = NULL) {
   if (is.na(spec@path_template)) {
     cli::cli_abort("Analysis {.val {spec@name}} has no {.field path_template}.")
   }
+  checkmate::assert_flag(checksum)
 
   read_fn <- .spec_reader(spec, reader)
   units <- .analysis_units(cohort, spec)
@@ -332,7 +339,11 @@ load_analysis <- function(cohort, spec, reader = NULL) {
     path <- paths[[i]]
     exists <- file.exists(path)
     file_rows[[length(file_rows) + 1]] <- tibble::as_tibble(
-      c(u$keys, list(path = path, exists = exists))
+      c(
+        u$keys,
+        list(path = path, exists = exists),
+        .file_details(path, exists, checksum)
+      )
     )
     if (exists) {
       d <- tibble::as_tibble(read_fn(path))
@@ -367,7 +378,43 @@ load_analysis <- function(cohort, spec, reader = NULL) {
 
 # The shape of a file manifest with no rows.
 .empty_files <- function() {
-  tibble::tibble(path = character(), exists = logical())
+  tibble::tibble(
+    path = character(),
+    exists = logical(),
+    size = numeric(),
+    modified = as.POSIXct(character()),
+    sha256 = character()
+  )
+}
+
+# Size in bytes, modified time, and (when asked) the SHA-256 of one path. A
+# folder gives the total size and the latest modified time of the files in
+# it, since its own time does not change when a file inside it does, and no
+# checksum. A missing path gives NA for all three.
+.file_details <- function(path, exists, checksum) {
+  out <- list(
+    size = NA_real_,
+    modified = as.POSIXct(NA),
+    sha256 = NA_character_
+  )
+  if (!exists) {
+    return(out)
+  }
+  if (fs::is_dir(path)) {
+    info <- fs::dir_info(path, recurse = TRUE, type = "file")
+    out$size <- sum(as.numeric(info$size))
+    if (nrow(info) > 0) {
+      out$modified <- max(info$modification_time)
+    }
+    return(out)
+  }
+  info <- fs::file_info(path)
+  out$size <- as.numeric(info$size)
+  out$modified <- info$modification_time
+  if (checksum) {
+    out$sha256 <- unname(cli::hash_file_sha256(path))
+  }
+  out
 }
 
 #' Load registered analyses into a cohort from disk
@@ -383,6 +430,9 @@ load_analysis <- function(cohort, spec, reader = NULL) {
 #'   analyses to load. Defaults to all that have a `path_template`.
 #' @param readers Optional named list of reader overrides, keyed by analysis
 #'   name (each a function or `"pkg::fun"` name).
+#' @param checksum Logical. Passed to [load_analysis()]. When `TRUE`, the
+#'   file tables that [analysis_files()] returns hold a SHA-256 checksum per
+#'   file.
 #'
 #' @return A new [Cohort] with `analyses` populated for the loaded specs.
 #'
@@ -418,7 +468,12 @@ load_analysis <- function(cohort, spec, reader = NULL) {
 #'
 #' @seealso [load_analysis()], [analysis_files()], [translate()]
 #' @export
-load_analyses <- function(cohort, analyses = NULL, readers = NULL) {
+load_analyses <- function(
+  cohort,
+  analyses = NULL,
+  readers = NULL,
+  checksum = FALSE
+) {
   if (!S7::S7_inherits(cohort, Cohort)) {
     cli::cli_abort("`cohort` must be a Cohort object.")
   }
@@ -447,27 +502,34 @@ load_analyses <- function(cohort, analyses = NULL, readers = NULL) {
       next
     }
     reader <- if (!is.null(readers)) readers[[nm]] else NULL
-    res <- load_analysis(cohort, spec, reader = reader)
+    res <- load_analysis(cohort, spec, reader = reader, checksum = checksum)
     new_analyses[[nm]] <- res$data
     manifests[[nm]] <- res$files
   }
 
   new_cache <- cohort@cache
-  new_cache$loaded <- manifests
+  # Replace only the analyses loaded now, so a load one analysis at a time
+  # keeps the file tables of the earlier loads.
+  loaded <- new_cache$loaded %||% list()
+  loaded[names(manifests)] <- manifests
+  new_cache$loaded <- loaded
 
   S7::set_props(cohort, analyses = new_analyses, cache = new_cache)
 }
 
 #' Retrieve analysis file manifests from a cohort
 #'
-#' After [load_analyses()], returns the per-analysis file manifests (resolved
-#' paths and whether each existed) recorded during loading.
+#' After [load_analyses()], returns the per-analysis file manifests recorded
+#' during loading: the resolved paths, whether each existed, and its size,
+#' modified time, and checksum. A report can keep this table to show which
+#' inputs changed between two runs.
 #'
 #' @param cohort A [Cohort] produced by [load_analyses()].
 #'
 #' @return A named list of tibbles, one per loaded analysis. Each has the unit
-#'   keys, `path`, and `exists`. When the cohort has not been loaded, an empty
-#'   tibble with columns `path` and `exists`.
+#'   keys, `path`, `exists`, `size`, `modified`, and `sha256` (see
+#'   [load_analysis()]). When the cohort has not been loaded, an empty tibble
+#'   with those five columns.
 #'
 #' @examples
 #' analysis_files(example_cohort)

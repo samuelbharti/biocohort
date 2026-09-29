@@ -4,7 +4,7 @@
 \alias{load_analysis}
 \title{Load an analysis's feature table from disk}
 \usage{
-load_analysis(cohort, spec, reader = NULL)
+load_analysis(cohort, spec, reader = NULL, checksum = FALSE)
 }
 \arguments{
 \item{cohort}{A \link{Cohort} providing \code{paths} (for \code{{root}}), subjects, and the
@@ -14,6 +14,10 @@ sample map (for subject, sample, and pair enumeration).}
 
 \item{reader}{Optional reader override: a function, or a \code{"fun"}/\code{"pkg::fun"}
 name. Defaults to the spec's \code{reader}.}
+
+\item{checksum}{Logical. When \code{TRUE}, the \code{sha256} column of \code{files} holds
+the SHA-256 checksum of each file. Default \code{FALSE}, since a checksum
+reads every byte.}
 }
 \value{
 A list with:
@@ -21,7 +25,10 @@ A list with:
 \item \code{data}: a tibble of all loaded rows (empty if no files were found),
 with provenance key columns added.
 \item \code{files}: a tibble with one row per unit: its keys, the resolved \code{path},
-and whether it \code{exists}.
+whether it \code{exists}, its \code{size} in bytes, its \code{modified} time, and its
+\code{sha256} checksum (\code{NA} unless \code{checksum = TRUE}). A missing file has
+\code{NA} in the last three. A folder has the total size and the latest
+modified time of the files in it, and no checksum.
 }
 }
 \description{
