@@ -17,8 +17,8 @@ ids (matched against \code{cohort@sample_map$sample_id}) or subject ids
 (matched against \code{cohort@subject_tbl$subject_id}). No default.}
 
 \item{action}{One of \code{"flag"} or \code{"drop"}. \code{"flag"} sets a status and a
-reason on the matching rows and keeps them (see Details). \code{"drop"} removes the
-matching rows entirely. No default.}
+reason on the matching rows and keeps them (see Details). \code{"drop"}
+removes the matching rows entirely. No default.}
 
 \item{reason}{A single, non-empty string explaining the decision.}
 }

@@ -184,6 +184,31 @@
   msgs
 }
 
+# A column other than subject_id that is in both tables cannot survive a
+# join of the two: dplyr would rename the pair to .x and .y. Error and name
+# the columns, so a join never renames a column in silence.
+.check_shared_cols <- function(
+  subject_tbl,
+  sample_map,
+  call = rlang::caller_env()
+) {
+  shared <- setdiff(
+    intersect(names(subject_tbl), names(sample_map)),
+    "subject_id"
+  )
+  if (length(shared) > 0) {
+    cli::cli_abort(
+      c(
+        "Column{?s} {.field {shared}} {?is/are} in both `subject_tbl` and `sample_map`.",
+        "i" = "The two tables are joined here, so each column needs its own name.",
+        "i" = "Rename the column in one of the tables."
+      ),
+      call = call
+    )
+  }
+  invisible(NULL)
+}
+
 # Raise one cli error that lists every problem.
 .abort_cohort_problems <- function(problems, call = rlang::caller_env()) {
   bullets <- sprintf("{problems[[%d]]}", seq_along(problems))

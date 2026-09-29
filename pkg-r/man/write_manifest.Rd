@@ -26,7 +26,9 @@ TSV, or other delimited file.
 \details{
 Columns are ordered \code{subject_id}, then the other subject-level columns,
 then the sample-level columns (\code{assay}, \code{sample_id}, \code{role}, and any
-extra ones). A missing value is written as an empty field.
+extra ones). A missing value is written as an empty field. A column other
+than \code{subject_id} that is in both tables is an error, since one flat
+manifest cannot hold two columns of the same name.
 }
 \examples{
 manifest <- data.frame(

@@ -13,8 +13,8 @@
 #'   ids (matched against `cohort@sample_map$sample_id`) or subject ids
 #'   (matched against `cohort@subject_tbl$subject_id`). No default.
 #' @param action One of `"flag"` or `"drop"`. `"flag"` sets a status and a
-#'   reason on the matching rows and keeps them (see Details). `"drop"` removes the
-#'   matching rows entirely. No default.
+#'   reason on the matching rows and keeps them (see Details). `"drop"`
+#'   removes the matching rows entirely. No default.
 #' @param reason A single, non-empty string explaining the decision.
 #'
 #' @return A new [Cohort].

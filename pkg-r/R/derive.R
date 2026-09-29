@@ -31,6 +31,10 @@
 #' numeric is an error naming the offending ids, never a silent `NA`. A
 #' value that was already missing stays `NA` in the derived column.
 #'
+#' `name` must not be a column of the other level's table, since the two
+#' tables are joined into one manifest by [write_manifest()] and
+#' [samples()].
+#'
 #' Re-deriving with the same `name` overwrites the column, the same way
 #' [analysis_register()] replaces a spec of the same name. Every call is
 #' recorded in [derive_log()], which, like [qc_log()], is not cleared by
@@ -74,6 +78,16 @@ cohort_derive <- function(cohort, name, from, cutoffs, level) {
   .assert_cutoffs(cutoffs)
 
   tbl <- if (level == "subject") cohort@subject_tbl else cohort@sample_map
+  other <- if (level == "subject") cohort@sample_map else cohort@subject_tbl
+  if (name %in% names(other)) {
+    other_level <- if (level == "subject") "sample" else "subject"
+    cli::cli_abort(
+      c(
+        "`name` {.field {name}} is already a {other_level}-level column.",
+        "i" = "Pick another name, so the two levels keep separate columns."
+      )
+    )
+  }
   if (!from %in% names(tbl)) {
     cli::cli_abort(
       c(

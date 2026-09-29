@@ -355,3 +355,17 @@ test_that("cohort_read errors on a cohort file with an invalid cohort", {
 
   expect_error(cohort_read(path), "Cohort object")
 })
+
+test_that("write_manifest names a column that is in both tables", {
+  cohort <- make_cohort(n = 1)
+  cohort@subject_tbl$batch <- "b1"
+  cohort@sample_map$batch <- "b2"
+
+  err <- expect_error(
+    write_manifest(cohort, withr::local_tempfile(fileext = ".csv")),
+    "in both"
+  )
+  expect_match(conditionMessage(err), "batch", fixed = TRUE)
+  expect_error(samples(cohort, with_subjects = TRUE), "batch")
+  expect_error(as_coldata(cohort, assay = "wes"), "batch")
+})
