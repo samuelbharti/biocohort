@@ -219,6 +219,10 @@ subject_new <- function(
 #'   Defaults to an empty list.
 #' @param analyses Named list of analysis tables or other data objects.
 #'   Defaults to an empty list.
+#' @param corrections Optional audit table of the corrections applied to the
+#'   manifest, as [corrections_log()] returns it for a corrected manifest.
+#'   Stored in the cohort, so the audit survives [validate_manifest()].
+#'   Defaults to `NULL`, an empty audit.
 #'
 #' @return A Cohort object. An error when the tables fail
 #'   [validate_cohort()].
@@ -271,7 +275,8 @@ cohort_new <- function(
   sample_map,
   study = NULL,
   paths = list(),
-  analyses = list()
+  analyses = list(),
+  corrections = NULL
 ) {
   if (!is.data.frame(subject_tbl)) {
     cli::cli_abort(
@@ -294,13 +299,19 @@ cohort_new <- function(
   if (!is.null(study) && !S7::S7_inherits(study, Study)) {
     cli::cli_abort("`study` must be a Study object or NULL.")
   }
+  corrections <- .check_log(
+    corrections %||% empty_corrections_log(),
+    empty_corrections_log(),
+    "corrections"
+  )
 
   cohort <- Cohort(
     study = study,
     subject_tbl = tibble::as_tibble(subject_tbl),
     sample_map = tibble::as_tibble(sample_map),
     paths = paths,
-    analyses = analyses
+    analyses = analyses,
+    corrections = corrections
   )
 
   validate_cohort(cohort)

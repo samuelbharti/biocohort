@@ -201,6 +201,9 @@ Subject <- S7::new_class(
 #' @param derived A tibble recording every [cohort_derive()] call (columns
 #'   `name`, `from`, `level`, `cutoffs`, `n_derived`, `n_na`, `timestamp`).
 #'   Durable in the same way as `qc`. Defaults to an empty table.
+#' @param corrections A tibble with the audit of the manifest corrections the
+#'   cohort was built from, in the shape [corrections_log()] returns. Durable
+#'   in the same way as `qc`. Defaults to an empty table.
 #'
 #' @return A `Cohort` object with the given properties.
 #'
@@ -224,6 +227,7 @@ Subject <- S7::new_class(
 #' cohort@cache         # Memoization cache
 #' cohort@qc            # QC audit log
 #' cohort@derived       # Derived-column provenance
+#' cohort@corrections   # Manifest corrections audit
 #' ```
 #'
 #' @examples
@@ -295,6 +299,10 @@ Cohort <- S7::new_class(
         n_na = integer(),
         timestamp = as.POSIXct(character())
       ))
+    ),
+    corrections = S7::new_property(
+      S7::class_data.frame,
+      default = quote(empty_corrections_log())
     )
   ),
   validator = function(self) {

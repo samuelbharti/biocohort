@@ -344,3 +344,18 @@ test_that("cohort_derive refuses a name used at the other level", {
     "already a subject-level column"
   )
 })
+
+test_that("cohort_derive refuses a cutoff name with a bar", {
+  cohort <- make_cohort(n = 1, subject_cols = list(age = "30"))
+
+  expect_error(
+    cohort_derive(
+      cohort,
+      "band",
+      from = "age",
+      cutoffs = c("lo|w" = 40, hi = Inf),
+      level = "subject"
+    ),
+    "must not contain"
+  )
+})

@@ -14,9 +14,11 @@ The \link{Cohort} object.
 }
 \description{
 Reads the RDS file, checks it is a cohort file, and re-validates the
-cohort before returning it. A subject QC flag saved by biocohort 0.1.x
-as \code{qc_status}/\code{qc_reason} in \code{subject_tbl} is renamed to
-\code{subject_qc_status}/\code{subject_qc_reason}, the names \code{\link[=cohort_qc]{cohort_qc()}} now uses.
+cohort before returning it. A cohort saved by an older version of the
+package gets the default for each property added since then, and a
+subject QC flag saved by biocohort 0.1.x as \code{qc_status}/\code{qc_reason} in
+\code{subject_tbl} is renamed to \code{subject_qc_status}/\code{subject_qc_reason}, the
+names \code{\link[=cohort_qc]{cohort_qc()}} now uses.
 }
 \examples{
 data(example_cohort)

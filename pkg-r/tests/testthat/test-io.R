@@ -369,3 +369,14 @@ test_that("write_manifest names a column that is in both tables", {
   expect_error(samples(cohort, with_subjects = TRUE), "batch")
   expect_error(as_coldata(cohort, assay = "wes"), "batch")
 })
+
+test_that("cohort_read fills a property an older version did not have", {
+  cohort <- make_cohort(n = 1)
+  attr(cohort, "corrections") <- NULL
+  path <- withr::local_tempfile(fileext = ".rds")
+  saveRDS(list(format = 1L, biocohort_version = "0.1.1", cohort = cohort), path)
+
+  reread <- cohort_read(path)
+
+  expect_equal(nrow(corrections_log(reread)), 0)
+})

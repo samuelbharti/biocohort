@@ -9,7 +9,8 @@ cohort_new(
   sample_map,
   study = NULL,
   paths = list(),
-  analyses = list()
+  analyses = list(),
+  corrections = NULL
 )
 }
 \arguments{
@@ -28,6 +29,11 @@ Defaults to an empty list.}
 
 \item{analyses}{Named list of analysis tables or other data objects.
 Defaults to an empty list.}
+
+\item{corrections}{Optional audit table of the corrections applied to the
+manifest, as \code{\link[=corrections_log]{corrections_log()}} returns it for a corrected manifest.
+Stored in the cohort, so the audit survives \code{\link[=validate_manifest]{validate_manifest()}}.
+Defaults to \code{NULL}, an empty audit.}
 }
 \value{
 A Cohort object. An error when the tables fail

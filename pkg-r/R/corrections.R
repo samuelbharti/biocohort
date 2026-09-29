@@ -76,21 +76,34 @@ apply_corrections <- function(manifest, corrections) {
   manifest
 }
 
-#' Return the audit table of a corrected manifest
+#' Return the audit table of a corrected manifest or a cohort
 #'
-#' Reads the `"corrections"` attribute that [apply_corrections()] sets.
+#' For a manifest, reads the `"corrections"` attribute that
+#' [apply_corrections()] sets. For a [Cohort], returns the audit it was built
+#' with (see the `corrections` argument of [cohort_new()]).
 #'
-#' @param x A manifest, corrected or not.
+#' @param x A manifest, corrected or not, or a [Cohort].
 #'
 #' @return A tibble with columns `level`, `id`, `column`, `old_value`,
 #'   `new_value`, `reason`, and `n_rows`. It has no rows when `x` has not been
 #'   corrected.
 #'
+#' @details
+#' [validate_manifest()] builds new tables and drops the attribute. Pass
+#' `corrections_log(corrected)` to [cohort_new()] to keep the audit in the
+#' cohort. [read_study_yaml()] does this for you.
+#'
 #' @examples
 #' manifest <- tibble::tibble(subject_id = "R1", sample_id = "R1_T")
 #' corrections_log(manifest)
+#'
+#' data(example_cohort)
+#' corrections_log(example_cohort)
 #' @export
 corrections_log <- function(x) {
+  if (S7::S7_inherits(x, Cohort)) {
+    return(tibble::as_tibble(x@corrections))
+  }
   log <- attr(x, "corrections", exact = TRUE)
   if (is.null(log)) {
     return(empty_corrections_log())

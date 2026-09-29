@@ -2,12 +2,12 @@
 % Please edit documentation in R/corrections.R
 \name{corrections_log}
 \alias{corrections_log}
-\title{Return the audit table of a corrected manifest}
+\title{Return the audit table of a corrected manifest or a cohort}
 \usage{
 corrections_log(x)
 }
 \arguments{
-\item{x}{A manifest, corrected or not.}
+\item{x}{A manifest, corrected or not, or a \link{Cohort}.}
 }
 \value{
 A tibble with columns \code{level}, \code{id}, \code{column}, \code{old_value},
@@ -15,9 +15,19 @@ A tibble with columns \code{level}, \code{id}, \code{column}, \code{old_value},
 corrected.
 }
 \description{
-Reads the \code{"corrections"} attribute that \code{\link[=apply_corrections]{apply_corrections()}} sets.
+For a manifest, reads the \code{"corrections"} attribute that
+\code{\link[=apply_corrections]{apply_corrections()}} sets. For a \link{Cohort}, returns the audit it was built
+with (see the \code{corrections} argument of \code{\link[=cohort_new]{cohort_new()}}).
+}
+\details{
+\code{\link[=validate_manifest]{validate_manifest()}} builds new tables and drops the attribute. Pass
+\code{corrections_log(corrected)} to \code{\link[=cohort_new]{cohort_new()}} to keep the audit in the
+cohort. \code{\link[=read_study_yaml]{read_study_yaml()}} does this for you.
 }
 \examples{
 manifest <- tibble::tibble(subject_id = "R1", sample_id = "R1_T")
 corrections_log(manifest)
+
+data(example_cohort)
+corrections_log(example_cohort)
 }

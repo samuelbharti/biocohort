@@ -371,9 +371,11 @@ cohort_save <- function(cohort, path) {
 #' Read a cohort saved with cohort_save()
 #'
 #' Reads the RDS file, checks it is a cohort file, and re-validates the
-#' cohort before returning it. A subject QC flag saved by biocohort 0.1.x
-#' as `qc_status`/`qc_reason` in `subject_tbl` is renamed to
-#' `subject_qc_status`/`subject_qc_reason`, the names [cohort_qc()] now uses.
+#' cohort before returning it. A cohort saved by an older version of the
+#' package gets the default for each property added since then, and a
+#' subject QC flag saved by biocohort 0.1.x as `qc_status`/`qc_reason` in
+#' `subject_tbl` is renamed to `subject_qc_status`/`subject_qc_reason`, the
+#' names [cohort_qc()] now uses.
 #'
 #' @param path Path to a file written by [cohort_save()].
 #'
@@ -409,8 +411,20 @@ cohort_read <- function(path) {
     cli::cli_abort("{.path {path}} does not contain a Cohort object.")
   }
 
-  cohort <- .rename_old_qc_cols(wrapper$cohort)
+  cohort <- .rename_old_qc_cols(.fill_missing_props(wrapper$cohort))
   validate_cohort(cohort)
+  cohort
+}
+
+# A cohort saved by an older version lacks the properties added since then.
+# Give each one its default, so the object works with this version.
+.fill_missing_props <- function(cohort) {
+  defaults <- Cohort()
+  for (nm in names(S7::props(defaults))) {
+    if (is.null(attr(cohort, nm, exact = TRUE))) {
+      attr(cohort, nm) <- S7::prop(defaults, nm)
+    }
+  }
   cohort
 }
 

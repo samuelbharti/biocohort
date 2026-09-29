@@ -29,6 +29,15 @@
   the last run. The checksum is filled with `checksum = TRUE` in
   `load_analysis()` and `load_analyses()` (#79). `load_analyses()` now keeps
   the file tables of earlier loads when it loads one analysis at a time.
+  `load_analysis()` and `load_analyses()` (#79).
+- `write_study_yaml()` writes the QC, derive and corrections logs as CSV
+  files next to the manifest and lists them under a new `logs:` key.
+  `read_study_yaml()` reads them back, so a study folder in git keeps the
+  reason for each QC flag (#78).
+- `Cohort` has a `corrections` property, set with the new `corrections`
+  argument of `cohort_new()`. `corrections_log()` accepts a cohort, and
+  `read_study_yaml()` keeps the audit of the corrections it applies.
+  `cohort_read()` gives a cohort saved by 0.1.x the new property.
 
 # biocohort 0.1.1
 

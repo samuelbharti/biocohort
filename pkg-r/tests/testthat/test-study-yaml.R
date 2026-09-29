@@ -222,3 +222,144 @@ test_that("write_study_yaml writes with a custom manifest name", {
   doc <- yaml::read_yaml(path)
   expect_equal(doc$manifest, "samples.tsv")
 })
+
+# A cohort with one row in each of the three logs.
+make_logged_cohort <- function() {
+  manifest <- tibble::tibble(
+    subject_id = c("R1", "R1", "R2"),
+    species = "rat",
+    age = c("30", "30", "50"),
+    assay = "wes",
+    sample_id = c("A1", "A2", "B1"),
+    role = c("tumor", "normal", "tumor")
+  )
+  fixes <- tibble::tibble(
+    level = "subject",
+    id = "R2",
+    column = "age",
+    value = "55",
+    reason = "entry typo"
+  )
+  corrected <- apply_corrections(manifest, fixes)
+  parsed <- validate_manifest(corrected)
+  cohort <- cohort_new(
+    parsed$subject_tbl,
+    parsed$sample_map,
+    corrections = corrections_log(corrected)
+  )
+  cohort <- cohort_qc(cohort, "A2", "sample", "flag", "low depth")
+  cohort_derive(
+    cohort,
+    name = "age_group",
+    from = "age",
+    cutoffs = c(young = 0, old = 40),
+    level = "subject"
+  )
+}
+
+test_that("the study YAML round trip keeps the three logs", {
+  skip_if_not_installed("yaml")
+  cohort <- make_logged_cohort()
+  dir <- withr::local_tempdir()
+  path <- file.path(dir, "study.yaml")
+
+  write_study_yaml(cohort, path)
+  back <- read_study_yaml(path)
+
+  doc <- yaml::read_yaml(path)
+  expect_equal(
+    doc$logs,
+    list(
+      qc = "qc_log.csv",
+      derive = "derive_log.csv",
+      corrections = "corrections_log.csv"
+    )
+  )
+  expect_equal(back@qc$reason, "low depth")
+  expect_equal(back@qc$previous_status, NA_character_)
+  expect_equal(
+    as.numeric(back@qc$timestamp),
+    as.numeric(cohort@qc$timestamp),
+    tolerance = 1
+  )
+  expect_equal(back@derived$cutoffs, cohort@derived$cutoffs)
+  expect_identical(back@derived$n_derived, cohort@derived$n_derived)
+  expect_equal(corrections_log(back), corrections_log(cohort))
+})
+
+test_that("logs are written next to a manifest in a subfolder", {
+  skip_if_not_installed("yaml")
+  dir <- withr::local_tempdir()
+  path <- file.path(dir, "study.yaml")
+
+  write_study_yaml(make_logged_cohort(), path, manifest = "data/manifest.csv")
+
+  expect_equal(yaml::read_yaml(path)$logs$qc, "data/qc_log.csv")
+  expect_true(file.exists(file.path(dir, "data", "qc_log.csv")))
+  expect_equal(nrow(qc_log(read_study_yaml(path))), 1)
+})
+
+test_that("a cohort with no log rows writes no logs key", {
+  skip_if_not_installed("yaml")
+  dir <- withr::local_tempdir()
+  path <- file.path(dir, "study.yaml")
+
+  write_study_yaml(make_cohort(), path)
+
+  expect_null(yaml::read_yaml(path)$logs)
+})
+
+test_that("read_study_yaml keeps the audit of an applied corrections file", {
+  skip_if_not_installed("yaml")
+  dir <- withr::local_tempdir()
+  writeLines(
+    c("subject_id,species,assay,sample_id", "R1,rat,wes,T1"),
+    file.path(dir, "manifest.csv")
+  )
+  writeLines(
+    c("level,id,column,value,reason", "subject,R1,species,mouse,wrong sheet"),
+    file.path(dir, "fixes.csv")
+  )
+  path <- file.path(dir, "study.yaml")
+  yaml::write_yaml(
+    list(manifest = "manifest.csv", corrections = "fixes.csv"),
+    path
+  )
+
+  log <- corrections_log(read_study_yaml(path))
+
+  expect_equal(log$old_value, "rat")
+  expect_equal(log$reason, "wrong sheet")
+})
+
+test_that("read_study_yaml rejects an unknown log", {
+  skip_if_not_installed("yaml")
+  dir <- withr::local_tempdir()
+  writeLines(
+    c("subject_id,species,assay,sample_id", "R1,rat,wes,T1"),
+    file.path(dir, "manifest.csv")
+  )
+  path <- file.path(dir, "study.yaml")
+  yaml::write_yaml(
+    list(manifest = "manifest.csv", logs = list(audit = "audit.csv")),
+    path
+  )
+
+  expect_error(read_study_yaml(path), "audit")
+})
+
+test_that("read_study_yaml names a log file that is missing", {
+  skip_if_not_installed("yaml")
+  dir <- withr::local_tempdir()
+  writeLines(
+    c("subject_id,species,assay,sample_id", "R1,rat,wes,T1"),
+    file.path(dir, "manifest.csv")
+  )
+  path <- file.path(dir, "study.yaml")
+  yaml::write_yaml(
+    list(manifest = "manifest.csv", logs = list(qc = "qc_log.csv")),
+    path
+  )
+
+  expect_error(read_study_yaml(path), "qc log file was not found")
+})
