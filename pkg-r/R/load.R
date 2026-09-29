@@ -105,6 +105,32 @@ NULL
   })
 }
 
+# One unit per sample of the spec's assay, in sample_map order. A sample with
+# no role gives no {role} token, so a template that needs one stops with the
+# unresolved-token error.
+.sample_units <- function(cohort, spec, base_tokens) {
+  sample_map <- cohort@sample_map
+  rows <- sample_map[sample_map$assay == spec@assay, , drop = FALSE]
+  if (nrow(rows) == 0) {
+    cli::cli_warn(
+      c(
+        "No sample for assay {.val {spec@assay}}.",
+        "i" = "Analysis {.val {spec@name}} has no units to load."
+      )
+    )
+    return(list())
+  }
+  lapply(seq_len(nrow(rows)), function(i) {
+    keys <- list(
+      subject_id = rows$subject_id[[i]],
+      sample_id = rows$sample_id[[i]]
+    )
+    role <- rows$role[[i]]
+    role_token <- if (is.na(role)) list() else list(role = role)
+    list(keys = keys, tokens = c(base_tokens, keys, role_token))
+  })
+}
+
 .pair_units <- function(cohort, spec, base_tokens) {
   pairs <- sample_pairs(
     cohort@sample_map,
@@ -141,7 +167,7 @@ NULL
 
 # Enumerate the per-file "units" for a spec, given its level. Each unit carries
 # `keys` (provenance columns added to loaded rows) and `tokens` (for the path).
-# Subject and pair units come only from samples of the spec's assay.
+# Subject, sample, and pair units come only from samples of the spec's assay.
 .analysis_units <- function(cohort, spec) {
   root <- if (!is.na(spec@root_key)) cohort@paths[[spec@root_key]] else NULL
   base_tokens <- if (!is.null(root)) list(root = root) else list()
@@ -150,7 +176,39 @@ NULL
     spec@level,
     cohort = list(list(keys = list(), tokens = base_tokens)),
     subject = .subject_units(cohort, spec, base_tokens),
+    sample = .sample_units(cohort, spec, base_tokens),
     pair = .pair_units(cohort, spec, base_tokens)
+  )
+}
+
+# Error when two units resolve to the same file. The file would be read once
+# per unit and each copy stamped with different keys, which duplicates rows
+# under wrong ids. It happens when the template lacks the level's own token.
+.check_unique_paths <- function(paths, units, spec) {
+  dup <- unique(paths[duplicated(paths)])
+  if (length(dup) == 0) {
+    return(invisible(NULL))
+  }
+  first <- dup[[1]]
+  shared <- vapply(
+    units[paths == first],
+    function(u) {
+      paste(names(u$keys), unlist(u$keys), sep = " = ", collapse = ", ")
+    },
+    character(1)
+  )
+  token <- switch(
+    spec@level,
+    subject = "{subject_id}",
+    sample = "{sample_id}",
+    pair = "{pair_id}"
+  )
+  cli::cli_abort(
+    c(
+      "Analysis {.val {spec@name}} resolves {length(shared)} units to one file: {.path {first}}.",
+      "i" = "Units: {toString(.head_ids_verbatim(shared))}.",
+      "i" = "A {spec@level}-level template needs a token that differs per unit, such as {.code {token}}."
+    )
   )
 }
 
@@ -172,12 +230,13 @@ NULL
 #' Load an analysis's feature table from disk
 #'
 #' Resolves an [AnalysisSpec]'s `path_template` for each unit implied by its
-#' `level` (one file per subject, per pair, or one for the whole cohort), reads
-#' the existing files with the spec's `reader`, and row-binds them into a single
-#' feature table annotated with provenance keys (`subject_id` and/or `pair_id`).
+#' `level` (one file per subject, per sample, per pair, or one for the whole
+#' cohort), reads the existing files with the spec's `reader`, and row-binds
+#' them into a single feature table annotated with provenance keys
+#' (`subject_id`, and `sample_id` or `pair_id`).
 #'
 #' @param cohort A [Cohort] providing `paths` (for `{root}`), subjects, and the
-#'   sample map (for subject and pair enumeration).
+#'   sample map (for subject, sample, and pair enumeration).
 #' @param spec An [AnalysisSpec] or the name of one registered in `cohort`.
 #' @param reader Optional reader override: a function, or a `"fun"`/`"pkg::fun"`
 #'   name. Defaults to the spec's `reader`.
@@ -190,13 +249,18 @@ NULL
 #'
 #' @details
 #' Units follow the spec's `assay`. A subject-level spec enumerates only the
-#' subjects with at least one sample of that assay. A pair-level spec calls
+#' subjects with at least one sample of that assay. A sample-level spec
+#' enumerates every sample of that assay in `sample_map`, so a sample removed
+#' by [cohort_qc()] gives no unit and a flagged sample still does. A
+#' pair-level spec calls
 #' [sample_pairs()] with the spec's `assay`, `tumor_role`, `normal_role`, and
-#' `pair_sep`. When no subject or pair matches, the function warns and returns
-#' empty tables.
+#' `pair_sep`. When no subject, sample, or pair matches, the function warns
+#' and returns empty tables. Two units that resolve to the same file are an
+#' error, since the file would be read once per unit under different keys.
 #'
 #' Path tokens supported: `{root}` (from `cohort@paths[[root_key]]`),
-#' `{subject_id}`, and for pair-level specs `{tumor_sample_id}`,
+#' `{subject_id}`, for sample-level specs `{sample_id}` and `{role}` (only
+#' when the sample has a role), and for pair-level specs `{tumor_sample_id}`,
 #' `{normal_sample_id}`, `{pair_id}` (derived via [sample_pairs()]). Missing
 #' files are skipped (with a warning) and recorded in `files`, so loading is
 #' never silently partial.
@@ -254,11 +318,18 @@ load_analysis <- function(cohort, spec, reader = NULL) {
 
   read_fn <- .spec_reader(spec, reader)
   units <- .analysis_units(cohort, spec)
+  paths <- vapply(
+    units,
+    function(u) .render_path(spec@path_template, u$tokens, spec@name),
+    character(1)
+  )
+  .check_unique_paths(paths, units, spec)
 
   file_rows <- list()
   data_list <- list()
-  for (u in units) {
-    path <- .render_path(spec@path_template, u$tokens, analysis = spec@name)
+  for (i in seq_along(units)) {
+    u <- units[[i]]
+    path <- paths[[i]]
     exists <- file.exists(path)
     file_rows[[length(file_rows) + 1]] <- tibble::as_tibble(
       c(u$keys, list(path = path, exists = exists))

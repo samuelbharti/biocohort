@@ -14,7 +14,7 @@ A tibble with the following columns:
 \itemize{
 \item \code{name}: Analysis name (chr)
 \item \code{assay}: Assay type (chr)
-\item \code{level}: Data level - "subject", "pair", or "cohort" (chr)
+\item \code{level}: Data level: "subject", "sample", "pair", or "cohort" (chr)
 \item \code{format}: File format (chr)
 \item \code{reader}: Reader function name (chr)
 \item \code{root_key}: Optional root path key (chr)

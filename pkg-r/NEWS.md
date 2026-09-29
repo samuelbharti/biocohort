@@ -19,6 +19,11 @@
   the value. The given value fills the subject row. Two different given
   values are still a conflict. `missing_is_conflict = TRUE` keeps the old
   check (#75).
+- `AnalysisSpec` has a fourth level, `"sample"`, for pipelines that write one
+  file per sample. Its path template takes `{sample_id}` and `{role}`, its
+  default `key_cols` are `subject_id` and `sample_id`, and
+  `cohort_filter()` trims a loaded sample-level table to the kept samples
+  (#73).
 
 # biocohort 0.1.1
 

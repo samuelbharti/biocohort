@@ -59,6 +59,7 @@ test_that("analysis_spec_new fills key_cols by level", {
     analysis_spec_new(name = "a", assay = "wes", level = level)@key_cols
   }
   expect_equal(keys_for("subject"), "subject_id")
+  expect_equal(keys_for("sample"), c("subject_id", "sample_id"))
   expect_equal(keys_for("pair"), c("subject_id", "pair_id"))
   expect_equal(keys_for("cohort"), character())
 
@@ -156,7 +157,7 @@ test_that("analysis_spec_new names the failing string argument", {
 
 test_that("analysis_spec_new validates the enums", {
   expect_error(
-    analysis_spec_new(name = "a", assay = "wes", level = "sample"),
+    analysis_spec_new(name = "a", assay = "wes", level = "tissue"),
     "level"
   )
   expect_error(

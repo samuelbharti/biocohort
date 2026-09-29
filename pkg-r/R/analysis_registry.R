@@ -77,7 +77,7 @@ analysis_register <- function(cohort, spec) {
 #' @return A tibble with the following columns:
 #'   - `name`: Analysis name (chr)
 #'   - `assay`: Assay type (chr)
-#'   - `level`: Data level - "subject", "pair", or "cohort" (chr)
+#'   - `level`: Data level: "subject", "sample", "pair", or "cohort" (chr)
 #'   - `format`: File format (chr)
 #'   - `reader`: Reader function name (chr)
 #'   - `root_key`: Optional root path key (chr)

@@ -480,3 +480,156 @@ test_that("load_analyses feeds straight into cohort-level orthologize", {
   expect_true("ortholog" %in% names(translated@analyses$expr))
   expect_equal(nrow(translated@analyses$expr), 3)
 })
+
+# Two samples of one subject and one of another, one count file per sample.
+make_sample_cohort <- function(root) {
+  manifest <- data.frame(
+    subject_id = c("S1", "S1", "S2"),
+    species = "human",
+    assay = "bulk_rna",
+    sample_id = c("A1", "A2", "B1"),
+    role = c("baseline", "followup", "baseline")
+  )
+  for (id in manifest$sample_id) {
+    write.csv(
+      data.frame(gene = "TP53", count = 1L),
+      file.path(root, paste0(id, ".counts.csv")),
+      row.names = FALSE
+    )
+  }
+  cohort <- make_cohort(manifest, root, "rna_root")
+  spec <- analysis_spec_new(
+    name = "gene_counts",
+    assay = "bulk_rna",
+    level = "sample",
+    path_template = "{root}/{sample_id}.counts.csv",
+    root_key = "rna_root"
+  )
+  analysis_register(cohort, spec)
+}
+
+test_that("load_analysis reads one file per sample at the sample level", {
+  root <- withr::local_tempdir()
+  cohort <- make_sample_cohort(root)
+
+  loaded <- load_analysis(cohort, "gene_counts")
+
+  expect_equal(loaded$data$sample_id, c("A1", "A2", "B1"))
+  expect_equal(loaded$data$subject_id, c("S1", "S1", "S2"))
+  expect_equal(loaded$files$sample_id, c("A1", "A2", "B1"))
+  expect_true(all(loaded$files$exists))
+})
+
+test_that("the sample level resolves the role token", {
+  root <- withr::local_tempdir()
+  cohort <- make_sample_cohort(root)
+  spec <- analysis_spec_new(
+    name = "by_role",
+    assay = "bulk_rna",
+    level = "sample",
+    path_template = "{root}/{subject_id}_{role}.csv",
+    root_key = "rna_root",
+    reader = "read.csv"
+  )
+
+  files <- suppressWarnings(load_analysis(cohort, spec))$files
+
+  expect_equal(
+    basename(files$path),
+    c("S1_baseline.csv", "S1_followup.csv", "S2_baseline.csv")
+  )
+})
+
+test_that("a role token on a sample with no role is an unresolved token", {
+  root <- withr::local_tempdir()
+  manifest <- data.frame(
+    subject_id = "S1",
+    species = "human",
+    assay = "bulk_rna",
+    sample_id = "A1"
+  )
+  cohort <- make_cohort(manifest, root, "rna_root")
+  spec <- analysis_spec_new(
+    name = "by_role",
+    assay = "bulk_rna",
+    level = "sample",
+    path_template = "{root}/{role}.csv",
+    root_key = "rna_root"
+  )
+
+  expect_error(load_analysis(cohort, spec), "Unresolved path token")
+})
+
+test_that("a dropped sample gives no unit and a flagged sample stays", {
+  root <- withr::local_tempdir()
+  cohort <- make_sample_cohort(root)
+  cohort <- cohort_qc(cohort, "A2", "sample", "drop", "failed library")
+  cohort <- cohort_qc(cohort, "B1", "sample", "flag", "low depth")
+
+  loaded <- load_analysis(cohort, "gene_counts")
+
+  expect_equal(loaded$files$sample_id, c("A1", "B1"))
+})
+
+test_that("cohort_filter trims a loaded sample-level table by sample_id", {
+  root <- withr::local_tempdir()
+  cohort <- load_analyses(make_sample_cohort(root))
+
+  out <- suppressMessages(cohort_filter(cohort, drop_sample_ids = "A2"))
+
+  expect_equal(out@analyses$gene_counts$sample_id, c("A1", "B1"))
+})
+
+test_that("cohort_filter leaves a sample_id column of a subject table alone", {
+  root <- withr::local_tempdir()
+  cohort <- make_sample_cohort(root)
+  cohort@analyses$other <- tibble::tibble(
+    subject_id = c("S1", "S2"),
+    sample_id = c("not_a_sample", "A2")
+  )
+
+  out <- cohort_filter(cohort, drop_sample_ids = "A2")
+
+  expect_equal(nrow(out@analyses$other), 2)
+})
+
+test_that("a study YAML accepts level: sample", {
+  skip_if_not_installed("yaml")
+  dir <- withr::local_tempdir()
+  writeLines(
+    c("subject_id,species,assay,sample_id", "S1,human,bulk_rna,A1"),
+    file.path(dir, "manifest.csv")
+  )
+  yaml::write_yaml(
+    list(
+      manifest = "manifest.csv",
+      analyses = list(list(
+        name = "gene_counts",
+        assay = "bulk_rna",
+        level = "sample",
+        path_template = "{root}/{sample_id}.tsv"
+      ))
+    ),
+    file.path(dir, "study.yaml")
+  )
+
+  cohort <- read_study_yaml(file.path(dir, "study.yaml"))
+
+  expect_equal(analysis_spec(cohort, "gene_counts")@level, "sample")
+})
+
+test_that("two units that resolve to one file are an error", {
+  root <- withr::local_tempdir()
+  cohort <- make_sample_cohort(root)
+  per_subject <- analysis_spec_new(
+    name = "counts",
+    assay = "bulk_rna",
+    level = "sample",
+    path_template = "{root}/{subject_id}.csv",
+    root_key = "rna_root"
+  )
+
+  err <- expect_error(load_analysis(cohort, per_subject), "2 units to one file")
+  expect_match(conditionMessage(err), "sample_id = A1", fixed = TRUE)
+  expect_match(conditionMessage(err), "{sample_id}", fixed = TRUE)
+})
