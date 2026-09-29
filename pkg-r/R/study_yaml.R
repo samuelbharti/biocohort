@@ -195,6 +195,15 @@ read_study_yaml <- function(path, strict = TRUE) {
   if (any(vapply(entries, function(e) is.null(e$path), logical(1)))) {
     cli::cli_abort("Each {.field manifest} entry needs a {.field path}.")
   }
+  unknown <- setdiff(unlist(lapply(entries, names)), c("path", "assay"))
+  if (length(unknown) > 0) {
+    cli::cli_abort(
+      c(
+        "A {.field manifest} entry has unknown key{?s}: {.field {unknown}}.",
+        "i" = "An entry takes {.field path} and {.field assay}."
+      )
+    )
+  }
   paths <- vapply(
     entries,
     function(e) as.character(.study_path(e$path, base_dir)),

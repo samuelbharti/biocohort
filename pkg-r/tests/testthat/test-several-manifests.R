@@ -123,3 +123,39 @@ test_that("a study YAML entry with no path is an error", {
 
   expect_error(read_study_yaml(path), "needs a")
 })
+
+test_that("a conflict between two files of one name shows their paths", {
+  dir <- withr::local_tempdir()
+  dir.create(file.path(dir, "rna"))
+  dir.create(file.path(dir, "prot"))
+  rna <- write_sheet(
+    file.path(dir, "rna"),
+    "samples.csv",
+    c("subject_id,species,sex,sample_id", "R1,human,F,A1")
+  )
+  protein <- write_sheet(
+    file.path(dir, "prot"),
+    "samples.csv",
+    c("subject_id,species,sex,sample_id", "R1,human,M,P1")
+  )
+
+  err <- expect_error(
+    read_manifest(c(bulk_rna = rna, proteomics = protein)),
+    "disagree"
+  )
+  expect_match(conditionMessage(err), "rna/samples.csv", fixed = TRUE)
+  expect_match(conditionMessage(err), "prot/samples.csv", fixed = TRUE)
+})
+
+test_that("a study YAML manifest entry with an unknown key is an error", {
+  skip_if_not_installed("yaml")
+  dir <- withr::local_tempdir()
+  write_sheet(dir, "a.csv", c("subject_id,species,sample_id", "R1,rat,A1"))
+  path <- file.path(dir, "study.yaml")
+  yaml::write_yaml(
+    list(manifest = list(list(path = "a.csv", assay = "wes", sheet = 2))),
+    path
+  )
+
+  expect_error(read_study_yaml(path), "sheet")
+})

@@ -134,6 +134,7 @@ read_manifest <- function(
     names(manifest),
     c(.sample_level_cols(manifest, sample_cols), "subject_id", ".manifest_file")
   )
+  labels <- .file_labels(unique(manifest$.manifest_file))
   msgs <- character()
   for (col in subject_cols) {
     given <- manifest[!is.na(manifest[[col]]), , drop = FALSE]
@@ -141,7 +142,7 @@ read_manifest <- function(
     per_subject <- table(unique(values[c("subject_id", col)])$subject_id)
     for (id in names(per_subject)[per_subject > 1]) {
       rows <- values[values$subject_id == id, , drop = FALSE]
-      where <- paste(rows[[col]], "in", fs::path_file(rows$.manifest_file))
+      where <- paste(rows[[col]], "in", labels[rows$.manifest_file])
       msgs <- c(msgs, sprintf("%s (%s: %s)", id, col, toString(where)))
     }
   }
@@ -156,6 +157,15 @@ read_manifest <- function(
     )
   }
   invisible(stacked)
+}
+
+# A short label per path for messages: the file name, or the whole path when
+# two paths share a file name, such as rna/samples.csv and prot/samples.csv.
+.file_labels <- function(paths) {
+  names <- fs::path_file(paths)
+  shared <- names %in% names[duplicated(names)]
+  names[shared] <- paths[shared]
+  stats::setNames(names, paths)
 }
 
 # The file-reading half of read_manifest(), without the validation step.
