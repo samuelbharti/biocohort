@@ -19,13 +19,20 @@ directory unless absolute. Default \code{"manifest.csv"}.}
 }
 \description{
 The inverse of \code{\link[=read_study_yaml]{read_study_yaml()}}: writes the cohort's study metadata,
-its manifest, its paths, and its registered analysis specs to a study
-YAML file and a manifest file alongside it.
+its manifest, its paths, its registered analysis specs, and its logs to a
+study YAML file, with the manifest and the logs as CSV files.
 }
 \details{
 A cohort has no stored corrections file, so a \verb{corrections:} key is never
 written; the manifest written out already reflects any correction that
 was applied before the cohort was built.
+
+Each log that has rows is written next to the manifest, as
+\code{qc_log.csv}, \code{derive_log.csv}, and \code{corrections_log.csv}, and listed
+under a \verb{logs:} key. A time is written in UTC, such as
+\verb{2026-09-29T21:19:07Z}, and the cutoffs of a derived column as
+\code{young=0|old=40}. Text files keep the record readable in a diff and from
+other languages. \code{\link[=cohort_save]{cohort_save()}} keeps the same logs in a binary file.
 }
 \examples{
 data(example_cohort)

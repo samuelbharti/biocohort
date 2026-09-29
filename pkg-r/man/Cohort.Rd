@@ -17,7 +17,8 @@ Cohort(
     = character(), previous_status = character(), timestamp = as.POSIXct(character())),
   derived = tibble::tibble(name = character(), from = character(), level = character(),
     cutoffs = list(), n_derived = integer(), n_na = integer(), timestamp =
-    as.POSIXct(character()))
+    as.POSIXct(character())),
+  corrections = empty_corrections_log()
 )
 }
 \arguments{
@@ -56,6 +57,10 @@ can always be recomputed. Defaults to an empty list.}
 \item{derived}{A tibble recording every \code{\link[=cohort_derive]{cohort_derive()}} call (columns
 \code{name}, \code{from}, \code{level}, \code{cutoffs}, \code{n_derived}, \code{n_na}, \code{timestamp}).
 Durable in the same way as \code{qc}. Defaults to an empty table.}
+
+\item{corrections}{A tibble with the audit of the manifest corrections the
+cohort was built from, in the shape \code{\link[=corrections_log]{corrections_log()}} returns. Durable
+in the same way as \code{qc}. Defaults to an empty table.}
 }
 \value{
 A \code{Cohort} object with the given properties.
@@ -85,6 +90,7 @@ cohort@registry      # Named list of AnalysisSpec objects
 cohort@cache         # Memoization cache
 cohort@qc            # QC audit log
 cohort@derived       # Derived-column provenance
+cohort@corrections   # Manifest corrections audit
 }\if{html}{\out{</div>}}
 }
 \examples{

@@ -5,7 +5,8 @@
   "species",
   "paths",
   "corrections",
-  "analyses"
+  "analyses",
+  "logs"
 )
 
 #' Build a cohort from a study YAML file
@@ -38,9 +39,16 @@
 #'   [apply_corrections()] before it is validated.
 #' - `analyses`: a list of [analysis_spec_new()] field sets, one per
 #'   registered analysis.
+#' - `logs`: a map with up to three keys, `qc`, `derive`, and `corrections`,
+#'   each the path of a CSV file that [write_study_yaml()] wrote. They fill
+#'   [qc_log()], [derive_log()], and [corrections_log()].
 #'
-#' Every path (`manifest`, an entry of `paths`, `corrections`) is resolved
-#' relative to the YAML file's own directory unless it is already absolute.
+#' Every path (`manifest`, an entry of `paths`, `corrections`, an entry of
+#' `logs`) is resolved relative to the YAML file's own directory unless it is
+#' already absolute.
+#'
+#' The audit of a `corrections` file is kept in the cohort, after the audit
+#' read from `logs`, so [corrections_log()] shows both.
 #'
 #' @examples
 #' dir <- tempfile()
@@ -97,7 +105,8 @@ read_study_yaml <- function(path, strict = TRUE) {
   }
 
   base_dir <- fs::path_dir(fs::path_abs(path))
-  parsed <- .read_study_manifest(doc, base_dir)
+  manifest <- .read_study_manifest(doc, base_dir)
+  parsed <- manifest$parsed
 
   study <- if (!is.null(doc$study)) do.call(study_new, doc$study) else NULL
   cohort_paths <- if (!is.null(doc$paths)) {
@@ -112,6 +121,7 @@ read_study_yaml <- function(path, strict = TRUE) {
     study = study,
     paths = cohort_paths
   )
+  cohort <- .read_study_logs(cohort, doc$logs, base_dir, manifest$corrections)
 
   for (spec_doc in doc$analyses %||% list()) {
     cohort <- analysis_register(cohort, do.call(analysis_spec_new, spec_doc))
@@ -119,7 +129,8 @@ read_study_yaml <- function(path, strict = TRUE) {
   cohort
 }
 
-# Read the manifest, apply corrections if named, and validate.
+# Read the manifest, apply corrections if named, and validate. Returns the
+# validate_manifest() result and the audit of the corrections applied.
 .read_study_manifest <- function(doc, base_dir) {
   manifest_path <- .study_path(doc$manifest, base_dir)
   if (!fs::file_exists(manifest_path)) {
@@ -132,7 +143,42 @@ read_study_yaml <- function(path, strict = TRUE) {
     raw <- apply_corrections(raw, read_corrections(corrections_path))
   }
 
-  validate_manifest(raw, sample_cols = doc$sample_cols, species = doc$species)
+  list(
+    parsed = validate_manifest(
+      raw,
+      sample_cols = doc$sample_cols,
+      species = doc$species
+    ),
+    corrections = corrections_log(raw)
+  )
+}
+
+# Set the QC, derive, and corrections logs from the files named under
+# `logs`. The corrections applied while reading follow the saved audit.
+.read_study_logs <- function(cohort, logs, base_dir, applied) {
+  logs <- logs %||% list()
+  unknown <- setdiff(names(logs), .log_kinds)
+  if (length(unknown) > 0) {
+    known <- .log_kinds
+    cli::cli_abort(
+      c(
+        "{.field logs} has unknown key{?s}: {.field {unknown}}.",
+        "i" = "Known keys: {.field {known}}."
+      )
+    )
+  }
+  read_kind <- function(kind) {
+    if (is.null(logs[[kind]])) {
+      return(.empty_log(kind))
+    }
+    .read_log(.study_path(logs[[kind]], base_dir), kind)
+  }
+  S7::set_props(
+    cohort,
+    qc = read_kind("qc"),
+    derived = read_kind("derive"),
+    corrections = dplyr::bind_rows(read_kind("corrections"), applied)
+  )
 }
 
 # A path from the YAML file, resolved relative to its directory unless it is
@@ -155,8 +201,8 @@ read_study_yaml <- function(path, strict = TRUE) {
 #' Write a cohort as a study YAML file
 #'
 #' The inverse of [read_study_yaml()]: writes the cohort's study metadata,
-#' its manifest, its paths, and its registered analysis specs to a study
-#' YAML file and a manifest file alongside it.
+#' its manifest, its paths, its registered analysis specs, and its logs to a
+#' study YAML file, with the manifest and the logs as CSV files.
 #'
 #' @param cohort A [Cohort] object.
 #' @param path Output path for the study YAML file.
@@ -169,6 +215,13 @@ read_study_yaml <- function(path, strict = TRUE) {
 #' A cohort has no stored corrections file, so a `corrections:` key is never
 #' written; the manifest written out already reflects any correction that
 #' was applied before the cohort was built.
+#'
+#' Each log that has rows is written next to the manifest, as
+#' `qc_log.csv`, `derive_log.csv`, and `corrections_log.csv`, and listed
+#' under a `logs:` key. A time is written in UTC, such as
+#' `2026-09-29T21:19:07Z`, and the cutoffs of a derived column as
+#' `young=0|old=40`. Text files keep the record readable in a diff and from
+#' other languages. [cohort_save()] keeps the same logs in a binary file.
 #'
 #' @examples
 #' data(example_cohort)
@@ -210,9 +263,36 @@ write_study_yaml <- function(cohort, path, manifest = "manifest.csv") {
   if (length(cohort@registry) > 0) {
     doc$analyses <- unname(lapply(cohort@registry, .analysis_spec_to_list))
   }
+  logs <- .write_study_logs(cohort, manifest, base_dir)
+  if (length(logs) > 0) {
+    doc$logs <- logs
+  }
 
   yaml::write_yaml(doc, path)
   invisible(path)
+}
+
+# Write each log that has rows next to the manifest. Returns the paths as
+# written in the YAML, named by log kind.
+.write_study_logs <- function(cohort, manifest, base_dir) {
+  logs <- list()
+  for (kind in .log_kinds) {
+    log <- .cohort_log(cohort, kind)
+    if (nrow(log) == 0) {
+      next
+    }
+    rel <- .beside(manifest, sprintf("%s_log.csv", kind))
+    .write_log(log, .study_path(rel, base_dir))
+    logs[[kind]] <- rel
+  }
+  logs
+}
+
+# `file` in the same folder as the path `next_to`, written without a
+# leading "./".
+.beside <- function(next_to, file) {
+  dir <- fs::path_dir(next_to)
+  if (dir == ".") file else as.character(fs::path(dir, file))
 }
 
 .study_to_list <- function(study) {

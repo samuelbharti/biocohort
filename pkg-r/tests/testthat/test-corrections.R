@@ -231,3 +231,56 @@ test_that("read_corrections errors on an unknown extension", {
 
   expect_error(read_corrections(path), "csv")
 })
+
+test_that("cohort_new stores a corrections audit and corrections_log reads it", {
+  manifest <- tibble::tibble(
+    subject_id = "R1",
+    species = "rat",
+    assay = "wes",
+    sample_id = "T1"
+  )
+  fixes <- tibble::tibble(
+    level = "sample",
+    id = "T1",
+    column = "assay",
+    value = "wgs",
+    reason = "vendor sheet"
+  )
+  corrected <- apply_corrections(manifest, fixes)
+  parsed <- validate_manifest(corrected)
+
+  cohort <- cohort_new(
+    parsed$subject_tbl,
+    parsed$sample_map,
+    corrections = corrections_log(corrected)
+  )
+
+  expect_equal(corrections_log(cohort)$new_value, "wgs")
+  expect_equal(nrow(corrections_log(make_cohort())), 0)
+  expect_error(
+    cohort_new(
+      parsed$subject_tbl,
+      parsed$sample_map,
+      corrections = data.frame(id = 1)
+    ),
+    "missing column"
+  )
+})
+
+test_that("cohort_filter keeps the corrections audit", {
+  cohort <- make_cohort(n = 2)
+  cohort@corrections <- tibble::add_row(
+    empty_corrections_log(),
+    level = "subject",
+    id = "S1",
+    column = "species",
+    old_value = "mouse",
+    new_value = "rat",
+    reason = "typo",
+    n_rows = 2L
+  )
+
+  out <- cohort_filter(cohort, subject_ids = "S2")
+
+  expect_equal(nrow(corrections_log(out)), 1)
+})
