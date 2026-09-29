@@ -709,3 +709,24 @@ test_that("analysis_files on an unloaded cohort has the five columns", {
     c("path", "exists", "size", "modified", "sha256")
   )
 })
+
+test_that("load_analyses keeps the file tables of earlier loads", {
+  root <- withr::local_tempdir()
+  cohort <- make_sample_cohort(root)
+  per_subject <- analysis_spec_new(
+    name = "per_subject",
+    assay = "bulk_rna",
+    level = "subject",
+    path_template = "{root}/{subject_id}.csv",
+    root_key = "rna_root"
+  )
+  cohort <- analysis_register(cohort, per_subject)
+
+  cohort <- load_analyses(cohort, analyses = "gene_counts")
+  cohort <- suppressWarnings(load_analyses(cohort, analyses = "per_subject"))
+
+  expect_setequal(
+    names(analysis_files(cohort)),
+    c("gene_counts", "per_subject")
+  )
+})

@@ -508,7 +508,11 @@ load_analyses <- function(
   }
 
   new_cache <- cohort@cache
-  new_cache$loaded <- manifests
+  # Replace only the analyses loaded now, so a load one analysis at a time
+  # keeps the file tables of the earlier loads.
+  loaded <- new_cache$loaded %||% list()
+  loaded[names(manifests)] <- manifests
+  new_cache$loaded <- loaded
 
   S7::set_props(cohort, analyses = new_analyses, cache = new_cache)
 }
