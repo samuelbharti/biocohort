@@ -51,6 +51,15 @@ NULL
       )
       next
     }
+    if (!is.data.frame(data_list[[nm]])) {
+      cli::cli_warn(
+        c(
+          "Analysis {.val {nm}} is not a data frame; skipping.",
+          "i" = "A lazy table needs {.fn dplyr::collect} before translation."
+        )
+      )
+      next
+    }
 
     res <- .translate_analysis(
       data_list[[nm]],

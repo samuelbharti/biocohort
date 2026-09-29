@@ -43,7 +43,8 @@ Filters a cohort's subject table and sample map together, so the result
 stays a valid \link{Cohort}. Any loaded analysis table that has a \code{subject_id}
 column is filtered to match. A table whose registered spec has
 \code{level = "sample"} is also filtered to the kept samples by \code{sample_id}.
-The registry and paths are kept as they are.
+A lazy arrow table from \code{load_analysis(lazy = TRUE)} is filtered by
+\code{subject_id} without a read. The registry and paths are kept as they are.
 }
 \details{
 The five ways to narrow a cohort combine: \code{...} and \code{subject_ids} both

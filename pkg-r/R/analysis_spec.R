@@ -176,6 +176,7 @@ AnalysisSpec <- S7::new_class(
     txt = "readr::read_tsv",
     rds = "readRDS",
     parquet = "arrow::read_parquet",
+    parquet_dataset = "arrow::open_dataset",
     NA_character_
   )
 }
@@ -270,7 +271,10 @@ AnalysisSpec <- S7::new_class(
 #' @param reader Character scalar for reader function name (e.g.,
 #'   "readr::read_tsv", "read.csv"). Optional. Defaults by `format`: "csv" to
 #'   "readr::read_csv", "tsv" and "txt" to "readr::read_tsv", "rds" to
-#'   "readRDS", "parquet" to "arrow::read_parquet". NA for any other format.
+#'   "readRDS", "parquet" to "arrow::read_parquet", and "parquet_dataset" (a
+#'   folder of parquet files) to "arrow::open_dataset". NA for any other
+#'   format. A template with no file extension gets no format, so set
+#'   `format = "parquet_dataset"` for a folder.
 #'   [load_analysis()] errors when neither the spec nor its `reader` argument
 #'   names a reader.
 #' @param key_cols Character vector of column names that must be present in

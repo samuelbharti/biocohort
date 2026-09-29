@@ -4,7 +4,7 @@
 \alias{load_analysis}
 \title{Load an analysis's feature table from disk}
 \usage{
-load_analysis(cohort, spec, reader = NULL, checksum = FALSE)
+load_analysis(cohort, spec, reader = NULL, checksum = FALSE, lazy = FALSE)
 }
 \arguments{
 \item{cohort}{A \link{Cohort} providing \code{paths} (for \code{{root}}), subjects, and the
@@ -18,12 +18,18 @@ name. Defaults to the spec's \code{reader}.}
 \item{checksum}{Logical. When \code{TRUE}, the \code{sha256} column of \code{files} holds
 the SHA-256 checksum of each file. Default \code{FALSE}, since a checksum
 reads every byte.}
+
+\item{lazy}{Logical. When \code{TRUE}, the reader's object is returned as it
+is, for example an arrow Dataset from \code{arrow::open_dataset()}, and no
+row is read. Only a spec with \code{level = "cohort"} can load lazily.
+Default \code{FALSE}.}
 }
 \value{
 A list with:
 \itemize{
 \item \code{data}: a tibble of all loaded rows (empty if no files were found),
-with provenance key columns added.
+with provenance key columns added. With \code{lazy = TRUE}, the reader's
+object, or \code{NULL} when the path does not exist.
 \item \code{files}: a tibble with one row per unit: its keys, the resolved \code{path},
 whether it \code{exists}, its \code{size} in bytes, its \code{modified} time, and its
 \code{sha256} checksum (\code{NA} unless \code{checksum = TRUE}). A missing file has
@@ -60,6 +66,15 @@ The reader comes from the \code{reader} argument, else from the spec. The
 function errors when neither names one. After each file is read, the spec's
 \code{key_cols} must be present in the table (the provenance keys count), or the
 function errors and names the missing columns.
+
+A table larger than memory, such as variant calls kept as a parquet folder,
+can load lazily. With \code{lazy = TRUE} and \code{format = "parquet_dataset"}, the
+data is an arrow Dataset: \code{key_cols} are checked against its column names
+and nothing is read until \code{dplyr::collect()}. \code{\link[=cohort_filter]{cohort_filter()}} filters a
+lazy arrow table by \code{subject_id} and it stays lazy. A lazy table holds a
+handle to files on disk, so it does not survive \code{\link[=cohort_save]{cohort_save()}}. Files per
+subject, sample, or pair cannot load lazily, because each file would need
+its key columns added without a read.
 }
 \examples{
 # Write a per-subject CSV, then load it.

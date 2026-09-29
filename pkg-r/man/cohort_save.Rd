@@ -18,6 +18,11 @@ cohort_save(cohort, path)
 Wraps a \link{Cohort} with a small format marker and the package version, and
 writes it with \code{\link[=saveRDS]{saveRDS()}}. Read it back with \code{\link[=cohort_read]{cohort_read()}}.
 }
+\details{
+A lazy table from \code{load_analysis(lazy = TRUE)} holds a handle to files on
+disk, not the rows, so it does not survive a save. Load it again after
+\code{\link[=cohort_read]{cohort_read()}}.
+}
 \examples{
 data(example_cohort)
 path <- tempfile(fileext = ".rds")

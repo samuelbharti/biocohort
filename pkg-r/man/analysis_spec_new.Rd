@@ -55,7 +55,10 @@ Optional, defaults to NA.}
 \item{reader}{Character scalar for reader function name (e.g.,
 "readr::read_tsv", "read.csv"). Optional. Defaults by \code{format}: "csv" to
 "readr::read_csv", "tsv" and "txt" to "readr::read_tsv", "rds" to
-"readRDS", "parquet" to "arrow::read_parquet". NA for any other format.
+"readRDS", "parquet" to "arrow::read_parquet", and "parquet_dataset" (a
+folder of parquet files) to "arrow::open_dataset". NA for any other
+format. A template with no file extension gets no format, so set
+\code{format = "parquet_dataset"} for a folder.
 \code{\link[=load_analysis]{load_analysis()}} errors when neither the spec nor its \code{reader} argument
 names a reader.}
 
