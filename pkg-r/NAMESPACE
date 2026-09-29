@@ -63,6 +63,8 @@ export(validate_cohort)
 export(validate_manifest)
 export(write_manifest)
 export(write_study_yaml)
-importFrom(rlang,"%||%")
-importFrom(rlang,.data)
-importFrom(rlang,.env)
+importFrom(rlang,
+  "%||%",
+  .data,
+  .env
+)

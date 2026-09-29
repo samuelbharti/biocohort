@@ -44,6 +44,10 @@ A value in \code{from} that is not already missing but fails to parse as
 numeric is an error naming the offending ids, never a silent \code{NA}. A
 value that was already missing stays \code{NA} in the derived column.
 
+\code{name} must not be a column of the other level's table, since the two
+tables are joined into one manifest by \code{\link[=write_manifest]{write_manifest()}} and
+\code{\link[=samples]{samples()}}.
+
 Re-deriving with the same \code{name} overwrites the column, the same way
 \code{\link[=analysis_register]{analysis_register()}} replaces a spec of the same name. Every call is
 recorded in \code{\link[=derive_log]{derive_log()}}, which, like \code{\link[=qc_log]{qc_log()}}, is not cleared by

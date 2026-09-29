@@ -197,9 +197,87 @@ test_that("cohort_qc() flag/subject sets columns on subject_tbl only", {
   )
 
   row <- out@subject_tbl[out@subject_tbl$subject_id == "S1", ]
-  expect_equal(row$qc_status, "flagged")
-  expect_equal(row$qc_reason, "excluded")
-  expect_false("qc_status" %in% names(out@sample_map))
+  expect_equal(row$subject_qc_status, "flagged")
+  expect_equal(row$subject_qc_reason, "excluded")
+  expect_false("qc_status" %in% names(out@subject_tbl))
+  expect_false("subject_qc_status" %in% names(out@sample_map))
+})
+
+test_that("cohort_qc() logs the previous subject status", {
+  cohort <- make_cohort(n = 2)
+  once <- cohort_qc(
+    cohort,
+    "S1",
+    scope = "subject",
+    action = "flag",
+    reason = "a"
+  )
+  twice <- cohort_qc(
+    once,
+    "S1",
+    scope = "subject",
+    action = "flag",
+    reason = "b"
+  )
+
+  expect_equal(qc_log(twice)$previous_status, c(NA, "flagged"))
+})
+
+test_that("subject and sample flags keep their level through a manifest file", {
+  cohort <- make_cohort(n = 2)
+  cohort <- cohort_qc(
+    cohort,
+    "S1_wes_tumor",
+    scope = "sample",
+    action = "flag",
+    reason = "low depth"
+  )
+  cohort <- cohort_qc(
+    cohort,
+    "S2",
+    scope = "subject",
+    action = "flag",
+    reason = "consent withdrawn"
+  )
+  path <- withr::local_tempfile(fileext = ".csv")
+
+  write_manifest(cohort, path)
+  back <- read_manifest(path)
+
+  expect_equal(
+    back$subject_tbl$subject_qc_status,
+    cohort@subject_tbl$subject_qc_status
+  )
+  expect_equal(back$sample_map$qc_reason, cohort@sample_map$qc_reason)
+  expect_false("qc_status" %in% names(back$subject_tbl))
+})
+
+test_that("subject and sample flags join without renamed columns", {
+  cohort <- make_cohort(n = 2)
+  cohort <- cohort_qc(cohort, "S1_wes_tumor", "sample", "flag", "low depth")
+  cohort <- cohort_qc(cohort, "S2", "subject", "flag", "consent withdrawn")
+
+  joined <- samples(cohort, with_subjects = TRUE)
+
+  expect_false(any(grepl("[.][xy]$", names(joined))))
+})
+
+test_that("cohort_read renames the subject flag columns of 0.1.x", {
+  cohort <- make_cohort(n = 2)
+  cohort <- cohort_qc(cohort, "S2", "subject", "flag", "consent withdrawn")
+  old <- cohort@subject_tbl
+  names(old)[names(old) == "subject_qc_status"] <- "qc_status"
+  names(old)[names(old) == "subject_qc_reason"] <- "qc_reason"
+  cohort@subject_tbl <- old
+  path <- withr::local_tempfile(fileext = ".rds")
+  cohort_save(cohort, path)
+
+  back <- cohort_read(path)
+
+  expect_equal(back@subject_tbl$subject_qc_status, c(NA, "flagged"))
+  expect_false("qc_status" %in% names(back@subject_tbl))
+  again <- cohort_qc(back, "S2", "subject", "flag", "second look")
+  expect_equal(qc_log(again)$previous_status[[2]], "flagged")
 })
 
 test_that("cohort_qc() drop/sample removes rows without touching subject_tbl", {

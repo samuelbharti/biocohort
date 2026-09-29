@@ -15,7 +15,9 @@ samples(cohort, assay = NULL, role = NULL, with_subjects = FALSE)
 
 \item{with_subjects}{Logical. When \code{TRUE}, left-joins the subject table on
 \code{subject_id}, so subject-level columns (species, genotype, ...) sit
-alongside each sample row. Default \code{FALSE}.}
+alongside each sample row. Default \code{FALSE}. A column other than
+\code{subject_id} that is in both tables is an error, so no column is
+renamed in silence.}
 }
 \value{
 A tibble with the sample map, filtered and optionally joined.

@@ -16,9 +16,9 @@ Duplicates are removed. Their meaning depends on \code{scope}.}
 ids (matched against \code{cohort@sample_map$sample_id}) or subject ids
 (matched against \code{cohort@subject_tbl$subject_id}). No default.}
 
-\item{action}{One of \code{"flag"} or \code{"drop"}. \code{"flag"} sets \code{qc_status}/
-\code{qc_reason} on the matching rows and keeps them. \code{"drop"} removes the
-matching rows entirely. No default.}
+\item{action}{One of \code{"flag"} or \code{"drop"}. \code{"flag"} sets a status and a
+reason on the matching rows and keeps them (see Details). \code{"drop"}
+removes the matching rows entirely. No default.}
 
 \item{reason}{A single, non-empty string explaining the decision.}
 }
@@ -38,10 +38,11 @@ is never silently ignored.
 
 \code{action = "flag"}, \code{scope = "sample"} sets \code{qc_status}/\code{qc_reason} on
 \code{sample_map}, creating the columns if they are absent. \code{scope = "subject"}
-sets the same two column names on \code{subject_tbl} instead; these are a
-separate pair of columns from the sample-level ones, and both can be set
-on the same cohort for different reasons. Flagging an id that already has
-a \code{qc_reason} appends the new reason rather than replacing it.
+sets \code{subject_qc_status}/\code{subject_qc_reason} on \code{subject_tbl} instead.
+The two pairs have different names, so both can be set on the same cohort
+for different reasons, and a written manifest keeps each pair at its own
+level. Flagging an id that already has a reason appends the new reason
+and keeps the old one.
 
 \code{action = "drop"} delegates to \code{\link[=cohort_filter]{cohort_filter()}}: \code{scope = "sample"} uses
 its \code{drop_sample_ids} argument, with \code{drop_empty = FALSE} so a subject

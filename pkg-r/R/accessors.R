@@ -109,7 +109,9 @@ subjects <- function(cohort) {
 #' @param role Optional character vector. Keep only these roles.
 #' @param with_subjects Logical. When `TRUE`, left-joins the subject table on
 #'   `subject_id`, so subject-level columns (species, genotype, ...) sit
-#'   alongside each sample row. Default `FALSE`.
+#'   alongside each sample row. Default `FALSE`. A column other than
+#'   `subject_id` that is in both tables is an error, so no column is
+#'   renamed in silence.
 #'
 #' @return A tibble with the sample map, filtered and optionally joined.
 #'
@@ -137,6 +139,7 @@ samples <- function(cohort, assay = NULL, role = NULL, with_subjects = FALSE) {
   }
 
   if (isTRUE(with_subjects)) {
+    .check_shared_cols(cohort@subject_tbl, sample_map)
     sample_map <- dplyr::left_join(
       sample_map,
       cohort@subject_tbl,

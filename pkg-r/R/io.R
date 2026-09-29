@@ -275,7 +275,9 @@ manifest_from_wide <- function(x, id_cols, subject_id = "subject_id") {
 #' @details
 #' Columns are ordered `subject_id`, then the other subject-level columns,
 #' then the sample-level columns (`assay`, `sample_id`, `role`, and any
-#' extra ones). A missing value is written as an empty field.
+#' extra ones). A missing value is written as an empty field. A column other
+#' than `subject_id` that is in both tables is an error, since one flat
+#' manifest cannot hold two columns of the same name.
 #'
 #' @examples
 #' manifest <- data.frame(
@@ -297,6 +299,7 @@ manifest_from_wide <- function(x, id_cols, subject_id = "subject_id") {
 write_manifest <- function(x, path, delim = NULL) {
   checkmate::assert_string(path, min.chars = 1)
   tbls <- .manifest_tables(x)
+  .check_shared_cols(tbls$subject_tbl, tbls$sample_map)
 
   manifest <- dplyr::left_join(
     tbls$sample_map,
@@ -366,7 +369,9 @@ cohort_save <- function(cohort, path) {
 #' Read a cohort saved with cohort_save()
 #'
 #' Reads the RDS file, checks it is a cohort file, and re-validates the
-#' cohort before returning it.
+#' cohort before returning it. A subject QC flag saved by biocohort 0.1.x
+#' as `qc_status`/`qc_reason` in `subject_tbl` is renamed to
+#' `subject_qc_status`/`subject_qc_reason`, the names [cohort_qc()] now uses.
 #'
 #' @param path Path to a file written by [cohort_save()].
 #'
@@ -402,8 +407,24 @@ cohort_read <- function(path) {
     cli::cli_abort("{.path {path}} does not contain a Cohort object.")
   }
 
-  validate_cohort(wrapper$cohort)
-  wrapper$cohort
+  cohort <- .rename_old_qc_cols(wrapper$cohort)
+  validate_cohort(cohort)
+  cohort
+}
+
+# biocohort 0.1.x wrote a subject flag to subject_tbl as qc_status and
+# qc_reason, the names the sample scope uses. Rename them to the subject
+# names, so the flags keep working and do not clash with sample flags.
+.rename_old_qc_cols <- function(cohort) {
+  tbl <- cohort@subject_tbl
+  old <- c("qc_status", "qc_reason")
+  new <- c("subject_qc_status", "subject_qc_reason")
+  if (!any(old %in% names(tbl)) || any(new %in% names(tbl))) {
+    return(cohort)
+  }
+  hit <- names(tbl) %in% old
+  names(tbl)[hit] <- new[match(names(tbl)[hit], old)]
+  S7::set_props(cohort, subject_tbl = tbl)
 }
 
 #' Read and validate a long-format manifest CSV file

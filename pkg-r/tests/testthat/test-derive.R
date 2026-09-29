@@ -313,3 +313,34 @@ test_that("print(Cohort) shows a derived-columns bullet once something is derive
   after <- cli::cli_fmt(print(out))
   expect_true(any(grepl("Derived columns: grp", after)))
 })
+
+test_that("cohort_derive refuses a name used at the other level", {
+  manifest <- data.frame(
+    subject_id = c("S1", "S1"),
+    species = "rat",
+    age = "30",
+    assay = "wes",
+    sample_id = c("a", "b"),
+    depth = c("10", "50")
+  )
+  parsed <- validate_manifest(manifest, sample_cols = "depth")
+  cohort <- cohort_new(parsed$subject_tbl, parsed$sample_map)
+  cohort <- cohort_derive(
+    cohort,
+    "band",
+    from = "age",
+    cutoffs = c(lo = 40, hi = Inf),
+    level = "subject"
+  )
+
+  expect_error(
+    cohort_derive(
+      cohort,
+      "band",
+      from = "depth",
+      cutoffs = c(lo = 20, hi = Inf),
+      level = "sample"
+    ),
+    "already a subject-level column"
+  )
+})

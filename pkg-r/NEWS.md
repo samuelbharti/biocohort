@@ -1,6 +1,19 @@
 # biocohort (development version)
 
 - README: a CRAN badge, and installation from CRAN first.
+- Breaking change: `cohort_qc(scope = "subject", action = "flag")` now
+  writes `subject_qc_status` and `subject_qc_reason` to `subject_tbl`. It
+  used the same names as the sample scope, `qc_status` and `qc_reason`.
+  With both scopes flagged, `write_manifest()` and `write_study_yaml()`
+  failed, and a subject flag alone moved to the samples after a write and a
+  read. Code that reads the subject flag by its old name needs the new one.
+  `cohort_read()` renames the old columns in a cohort saved by 0.1.x.
+- `write_manifest()` and `samples(with_subjects = TRUE)` (and so
+  `as_coldata()`, `join_metadata()` and `sample_sheet()`) now stop with a
+  clear error when a column other than `subject_id` is in both tables. Before,
+  the join renamed the pair to `.x` and `.y`, and `write_manifest()` failed
+  with an internal error. `cohort_derive()` no longer creates a column whose
+  name is used at the other level.
 
 # biocohort 0.1.1
 
