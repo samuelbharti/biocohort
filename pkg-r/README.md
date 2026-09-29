@@ -1,6 +1,7 @@
 # biocohort <img src="man/figures/logo.png" align="right" height="139" alt="biocohort hex logo" />
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/biocohort)](https://CRAN.R-project.org/package=biocohort)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml/badge.svg)](https://github.com/samuelbharti/biocohort/actions/workflows/r.yml)
 [![r-universe](https://samuelbharti.r-universe.dev/badges/biocohort)](https://samuelbharti.r-universe.dev/biocohort)
@@ -19,11 +20,19 @@ manifest, the file paths, the sample sheet, and the record of every manual fix.
 
 ## Installation
 
+From CRAN:
+
+```r
+install.packages("biocohort")
+```
+
+The development version, from GitHub:
+
 ```r
 pak::pak("samuelbharti/biocohort/pkg-r")
 ```
 
-r-universe works too:
+or from r-universe:
 
 ```r
 install.packages("biocohort", repos = "https://samuelbharti.r-universe.dev")

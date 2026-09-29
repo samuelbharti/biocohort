@@ -1,3 +1,7 @@
+# biocohort (development version)
+
+- README: a CRAN badge, and installation from CRAN first.
+
 # biocohort 0.1.1
 
 Resubmission to CRAN. The package code is unchanged from 0.1.0; every change

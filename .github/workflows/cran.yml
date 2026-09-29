@@ -77,8 +77,10 @@ jobs:
       # error_on = "warning" leaves NOTEs to the filter below. The pretest
       # accepts an incoming feasibility NOTE that only says the package is new
       # (or, after a release, how many days since the last update), and a
-      # spelling NOTE whose words are all known. Anything else fails, the same
-      # way the pretest fails it.
+      # spelling NOTE whose words are all known. Between releases the version
+      # ends in .9000, which adds a "large components" line to the same NOTE;
+      # that line is allowed too. Anything else fails, the same way the
+      # pretest fails it.
       - name: Check as CRAN
         run: |
           res <- rcmdcheck::rcmdcheck(
@@ -98,6 +100,7 @@ jobs:
             "^Maintainer: ",
             "^New submission$",
             "^Days since last update: ",
+            "^Version contains large components ",
             "^Possibly misspelled words in DESCRIPTION:$",
             sprintf("^(%s) \\([0-9]+:[0-9]+\\)$", paste(known_words, collapse = "|")),
             "^$"

@@ -58,7 +58,10 @@ does, with the incoming checks, the URL check, the relative-link check, and
 the spell check of `DESCRIPTION` turned on. It runs on every pull request on
 R-release, and every Monday on R-devel. It fails on any NOTE the pretest
 would not accept, so a green `R-CMD-check` and a red `cran` means the package
-would bounce at submission.
+would bounce at submission. One exception: between releases the version ends
+in `.9000`, and the job allows the "Version contains large components" line
+that this gives. A submission must not carry that suffix, so the release steps
+below remove it.
 
 CI is a backstop, not the first line of defence. Run the checks locally before
 you push:
@@ -107,5 +110,17 @@ example that takes more than five seconds goes in `\donttest{}`, not
 
 ## Releases
 
-A release bumps the version in `DESCRIPTION`, adds a dated heading in
-`NEWS.md`, and tags `v<version>` once the change is on `main`.
+Between releases, `DESCRIPTION` carries a development version such as
+`0.1.1.9000`, and `NEWS.md` collects changes under
+`# biocohort (development version)`.
+
+A release:
+
+1. Sets the version in `DESCRIPTION` to the release number, without `.9000`.
+2. Renames the development heading in `NEWS.md` to the release number and
+   date.
+3. Sets `version` and `date-released` in `CITATION.cff` to match.
+4. Tags `v<version>` once the change is on `main`.
+
+After the release is on CRAN, bump `DESCRIPTION` to `<version>.9000` and add
+a new development heading to `NEWS.md`.

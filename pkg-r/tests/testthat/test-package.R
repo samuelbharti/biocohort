@@ -22,13 +22,15 @@ test_that("no Shiny dependency in any form", {
 
 # CITATION.cff is what GitHub renders in the cite box. It lives at the
 # repository root, one level up from the package in pkg-r/, so it is read
-# from the source tree and the test is skipped elsewhere.
+# from the source tree and the test is skipped elsewhere. Between releases
+# DESCRIPTION carries a development version such as 0.1.1.9000, and the cite
+# box keeps the last release, so only the first three parts are compared.
 test_that("DESCRIPTION and CITATION.cff agree on the version", {
   root <- file.path(testthat::test_path(), "..", "..", "..")
   citation <- file.path(root, "CITATION.cff")
   skip_if_not(file.exists(citation), "not a source tree")
 
-  declared <- as.character(utils::packageVersion("biocohort"))
+  declared <- as.character(utils::packageVersion("biocohort")[, 1:3])
   cff <- readLines(citation, warn = FALSE)
   cff_version <- trimws(sub(
     "^version:",
