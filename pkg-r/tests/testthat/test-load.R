@@ -215,7 +215,7 @@ test_that("load_analysis warns and returns empty tables when no unit matches", {
   )
   expect_warning(res <- load_analysis(coh, no_assay), "atac")
   expect_equal(nrow(res$files), 0)
-  expect_named(res$files, c("path", "exists"))
+  expect_named(res$files, c("path", "exists", "size", "modified", "sha256"))
   expect_equal(nrow(res$data), 0)
 
   no_pair <- analysis_spec_new(
@@ -445,7 +445,7 @@ test_that("analysis_files returns an empty tibble before loading", {
   files <- analysis_files(coh)
   expect_s3_class(files, "tbl_df")
   expect_equal(nrow(files), 0)
-  expect_named(files, c("path", "exists"))
+  expect_named(files, c("path", "exists", "size", "modified", "sha256"))
 })
 
 test_that("load_analyses feeds straight into cohort-level orthologize", {
@@ -632,4 +632,80 @@ test_that("two units that resolve to one file are an error", {
   err <- expect_error(load_analysis(cohort, per_subject), "2 units to one file")
   expect_match(conditionMessage(err), "sample_id = A1", fixed = TRUE)
   expect_match(conditionMessage(err), "{sample_id}", fixed = TRUE)
+})
+
+test_that("the files table records size and modified time", {
+  root <- withr::local_tempdir()
+  cohort <- make_sample_cohort(root)
+  unlink(file.path(root, "B1.counts.csv"))
+
+  files <- suppressWarnings(load_analysis(cohort, "gene_counts"))$files
+
+  expect_named(
+    files,
+    c("subject_id", "sample_id", "path", "exists", "size", "modified", "sha256")
+  )
+  expect_equal(files$size[1:2], as.numeric(file.size(files$path[1:2])))
+  expect_s3_class(files$modified, "POSIXct")
+  expect_false(anyNA(files$modified[1:2]))
+  expect_true(is.na(files$size[[3]]))
+  expect_true(is.na(files$modified[[3]]))
+  expect_true(all(is.na(files$sha256)))
+})
+
+test_that("checksum = TRUE fills sha256", {
+  root <- withr::local_tempdir()
+  writeBin(charToRaw("abc"), file.path(root, "S1.txt"))
+  manifest <- data.frame(
+    subject_id = "S1",
+    species = "human",
+    assay = "rna",
+    sample_id = "x1"
+  )
+  cohort <- make_cohort(manifest, root, "rna_root")
+  spec <- analysis_spec_new(
+    name = "raw",
+    assay = "rna",
+    level = "subject",
+    path_template = "{root}/{subject_id}.txt",
+    root_key = "rna_root",
+    reader = "read.csv"
+  )
+  cohort <- analysis_register(cohort, spec)
+  read_text <- function(path) data.frame(text = readLines(path, warn = FALSE))
+
+  loaded <- load_analyses(
+    cohort,
+    readers = list(raw = read_text),
+    checksum = TRUE
+  )
+
+  expect_equal(
+    analysis_files(loaded)$raw$sha256,
+    "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+  )
+})
+
+test_that("a folder gets the total size and the latest time of its files", {
+  root <- withr::local_tempdir()
+  dir.create(file.path(root, "variants", "chr1"), recursive = TRUE)
+  writeLines("a", file.path(root, "variants", "part1.txt"))
+  writeLines("bbbb", file.path(root, "variants", "chr1", "part2.txt"))
+
+  details <- .file_details(file.path(root, "variants"), TRUE, checksum = TRUE)
+
+  expected <- file.size(c(
+    file.path(root, "variants", "part1.txt"),
+    file.path(root, "variants", "chr1", "part2.txt")
+  ))
+  expect_equal(details$size, sum(expected))
+  expect_false(is.na(details$modified))
+  expect_true(is.na(details$sha256))
+})
+
+test_that("analysis_files on an unloaded cohort has the five columns", {
+  expect_named(
+    analysis_files(make_sample_cohort(withr::local_tempdir())),
+    c("path", "exists", "size", "modified", "sha256")
+  )
 })

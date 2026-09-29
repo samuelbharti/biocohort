@@ -11,12 +11,15 @@ analysis_files(cohort)
 }
 \value{
 A named list of tibbles, one per loaded analysis. Each has the unit
-keys, \code{path}, and \code{exists}. When the cohort has not been loaded, an empty
-tibble with columns \code{path} and \code{exists}.
+keys, \code{path}, \code{exists}, \code{size}, \code{modified}, and \code{sha256} (see
+\code{\link[=load_analysis]{load_analysis()}}). When the cohort has not been loaded, an empty tibble
+with those five columns.
 }
 \description{
-After \code{\link[=load_analyses]{load_analyses()}}, returns the per-analysis file manifests (resolved
-paths and whether each existed) recorded during loading.
+After \code{\link[=load_analyses]{load_analyses()}}, returns the per-analysis file manifests recorded
+during loading: the resolved paths, whether each existed, and its size,
+modified time, and checksum. A report can keep this table to show which
+inputs changed between two runs.
 }
 \examples{
 analysis_files(example_cohort)
