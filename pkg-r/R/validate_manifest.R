@@ -220,11 +220,16 @@ validate_manifest <- function(
     na_rm = !missing_is_conflict
   )
   if (length(conflicts) > 0) {
+    rule <- if (missing_is_conflict) {
+      "A subject-level column must not hold two values, or a value and a missing value, for one subject."
+    } else {
+      "A subject-level column must not hold two different values for one subject."
+    }
     cli::cli_abort(
       c(
         "`manifest` has conflicting subject-level metadata.",
         "i" = "Subject and column{?s} that vary: {toString(conflicts)}.",
-        "i" = "Subject-level columns must be identical across a subject's rows.",
+        "i" = rule,
         "i" = "If a column varies per sample, pass it in `sample_cols`."
       )
     )

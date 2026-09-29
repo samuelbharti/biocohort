@@ -465,3 +465,34 @@ test_that("read_manifest passes missing_is_conflict on", {
     "conflicting"
   )
 })
+
+test_that("the conflict hint matches the rule in force", {
+  manifest <- data.frame(
+    subject_id = c("R1", "R1"),
+    species = "human",
+    sex = c("F", NA),
+    assay = "wes",
+    sample_id = c("A1", "A2")
+  )
+
+  expect_error(
+    validate_manifest(manifest, missing_is_conflict = TRUE),
+    "or a value and a missing value"
+  )
+  manifest$sex[[2]] <- "M"
+  expect_error(validate_manifest(manifest), "two different values")
+})
+
+test_that(".collapse_subjects keeps each column's type", {
+  wide <- tibble::tibble(
+    subject_id = c("R1", "R1", "R2"),
+    age = c(NA, 34, 51),
+    enrolled = c(TRUE, NA, FALSE)
+  )
+
+  out <- .collapse_subjects(wide)
+
+  expect_equal(out$subject_id, c("R1", "R2"))
+  expect_identical(out$age, c(34, 51))
+  expect_identical(out$enrolled, c(TRUE, FALSE))
+})
