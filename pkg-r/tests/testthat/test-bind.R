@@ -163,3 +163,40 @@ test_that("cohort_bind checks its cohorts", {
     "already has a"
   )
 })
+
+test_that("a dropped subject keeps its id in the stacked QC log", {
+  a <- bind_cohort(c("R1", "R2"), c("S1", "S2"), "wgs")
+  a <- cohort_qc(a, "R2", "subject", "drop", "withdrawn")
+  b <- bind_cohort("C1", "V1", "rna")
+
+  expect_equal(qc_log(cohort_bind(a = a, b = b))$id, "R2")
+  expect_equal(
+    qc_log(cohort_bind(a = a, b = b, separate = TRUE))$id,
+    "a_R2"
+  )
+  links <- data.frame(
+    cohort = c("a", "a", "b"),
+    from = c("R1", "R2", "C1"),
+    subject_id = c("P1", "P2", "P3")
+  )
+  expect_equal(qc_log(cohort_bind(a = a, b = b, links = links))$id, "P2")
+})
+
+test_that("two subjects of one cohort cannot get the same new id", {
+  a <- bind_cohort(c("R1", "R2"), c("S1", "S2"), "wgs")
+  b <- bind_cohort("C1", "V1", "rna")
+  links <- data.frame(
+    cohort = c("a", "a", "b"),
+    from = c("R1", "R2", "C1"),
+    subject_id = c("P1", "P1", "P2")
+  )
+
+  expect_error(cohort_bind(a = a, b = b, links = links), "a: P1")
+})
+
+test_that("separate = TRUE refuses prefixes that make one id twice", {
+  a <- bind_cohort("R_1", "S1", "wgs")
+  a_r <- bind_cohort("1", "S2", "wgs")
+
+  expect_error(cohort_bind(a = a, a_R = a_r, separate = TRUE), "a_R_1")
+})

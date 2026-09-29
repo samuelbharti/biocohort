@@ -35,11 +35,15 @@ to place several studies of different people side by side.
 \details{
 The new subject ids replace the old ones in the subject table, the sample
 map, the subject rows of the QC and corrections logs, and every loaded
-analysis table that has a \code{subject_id} column.
+analysis table that has a \code{subject_id} column. A log row for a subject no
+longer in the cohort, such as one dropped by \code{\link[=cohort_qc]{cohort_qc()}}, gets its new
+id from \code{links} when a row names it, and keeps its old id otherwise.
 
 The rules:
 \itemize{
 \item Sample ids must be unique across the cohorts.
+\item Two subjects of one cohort must not get the same new id. With
+\code{separate = TRUE}, no new id may appear in two cohorts either.
 \item When one person is in two cohorts, their subject rows are merged. A
 missing value is no conflict and the given value fills it. Two
 different given values are an error.

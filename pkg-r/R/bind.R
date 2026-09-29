@@ -23,10 +23,14 @@
 #' @details
 #' The new subject ids replace the old ones in the subject table, the sample
 #' map, the subject rows of the QC and corrections logs, and every loaded
-#' analysis table that has a `subject_id` column.
+#' analysis table that has a `subject_id` column. A log row for a subject no
+#' longer in the cohort, such as one dropped by [cohort_qc()], gets its new
+#' id from `links` when a row names it, and keeps its old id otherwise.
 #'
 #' The rules:
 #' - Sample ids must be unique across the cohorts.
+#' - Two subjects of one cohort must not get the same new id. With
+#'   `separate = TRUE`, no new id may appear in two cohorts either.
 #' - When one person is in two cohorts, their subject rows are merged. A
 #'   missing value is no conflict and the given value fills it. Two
 #'   different given values are an error.
@@ -118,30 +122,40 @@ cohort_bind <- function(..., links = NULL, separate = FALSE, study = NULL) {
   cohorts
 }
 
-# For each cohort, a named character vector from old subject id to new.
+# For each cohort, a function from old subject ids to new ones. It also
+# maps ids that only the logs still hold, such as a subject dropped by
+# cohort_qc(): with links, such an id keeps its old value unless the links
+# name it.
 .bind_id_maps <- function(cohorts, links, separate) {
-  ids <- lapply(cohorts, function(x) x@subject_tbl$subject_id)
+  nms <- stats::setNames(names(cohorts), names(cohorts))
   if (separate) {
-    return(Map(
-      function(id, nm) stats::setNames(paste(nm, id, sep = "_"), id),
-      ids,
-      names(cohorts)
-    ))
+    maps <- lapply(nms, function(nm) function(id) paste(nm, id, sep = "_"))
+  } else if (is.null(links)) {
+    maps <- lapply(nms, function(nm) identity)
+  } else {
+    links <- .check_links(links, names(cohorts))
+    .check_links_cover(cohorts, links)
+    maps <- lapply(nms, function(nm) {
+      rows <- links[links$cohort == nm, , drop = FALSE]
+      lookup <- stats::setNames(rows$subject_id, rows$from)
+      function(id) {
+        new <- unname(lookup[id])
+        new[is.na(new)] <- id[is.na(new)]
+        new
+      }
+    })
   }
-  if (is.null(links)) {
-    return(lapply(ids, function(id) stats::setNames(id, id)))
-  }
-  links <- .check_links(links, names(cohorts))
-  unlinked <- character()
-  maps <- list()
-  for (nm in names(cohorts)) {
-    rows <- links[links$cohort == nm, , drop = FALSE]
-    missing <- setdiff(ids[[nm]], rows$from)
-    if (length(missing) > 0) {
-      unlinked <- c(unlinked, paste0(nm, ": ", missing))
-    }
-    maps[[nm]] <- stats::setNames(rows$subject_id, rows$from)[ids[[nm]]]
-  }
+  .check_new_ids(cohorts, maps, across = separate)
+  maps
+}
+
+# Every subject of every cohort needs a row in `links`.
+.check_links_cover <- function(cohorts, links) {
+  unlinked <- unlist(lapply(names(cohorts), function(nm) {
+    ids <- cohorts[[nm]]@subject_tbl$subject_id
+    missing <- setdiff(ids, links$from[links$cohort == nm])
+    if (length(missing) > 0) paste0(nm, ": ", missing) else character()
+  }))
   if (length(unlinked) > 0) {
     cli::cli_abort(
       c(
@@ -150,7 +164,33 @@ cohort_bind <- function(..., links = NULL, separate = FALSE, study = NULL) {
       )
     )
   }
-  maps
+}
+
+# Two subjects of one cohort must not get the same new id, or they would
+# merge into one person. With `across = TRUE` (separate people), no new id
+# may appear in two cohorts either.
+.check_new_ids <- function(cohorts, maps, across) {
+  new_ids <- lapply(names(cohorts), function(nm) {
+    maps[[nm]](cohorts[[nm]]@subject_tbl$subject_id)
+  })
+  names(new_ids) <- names(cohorts)
+  clashes <- unlist(lapply(names(new_ids), function(nm) {
+    dup <- unique(new_ids[[nm]][duplicated(new_ids[[nm]])])
+    if (length(dup) > 0) paste0(nm, ": ", dup) else character()
+  }))
+  if (across) {
+    all_ids <- unlist(new_ids, use.names = FALSE)
+    clashes <- c(clashes, unique(all_ids[duplicated(all_ids)]))
+  }
+  if (length(clashes) > 0) {
+    cli::cli_abort(
+      c(
+        "Two different subjects would get the same new id.",
+        "i" = "New id{?s}: {toString(.head_ids_verbatim(clashes))}.",
+        "i" = "Check `links`, or the cohort names used as prefixes."
+      )
+    )
+  }
 }
 
 .check_links <- function(links, cohort_names) {
@@ -184,8 +224,7 @@ cohort_bind <- function(..., links = NULL, separate = FALSE, study = NULL) {
 
 # The tables and logs of one cohort, with its new subject ids and a source
 # column where the result needs one.
-.rename_cohort <- function(cohort, id_map, name) {
-  new_id <- function(x) unname(id_map[x])
+.rename_cohort <- function(cohort, new_id, name) {
   if ("source" %in% names(cohort@sample_map)) {
     cli::cli_abort(
       c(
