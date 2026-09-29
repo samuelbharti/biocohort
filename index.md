@@ -12,12 +12,21 @@ of every manual fix.
 
 ## Installation
 
+From CRAN:
+
+``` r
+
+install.packages("biocohort")
+```
+
+The development version, from GitHub:
+
 ``` r
 
 pak::pak("samuelbharti/biocohort/pkg-r")
 ```
 
-r-universe works too:
+or from r-universe:
 
 ``` r
 
